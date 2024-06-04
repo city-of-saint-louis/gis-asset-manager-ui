@@ -1,14 +1,10 @@
 class GISAssetChooserComponent extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: "open" });
-  }
   connectedCallback() {
     const div = document.createElement("div");
     div.id = "viewDiv";
     div.style.width = "60%";
     div.style.height = "60vh";
-    this.shadowRoot.appendChild(div);
+    this.appendChild(div);
     require(["esri/config", "esri/Map", "esri/views/MapView"], function (
       esriConfig,
       Map,
@@ -23,7 +19,7 @@ class GISAssetChooserComponent extends HTMLElement {
         map: map,
         center: [-90.25, 38.64], // Longitude, latitude
         zoom: 14, // Zoom level
-        container: this.shadowRoot.querySelector("#viewDiv"), // Div element
+        container: this.querySelector("#viewDiv"), // Div element
       });
     }.bind(this));
   }
