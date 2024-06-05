@@ -1,4 +1,7 @@
 class GISAssetChooserComponent extends HTMLElement {
+  constructor() {
+    super();
+  }
   connectedCallback() {
     const div = document.createElement("div");
     div.id = "viewDiv";
@@ -14,6 +17,7 @@ class GISAssetChooserComponent extends HTMLElement {
         "AAPK1af1e90a1ee2405a912eb235152854062ll-5gN7QQk-TSyXgKTR7HoKrqRAcw7RseJvj4d6jlHhucrqvv-yD6mJFYA5iSO9";
       const map = new Map({
         basemap: "arcgis/topographic",
+        // basemap: "streets-navigation-vector",
       });
       const view = new MapView({
         map: map,
@@ -26,5 +30,3 @@ class GISAssetChooserComponent extends HTMLElement {
 }
 
 customElements.define("gis-asset-chooser", GISAssetChooserComponent);
-
-
