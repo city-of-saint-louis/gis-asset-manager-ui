@@ -4,8 +4,8 @@ class GISAssetChooserComponent extends HTMLElement {
   }
   connectedCallback() {
     try {
-      const title = this.getAttribute("title") || "This is the title";
-      const hint = this.getAttribute("hint") || "This is the hint";
+      const title = this.getAttribute("title") || "";
+      const hint = this.getAttribute("hint") || "";
       const layers = this.getAttribute("layers") || [];
       const zoom = this.getAttribute("zoom") || 12;
       const baseMapURL = this.getAttribute("baseMap") || "streets-navigation-vector";
