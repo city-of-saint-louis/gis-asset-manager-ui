@@ -17,7 +17,7 @@ class GISAssetChooserComponent extends HTMLElement {
       this.innerHTML = `
         <p>${title}</p>
         <p>${hint}</p>
-        <div id="viewDiv" style="width: 30%; height: 60vh;"></div>
+        <div id="viewDiv" style="width: 40%; height: 35vh;"></div>
       `;
 
       require(["esri/Map", "esri/views/MapView"], function (
