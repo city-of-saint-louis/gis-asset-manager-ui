@@ -19,7 +19,7 @@ class GISAssetChooserComponent extends HTMLElement {
         <p>${hint}</p>
         <div id="viewDiv" style="width: 30%; height: 50vh;"></div>
       `;
-
+      // git branch -D gis-asset-chooser1.js
       require([
         "esri/Map",
         "esri/views/MapView",
