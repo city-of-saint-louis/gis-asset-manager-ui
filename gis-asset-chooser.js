@@ -6,9 +6,10 @@ class GISAssetChooserComponent extends HTMLElement {
     try {
       const title = this.getAttribute("title") || "";
       const hint = this.getAttribute("hint") || "";
-      const layers = this.getAttribute("layers") || [];
+      const layers = JSON.parse(this.getAttribute("layers") || "[]");
+      console.log(layers);
       const zoom = this.getAttribute("zoom") || 12;
-      const baseMap = this.getAttribute("baseMap") || "streets-vector"; // topo-vector
+      const baseMap = this.getAttribute("baseMap") || "streets"; // topo-vector
       const showSearch = this.getAttribute("showSearch") || false;
       const centerX = this.getAttribute("centerX") || -90.25;
       const centerY = this.getAttribute("centerY") || 38.64;
@@ -17,7 +18,7 @@ class GISAssetChooserComponent extends HTMLElement {
       this.innerHTML = `
         <p>${title}</p>
         <p>${hint}</p>
-        <div id="viewDiv" style="width: 30%; height: 50vh;"></div>
+        <div id="viewDiv" style="width: 45%; height: 40vh;"></div>
       `;
       // git branch -D gis-asset-chooser1.js
       require([
@@ -26,7 +27,7 @@ class GISAssetChooserComponent extends HTMLElement {
         "esri/layers/FeatureLayer",
       ], function (Map, MapView, FeatureLayer) {
         const map = new Map({
-          basemap: "streets",
+          basemap: baseMap,
         });
 
         const view = new MapView({
@@ -36,15 +37,36 @@ class GISAssetChooserComponent extends HTMLElement {
           container: this.querySelector("#viewDiv"),
         });
 
-        const parcelLayer = new FeatureLayer({
-          url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0",
-        });
-        map.add(parcelLayer);
+        const layerOptions = {
+          "parcel-layer": {
+            url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0",
+          },
+          "street-tree-layer": {
+            url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Street_Trees_Read_Only/FeatureServer/0",
+          },
+        };
 
-        const streetTreeLayer = new FeatureLayer({
-          url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Street_Trees_Read_Only/FeatureServer/0",
+        Object.entries(layerOptions).forEach(([layerName, layerProperties]) => {
+          if (layers.includes(layerName)) {
+            const layer = new FeatureLayer(layerProperties);
+            map.add(layer);
+          }
         });
-        map.add(streetTreeLayer);
+
+        // if (layers.includes("parcel-layer")) {
+        //   const parcelLayer = new FeatureLayer({
+        //     url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0",
+        //   });
+        //   map.add(parcelLayer);
+        // }
+
+        // if (layers.includes("street-tree-layer")) {
+        //   const streetTreeLayer = new FeatureLayer({
+        //     url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Street_Trees_Read_Only/FeatureServer/0",
+        //   });
+        //   map.add(streetTreeLayer);
+        // }
+
       }.bind(this));
     } catch (e) {
       console.error(e);
