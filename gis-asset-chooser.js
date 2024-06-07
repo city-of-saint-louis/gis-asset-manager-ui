@@ -24,6 +24,10 @@ class GISAssetChooserComponent extends HTMLElement {
         zoom: 14, // Zoom level
         container: this.querySelector("#viewDiv"), // Div element
       });
+      const featureLayer = new FeatureLayer({
+        url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/2020_Census_in_2011_Wards/FeatureServer/0",
+      });
+      map.add(featureLayer);
     }.bind(this));
   }
 }
