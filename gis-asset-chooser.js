@@ -3,32 +3,56 @@ class GISAssetChooserComponent extends HTMLElement {
     super();
   }
   connectedCallback() {
-    const div = document.createElement("div");
-    div.id = "viewDiv";
-    div.style.width = "60%";
-    div.style.height = "60vh";
-    this.appendChild(div);
-    require(["esri/config", "esri/Map", "esri/views/MapView"], function (
-      esriConfig,
-      Map,
-      MapView
-    ) {
-      esriConfig.apiKey =
-        "AAPK1af1e90a1ee2405a912eb235152854062ll-5gN7QQk-TSyXgKTR7HoKrqRAcw7RseJvj4d6jlHhucrqvv-yD6mJFYA5iSO9";
-      const map = new Map({
-        basemap: "arcgis/topographic",
-      });
-      const view = new MapView({
-        map: map,
-        center: [-90.25, 38.64], // Longitude, latitude
-        zoom: 14, // Zoom level
-        container: this.querySelector("#viewDiv"), // Div element
-      });
-      const featureLayer = new FeatureLayer({
-        url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/2020_Census_in_2011_Wards/FeatureServer/0",
-      });
-      map.add(featureLayer);
-    }.bind(this));
+    try {
+      const title = this.getAttribute("title") || "";
+      const hint = this.getAttribute("hint") || "";
+      const layers = this.getAttribute("layers") || [];
+      const zoom = this.getAttribute("zoom") || 12;
+      const baseMap = this.getAttribute("baseMap") || "streets-vector"; // topo-vector
+      const showSearch = this.getAttribute("showSearch") || false;
+      const centerX = this.getAttribute("centerX") || -90.25;
+      const centerY = this.getAttribute("centerY") || 38.64;
+      const allowPoints = this.getAttribute("allowPoints") || false;
+
+      this.innerHTML = `
+        <p>${title}</p>
+        <p>${hint}</p>
+        <div id="viewDiv" style="width: 30%; height: 50vh;"></div>
+      `;
+
+      require([
+        "esri/config",
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/GraphicsLayer",
+        "esri/layers/FeatureLayer",
+      ], function (
+        esriConfig,
+        Map,
+        MapView,
+        Graphic,
+        GraphicsLayer,
+        FeatureLayer
+      ) {
+        // esriConfig.apiKey="AAPK1af1e90a1ee2405a912eb235152854062ll-5gN7QQk-TSyXgKTR7HoKrqRAcw7RseJvj4d6jlHhucrqvv-yD6mJFYA5iSO9"
+
+        const map = new Map({
+          basemap: baseMap,
+        });
+
+        const view = new MapView({
+          map: map,
+          center: [centerX, centerY], // Longitude, latitude
+          zoom: zoom, // Zoom level
+          container: this.querySelector("#viewDiv"),
+        });
+      }.bind(this));
+    } catch (e) {
+      console.error(e);
+      document.getElementById(
+        "viewDiv"
+      ).innerHTML = `<p>There was a problem loading the map. Please try again later.</p>`;
+    }
   }
 }
 
