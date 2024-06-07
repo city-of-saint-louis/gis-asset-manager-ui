@@ -21,23 +21,12 @@ class GISAssetChooserComponent extends HTMLElement {
       `;
 
       require([
-        "esri/config",
         "esri/Map",
         "esri/views/MapView",
-        "esri/layers/GraphicsLayer",
         "esri/layers/FeatureLayer",
-      ], function (
-        esriConfig,
-        Map,
-        MapView,
-        Graphic,
-        GraphicsLayer,
-        FeatureLayer
-      ) {
-        // esriConfig.apiKey="AAPK1af1e90a1ee2405a912eb235152854062ll-5gN7QQk-TSyXgKTR7HoKrqRAcw7RseJvj4d6jlHhucrqvv-yD6mJFYA5iSO9"
-
+      ], function (Map, MapView, FeatureLayer) {
         const map = new Map({
-          basemap: baseMap,
+          basemap: "streets",
         });
 
         const view = new MapView({
@@ -46,6 +35,16 @@ class GISAssetChooserComponent extends HTMLElement {
           zoom: zoom, // Zoom level
           container: this.querySelector("#viewDiv"),
         });
+
+        const parcelLayer = new FeatureLayer({
+          url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0",
+        });
+        map.add(parcelLayer);
+
+        const streetTreeLayer = new FeatureLayer({
+          url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Street_Trees_Read_Only/FeatureServer/0",
+        });
+        map.add(streetTreeLayer);
       }.bind(this));
     } catch (e) {
       console.error(e);
