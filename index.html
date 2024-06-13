@@ -5,20 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GIS Asset Chooser Development</title>
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.29/esri/themes/light/main.css"
+    />
     <script src="https://js.arcgis.com/4.29/"></script>
   </head>
   <body>
     <header></header>
     <main>
-      <gis-asset-chooser
-        title="Here is a title"
+      <gis-asset-chooser 
+        title="Here is a title" 
         hint="Here is a hint"
-        layers='["parcel-layer", "street-tree-layer"]'
+        zoom="12" 
+        centerX="-90.25" 
+        centerY=" 38.64"
       >
+        <map-layer
+          layer-id="34f817a794c64919affc7ec449677de3"
+          name="Parcels"
+          server-url="https://stlcity.maps.arcgis.com/"
+        >
+        </map-layer>
+        <map-layer
+          layer-id="46bd9d471a184f20a773224f494c45c8"
+          name="Street Trees"
+          server-url="https://stlcity.maps.arcgis.com/"
+        >
+        </map-layer>
       </gis-asset-chooser>
     </main>
     <footer></footer>
+    <script src="map-layer.js"></script>
     <script src="gis-asset-chooser.js"></script>
   </body>
 </html>
+
+
