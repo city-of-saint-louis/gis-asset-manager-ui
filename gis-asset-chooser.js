@@ -33,7 +33,6 @@ class GISAssetChooserComponent extends HTMLElement {
 const mapLayersToAdd = [];
 console.log("mapLayersToAdd", mapLayersToAdd);
 document.addEventListener("layerDetailsProvided", (event) => {
-  
   const mapLayer = event.detail;
   mapLayersToAdd.push(mapLayer);
   console.log("mapLayer", mapLayer);
@@ -42,16 +41,25 @@ document.addEventListener("layerDetailsProvided", (event) => {
 
 function initializeMap() {
   try {
-    const zoomToApply = document.querySelector("gis-asset-chooser").getAttribute("zoom");
+    const zoomToApply = document
+      .querySelector("gis-asset-chooser")
+      .getAttribute("zoom");
     console.log("zoomToApply", zoomToApply);
-    const baseMapToApply = document.querySelector("gis-asset-chooser").getAttribute("baseMap") || "streets";
-    const centerXToApply = document.querySelector("gis-asset-chooser").getAttribute("centerX");
-    const centerYToApply = document.querySelector("gis-asset-chooser").getAttribute("centerY");
-   
-    require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer"], (
+    const baseMapToApply =
+      document.querySelector("gis-asset-chooser").getAttribute("baseMap") ||
+      "streets";
+    const centerXToApply = document
+      .querySelector("gis-asset-chooser")
+      .getAttribute("centerX");
+    const centerYToApply = document
+      .querySelector("gis-asset-chooser")
+      .getAttribute("centerY");
+
+    require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/portal/PortalItem"], (
       Map,
       MapView,
-      FeatureLayer
+      FeatureLayer,
+      PortalItem
     ) => {
       const map = new Map({
         basemap: baseMapToApply,
@@ -77,20 +85,36 @@ function initializeMap() {
         map.add(layerToAdd);
 
         // hit test goes here
-        
+        // for any layer graphics that the click 'hits'
+        view.on("click", (event) => {
+          view.hitTest(event).then(function (response) {
+            if (response.results.length) {
+              const graphic = response.results[0].graphic;
 
+              // Get the top layer's graphic object info
+              const attributes = graphic.attributes;
+              console.log("Graphic attributes:");
+              console.log(attributes);
 
+              // Highlight this graphic
+              view.whenLayerView(graphic.layer).then(function (layerView) {
+                layerView.highlight(graphic);
+              });
 
+              // Get the layer info for this graphic
+              const layerInfo = response.results[0].layer.portalItem;
+              const layerPortalID = layerInfo.id;
+              console.log("Layer's portal ID: " + layerPortalID);
+            }
+          });
+        });
       });
-
     });
   } catch (e) {
     console.error(e);
   }
-};
+}
 initializeMap();
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
 });
-
-
