@@ -1,60 +1,27 @@
 class GISAssetChooserComponent extends HTMLElement {
   constructor() {
-    super();
+    super(); // always call super() first in the constructor.
+    this.mapLayers = []; // Initialize an empty array to store map layers
   }
+
   connectedCallback() {
+    console.log("gis-asset-chooser initialized");
+
     try {
       const title = this.getAttribute("title") || "";
       const hint = this.getAttribute("hint") || "";
-      const layers = JSON.parse(this.getAttribute("layers") || "[]");
-      // console.log(layers);
-      const zoom = this.getAttribute("zoom") || 12;
-      const baseMap = this.getAttribute("baseMap") || "streets"; // topo-vector
-      const centerX = this.getAttribute("centerX") || -90.25;
-      const centerY = this.getAttribute("centerY") || 38.64;
+      console.log("this", this);
       // const showSearch = this.getAttribute("showSearch") || false;
       // const allowPoints = this.getAttribute("allowPoints") || false;
 
       this.innerHTML = `
-        <p>${title}</p>
-        <p>${hint}</p>
-        <div id="viewDiv" style="width: 45%; height: 40vh;"></div>
-        <slot name="map-layers"></slot>
+        <div id="map-container">
+          <p>${title}</p>
+          <p>${hint}</p>
+          <div id="viewDiv" style="width: 45%; height: 40vh;">
+          </div>
+        </div>
       `;
-      require([
-        "esri/Map",
-        "esri/views/MapView",
-        "esri/layers/FeatureLayer",
-      ], function (Map, MapView, FeatureLayer) {
-        const map = new Map({
-          basemap: baseMap,
-        });
-
-        const view = new MapView({
-          map: map,
-          center: [centerX, centerY], // Longitude, latitude
-          zoom: zoom, // Zoom level
-          container: this.querySelector("#viewDiv"),
-        });
-
-        const layerOptions = [
-          {
-            layerName: "parcel-layer",
-            url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0",
-          },
-          {
-            layerName: "street-tree-layer",
-            url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Street_Trees_Read_Only/FeatureServer/0",
-          },
-        ];
-
-        layerOptions.forEach((layerProperties) => {
-          const { layerName, url } = layerProperties;
-          const layer = new FeatureLayer({ url, layerName });
-          console.log(layer.layerName, layer);
-          map.add(layer);
-        });
-      }.bind(this));
     } catch (e) {
       console.error(e);
       document.getElementById(
@@ -64,4 +31,58 @@ class GISAssetChooserComponent extends HTMLElement {
   }
 }
 
-customElements.define("gis-asset-chooser", GISAssetChooserComponent);
+const mapLayersToAdd = [];
+console.log("mapLayersToAdd", mapLayersToAdd);
+document.addEventListener("layerDetailsProvided", (event) => {
+  
+  const mapLayer = event.detail;
+  mapLayersToAdd.push(mapLayer);
+  console.log("mapLayer", mapLayer);
+  console.log("mapLayersToAdd", mapLayersToAdd);
+});
+
+function initializeMap() {
+  try {
+    const zoomToApply = document.querySelector("gis-asset-chooser").getAttribute("zoom");
+    console.log("zoomToApply", zoomToApply);
+    const baseMapToApply = document.querySelector("gis-asset-chooser").getAttribute("baseMap") || "streets";
+    const centerXToApply = document.querySelector("gis-asset-chooser").getAttribute("centerX");
+    const centerYToApply = document.querySelector("gis-asset-chooser").getAttribute("centerY");
+   
+    require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer"], (
+      Map,
+      MapView,
+      FeatureLayer
+    ) => {
+      const map = new Map({
+        basemap: baseMapToApply,
+      });
+
+      const view = new MapView({
+        map: map,
+        center: [centerXToApply, centerYToApply],
+        zoom: zoomToApply,
+        container: document.querySelector("#viewDiv"),
+      });
+
+      mapLayersToAdd.forEach((mapLayer) => {
+        const layerToAdd = new FeatureLayer({
+          portalItem: {
+            id: mapLayer.layerId,
+            portal: mapLayer.serverUrl,
+          },
+        });
+        map.add(layerToAdd);
+      });
+
+    });
+  } catch (e) {
+    console.error(e);
+  }
+};
+initializeMap();
+document.addEventListener("DOMContentLoaded", () => {
+  customElements.define("gis-asset-chooser", GISAssetChooserComponent);
+});
+
+
