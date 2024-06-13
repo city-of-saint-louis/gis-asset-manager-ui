@@ -1,7 +1,6 @@
 class GISAssetChooserComponent extends HTMLElement {
   constructor() {
     super(); // always call super() first in the constructor.
-    this.mapLayers = []; // Initialize an empty array to store map layers
   }
 
   connectedCallback() {
@@ -18,7 +17,7 @@ class GISAssetChooserComponent extends HTMLElement {
         <div id="map-container">
           <p>${title}</p>
           <p>${hint}</p>
-          <div id="viewDiv" style="width: 45%; height: 40vh;">
+          <div id="viewDiv" style="width: 40%; height:50vh;">
           </div>
         </div>
       `;
@@ -72,7 +71,16 @@ function initializeMap() {
             portal: mapLayer.serverUrl,
           },
         });
+        layerToAdd.outFields = ["*"];
+        console.log("layerToAdd", layerToAdd);
+        layerToAdd.popupEnabled = false;
         map.add(layerToAdd);
+
+        // hit test goes here
+        
+
+
+
       });
 
     });
