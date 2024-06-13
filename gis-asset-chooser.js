@@ -17,7 +17,7 @@ class GISAssetChooserComponent extends HTMLElement {
         <div id="map-container">
           <p>${title}</p>
           <p>${hint}</p>
-          <div id="viewDiv" style="width: 40%; height:50vh;">
+          <div id="viewDiv" style="width: 80%; height:60vh;">
           </div>
         </div>
       `;
@@ -31,6 +31,7 @@ class GISAssetChooserComponent extends HTMLElement {
 }
 
 const mapLayersToAdd = [];
+const selectedGraphics = []; // array to hold selected graphics
 console.log("mapLayersToAdd", mapLayersToAdd);
 document.addEventListener("layerDetailsProvided", (event) => {
   const mapLayer = event.detail;
@@ -55,12 +56,12 @@ function initializeMap() {
       .querySelector("gis-asset-chooser")
       .getAttribute("centerY");
 
-    require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/portal/PortalItem"], (
-      Map,
-      MapView,
-      FeatureLayer,
-      PortalItem
-    ) => {
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/portal/PortalItem",
+    ], (Map, MapView, FeatureLayer, PortalItem) => {
       const map = new Map({
         basemap: baseMapToApply,
       });
@@ -90,12 +91,14 @@ function initializeMap() {
           view.hitTest(event).then(function (response) {
             if (response.results.length) {
               const graphic = response.results[0].graphic;
+              console.log("Graphic:", graphic);
+              
+              const found = selectedGraphics.find((element) => element.attributes.FID === graphic.attributes.FID <1);
+              if (found) {
+                selectedGraphics.push(graphic);
+              }
 
-              // Get the top layer's graphic object info
-              const attributes = graphic.attributes;
-              console.log("Graphic attributes:");
-              console.log(attributes);
-
+              console.log("Selected graphics:", selectedGraphics);
               // Highlight this graphic
               view.whenLayerView(graphic.layer).then(function (layerView) {
                 layerView.highlight(graphic);
