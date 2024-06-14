@@ -9,8 +9,6 @@ class GISAssetChooserComponent extends HTMLElement {
     try {
       const title = this.getAttribute("title") || "";
       const hint = this.getAttribute("hint") || "";
-      console.log("this", this);
-      // const showSearch = this.getAttribute("showSearch") || false;
       // const allowPoints = this.getAttribute("allowPoints") || false;
 
       this.innerHTML = `
@@ -34,7 +32,9 @@ const defaultZoom = "12";
 const defaultCenterX = "-90.25";
 const defaultCenterY = "38.64";
 const defaultBaseMap = "streets";
+const defaultShowSearch = true;
 const mapLayersToAdd = [];
+
 // console.log("mapLayersToAdd", mapLayersToAdd);
 const selectedGraphics = []; // array to hold selected graphics
 
@@ -60,7 +60,9 @@ function initializeMap() {
     const centerYToApply =
       document.querySelector("gis-asset-chooser").getAttribute("centerY") ||
       defaultCenterY;
-
+    const showSearch =
+      document.querySelector("gis-asset-chooser").getAttribute("showSearch") ||
+      defaultShowSearch;
     require([
       "esri/Map",
       "esri/views/MapView",
@@ -78,14 +80,16 @@ function initializeMap() {
         container: document.querySelector("#viewDiv"),
       });
 
-      const searchWidget = new Search({
-        view: view
-      });
+      if (showSearch) {
+        const searchWidget = new Search({
+          view: view
+        });
 
-      // Add the search widget to the top right corner of the view
-      view.ui.add(searchWidget, {
-        position: "top-right"
-      });
+        // Add the search widget to the top right corner of the view
+        view.ui.add(searchWidget, {
+          position: "top-right"
+        });
+      }
 
       mapLayersToAdd.forEach((mapLayer) => {
         const layerToAdd = new FeatureLayer({
