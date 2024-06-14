@@ -1,47 +1,26 @@
 class GISAssetChooserComponent extends HTMLElement {
   constructor() {
     super();
-    this._items = []; // Initialize the items array
-  }
-
-  static get observedAttributes() {
-    return ["items"];
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === "items") {
-      this.items = JSON.parse(newValue);
-    }
-  }
-
-  set items(value) {
-    this._items = value;
-    this.render();
-  }
-
-  get items() {
-    return this._items;
   }
 
   connectedCallback() {
-    this.render();
     try {
       const title = this.getAttribute("title") || "";
       const hint = this.getAttribute("hint") || "";
-      const layers = JSON.parse(this.getAttribute("layers")) || [];
+      const layers = this.getAttribute("layers") || [];
       const zoom = this.getAttribute("zoom") || 12;
       const baseMap = this.getAttribute("baseMap") || "streets-vector"; // topo-vector
       const showSearch = this.getAttribute("showSearch") || false;
       const centerX = this.getAttribute("centerX") || -90.25;
       const centerY = this.getAttribute("centerY") || 38.64;
       const allowPoints = this.getAttribute("allowPoints") || false;
-      console.log(layers);
+
       this.innerHTML = `
         <p>${title}</p>
         <p>${hint}</p>
         <div id="viewDiv" style="width: 30%; height: 50vh;"></div>
       `;
-
+      // git branch -D gis-asset-chooser1.js
       require([
         "esri/Map",
         "esri/views/MapView",
@@ -57,7 +36,7 @@ class GISAssetChooserComponent extends HTMLElement {
           zoom: zoom, // Zoom level
           container: this.querySelector("#viewDiv"),
         });
-        // if layers includes 'parcel-layer' then add 'parcelLayer'
+
         const parcelLayer = new FeatureLayer({
           url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0",
         });
@@ -66,7 +45,6 @@ class GISAssetChooserComponent extends HTMLElement {
         const streetTreeLayer = new FeatureLayer({
           url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Street_Trees_Read_Only/FeatureServer/0",
         });
-
         map.add(streetTreeLayer);
       }.bind(this));
     } catch (e) {
@@ -79,4 +57,62 @@ class GISAssetChooserComponent extends HTMLElement {
   render() {}
 }
 
-customElements.define("gis-asset-chooser", GISAssetChooserComponent);
+const mapLayersToAdd = [];
+console.log("mapLayersToAdd", mapLayersToAdd);
+document.addEventListener("layerDetailsProvided", (event) => {
+  const mapLayer = event.detail;
+  mapLayersToAdd.push(mapLayer);
+  console.log("mapLayer", mapLayer);
+  console.log("mapLayersToAdd", mapLayersToAdd);
+});
+
+function initializeMap() {
+  try {
+    const zoomToApply = document
+      .querySelector("gis-asset-chooser")
+      .getAttribute("zoom");
+    console.log("zoomToApply", zoomToApply);
+    const baseMapToApply =
+      document.querySelector("gis-asset-chooser").getAttribute("baseMap") ||
+      "streets";
+    const centerXToApply = document
+      .querySelector("gis-asset-chooser")
+      .getAttribute("centerX");
+    const centerYToApply = document
+      .querySelector("gis-asset-chooser")
+      .getAttribute("centerY");
+
+    require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer"], (
+      Map,
+      MapView,
+      FeatureLayer
+    ) => {
+      const map = new Map({
+        basemap: baseMapToApply,
+      });
+
+      const view = new MapView({
+        map: map,
+        center: [centerXToApply, centerYToApply],
+        zoom: zoomToApply,
+        container: document.querySelector("#viewDiv"),
+      });
+
+      mapLayersToAdd.forEach((mapLayer) => {
+        const layerToAdd = new FeatureLayer({
+          portalItem: {
+            id: mapLayer.layerId,
+            portal: mapLayer.serverUrl,
+          },
+        });
+        map.add(layerToAdd);
+      });
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+initializeMap();
+document.addEventListener("DOMContentLoaded", () => {
+  customElements.define("gis-asset-chooser", GISAssetChooserComponent);
+});
