@@ -31,8 +31,9 @@ class GISAssetChooserComponent extends HTMLElement {
 }
 
 const mapLayersToAdd = [];
-const selectedGraphics = []; // array to hold selected graphics
 console.log("mapLayersToAdd", mapLayersToAdd);
+const selectedGraphics = []; // array to hold selected graphics
+
 document.addEventListener("layerDetailsProvided", (event) => {
   const mapLayer = event.detail;
   mapLayersToAdd.push(mapLayer);
@@ -84,32 +85,76 @@ function initializeMap() {
         console.log("layerToAdd", layerToAdd);
         layerToAdd.popupEnabled = false;
         map.add(layerToAdd);
+      });
+      // hit test goes here
+      // for any layer graphics that the click 'hits'
+      view.on("click", (event) => {
+        view.hitTest(event).then(function (response) {
+          if (response.results.length) {
+            const graphic = response.results[0].graphic;
+            console.log("Graphic:", graphic);
+            // selectedGraphics.push(graphic);
+            // Get the layer info for this graphic
+            const layerInfo = response.results[0].layer.portalItem;
+            const layerPortalID = layerInfo.id;
+            console.log("Layer's portal ID: " + layerPortalID);
 
-        // hit test goes here
-        // for any layer graphics that the click 'hits'
-        view.on("click", (event) => {
-          view.hitTest(event).then(function (response) {
-            if (response.results.length) {
-              const graphic = response.results[0].graphic;
-              console.log("Graphic:", graphic);
-              
-              const found = selectedGraphics.find((element) => element.attributes.FID === graphic.attributes.FID <1);
-              if (found) {
-                selectedGraphics.push(graphic);
-              }
+            let isParcel = false;
+            let isBike = false;
+            let isTree = false;
+            let isFood = false;
 
-              console.log("Selected graphics:", selectedGraphics);
-              // Highlight this graphic
-              view.whenLayerView(graphic.layer).then(function (layerView) {
-                layerView.highlight(graphic);
-              });
-
-              // Get the layer info for this graphic
-              const layerInfo = response.results[0].layer.portalItem;
-              const layerPortalID = layerInfo.id;
-              console.log("Layer's portal ID: " + layerPortalID);
+            if (layerPortalID === "34f817a794c64919affc7ec449677de3") {
+              isParcel = true;
+              console.log("isParcel", isParcel);
             }
-          });
+            if (layerPortalID === "b0a2bf75ab284aba834328a5a8f6e28b") {
+              isBike = true;
+              console.log("isBike", isBike);
+            }
+            if (layerPortalID === "46bd9d471a184f20a773224f494c45c8") {
+              isTree = true;
+              console.log("isTree", isTree);
+            }
+            if (layerPortalID === "0da094b7d469485e9cd5172625cf6513") {
+              isFood = true;
+              console.log("isFood", isFood);
+            }
+            if (isFood) {
+              console.log("Food site selected", graphic.attributes);
+              if (
+                !selectedGraphics.find(
+                  (g) => g.attributes.OBJECTID === graphic.attributes.OBJECTID
+                )
+              ) {
+                console.log("Graphic not already selected");
+                selectedGraphics.push(graphic);
+                console.log("selectedGraphics", selectedGraphics);
+              } else {
+                console.log("Graphic already selected");
+                // console.log("selectedGraphics", selectedGraphics);
+              }
+            } else {
+              if (
+                !selectedGraphics.find(
+                  (g) => g.attributes.FID === graphic.attributes.FID
+                )
+              ) {
+                console.log("Graphic not already selected");
+                selectedGraphics.push(graphic);
+                // console.log("selectedGraphics", selectedGraphics);
+              } else {
+                console.log("Graphic already selected");
+                // console.log("selectedGraphics", selectedGraphics);
+              }
+            }
+            console.log("Selected graphics:", selectedGraphics);
+
+            // Highlight selected graphic
+            view.whenLayerView(graphic.layer).then(function (layerView) {
+              layerView.highlight(graphic);
+            });
+          }
         });
       });
     });
