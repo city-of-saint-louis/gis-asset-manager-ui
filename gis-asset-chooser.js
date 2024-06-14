@@ -30,8 +30,12 @@ class GISAssetChooserComponent extends HTMLElement {
   }
 }
 
+const defaultZoom = "12";
+const defaultCenterX = "-90.25";
+const defaultCenterY = "38.64";
+const defaultBaseMap = "streets";
 const mapLayersToAdd = [];
-console.log("mapLayersToAdd", mapLayersToAdd);
+// console.log("mapLayersToAdd", mapLayersToAdd);
 const selectedGraphics = []; // array to hold selected graphics
 
 document.addEventListener("layerDetailsProvided", (event) => {
@@ -46,16 +50,16 @@ function initializeMap() {
     const zoomToApply = document
       .querySelector("gis-asset-chooser")
       .getAttribute("zoom");
-    console.log("zoomToApply", zoomToApply);
+    console.log("zoomToApply", zoomToApply) || defaultZoom;
     const baseMapToApply =
       document.querySelector("gis-asset-chooser").getAttribute("baseMap") ||
-      "streets";
-    const centerXToApply = document
-      .querySelector("gis-asset-chooser")
-      .getAttribute("centerX");
-    const centerYToApply = document
-      .querySelector("gis-asset-chooser")
-      .getAttribute("centerY");
+      defaultBaseMap;
+    const centerXToApply =
+      document.querySelector("gis-asset-chooser").getAttribute("centerX") ||
+      defaultCenterX;
+    const centerYToApply =
+      document.querySelector("gis-asset-chooser").getAttribute("centerY") ||
+      defaultCenterY;
 
     require([
       "esri/Map",
@@ -86,10 +90,15 @@ function initializeMap() {
         layerToAdd.popupEnabled = false;
         map.add(layerToAdd);
       });
-      // hit test goes here
-      // for any layer graphics that the click 'hits'
+
+      // hit test - for any layer graphics that the click 'hits'
       view.on("click", (event) => {
         view.hitTest(event).then(function (response) {
+          let isParcel = false;
+          let isBike = false;
+          let isTree = false;
+          let isFood = false;
+
           if (response.results.length) {
             const graphic = response.results[0].graphic;
             console.log("Graphic:", graphic);
@@ -98,11 +107,6 @@ function initializeMap() {
             const layerInfo = response.results[0].layer.portalItem;
             const layerPortalID = layerInfo.id;
             console.log("Layer's portal ID: " + layerPortalID);
-
-            let isParcel = false;
-            let isBike = false;
-            let isTree = false;
-            let isFood = false;
 
             if (layerPortalID === "34f817a794c64919affc7ec449677de3") {
               isParcel = true;
