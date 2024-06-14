@@ -65,8 +65,8 @@ function initializeMap() {
       "esri/Map",
       "esri/views/MapView",
       "esri/layers/FeatureLayer",
-      "esri/portal/PortalItem",
-    ], (Map, MapView, FeatureLayer, PortalItem) => {
+      "esri/widgets/Search",
+    ], (Map, MapView, FeatureLayer, Search) => {
       const map = new Map({
         basemap: baseMapToApply,
       });
@@ -76,6 +76,15 @@ function initializeMap() {
         center: [centerXToApply, centerYToApply],
         zoom: zoomToApply,
         container: document.querySelector("#viewDiv"),
+      });
+
+      const searchWidget = new Search({
+        view: view
+      });
+
+      // Add the search widget to the top right corner of the view
+      view.ui.add(searchWidget, {
+        position: "top-right"
       });
 
       mapLayersToAdd.forEach((mapLayer) => {
