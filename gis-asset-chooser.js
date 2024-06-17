@@ -69,6 +69,7 @@ function initializeMap() {
       "esri/layers/FeatureLayer",
       "esri/widgets/Search",
     ], (Map, MapView, FeatureLayer, Search) => {
+      var layerViewsCollection = [];
       const map = new Map({
         basemap: baseMapToApply,
       });
@@ -82,12 +83,12 @@ function initializeMap() {
 
       if (showSearch) {
         const searchWidget = new Search({
-          view: view
+          view: view,
         });
 
         // Add the search widget to the top right corner of the view
         view.ui.add(searchWidget, {
-          position: "top-right"
+          position: "top-right",
         });
       }
 
@@ -103,10 +104,19 @@ function initializeMap() {
         layerToAdd.popupEnabled = false;
         map.add(layerToAdd);
       });
-
+      view.when(function () {
+        layerViewCollection = view.layerViews;
+      });
+      let highlights = [];
       // hit test - for any layer graphics that the click 'hits'
       view.on("click", (event) => {
         view.hitTest(event).then(function (response) {
+          //  if (highlights.length > 0) {
+          //    highlights.forEach(function (highlight) {
+          //      highlight.remove();
+          //    });
+          //    highlights = [];
+          // }
           let isParcel = false;
           let isBike = false;
           let isTree = false;
@@ -117,6 +127,7 @@ function initializeMap() {
             console.log("Graphic:", graphic);
             // selectedGraphics.push(graphic);
             // Get the layer info for this graphic
+            let highlightSelect;
             const layerInfo = response.results[0].layer.portalItem;
             const layerPortalID = layerInfo.id;
             console.log("Layer's portal ID: " + layerPortalID);
@@ -147,9 +158,27 @@ function initializeMap() {
                 console.log("Graphic not already selected");
                 selectedGraphics.push(graphic);
                 console.log("selectedGraphics", selectedGraphics);
+                view.whenLayerView(graphic.layer).then(function (layerView) {
+                  highlightSelect = layerView.highlight(graphic);
+                  const hightlightDetail = {
+                    objectId: graphic.attributes.OBJECTID,
+                    highlightSelect: highlightSelect,
+                  };
+                  highlights.push(hightlightDetail);
+                  console.log("highlightSelects", highlights);
+                });
               } else {
-                console.log("Graphic already selected");
-                // console.log("selectedGraphics", selectedGraphics);
+                console.log("Graphic already selected food");
+                if (highlights.length > 0) {
+                  highlights.forEach(function (highlight) {
+                    if (highlight.objectId === graphic.attributes.OBJECTID) {
+                      highlight.highlightSelect.remove();
+                    }
+                  });
+                  highlights = [];
+                }
+                // highlightSelect.remove();
+                console.log("selectedGraphics", selectedGraphics);
               }
             } else {
               if (
@@ -159,18 +188,29 @@ function initializeMap() {
               ) {
                 console.log("Graphic not already selected");
                 selectedGraphics.push(graphic);
-                // console.log("selectedGraphics", selectedGraphics);
+                view.whenLayerView(graphic.layer).then(function (layerView) {
+                  highlightSelect = layerView.highlight(graphic);
+                  const hightlightDetail = {
+                    FID: graphic.attributes.FID,
+                    highlightSelect: highlightSelect,
+                  };
+                  highlights.push(hightlightDetail);
+                  console.log("highlightSelects", highlights);
+                });
               } else {
                 console.log("Graphic already selected");
-                // console.log("selectedGraphics", selectedGraphics);
+                console.log("highlightSelect remove", highlightSelect);
+                if (highlights.length > 0) {
+                  highlights.forEach(function (highlight) {
+                    if (highlight.FID === graphic.attributes.FID) {
+                      highlight.highlightSelect.remove();
+                    }
+                  });
+                  // highlights = [];
+                }
               }
             }
             console.log("Selected graphics:", selectedGraphics);
-
-            // Highlight selected graphic
-            view.whenLayerView(graphic.layer).then(function (layerView) {
-              layerView.highlight(graphic);
-            });
           }
         });
       });
