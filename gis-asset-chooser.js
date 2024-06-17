@@ -37,6 +37,7 @@ const mapLayersToAdd = [];
 
 // console.log("mapLayersToAdd", mapLayersToAdd);
 const selectedGraphics = []; // array to hold selected graphics
+const highlights = []; // array to hold highlighted graphics
 
 document.addEventListener("layerDetailsProvided", (event) => {
   const mapLayer = event.detail;
@@ -146,10 +147,23 @@ function initializeMap() {
               ) {
                 console.log("Graphic not already selected");
                 selectedGraphics.push(graphic);
+                view.whenLayerView(graphic.layer).then(function (layerView) {
+                  layerView.highlight(graphic);
+                });
+                highlights.push(graphic);
                 console.log("selectedGraphics", selectedGraphics);
               } else {
                 console.log("Graphic already selected");
-                // console.log("selectedGraphics", selectedGraphics);
+                const indexToRemove = selectedGraphics.findIndex(
+                  (g) => g.attributes.OBJECTID === graphic.attributes.OBJECTID
+                );
+                selectedGraphics.splice(indexToRemove, 1);
+
+                view.whenLayerView(graphic.layer).then(function (layerView) {
+                  layerView.remove(graphic);
+                });
+              
+                console.log("selectedGraphics", selectedGraphics);
               }
             } else {
               if (
@@ -162,15 +176,14 @@ function initializeMap() {
                 // console.log("selectedGraphics", selectedGraphics);
               } else {
                 console.log("Graphic already selected");
+                const indexToRemove = selectedGraphics.findIndex(
+                  (g) => g.attributes.FID === graphic.attributes.FID
+                );
+                selectedGraphics.splice(indexToRemove, 1);
                 // console.log("selectedGraphics", selectedGraphics);
               }
             }
             console.log("Selected graphics:", selectedGraphics);
-
-            // Highlight selected graphic
-            view.whenLayerView(graphic.layer).then(function (layerView) {
-              layerView.highlight(graphic);
-            });
           }
         });
       });
