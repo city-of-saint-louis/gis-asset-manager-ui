@@ -15,7 +15,37 @@
     <header></header>
 
     <main>
-      <gis-asset-chooser title="Here is a title" hint="Here is a hint">
+      <gis-asset-chooser
+        title="Map Title"
+        hint="GIS asset chooser"
+        zoom="12"
+        centerX="-90.25"
+        centerY="38.64"
+      >
+        <map-layer
+          layer-id="34f817a794c64919affc7ec449677de3"
+          name="Parcels"
+          server-url="https://stlcity.maps.arcgis.com/"
+        >
+        </map-layer>
+        <map-layer
+          layer-id="46bd9d471a184f20a773224f494c45c8"
+          name="Trees"
+          server-url="https://stlcity.maps.arcgis.com/"
+        >
+        </map-layer>
+        <map-layer
+          layer-id="b0a2bf75ab284aba834328a5a8f6e28b"
+          name="Bike"
+          server-url="https://stlcity.maps.arcgis.com/"
+        >
+        </map-layer>
+        <map-layer
+          layer-id="0da094b7d469485e9cd5172625cf6513"
+          name="Food"
+          server-url="https://stlcity.maps.arcgis.com/"
+        >
+        </map-layer>
       </gis-asset-chooser>
     </main>
     <footer></footer>
