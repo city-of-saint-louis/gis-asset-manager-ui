@@ -13,12 +13,13 @@
   </head>
   <body>
     <header></header>
+
     <main>
-      <gis-asset-chooser 
-        title="Map Title" 
+      <gis-asset-chooser
+        title="Map Title"
         hint="GIS asset chooser"
-        zoom="12" 
-        centerX="-90.25" 
+        zoom="12"
+        centerX="-90.25"
         centerY="38.64"
       >
         <map-layer
@@ -50,7 +51,42 @@
     <footer></footer>
     <script src="map-layer.js"></script>
     <script src="gis-asset-chooser.js"></script>
+
+    <script>
+      const myComponent = document.getElementById("gisComponent");
+      const inputs = [
+        {
+          title: "This is the title1",
+          hint: "This is the hint1",
+          layers: [
+            {
+              id: "297bd25c5ee744aa900ea9b23c68f797",
+              url: "https://stlcity.maps.arcgis.com/",
+              name: "cityParcels",
+              required: true,
+              limit: 100,
+              labelMask: "{SITEADDR}",
+            },
+          ],
+          required: true,
+        },
+        {
+          title: "This is the title2",
+          hint: "This is the hint2",
+          layers: [
+            {
+              id: "2",
+              url: "https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/CITY_TREES/FeatureServer/0",
+              name: "cityTrees",
+              required: true,
+              limit: 200,
+              labelMask: "{STREET_NUM}, {STREET}, {ADDRESS}",
+            },
+          ],
+          required: true,
+        },
+      ];
+      myComponent.items = inputs;
+    </script>
   </body>
 </html>
-
-
