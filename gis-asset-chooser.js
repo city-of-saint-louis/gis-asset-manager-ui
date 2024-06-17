@@ -37,7 +37,7 @@ const mapLayersToAdd = [];
 
 // console.log("mapLayersToAdd", mapLayersToAdd);
 const selectedGraphics = []; // array to hold selected graphics
-
+const highlights = [];
 document.addEventListener("layerDetailsProvided", (event) => {
   const mapLayer = event.detail;
   mapLayersToAdd.push(mapLayer);
@@ -104,30 +104,18 @@ function initializeMap() {
         layerToAdd.popupEnabled = false;
         map.add(layerToAdd);
       });
-      view.when(function () {
-        layerViewCollection = view.layerViews;
-      });
-      let highlights = [];
       // hit test - for any layer graphics that the click 'hits'
       view.on("click", (event) => {
         view.hitTest(event).then(function (response) {
-          //  if (highlights.length > 0) {
-          //    highlights.forEach(function (highlight) {
-          //      highlight.remove();
-          //    });
-          //    highlights = [];
-          // }
           let isParcel = false;
           let isBike = false;
           let isTree = false;
           let isFood = false;
+          let highlightSelect;
 
           if (response.results.length) {
             const graphic = response.results[0].graphic;
             console.log("Graphic:", graphic);
-            // selectedGraphics.push(graphic);
-            // Get the layer info for this graphic
-            let highlightSelect;
             const layerInfo = response.results[0].layer.portalItem;
             const layerPortalID = layerInfo.id;
             console.log("Layer's portal ID: " + layerPortalID);
@@ -159,7 +147,7 @@ function initializeMap() {
                 selectedGraphics.push(graphic);
                 console.log("selectedGraphics", selectedGraphics);
                 view.whenLayerView(graphic.layer).then(function (layerView) {
-                  highlightSelect = layerView.highlight(graphic);
+                  const highlightSelect = layerView.highlight(graphic);
                   const hightlightDetail = {
                     objectId: graphic.attributes.OBJECTID,
                     highlightSelect: highlightSelect,
@@ -169,15 +157,23 @@ function initializeMap() {
                 });
               } else {
                 console.log("Graphic already selected food");
-                if (highlights.length > 0) {
-                  highlights.forEach(function (highlight) {
-                    if (highlight.objectId === graphic.attributes.OBJECTID) {
-                      highlight.highlightSelect.remove();
-                    }
-                  });
-                  highlights = [];
-                }
-                // highlightSelect.remove();
+                const indexToRemove = selectedGraphics.findIndex(
+                  (g) => g.attributes.OBJECTID === graphic.attributes.OBJECTID
+                );
+                selectedGraphics.splice(indexToRemove, 1);
+
+                highlights.forEach(function (highlight) {
+                  if (highlight.objectId === graphic.attributes.OBJECTID) {
+                    highlight.highlightSelect.remove();
+                  }
+                });
+
+                const hightlightToRemove = highlights.findIndex(
+                  (h) => h.objectId === graphic.attributes.OBJECTID
+                );
+                highlights.splice(hightlightToRemove, 1);
+
+                console.log("highlights ", highlights);
                 console.log("selectedGraphics", selectedGraphics);
               }
             } else {
@@ -189,8 +185,8 @@ function initializeMap() {
                 console.log("Graphic not already selected");
                 selectedGraphics.push(graphic);
                 view.whenLayerView(graphic.layer).then(function (layerView) {
-                  highlightSelect = layerView.highlight(graphic);
-                  const hightlightDetail = {
+                  const highlightSelect = layerView.highlight(graphic);
+                  hightlightDetail = {
                     FID: graphic.attributes.FID,
                     highlightSelect: highlightSelect,
                   };
@@ -200,14 +196,21 @@ function initializeMap() {
               } else {
                 console.log("Graphic already selected");
                 console.log("highlightSelect remove", highlightSelect);
-                if (highlights.length > 0) {
-                  highlights.forEach(function (highlight) {
-                    if (highlight.FID === graphic.attributes.FID) {
-                      highlight.highlightSelect.remove();
-                    }
-                  });
-                  // highlights = [];
-                }
+                const indexToRemove = selectedGraphics.findIndex(
+                  (g) => g.attributes.FID === graphic.attributes.FID
+                );
+                selectedGraphics.splice(indexToRemove, 1);
+                highlights.forEach(function (highlight) {
+                  if (highlight.FID === graphic.attributes.FID) {
+                    highlight.highlightSelect.remove();
+                  }
+                });
+                const hightlightToRemove = highlights.findIndex(
+                  (h) => h.FID === graphic.attributes.FID
+                );
+                highlights.splice(hightlightToRemove, 1);
+
+                console.log("highlights ", highlights);
               }
             }
             console.log("Selected graphics:", selectedGraphics);
