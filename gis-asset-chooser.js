@@ -1,3 +1,12 @@
+const defaultZoom = "12";
+const defaultCenterX = "-90.25";
+const defaultCenterY = "38.64";
+const defaultBaseMap = "streets";
+const defaultShowSearch = true;
+const mapLayersToAdd = [];
+const selectedGraphics = []; // array to hold selected graphics
+const highlightedGraphics = []; // array to hold highlighted graphics
+
 class GISAssetChooserComponent extends HTMLElement {
   constructor() {
     super(); // always call super() first in the constructor.
@@ -5,7 +14,6 @@ class GISAssetChooserComponent extends HTMLElement {
 
   connectedCallback() {
     console.log("gis-asset-chooser initialized");
-
     try {
       const title = this.getAttribute("title") || "";
       const hint = this.getAttribute("hint") || "";
@@ -28,15 +36,6 @@ class GISAssetChooserComponent extends HTMLElement {
   }
 }
 
-const defaultZoom = "12";
-const defaultCenterX = "-90.25";
-const defaultCenterY = "38.64";
-const defaultBaseMap = "streets";
-const defaultShowSearch = true;
-const mapLayersToAdd = [];
-const selectedGraphics = []; // array to hold selected graphics
-const highlightedGraphics = []; // array to hold highlighted graphics
-
 document.addEventListener("layerDetailsProvided", (event) => {
   const mapLayer = event.detail;
   mapLayersToAdd.push(mapLayer);
@@ -46,17 +45,16 @@ document.addEventListener("layerDetailsProvided", (event) => {
 
 function initializeMap() {
   try {
-    const zoomToApply = document
+    const zoom = document
       .querySelector("gis-asset-chooser")
       .getAttribute("zoom");
-    // console.log("zoomToApply", zoomToApply) || defaultZoom;
-    const baseMapToApply =
+    const baseMap =
       document.querySelector("gis-asset-chooser").getAttribute("baseMap") ||
       defaultBaseMap;
-    const centerXToApply =
+    const centerX =
       document.querySelector("gis-asset-chooser").getAttribute("centerX") ||
       defaultCenterX;
-    const centerYToApply =
+    const centerY =
       document.querySelector("gis-asset-chooser").getAttribute("centerY") ||
       defaultCenterY;
     const showSearch =
@@ -69,13 +67,13 @@ function initializeMap() {
       "esri/widgets/Search",
     ], (Map, MapView, FeatureLayer, Search) => {
       const map = new Map({
-        basemap: baseMapToApply,
+        basemap: baseMap,
       });
 
       const view = new MapView({
         map: map,
-        center: [centerXToApply, centerYToApply],
-        zoom: zoomToApply,
+        center: [centerX, centerY],
+        zoom: zoom,
         container: document.querySelector("#viewDiv"),
       });
 
@@ -115,7 +113,6 @@ function initializeMap() {
           if (response.results.length) {
             const graphic = response.results[0].graphic;
             console.log("Graphic:", graphic);
-            // selectedGraphics.push(graphic);
             // Get the layer info for this graphic
             const layerInfo = response.results[0].layer.portalItem;
             const layerPortalID = layerInfo.id;
@@ -225,6 +222,7 @@ function initializeMap() {
   }
 }
 initializeMap();
+
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
 });
