@@ -15,7 +15,7 @@ class MapLayer extends HTMLElement {
         name,
         serverUrl,
       };
-      console.log('layerDetails', layerDetails);
+      // console.log('layerDetails', layerDetails);
       this.dispatchEvent(new CustomEvent("layerDetailsProvided", { 
         detail: layerDetails,
         bubbles: true,

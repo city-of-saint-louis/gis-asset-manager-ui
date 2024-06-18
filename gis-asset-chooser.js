@@ -135,7 +135,7 @@ function initializeMap() {
               // console.log("isFood", isFood);
             }
             if (isFood) {
-              console.log("Food site selected", graphic.attributes);
+              // console.log("Food site selected", graphic.attributes);
               if (
                 !selectedGraphics.find(
                   (g) => g.attributes.OBJECTID === graphic.attributes.OBJECTID
