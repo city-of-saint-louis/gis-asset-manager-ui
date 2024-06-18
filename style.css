@@ -4,20 +4,43 @@
 
 #map-container {
   display: grid;
-  grid-template-columns: 3fr 1fr; /* 3:1 ratio for larger screens */
+  grid-template-columns: 2fr 1fr; /* Adjusted for a 2:1 ratio for larger screens */
+  grid-template-rows: auto 1fr; /* Two rows: one for titles, one for content */
   grid-gap: 10px; /* Adjust gap as needed */
 }
 
 #viewDiv, #layer-data-div {
-  height: 60vh;
+  height: 50vh;
+  border: black 1px solid;
+}
+
+#viewDiv-title, #layer-data-title {
+  align-self: end; /* Aligns titles to the bottom of their grid cell */
+}
+
+.map-layer-data-container {
+  padding-left: 1em;
+  border: black 1px solid;
+  margin: 1em;
+}
+
+#map-layers-headline-mobile {
+  display: none; /* Hide layer data on larger screens */
 }
 
 @media (max-width: 768px) {
   #map-container {
     grid-template-columns: 1fr; /* Stack columns vertically on smaller screens */
+    grid-template-rows: auto auto 1fr; /* Adjust rows for stacking */
   }
 
-  #viewDiv, #layer-data-div {
+  #viewDiv, #layer-data-div, #viewDiv-title, #layer-data-title {
     width: 100%; /* Full width for smaller screens */
+  }
+  #map-layers-headline-mobile {
+    display: block; /* Show layer data on smaller screens */
+  }
+  #map-layers-headline-desktop {
+    display: none; /* Hide layer data on smaller screens */
   }
 }

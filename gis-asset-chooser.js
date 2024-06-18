@@ -18,17 +18,23 @@ class GISAssetChooserComponent extends HTMLElement {
       const title = this.getAttribute("title") || "";
       const hint = this.getAttribute("hint") || "";
       // const allowPoints = this.getAttribute("allowPoints") || false;
-
       this.innerHTML = `
-        <section>
-          <h3>${title}</h3>
-          <h4>${hint}</h4>
-          <div id="map-container" class="grid-container">
-            <div class="grid-item" id="viewDiv"></div>
-            <div class="grid-item" id="layer-data-div""></div>
+      <section>
+        <h3>${title}</h3>
+        <div id="map-container" class="grid-container">
+          <div class="grid-item" id="viewDiv-title"><h4>${hint}</h4>
           </div>
-        </section>
-      `;
+          <div class="grid-item" id="layer-data-title">
+            <h5 id="map-layers-headline-desktop">Map Layers</h5>
+          </div>
+          <div class="grid-item" id="viewDiv">
+          </div>
+           <h5 id="map-layers-headline-mobile">Map Layers</h5>
+          <div class="grid-item" id="layer-data-div">
+          </div>
+        </div>
+      </section>
+    `;
     } catch (e) {
       console.error(e);
       document.getElementById(
@@ -41,8 +47,8 @@ class GISAssetChooserComponent extends HTMLElement {
 document.addEventListener("layerDetailsProvided", (event) => {
   const mapLayer = event.detail;
   mapLayersToAdd.push(mapLayer);
-  // console.log("mapLayer", mapLayer);
-  // console.log("mapLayersToAdd", mapLayersToAdd);
+  console.log("mapLayer", mapLayer);
+  console.log("mapLayersToAdd", mapLayersToAdd);
 });
 
 function initializeMap() {
@@ -98,9 +104,17 @@ function initializeMap() {
           },
         });
         layerToAdd.outFields = ["*"];
-        // console.log("layerToAdd", layerToAdd);
+        console.log("layerToAdd", layerToAdd);
         layerToAdd.popupEnabled = false;
         map.add(layerToAdd);
+        document.getElementById("layer-data-div").innerHTML += `
+         
+          <div class="map-layer-data-container">
+            <h6>${mapLayer.name}</h6>
+            ${mapLayer.required ? `<p>Select at least 1 from ${mapLayer.name}</p>` : ''}
+            ${mapLayer.limit > 0 ? `<p>Select a maximum of ${mapLayer.limit}</p>` : ''}
+          </div>
+        `;
       });
 
       // hit test - for any layer graphics that the click 'hits'

@@ -9,11 +9,17 @@ class MapLayer extends HTMLElement {
       const layerId = this.getAttribute("layer-id") || "";
       const name = this.getAttribute("name") || "";
       const serverUrl = this.getAttribute("server-url") || "";
+      const required = this.getAttribute("required") || false;
+      const limit = this.getAttribute("limit") || 0;
+      const labelMask = this.getAttribute("label-mask") || "";
 
       const layerDetails = {
         layerId,
         name,
         serverUrl,
+        required,
+        limit,
+        labelMask,
       };
       // console.log('layerDetails', layerDetails);
       this.dispatchEvent(new CustomEvent("layerDetailsProvided", { 
