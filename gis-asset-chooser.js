@@ -110,9 +110,9 @@ function initializeMap() {
         document.getElementById("layer-data-div").innerHTML += `
          
           <div class="map-layer-data-container">
-            <h6>${mapLayer.name}</h6>
-            ${mapLayer.required ? `<p>Select at least 1 from ${mapLayer.name}</p>` : ''}
-            ${mapLayer.limit > 0 ? `<p>Select a maximum of ${mapLayer.limit}</p>` : ''}
+            <h6>${mapLayer.name}<span class="glyphicons glyphicons-eye-open"><span></h6>
+            ${mapLayer.required ? `<p>Select at least 1 asset from ${mapLayer.name}.</p>` : ''}
+            ${mapLayer.limit > 0 ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>` : ''}
           </div>
         `;
       });

@@ -9,10 +9,18 @@
   grid-gap: 10px; /* Adjust gap as needed */
 }
 
-#viewDiv, #layer-data-div {
+#viewDiv {
   height: 50vh;
-  border: black 1px solid;
+  border: grey 1px solid;
 }
+
+
+#layer-data-div {
+  
+ 
+  border: grey 1px solid;
+}
+
 
 #viewDiv-title, #layer-data-title {
   align-self: end; /* Aligns titles to the bottom of their grid cell */
@@ -20,8 +28,9 @@
 
 .map-layer-data-container {
   padding-left: 1em;
-  border: black 1px solid;
+  border: grey 1px solid;
   margin: 1em;
+  background-color: #f5f5f5 
 }
 
 #map-layers-headline-mobile {
@@ -43,4 +52,5 @@
   #map-layers-headline-desktop {
     display: none; /* Hide layer data on smaller screens */
   }
+ 
 }
