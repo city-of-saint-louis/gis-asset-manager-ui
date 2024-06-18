@@ -49,7 +49,7 @@ function initializeMap() {
     const zoomToApply = document
       .querySelector("gis-asset-chooser")
       .getAttribute("zoom");
-    console.log("zoomToApply", zoomToApply) || defaultZoom;
+    // console.log("zoomToApply", zoomToApply) || defaultZoom;
     const baseMapToApply =
       document.querySelector("gis-asset-chooser").getAttribute("baseMap") ||
       defaultBaseMap;
@@ -187,12 +187,13 @@ function initializeMap() {
                 selectedGraphics.push(graphic);
                 view.whenLayerView(graphic.layer).then(function (layerView) {
                   highlightedSelection = layerView.highlight(graphic);
-                  const hightlightDetail = {
-                    objectId: graphic.attributes.OBJECTID,
+                  hightlightDetail = {
+                    FID: graphic.attributes.FID,
                     highlightSelect: highlightedSelection,
                   };
                   highlightedGraphics.push(hightlightDetail);
                   console.log("highlightedGraphics", highlightedGraphics);
+                  console.log("selectedGraphics", selectedGraphics);
                 });
               } else {
                 console.log("Graphic already selected");
@@ -203,12 +204,12 @@ function initializeMap() {
                 selectedGraphics.splice(indexToRemove, 1);
 
                 highlightedGraphics.forEach(function (highlight) {
-                  if (highlight.objectId === graphic.attributes.OBJECTID) {
+                  if (highlight.FID === graphic.attributes.FID) {
                     highlight.highlightSelect.remove();
                   }
                 });
                 const hightlightToRemove = highlightedGraphics.findIndex(
-                  (h) => h.objectId === graphic.attributes.OBJECTID
+                  (h) => h.FID === graphic.attributes.FID
                 );
                 highlightedGraphics.splice(hightlightToRemove, 1);
                 console.log("highlightedGraphics", highlightedGraphics);
