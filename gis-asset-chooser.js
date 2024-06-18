@@ -18,6 +18,11 @@ class GISAssetChooserComponent extends HTMLElement {
           <div id="viewDiv" style="width: 80%; height:60vh;">
           </div>
         </div>
+       <div>
+          <p>Trees <img src="small-eyeball-on-icon.png" class="selectLayers" att-layer-id="46bd9d471a184f20a773224f494c45c8"></p>
+          <p>Bike Riding <img src="small-eyeball-on-icon.png" class="selectLayers" att-layer-id="b0a2bf75ab284aba834328a5a8f6e28b"></p>
+
+        </div>
       `;
     } catch (e) {
       console.error(e);
@@ -34,7 +39,7 @@ const defaultCenterY = "38.64";
 const defaultBaseMap = "streets";
 const defaultShowSearch = true;
 const mapLayersToAdd = [];
-
+const featurelayers = [];
 // console.log("mapLayersToAdd", mapLayersToAdd);
 const selectedGraphics = []; // array to hold selected graphics
 const highlights = [];
@@ -100,10 +105,12 @@ function initializeMap() {
           },
         });
         layerToAdd.outFields = ["*"];
-        console.log("layerToAdd", layerToAdd);
+        console.log("layerToAdd-ID", layerToAdd.layerId);
+        featurelayers.push(layerToAdd);
         layerToAdd.popupEnabled = false;
         map.add(layerToAdd);
       });
+      selectFeatureLayer();
       // hit test - for any layer graphics that the click 'hits'
       view.on("click", (event) => {
         view.hitTest(event).then(function (response) {
@@ -222,6 +229,32 @@ function initializeMap() {
     console.error(e);
   }
 }
+
+function selectFeatureLayer() {
+  console.log("checked featurelayers", featurelayers);
+  featurelayers.forEach((outerLayer) => {
+    const selectLayersElements = document.querySelectorAll(".selectLayers");
+    selectLayersElements.forEach((selectLayer) => {
+      selectLayer.addEventListener("click", (event) => {
+        const layerId = selectLayer.getAttribute("att-layer-id");
+        // console.log("Layer ID selected", layerId);
+        if (outerLayer.portalItem.id === layerId) {
+          //foundLayer.visible = !foundLayer.visible;
+          if (outerLayer.visible) {
+            outerLayer.visible = false;
+          } else {
+            outerLayer.visible = true;
+          }
+          selectLayer.src = outerLayer.visible
+            ? "small-eyeball-on-icon.png"
+            : "small-eyeball-off-icon.png";
+          console.log("Layer chooser visible", outerLayer);
+        }
+      });
+    });
+  });
+}
+
 initializeMap();
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
