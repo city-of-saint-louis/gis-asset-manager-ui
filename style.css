@@ -1,6 +1,23 @@
-#viewDiv {
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  width: 100%;
+* {
+  box-sizing: border-box;
+}
+
+#map-container {
+  display: grid;
+  grid-template-columns: 3fr 1fr; /* 3:1 ratio for larger screens */
+  grid-gap: 10px; /* Adjust gap as needed */
+}
+
+#viewDiv, #layer-data-div {
+  height: 60vh;
+}
+
+@media (max-width: 768px) {
+  #map-container {
+    grid-template-columns: 1fr; /* Stack columns vertically on smaller screens */
+  }
+
+  #viewDiv, #layer-data-div {
+    width: 100%; /* Full width for smaller screens */
+  }
 }
