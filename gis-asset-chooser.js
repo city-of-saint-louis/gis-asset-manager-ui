@@ -237,6 +237,7 @@ function initializeMap() {
     console.error(e);
   }
 }
+
 initializeMap();
 
 document.addEventListener("DOMContentLoaded", () => {
