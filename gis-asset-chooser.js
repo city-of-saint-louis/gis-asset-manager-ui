@@ -4,7 +4,7 @@ const defaultCenterY = "38.64";
 const defaultBaseMap = "streets";
 const defaultShowSearch = true;
 const mapLayersToAdd = [];
-const selectedGraphics = []; // array to hold selected graphics
+// const selectedGraphics = []; // array to hold selected graphics
 const highlightedGraphics = []; // array to hold highlighted graphics
 
 class GISAssetChooserComponent extends HTMLElement {
@@ -106,17 +106,18 @@ function initializeMap() {
         layerToAdd.outFields = ["*"];
         console.log("layerToAdd", layerToAdd);
         layerToAdd.popupEnabled = false;
+        
         map.add(layerToAdd);
         document.getElementById("layer-data-div").innerHTML += `
          
-          <div class="map-layer-data-container">
-            <h6>${mapLayer.name}<span class="glyphicons glyphicons-eye-open"><span></h6>
+          <div class="map-layer-data-container" data-layer-id=${mapLayer.layerId}>
+            <h6>${mapLayer.name}</h6>
             ${mapLayer.required ? `<p>Select at least 1 asset from ${mapLayer.name}.</p>` : ''}
             ${mapLayer.limit > 0 ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>` : ''}
           </div>
         `;
       });
-
+      
       // hit test - for any layer graphics that the click 'hits'
       view.on("click", (event) => {
         view.hitTest(event).then(function (response) {
@@ -150,85 +151,95 @@ function initializeMap() {
               isFood = true;
               // console.log("isFood", isFood);
             }
+
             if (isFood) {
               // console.log("Food site selected", graphic.attributes);
               if (
-                !selectedGraphics.find(
-                  (g) => g.attributes.OBJECTID === graphic.attributes.OBJECTID
+                !highlightedGraphics.find(
+                  (g) => g.highlightedGraphicId === graphic.attributes.OBJECTID
                 )
               ) {
-                console.log("Graphic not already selected");
-                selectedGraphics.push(graphic);
+                console.log("Graphic not already selected", graphic);
+                // selectedGraphics.push(graphic);
                 view.whenLayerView(graphic.layer).then(function (layerView) {
                   highlightedSelection = layerView.highlight(graphic);
 
-                  const hightlightDetail = {
-                    objectId: graphic.attributes.OBJECTID,
+                  const highlightedGraphic = {
+                    attributes: graphic.attributes,
+                    layerData: graphic.layer,
+                    layerId: graphic.layer.uid,
+                    highlightedGraphicId: graphic.attributes.OBJECTID,
                     highlightSelect: highlightedSelection,
                   };
-                  highlightedGraphics.push(hightlightDetail);
+                  highlightedGraphics.push(highlightedGraphic);
                   console.log("highlightedGraphics", highlightedGraphics);
+                  // console.log("selectedGraphics", selectedGraphics);
                 });
               } else {
-                console.log("Graphic already selected");
-                const indexToRemove = selectedGraphics.findIndex(
-                  (g) => g.attributes.OBJECTID === graphic.attributes.OBJECTID
-                );
-                selectedGraphics.splice(indexToRemove, 1);
+                console.log("Graphic already selected", graphic);
+                // const indexToRemove = highlightedGraphics.findIndex(
+                //   (g) => g.highlightedGraphicId === graphic.attributes.OBJECTID
+                // );
+                // highlightedGraphics.splice(indexToRemove, 1);
 
                 highlightedGraphics.forEach(function (highlight) {
-                  if (highlight.objectId === graphic.attributes.OBJECTID) {
+                  if (highlight.highlightedGraphicId === graphic.attributes.OBJECTID) {
                     highlight.highlightSelect.remove();
                   }
                 });
 
                 const hightlightToRemove = highlightedGraphics.findIndex(
-                  (h) => h.objectId === graphic.attributes.OBJECTID
+                  (h) => h.highlightedGraphicId === graphic.attributes.OBJECTID
                 );
                 highlightedGraphics.splice(hightlightToRemove, 1);
 
                 console.log("highlightedGraphics ", highlightedGraphics);
-                console.log("selectedGraphics", selectedGraphics);
+                // console.log("selectedGraphics", selectedGraphics);
               }
             } else {
               if (
-                !selectedGraphics.find(
-                  (g) => g.attributes.FID === graphic.attributes.FID
+                !highlightedGraphics.find(
+                  (g) => g.highlightedGraphicId === graphic.attributes.FID
                 )
               ) {
-                console.log("Graphic not already selected");
-                selectedGraphics.push(graphic);
+                console.log("Graphic not already selected", graphic);
+                // selectedGraphics.push(graphic);
                 view.whenLayerView(graphic.layer).then(function (layerView) {
                   highlightedSelection = layerView.highlight(graphic);
-                  hightlightDetail = {
-                    FID: graphic.attributes.FID,
+                  
+                  const highlightedGraphic = {
+                    attributes: graphic.attributes,
+                    layerData: graphic.layer,
+                    layerId: graphic.layer.uid,
+                    highlightedGraphicId: graphic.attributes.FID,
                     highlightSelect: highlightedSelection,
                   };
-                  highlightedGraphics.push(hightlightDetail);
+                  highlightedGraphics.push(highlightedGraphic);
                   console.log("highlightedGraphics", highlightedGraphics);
-                  console.log("selectedGraphics", selectedGraphics);
+                  // console.log("selectedGraphics", selectedGraphics);
                 });
               } else {
-                console.log("Graphic already selected");
+                console.log("Graphic already selected", graphic);
                 // console.log("selectedGraphics", selectedGraphics);
-                const indexToRemove = selectedGraphics.findIndex(
-                  (g) => g.attributes.FID === graphic.attributes.FID
-                );
-                selectedGraphics.splice(indexToRemove, 1);
+                // const indexToRemove = selectedGraphics.findIndex(
+                //   (g) => g.attributes.FID === graphic.attributes.FID
+                // );
+                // selectedGraphics.splice(indexToRemove, 1);
 
                 highlightedGraphics.forEach(function (highlight) {
-                  if (highlight.FID === graphic.attributes.FID) {
+                  if (highlight.highlightedGraphicId === graphic.attributes.FID) {
                     highlight.highlightSelect.remove();
                   }
                 });
                 const hightlightToRemove = highlightedGraphics.findIndex(
-                  (h) => h.FID === graphic.attributes.FID
+                  (h) => h.highlightedGraphicId=== graphic.attributes.FID
                 );
                 highlightedGraphics.splice(hightlightToRemove, 1);
                 console.log("highlightedGraphics", highlightedGraphics);
-                console.log("selectedGraphics", selectedGraphics);
+                // console.log("selectedGraphics", selectedGraphics);
               }
             }
+            
           }
         });
       });
@@ -239,7 +250,6 @@ function initializeMap() {
 }
 
 initializeMap();
-
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
 });

@@ -14,13 +14,9 @@
   border: grey 1px solid;
 }
 
-
 #layer-data-div {
-  
- 
   border: grey 1px solid;
 }
-
 
 #viewDiv-title, #layer-data-title {
   align-self: end; /* Aligns titles to the bottom of their grid cell */
