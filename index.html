@@ -26,16 +26,17 @@
           layer-id="34f817a794c64919affc7ec449677de3"
           name="Parcels"
           server-url="https://stlcity.maps.arcgis.com/"
-          layerAssetIDFieldName="FID"
+          layer-asset-id-field-name="FID"
           required=true
           limit=4
+          mask-label="SITEADDR"
         >
         </map-layer>
         <map-layer
           layer-id="46bd9d471a184f20a773224f494c45c8"
           name="Street_Trees_Read_Only"
           server-url="https://stlcity.maps.arcgis.com/"
-          layerAssetIDFieldName="FID"
+          layer-asset-id-field-name="FID"
           limit=3
           label-mask="{COMB_NAME} from {FROM_} to {TO_}"
         >
@@ -44,7 +45,7 @@
           layer-id="b0a2bf75ab284aba834328a5a8f6e28b"
           name="Bike St. Louis Street Routes"
           server-url="https://stlcity.maps.arcgis.com/"
-          layerAssetIDFieldName="FID"
+          layer-asset-id-field-name="FID"
           limit=2
           label-mask="{COMMON} {LOCATION_T} at {LOCATION}"
         >
@@ -52,9 +53,10 @@
         <map-layer
           layer-id="0da094b7d469485e9cd5172625cf6513"
           name="2024 St Louis City Summer Meal Program Locations"
-          layerAssetIDFieldName="OBJECTID"
+          layer-asset-id-field-name="OBJECTID"
           server-url="https://stlcity.maps.arcgis.com/"
           limit=1
+          label-mask="{ADDRESS}"
         >
         </map-layer>
       </gis-asset-chooser>

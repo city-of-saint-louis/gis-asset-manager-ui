@@ -4,17 +4,9 @@ const defaultCenterY = "38.64";
 const defaultBaseMap = "streets";
 const defaultShowSearch = true;
 const mapLayersToAdd = [];
-const featurelayers = [];
+const selectedGraphics = []; // array to hold selected graphics
 const highlightedGraphics = []; // array to hold highlighted graphics
-
-function renderHighlightedAssets() {
-  highlightedGraphics.forEach((highlightedGraphic) => {
-    // Access the properties of the highlightedGraphic object
-    // console.log("highlightedGraphic", highlightedGraphic)
-    // console.log("highlightedGraphic layerId",highlightedGraphic.layerId)
-  });
-}
-
+const featurelayers = []; // array to hold feature layers
 class GISAssetChooserComponent extends HTMLElement {
   constructor() {
     super(); // always call super() first in the constructor.
@@ -76,7 +68,6 @@ function initializeMap() {
     const showSearch =
       document.querySelector("gis-asset-chooser").getAttribute("showSearch") ||
       defaultShowSearch;
-      
     require([
       "esri/Map",
       "esri/views/MapView",
@@ -98,6 +89,7 @@ function initializeMap() {
         const searchWidget = new Search({
           view: view,
         });
+
         // Add the search widget to the top right corner of the view
         view.ui.add(searchWidget, {
           position: "top-right",
@@ -110,17 +102,9 @@ function initializeMap() {
             id: mapLayer.layerId,
             portal: mapLayer.serverUrl,
           },
-          layerProperties: {
-            layerAssetIDFieldName: mapLayer.layerAssetIDFieldName,
-            labelMask: mapLayer.labelMask,
-            layerId: mapLayer.layerId,
-            limit: mapLayer.limit,
-            required: mapLayer.required,
-            serverUrl: mapLayer.serverUrl,
-          }
         });
         layerToAdd.outFields = ["*"];
-        // console.log("layerToAdd", layerToAdd);
+        console.log("layerToAdd", layerToAdd);
         layerToAdd.popupEnabled = false;
         featurelayers.push(layerToAdd);
         map.add(layerToAdd);
@@ -146,6 +130,7 @@ function initializeMap() {
                 ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>`
                 : ""
             }
+
             <ul class="list-group" id="labelMask${mapLayer.layerId}">
             </ul>
           </div>
@@ -156,60 +141,126 @@ function initializeMap() {
       // hit test - for any layer graphics that the click 'hits'
       view.on("click", (event) => {
         view.hitTest(event).then(function (response) {
-          // let isParcel = false;
-          // let isBike = false;
-          // let isTree = false;
+          let isParcel = false;
+          let isBike = false;
+          let isTree = false;
           let isFood = false;
           let highlightedSelection;
 
           if (response.results.length) {
-            console.log("response", response.results[0]);
             const graphic = response.results[0].graphic;
+            // console.log("Graphic:", graphic);
             // Get the layer info for this graphic
             const layerInfo = response.results[0].layer.portalItem;
-            const layerProperties = response.results[0].layer.layerProperties;
-            const layerAssetIDFieldName = response.results[0].layer.layerProperties.layerAssetIDFieldName;
-            console.log("layerAssetIDFieldName", layerAssetIDFieldName);
-            console.log("layerProperties", layerProperties);
-            console.log("layerInfo", layerInfo);
+            const layerPortalID = layerInfo.id;
+            // console.log("Layer's portal ID: " + layerPortalID);
+
+            if (layerPortalID === "34f817a794c64919affc7ec449677de3") {
+              isParcel = true;
+              // console.log("isParcel", isParcel);
+            }
+            if (layerPortalID === "b0a2bf75ab284aba834328a5a8f6e28b") {
+              isBike = true;
+              // console.log("isBike", isBike);
+            }
+            if (layerPortalID === "46bd9d471a184f20a773224f494c45c8") {
+              isTree = true;
+              // console.log("isTree", isTree);
+            }
+            if (layerPortalID === "0da094b7d469485e9cd5172625cf6513") {
+              isFood = true;
+              // console.log("isFood", isFood);
+            }
+            if (isFood) {
+              // console.log("Food site selected", graphic.attributes);
               if (
-                !highlightedGraphics.find(
-                  (g) => g.highlightedGraphicId === graphic.attributes[layerAssetIDFieldName]
+                !selectedGraphics.find(
+                  (g) => g.attributes.OBJECTID === graphic.attributes.OBJECTID
                 )
               ) {
-                
+                console.log("Graphic not already selected");
+                selectedGraphics.push(graphic);
                 view.whenLayerView(graphic.layer).then(function (layerView) {
                   highlightedSelection = layerView.highlight(graphic);
-                  console.log(graphic)
-                    const highlightedGraphic = {
-                    highlightedGraphicAttributes: graphic.attributes,
-                    highlightedGraphicId: graphic.attributes[layerAssetIDFieldName],
+
+                  const hightlightDetail = {
+                    objectId: graphic.attributes.OBJECTID,
                     highlightSelect: highlightedSelection,
-                    layerData: graphic.layer,
-                    layerId: graphic.layer.uid,
-                    layerTitle: graphic.layer.title,
-                    };
-                  highlightedGraphics.push(highlightedGraphic);
-                  console.log("Graphic now highlighted", graphic);
+                  };
+                  highlightedGraphics.push(hightlightDetail);
                   console.log("highlightedGraphics", highlightedGraphics);
-                  renderHighlightedAssets();
+                  const mapLayerFound = mapLayersToAdd.find(
+                    (item) => item.layerId === layerPortalID
+                  );
+                  let labelMask = mapLayerFound.labelMask;
+                  generateLabelMask(labelMask, layerPortalID, graphic);
                 });
-            
               } else {
+                console.log("Graphic already selected");
+                const indexToRemove = selectedGraphics.findIndex(
+                  (g) => g.attributes.OBJECTID === graphic.attributes.OBJECTID
+                );
+                selectedGraphics.splice(indexToRemove, 1);
+
                 highlightedGraphics.forEach(function (highlight) {
-                  if (highlight.highlightedGraphicId === graphic.attributes[layerAssetIDFieldName]) {
+                  if (highlight.objectId === graphic.attributes.OBJECTID) {
                     highlight.highlightSelect.remove();
                   }
-                  console.log("Graphic unhighlighted.", graphic);
+                });
+
+                const hightlightToRemove = highlightedGraphics.findIndex(
+                  (h) => h.objectId === graphic.attributes.OBJECTID
+                );
+                highlightedGraphics.splice(hightlightToRemove, 1);
+
+                console.log("highlightedGraphics ", highlightedGraphics);
+                console.log("selectedGraphics", selectedGraphics);
+              }
+            } else {
+              if (
+                !selectedGraphics.find(
+                  (g) => g.attributes.FID === graphic.attributes.FID
+                )
+              ) {
+                console.log("Graphic not already selected");
+                selectedGraphics.push(graphic);
+                view.whenLayerView(graphic.layer).then(function (layerView) {
+                  highlightedSelection = layerView.highlight(graphic);
+                  hightlightDetail = {
+                    FID: graphic.attributes.FID,
+                    highlightSelect: highlightedSelection,
+                  };
+                  highlightedGraphics.push(hightlightDetail);
+                  console.log("highlightedGraphics", highlightedGraphics);
+                  console.log("selectedGraphics", selectedGraphics);
+                  //create label mask
+                  const mapLayerFound = mapLayersToAdd.find(
+                    (item) => item.layerId === layerPortalID
+                  );
+                  let labelMask = mapLayerFound.labelMask;
+                  generateLabelMask(labelMask, layerPortalID, graphic);
+                });
+              } else {
+                console.log("Graphic already selected");
+                // console.log("selectedGraphics", selectedGraphics);
+                const indexToRemove = selectedGraphics.findIndex(
+                  (g) => g.attributes.FID === graphic.attributes.FID
+                );
+                selectedGraphics.splice(indexToRemove, 1);
+
+                highlightedGraphics.forEach(function (highlight) {
+                  if (highlight.FID === graphic.attributes.FID) {
+                    highlight.highlightSelect.remove();
+                  }
                 });
                 const hightlightToRemove = highlightedGraphics.findIndex(
-                  (h) => h.highlightedGraphicId === graphic.attributes[layerAssetIDFieldName]
+                  (h) => h.FID === graphic.attributes.FID
                 );
                 highlightedGraphics.splice(hightlightToRemove, 1);
                 console.log("highlightedGraphics", highlightedGraphics);
-                renderHighlightedAssets();
+                console.log("selectedGraphics", selectedGraphics);
               }
-            // } 
+            }
           }
         });
       });
@@ -239,14 +290,49 @@ function selectFeatureLayer() {
             spanElement.classList.remove("glyphicons-eye-close");
             spanElement.classList.add("glyphicons-eye-open");
           }
+          //selectLayer.src = outerLayer.visible
+          //  ? "small-eyeball-on-icon.png"
+          //  : "small-eyeball-off-icon.png";
         }
       });
     });
   });
 }
+// Function to create Label Mask
+const generateLabelMask = (labelMask, layerPortalID, graphic) => {
+  const showlabelMask = document.getElementById(`labelMask${layerPortalID}`);
+  const labelMaskItem = document.createElement("li");
+  // console.log("Before replacement, labelMask:", labelMask);
+  const outputString = labelMask.replace(/\{([^}]+)\}/g, (match, p1) => {
+    return `" + graphic.attributes.${p1} + "`;
+  });
+  // Prepend and append a quote to handle static text at the beginning and end
+  const finalString = `"${outputString}"`;
+  const removeLabelMask = `<a class="removeLabelMask" href="#"  onclick="removeLabelMask('${layerPortalID}','${graphic.attributes.FID}',event)">
+  <span class="glyphicons glyphicons-remove small">Remove</span>
+  </a>`;
+  //console.log("After replacement, modifiedLabelMask:", finalString);
+  // Evaluate the finalString to resolve the attributes and concatenate them
+  labelMaskItem.innerHTML = eval(finalString);
+  labelMaskItem.innerHTML += removeLabelMask;
+  showlabelMask.appendChild(labelMaskItem);
+};
+
+function removeHighLight(layerId, objectId) {
+  highlightedGraphics.forEach(function (highlight) {
+    if (highlight.FID === objectId) {
+      highlight.highlightSelect.remove();
+    }
+  }); // Your function implementation here
+}
+function removeLabelMask(layerId, objectId, event) {
+  const clickedElement = event.target;
+  clickedElement.remove();
+  console.log("Label Mask removed:", clickedElement);
+  removeHighLight(layerId, objectId);
+}
 
 initializeMap();
-
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
 });

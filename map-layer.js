@@ -12,6 +12,7 @@ class MapLayer extends HTMLElement {
       const required = this.getAttribute("required") || false;
       const limit = this.getAttribute("limit") || 0;
       const labelMask = this.getAttribute("label-mask") || "";
+      const layerAssetIDFieldName = this.getAttribute("layer-asset-id-field-name") || "";
 
       const layerDetails = {
         layerId,
@@ -20,6 +21,7 @@ class MapLayer extends HTMLElement {
         required,
         limit,
         labelMask,
+        layerAssetIDFieldName
       };
       // console.log('layerDetails', layerDetails);
       this.dispatchEvent(new CustomEvent("layerDetailsProvided", { 
