@@ -6,6 +6,15 @@ const defaultShowSearch = true;
 const mapLayersToAdd = [];
 const highlightedGraphics = []; // array to hold highlighted graphics
 
+function renderHighlightedAssets() {
+  highlightedGraphics.forEach((highlightedGraphic) => {
+    // Access the properties of the highlightedGraphic object
+    // console.log("highlightedGraphic", highlightedGraphic)
+    // console.log("highlightedGraphic layerId",highlightedGraphic.layerId)
+    
+  });
+}
+
 class GISAssetChooserComponent extends HTMLElement {
   constructor() {
     super(); // always call super() first in the constructor.
@@ -46,7 +55,7 @@ class GISAssetChooserComponent extends HTMLElement {
 document.addEventListener("layerDetailsProvided", (event) => {
   const mapLayer = event.detail;
   mapLayersToAdd.push(mapLayer);
-  console.log("mapLayer", mapLayer);
+  // console.log("mapLayer", mapLayer);
   console.log("mapLayersToAdd", mapLayersToAdd);
 });
 
@@ -102,23 +111,19 @@ function initializeMap() {
           },
         });
         layerToAdd.outFields = ["*"];
-        console.log("layerToAdd", layerToAdd);
+        // console.log("layerToAdd", layerToAdd);
         layerToAdd.popupEnabled = false;
         
         map.add(layerToAdd);
         document.getElementById("layer-data-div").innerHTML += `
          
-          <div class="map-layer-data-container" data-layer-id=${mapLayer.layerId}>
+          <div id="${mapLayer.name}" class="map-layer-data-container" data-layer-id=${mapLayer.layerId}>
             <h6>${mapLayer.name}</h6>
             ${mapLayer.required ? `<p>Select at least 1.</p>` : ''}
-            <div>
-             
-            </div>
             ${mapLayer.limit > 0 ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>` : ''}
           </div>
         `;
       });
-      
       // hit test - for any layer graphics that the click 'hits'
       view.on("click", (event) => {
         view.hitTest(event).then(function (response) {
@@ -148,14 +153,13 @@ function initializeMap() {
             if (layerPortalID === "0da094b7d469485e9cd5172625cf6513") {
               isFood = true;
             }
-
             if (isFood) {
               if (
                 !highlightedGraphics.find(
                   (g) => g.highlightedGraphicId === graphic.attributes.OBJECTID
                 )
               ) {
-                console.log("Graphic now highlighted", graphic);
+                console.log(graphic)
                 view.whenLayerView(graphic.layer).then(function (layerView) {
                   highlightedSelection = layerView.highlight(graphic);
                   const highlightedGraphic = {
@@ -167,7 +171,9 @@ function initializeMap() {
                     layerTitle: graphic.layer.title,
                   };
                   highlightedGraphics.push(highlightedGraphic);
+                  console.log("Graphic now highlighted", graphic);
                   console.log("highlightedGraphics", highlightedGraphics);
+                  renderHighlightedAssets();
                 });
               } else {
                 highlightedGraphics.forEach(function (highlight) {
@@ -181,6 +187,7 @@ function initializeMap() {
                 );
                 highlightedGraphics.splice(hightlightToRemove, 1);
                 console.log("highlightedGraphics ", highlightedGraphics);
+                renderHighlightedAssets();
               }
             } else {
               if (
@@ -188,7 +195,7 @@ function initializeMap() {
                   (g) => g.highlightedGraphicId === graphic.attributes.FID
                 )
               ) {
-                console.log("Graphic now highlighted", graphic);
+                
                 view.whenLayerView(graphic.layer).then(function (layerView) {
                   highlightedSelection = layerView.highlight(graphic);
                   const highlightedGraphic = {
@@ -200,7 +207,9 @@ function initializeMap() {
                     layerTitle: graphic.layer.title,
                   };
                   highlightedGraphics.push(highlightedGraphic);
+                  console.log("Graphic now highlighted", graphic);
                   console.log("highlightedGraphics", highlightedGraphics);
+                  renderHighlightedAssets();
                 });
               } else {
                 highlightedGraphics.forEach(function (highlight) {
@@ -214,6 +223,7 @@ function initializeMap() {
                 );
                 highlightedGraphics.splice(hightlightToRemove, 1);
                 console.log("highlightedGraphics", highlightedGraphics);
+                renderHighlightedAssets();
               }
             } 
           }
@@ -225,8 +235,6 @@ function initializeMap() {
   }
 }
 initializeMap();
-
-
 
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
