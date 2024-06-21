@@ -153,10 +153,9 @@ function initializeMap() {
                   (g) => g.highlightedGraphicId === graphic.attributes.OBJECTID
                 )
               ) {
-                console.log("Graphic not already selected", graphic);
+                console.log("Graphic now highlighted", graphic);
                 view.whenLayerView(graphic.layer).then(function (layerView) {
                   highlightedSelection = layerView.highlight(graphic);
-
                   const highlightedGraphic = {
                     highlightedGraphicAttributes: graphic.attributes,
                     highlightedGraphicId: graphic.attributes.OBJECTID,
@@ -169,12 +168,11 @@ function initializeMap() {
                   console.log("highlightedGraphics", highlightedGraphics);
                 });
               } else {
-                console.log("Graphic already selected", graphic);
-
                 highlightedGraphics.forEach(function (highlight) {
                   if (highlight.highlightedGraphicId === graphic.attributes.OBJECTID) {
                     highlight.highlightSelect.remove();
                   }
+                  console.log("Graphic unhighlighted.", graphic);
                 });
                 const hightlightToRemove = highlightedGraphics.findIndex(
                   (h) => h.highlightedGraphicId === graphic.attributes.OBJECTID
@@ -188,7 +186,7 @@ function initializeMap() {
                   (g) => g.highlightedGraphicId === graphic.attributes.FID
                 )
               ) {
-                console.log("Graphic not already selected", graphic);
+                console.log("Graphic now highlighted", graphic);
                 view.whenLayerView(graphic.layer).then(function (layerView) {
                   highlightedSelection = layerView.highlight(graphic);
                   const highlightedGraphic = {
@@ -203,11 +201,11 @@ function initializeMap() {
                   console.log("highlightedGraphics", highlightedGraphics);
                 });
               } else {
-                console.log("Graphic already selected", graphic);
                 highlightedGraphics.forEach(function (highlight) {
                   if (highlight.highlightedGraphicId === graphic.attributes.FID) {
                     highlight.highlightSelect.remove();
                   }
+                  console.log("Graphic unhighlighted.", graphic);
                 });
                 const hightlightToRemove = highlightedGraphics.findIndex(
                   (h) => h.highlightedGraphicId=== graphic.attributes.FID
