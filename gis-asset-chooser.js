@@ -88,7 +88,6 @@ function initializeMap() {
         const searchWidget = new Search({
           view: view,
         });
-
         // Add the search widget to the top right corner of the view
         view.ui.add(searchWidget, {
           position: "top-right",
@@ -111,7 +110,10 @@ function initializeMap() {
          
           <div class="map-layer-data-container" data-layer-id=${mapLayer.layerId}>
             <h6>${mapLayer.name}</h6>
-            ${mapLayer.required ? `<p>Select at least 1 asset from ${mapLayer.name}.</p>` : ''}
+            ${mapLayer.required ? `<p>Select at least 1.</p>` : ''}
+            <div>
+             
+            </div>
             ${mapLayer.limit > 0 ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>` : ''}
           </div>
         `;
@@ -223,6 +225,9 @@ function initializeMap() {
   }
 }
 initializeMap();
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
 });
