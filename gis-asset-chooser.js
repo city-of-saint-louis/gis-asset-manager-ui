@@ -4,7 +4,6 @@ const defaultCenterY = "38.64";
 const defaultBaseMap = "streets";
 const defaultShowSearch = true;
 const mapLayersToAdd = [];
-// const selectedGraphics = []; // array to hold selected graphics
 const highlightedGraphics = []; // array to hold highlighted graphics
 
 class GISAssetChooserComponent extends HTMLElement {
@@ -121,80 +120,67 @@ function initializeMap() {
       // hit test - for any layer graphics that the click 'hits'
       view.on("click", (event) => {
         view.hitTest(event).then(function (response) {
-          let isParcel = false;
-          let isBike = false;
-          let isTree = false;
+          // let isParcel = false;
+          // let isBike = false;
+          // let isTree = false;
           let isFood = false;
           let highlightedSelection;
 
           if (response.results.length) {
             const graphic = response.results[0].graphic;
-            // console.log("Graphic:", graphic);
             // Get the layer info for this graphic
             const layerInfo = response.results[0].layer.portalItem;
             const layerPortalID = layerInfo.id;
-            // console.log("Layer's portal ID: " + layerPortalID);
-
-            if (layerPortalID === "34f817a794c64919affc7ec449677de3") {
-              isParcel = true;
-              // console.log("isParcel", isParcel);
-            }
-            if (layerPortalID === "b0a2bf75ab284aba834328a5a8f6e28b") {
-              isBike = true;
-              // console.log("isBike", isBike);
-            }
-            if (layerPortalID === "46bd9d471a184f20a773224f494c45c8") {
-              isTree = true;
-              // console.log("isTree", isTree);
-            }
+            // if (layerPortalID === "34f817a794c64919affc7ec449677de3") {
+            //   isParcel = true;
+            //   // console.log("isParcel", isParcel);
+            // }
+            // if (layerPortalID === "b0a2bf75ab284aba834328a5a8f6e28b") {
+            //   isBike = true;
+            //   // console.log("isBike", isBike);
+            // }
+            // if (layerPortalID === "46bd9d471a184f20a773224f494c45c8") {
+            //   isTree = true;
+            //   // console.log("isTree", isTree);
+            // }
             if (layerPortalID === "0da094b7d469485e9cd5172625cf6513") {
               isFood = true;
-              // console.log("isFood", isFood);
             }
 
             if (isFood) {
-              // console.log("Food site selected", graphic.attributes);
               if (
                 !highlightedGraphics.find(
                   (g) => g.highlightedGraphicId === graphic.attributes.OBJECTID
                 )
               ) {
                 console.log("Graphic not already selected", graphic);
-                // selectedGraphics.push(graphic);
                 view.whenLayerView(graphic.layer).then(function (layerView) {
                   highlightedSelection = layerView.highlight(graphic);
 
                   const highlightedGraphic = {
-                    attributes: graphic.attributes,
-                    layerData: graphic.layer,
-                    layerId: graphic.layer.uid,
+                    highlightedGraphicAttributes: graphic.attributes,
                     highlightedGraphicId: graphic.attributes.OBJECTID,
                     highlightSelect: highlightedSelection,
+                    layerData: graphic.layer,
+                    layerId: graphic.layer.uid,
+                    layerTitle: graphic.layer.title,
                   };
                   highlightedGraphics.push(highlightedGraphic);
                   console.log("highlightedGraphics", highlightedGraphics);
-                  // console.log("selectedGraphics", selectedGraphics);
                 });
               } else {
                 console.log("Graphic already selected", graphic);
-                // const indexToRemove = highlightedGraphics.findIndex(
-                //   (g) => g.highlightedGraphicId === graphic.attributes.OBJECTID
-                // );
-                // highlightedGraphics.splice(indexToRemove, 1);
 
                 highlightedGraphics.forEach(function (highlight) {
                   if (highlight.highlightedGraphicId === graphic.attributes.OBJECTID) {
                     highlight.highlightSelect.remove();
                   }
                 });
-
                 const hightlightToRemove = highlightedGraphics.findIndex(
                   (h) => h.highlightedGraphicId === graphic.attributes.OBJECTID
                 );
                 highlightedGraphics.splice(hightlightToRemove, 1);
-
                 console.log("highlightedGraphics ", highlightedGraphics);
-                // console.log("selectedGraphics", selectedGraphics);
               }
             } else {
               if (
@@ -203,29 +189,21 @@ function initializeMap() {
                 )
               ) {
                 console.log("Graphic not already selected", graphic);
-                // selectedGraphics.push(graphic);
                 view.whenLayerView(graphic.layer).then(function (layerView) {
                   highlightedSelection = layerView.highlight(graphic);
-                  
                   const highlightedGraphic = {
-                    attributes: graphic.attributes,
-                    layerData: graphic.layer,
-                    layerId: graphic.layer.uid,
+                    highlightedGraphicAttributes: graphic.attributes,
                     highlightedGraphicId: graphic.attributes.FID,
                     highlightSelect: highlightedSelection,
+                    layerData: graphic.layer,
+                    layerId: graphic.layer.uid,
+                    layerTitle: graphic.layer.title,
                   };
                   highlightedGraphics.push(highlightedGraphic);
                   console.log("highlightedGraphics", highlightedGraphics);
-                  // console.log("selectedGraphics", selectedGraphics);
                 });
               } else {
                 console.log("Graphic already selected", graphic);
-                // console.log("selectedGraphics", selectedGraphics);
-                // const indexToRemove = selectedGraphics.findIndex(
-                //   (g) => g.attributes.FID === graphic.attributes.FID
-                // );
-                // selectedGraphics.splice(indexToRemove, 1);
-
                 highlightedGraphics.forEach(function (highlight) {
                   if (highlight.highlightedGraphicId === graphic.attributes.FID) {
                     highlight.highlightSelect.remove();
@@ -236,10 +214,8 @@ function initializeMap() {
                 );
                 highlightedGraphics.splice(hightlightToRemove, 1);
                 console.log("highlightedGraphics", highlightedGraphics);
-                // console.log("selectedGraphics", selectedGraphics);
               }
-            }
-            
+            } 
           }
         });
       });
@@ -248,7 +224,6 @@ function initializeMap() {
     console.error(e);
   }
 }
-
 initializeMap();
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
