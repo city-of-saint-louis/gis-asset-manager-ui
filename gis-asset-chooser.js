@@ -227,8 +227,8 @@ function selectFeatureLayer() {
       selectLayer.addEventListener("click", (event) => {
         const layerId = selectLayer.getAttribute("att-layer-id");
         const spanElement = selectLayer.querySelector("span");
-        console.log("spanElement", spanElement);
-        console.log("Layer ID selected", layerId);
+        // console.log("spanElement", spanElement);
+        // console.log("Layer ID selected", layerId);
         if (outerLayer.portalItem.id === layerId) {
           if (outerLayer.visible) {
             outerLayer.visible = false;
