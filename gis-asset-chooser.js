@@ -177,6 +177,7 @@ function initializeMap() {
                     layerId: graphic.layer.uid,
                     layerTitle: graphic.layer.title,
                     layerLabelMask: graphic.layer.layerProperties.labelMask,
+                    layerAssetLimit: graphic.layer.layerProperties.limit,
                     };
                   highlightedGraphics.push(highlightedGraphic);
                   console.log("Graphic now highlighted", graphic);
