@@ -137,7 +137,7 @@ function initializeMap() {
             </h6>
             ${
               mapLayer.required
-                ? `<p>Select at least 1 asset from ${mapLayer.name}.</p>`
+                ? `<p>Select at least 1 asset.</p>`
                 : ""
             }
 
