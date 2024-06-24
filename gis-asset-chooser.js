@@ -191,35 +191,32 @@ function initializeMap() {
                 
                 view.whenLayerView(graphic.layer).then(function (layerView) {
                   console.log("graphic.layer",graphic.layer)
-                  const layerId = graphic.layer.layerProperties.layerId;
                   const layerAssetLimit = graphic.layer.layerProperties.limit;
-                  console.log("layerAssetLimit",layerAssetLimit)
-                  console.log("layerId",layerId)
-                  console.log(highlightedGraphics)
-
-               
-                
-
-
+                  console.log("layerAssetLimit", layerAssetLimit);
+                  const totalLayerAssetsSelected = highlightedGraphics.filter(
+                    (h) => h.layerId === graphic.layer.layerProperties.layerId
+                  ).length;
+                  console.log("totalLayerAssetsSelected", totalLayerAssetsSelected);
+                  if (layerAssetLimit > 0 && totalLayerAssetsSelected >= layerAssetLimit) {
+                  console.log("Layer limit reached");
+                  return;
+                } 
 
                   highlightedSelection = layerView.highlight(graphic);
-                  console.log(graphic)
+                    console.log(graphic)
+
                     const highlightedGraphic = {
-                    highlightedGraphicAttributes: graphic.attributes,
-                    highlightedGraphicId: graphic.attributes[layerAssetIDFieldName],
-                    highlightSelect: highlightedSelection,
-                    layerData: graphic.layer,
-                    layerId: graphic.layer.uid,
-                    layerTitle: graphic.layer.title,
-                    layerLabelMask: graphic.layer.layerProperties.labelMask,
-                    // layerAssetLimit: graphic.layer.layerProperties.limit,
+                      highlightedGraphicAttributes: graphic.attributes,
+                      highlightedGraphicId: graphic.attributes[layerAssetIDFieldName],
+                      highlightSelect: highlightedSelection,
+                      layerData: graphic.layer,
+                      layerUid: graphic.layer.uid,
+                      layerId: graphic.layer.layerProperties.layerId,
+                      layerTitle: graphic.layer.title,
+                      layerLabelMask: graphic.layer.layerProperties.labelMask,
+                      layerAssetLimit: graphic.layer.layerProperties.limit,
+                      layerAssetsRequired: graphic.layer.layerProperties.required,
                     };
-
-
-
-
-
-
 
                   highlightedGraphics.push(highlightedGraphic);
                   console.log("Graphic now highlighted", graphic);
