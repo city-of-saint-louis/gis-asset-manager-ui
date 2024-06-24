@@ -7,12 +7,27 @@ const mapLayersToAdd = [];
 const featurelayers = [];
 const highlightedGraphics = []; // array to hold highlighted graphics
 
-function renderHighlightedAssets() {
-  highlightedGraphics.forEach((highlightedGraphic) => {
-    // Access the properties of the highlightedGraphic object
-    // console.log("highlightedGraphic", highlightedGraphic)
-    // console.log("highlightedGraphic layerId",highlightedGraphic.layerId)
+function renderLabelMask(labelMask, layerPortalID, graphic) {
+  const showlabelMask = document.getElementById(`labelMask${layerPortalID}`);
+  const labelMaskItem = document.createElement("li");
+  // console.log("Before replacement, labelMask:", labelMask);
+  const outputString = labelMask.replace(/\{([^}]+)\}/g, (match, p1) => {
+    return `" + graphic.attributes.${p1} + "`;
   });
+  // Prepend and append a quote to handle static text at the beginning and end
+  const finalString = `"${outputString}"`;
+  const removeLabelMask = `<a class="removeLabelMask pull-right" href="#"  onclick="removeLabelMask('${layerPortalID}','${graphic.attributes.FID}',event)">
+  <span class="glyphicons glyphicons-remove small"></span> Remove
+  </a>`;
+  //console.log("After replacement, modifiedLabelMask:", finalString);
+  // Evaluate the finalString to resolve the attributes and concatenate them
+  labelMaskItem.innerHTML = eval(finalString);
+  labelMaskItem.innerHTML += removeLabelMask;
+  showlabelMask.appendChild(labelMaskItem);
+}
+
+function removeLabelMask() {
+
 }
 
 class GISAssetChooserComponent extends HTMLElement {
@@ -120,7 +135,7 @@ function initializeMap() {
           }
         });
         layerToAdd.outFields = ["*"];
-        // console.log("layerToAdd", layerToAdd);
+        console.log("layerToAdd", layerToAdd);
         layerToAdd.popupEnabled = false;
         featurelayers.push(layerToAdd);
         map.add(layerToAdd);
@@ -146,7 +161,7 @@ function initializeMap() {
                 ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>`
                 : ""
             }
-            <ul class="list-group" id="labelMask${mapLayer.layerId}">
+            <ul class="highlighted-asset-data-list" id="labelMask${mapLayer.layerId}">
             </ul>
           </div>
         `;
@@ -175,6 +190,18 @@ function initializeMap() {
               ) {
                 
                 view.whenLayerView(graphic.layer).then(function (layerView) {
+                  console.log("graphic.layer",graphic.layer)
+                  const layerId = graphic.layer.layerProperties.layerId;
+                  const layerAssetLimit = graphic.layer.layerProperties.limit;
+                  console.log("layerAssetLimit",layerAssetLimit)
+                  console.log("layerId",layerId)
+                  console.log(highlightedGraphics)
+
+               
+                
+
+
+
                   highlightedSelection = layerView.highlight(graphic);
                   console.log(graphic)
                     const highlightedGraphic = {
@@ -185,12 +212,19 @@ function initializeMap() {
                     layerId: graphic.layer.uid,
                     layerTitle: graphic.layer.title,
                     layerLabelMask: graphic.layer.layerProperties.labelMask,
-                    layerAssetLimit: graphic.layer.layerProperties.limit,
+                    // layerAssetLimit: graphic.layer.layerProperties.limit,
                     };
+
+
+
+
+
+
+
                   highlightedGraphics.push(highlightedGraphic);
                   console.log("Graphic now highlighted", graphic);
                   console.log("highlightedGraphics", highlightedGraphics);
-                  renderHighlightedAssets();
+                  renderLabelMask(graphic.layer.layerProperties.labelMask, graphic.layer.layerProperties.layerId, graphic);
                 });
             
               } else {
@@ -205,7 +239,7 @@ function initializeMap() {
                 );
                 highlightedGraphics.splice(hightlightToRemove, 1);
                 console.log("highlightedGraphics", highlightedGraphics);
-                renderHighlightedAssets();
+              
               }
             // } 
           }

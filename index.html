@@ -38,7 +38,7 @@
           server-url="https://stlcity.maps.arcgis.com/"
           layer-asset-id-field-name="FID"
           limit=3
-          label-mask="{COMB_NAME} from {FROM_} to {TO_}"
+          label-mask="{COMMON} {LOCATION_T} at {LOCATION}"
         >
         </map-layer>
         <map-layer
@@ -47,7 +47,7 @@
           server-url="https://stlcity.maps.arcgis.com/"
           layer-asset-id-field-name="FID"
           limit=2
-          label-mask="{COMMON} {LOCATION_T} at {LOCATION}"
+          label-mask="{COMB_NAME} from {FROM_} to {TO_}"
         >
         </map-layer>
         <map-layer
@@ -56,7 +56,7 @@
           layer-asset-id-field-name="OBJECTID"
           server-url="https://stlcity.maps.arcgis.com/"
           limit=1
-          label-mask="{ADDRESS}"
+          label-mask="{Site_Name}"
         >
         </map-layer>
       </gis-asset-chooser>
