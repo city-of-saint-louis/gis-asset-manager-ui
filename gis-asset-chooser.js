@@ -7,14 +7,6 @@ const mapLayersToAdd = [];
 const featurelayers = [];
 const highlightedGraphics = []; // array to hold highlighted graphics
 
-function renderHighlightedAssets() {
-  highlightedGraphics.forEach((highlightedGraphic) => {
-    // Access the properties of the highlightedGraphic object
-    // console.log("highlightedGraphic", highlightedGraphic)
-    // console.log("highlightedGraphic layerId",highlightedGraphic.layerId)
-  });
-}
-
 class GISAssetChooserComponent extends HTMLElement {
   constructor() {
     super(); // always call super() first in the constructor.
@@ -189,7 +181,7 @@ function initializeMap() {
                   highlightedGraphics.push(highlightedGraphic);
                   console.log("Graphic now highlighted", graphic);
                   console.log("highlightedGraphics", highlightedGraphics);
-                  renderHighlightedAssets();
+              
                 });
             
               } else {
@@ -204,7 +196,7 @@ function initializeMap() {
                 );
                 highlightedGraphics.splice(hightlightToRemove, 1);
                 console.log("highlightedGraphics", highlightedGraphics);
-                renderHighlightedAssets();
+              
               }
             // } 
           }
