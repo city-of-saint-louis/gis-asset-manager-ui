@@ -156,10 +156,6 @@ function initializeMap() {
       // hit test - for any layer graphics that the click 'hits'
       view.on("click", (event) => {
         view.hitTest(event).then(function (response) {
-          // let isParcel = false;
-          // let isBike = false;
-          // let isTree = false;
-          let isFood = false;
           let highlightedSelection;
 
           if (response.results.length) {
@@ -188,6 +184,7 @@ function initializeMap() {
                     layerData: graphic.layer,
                     layerId: graphic.layer.uid,
                     layerTitle: graphic.layer.title,
+                    layerLabelMask: graphic.layer.layerProperties.labelMask,
                     };
                   highlightedGraphics.push(highlightedGraphic);
                   console.log("Graphic now highlighted", graphic);
