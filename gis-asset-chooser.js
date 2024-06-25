@@ -23,7 +23,7 @@ function renderLabelMask(
   });
   // Prepend and append a quote to handle static text at the beginning and end
   const finalString = `"${outputString}"`;
-  const removeLabelMask = `<a class="removeLabelMask pull-right" href="#"  onclick="removeLabelMask('${layerPortalID}','${highlightedGraphicId}',event)">
+  const removeLabelMask = `<a class="removeLabelMask pull-right" href="#"  onclick="removeLabelMask('${highlightedGraphicId}',event)">
   <span class="glyphicons glyphicons-remove small"></span> Remove
   </a>`;
   //console.log("After replacement, modifiedLabelMask:", finalString);
@@ -35,7 +35,7 @@ function renderLabelMask(
 
 function removeHighLight(highlightedGraphicId) {
   highlightedGraphics.forEach(function (highlight) {
-    if (highlight.highlightedGraphicId === highlightedGraphicId) {
+    if (highlightedGraphicId === highlightedGraphicId) {
       highlight.highlightSelect.remove();
     }
   }); // Your function implementation here
@@ -43,9 +43,10 @@ function removeHighLight(highlightedGraphicId) {
 function removeLabelMask(highlightedGraphicId, event) {
   const clickedElement = event.target;
   clickedElement.remove();
-  //const liItem = document.querySelector("asset-list");
-  // const assetValue = liItem.getAttribute("att-asset-id");
-  // if (assetValue === highlightedGraphicId) liItem.remove();
+  const liItem = document.querySelector(".asset-list");
+  const assetValue = liItem.getAttribute("att-asset-id");
+  console.log("assetValue", assetValue);
+  if (assetValue === highlightedGraphicId) liItem.remove();
   removeHighLight(highlightedGraphicId);
 }
 
