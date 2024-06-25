@@ -37,9 +37,13 @@ function removeHighLight(highlightedGraphicId) {
   highlightedGraphics.forEach(function (highlight) {
     if (highlightedGraphicId === highlightedGraphicId) {
       highlight.highlightSelect.remove();
+      highlightedGraphics.splice(highlightedGraphics.indexOf(highlight), 1);
     }
-  }); // Your function implementation here
+  });
+  console.log("highlightedGraphics", highlightedGraphics);
 }
+// we have a removeLabelMask variable on line 26 and a removeLabelMask function on line 43
+// we should rename one of them to avoid confusion. i suggest we change the variable onname on line 26 to removeLabelMaskLink
 function removeLabelMask(highlightedGraphicId, event) {
   const clickedElement = event.target;
   clickedElement.remove();
@@ -48,6 +52,12 @@ function removeLabelMask(highlightedGraphicId, event) {
   console.log("assetValue", assetValue);
   if (assetValue === highlightedGraphicId) liItem.remove();
   removeHighLight(highlightedGraphicId);
+  // console.log(highlightedGraphicId);
+  // const hightlightedGraphicToRemove = highlightedGraphics.findIndex(
+  //   (h) => h.highlightedGraphicId === highlightedGraphicId
+  // );
+  // highlightedGraphics.splice(hightlightedGraphicToRemove, 1);
+  // console.log("highlightedGraphics", highlightedGraphics);
 }
 
 class GISAssetChooserComponent extends HTMLElement {
@@ -199,9 +209,9 @@ function initializeMap() {
             const layerProperties = response.results[0].layer.layerProperties;
             const layerAssetIDFieldName =
               response.results[0].layer.layerProperties.layerAssetIDFieldName;
-            console.log("layerAssetIDFieldName", layerAssetIDFieldName);
-            console.log("layerProperties", layerProperties);
-            console.log("layerInfo", layerInfo);
+            // console.log("layerAssetIDFieldName", layerAssetIDFieldName);
+            // console.log("layerProperties", layerProperties);
+            // console.log("layerInfo", layerInfo);
             if (
               !highlightedGraphics.find(
                 (g) =>
@@ -265,15 +275,15 @@ function initializeMap() {
                 }
                 console.log("Graphic unhighlighted.", graphic);
               });
-              const hightlightToRemove = highlightedGraphics.findIndex(
-                (h) =>
-                  h.highlightedGraphicId ===
-                  graphic.attributes[layerAssetIDFieldName]
-              );
-              highlightedGraphics.splice(hightlightToRemove, 1);
-              console.log("highlightedGraphics", highlightedGraphics);
+              // const hightlightToRemove = highlightedGraphics.findIndex(
+              //   (h) =>
+              //     h.highlightedGraphicId ===
+              //     graphic.attributes[layerAssetIDFieldName]
+              // );
+              // highlightedGraphics.splice(hightlightToRemove, 1);
+              // console.log("highlightedGraphics", highlightedGraphics);
+             
             }
-            // }
           }
         });
       });
