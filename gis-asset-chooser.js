@@ -15,6 +15,8 @@ function renderLabelMask(
 ) {
   const showlabelMask = document.getElementById(`labelMask${layerPortalID}`);
   const labelMaskItem = document.createElement("li");
+  labelMaskItem.classList.add("asset-list");
+  labelMaskItem.setAttribute("att-asset-id", highlightedGraphicId);
   // console.log("Before replacement, labelMask:", labelMask);
   const outputString = labelMask.replace(/\{([^}]+)\}/g, (match, p1) => {
     return `" + graphic.attributes.${p1} + "`;
@@ -31,7 +33,21 @@ function renderLabelMask(
   showlabelMask.appendChild(labelMaskItem);
 }
 
-function removeLabelMask() {}
+function removeHighLight(highlightedGraphicId) {
+  highlightedGraphics.forEach(function (highlight) {
+    if (highlight.highlightedGraphicId === highlightedGraphicId) {
+      highlight.highlightSelect.remove();
+    }
+  }); // Your function implementation here
+}
+function removeLabelMask(highlightedGraphicId, event) {
+  const clickedElement = event.target;
+  clickedElement.remove();
+  //const liItem = document.querySelector("asset-list");
+  // const assetValue = liItem.getAttribute("att-asset-id");
+  // if (assetValue === highlightedGraphicId) liItem.remove();
+  removeHighLight(highlightedGraphicId);
+}
 
 class GISAssetChooserComponent extends HTMLElement {
   constructor() {
