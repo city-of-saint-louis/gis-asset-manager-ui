@@ -138,9 +138,7 @@ function initializeMap() {
                 ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>`
                 : ""
             }
-            <ul class="highlighted-asset-data-list" id="labelMask${
-              mapLayer.layerId
-            }">
+            <ul class="highlighted-asset-data-list" id="${mapLayer.layerId}">
             </ul>
           </div>
         `;
@@ -209,12 +207,7 @@ function initializeMap() {
                 highlightedGraphics.push(highlightedGraphic);
                 console.log("Graphic now highlighted", graphic);
                 console.log("highlightedGraphics", highlightedGraphics);
-                renderLabelMask(
-                  graphic.layer.layerProperties.labelMask,
-                  graphic.layer.layerProperties.layerId,
-                  highlightedGraphic.highlightedGraphicId,
-                  graphic
-                );
+                renderLabelMask();
               });
             } else {
               highlightedGraphics.forEach(function (highlight) {
@@ -232,8 +225,8 @@ function initializeMap() {
                   graphic.attributes[layerAssetIDFieldName]
               );
               highlightedGraphics.splice(hightlightToRemove, 1);
+              renderLabelMask();
               console.log("highlightedGraphics", highlightedGraphics);
-             
             }
           }
         });
@@ -270,61 +263,34 @@ function selectFeatureLayer() {
   });
 }
 
-
-function renderLabelMask(
-  labelMask,
-  layerPortalID,
-  highlightedGraphicId,
-  graphic
-) {
-  const showlabelMask = document.getElementById(`labelMask${layerPortalID}`);
-  const labelMaskItem = document.createElement("li");
-  labelMaskItem.classList.add("asset-list");
-  labelMaskItem.setAttribute("att-asset-id", highlightedGraphicId);
-  // console.log("Before replacement, labelMask:", labelMask);
-  const outputString = labelMask.replace(/\{([^}]+)\}/g, (match, p1) => {
-    return `" + graphic.attributes.${p1} + "`;
-  });
-  // Prepend and append a quote to handle static text at the beginning and end
-  const finalString = `"${outputString}"`;
-  const removeLabelMask = `<a class="removeLabelMask pull-right" href="#"  onclick="removeLabelMask('${highlightedGraphicId}',event)">
-  <span class="glyphicons glyphicons-remove small"></span> Remove
-  </a>`;
-  //console.log("After replacement, modifiedLabelMask:", finalString);
-  // Evaluate the finalString to resolve the attributes and concatenate them
-  labelMaskItem.innerHTML = eval(finalString);
-  labelMaskItem.innerHTML += removeLabelMask;
-  showlabelMask.appendChild(labelMaskItem);
-}
-
-function removeHighLight(highlightedGraphicId) {
-  highlightedGraphics.forEach(function (highlight) {
-    if (highlightedGraphicId === highlightedGraphicId) {
-      highlight.highlightSelect.remove();
-      highlightedGraphics.splice(highlightedGraphics.indexOf(highlight), 1);
-    }
-  });
-  console.log("highlightedGraphics", highlightedGraphics);
-}
-// we have a removeLabelMask variable on line 26 and a removeLabelMask function on line 43
-// we should rename one of them to avoid confusion. i suggest we change the variable onname on line 26 to removeLabelMaskLink
-function removeLabelMask(highlightedGraphicId, event) {
-  const clickedElement = event.target;
-  clickedElement.remove();
-  const liItem = document.querySelector(".asset-list");
-  const assetValue = liItem.getAttribute("att-asset-id");
-  console.log("assetValue", assetValue);
-  if (assetValue === highlightedGraphicId) liItem.remove();
-  removeHighLight(highlightedGraphicId);
-  console.log(highlightedGraphicId);
-  const hightlightedGraphicToRemove = highlightedGraphics.findIndex(
-    (h) => h.highlightedGraphicId === highlightedGraphicId
+function renderLabelMask() {
+  const selectedLayerAssetListArray = document.querySelectorAll(
+    ".highlighted-asset-data-list"
   );
-  highlightedGraphics.splice(hightlightedGraphicToRemove, 1);
-  console.log("highlightedGraphics", highlightedGraphics);
+  console.log("selectedLayerAssetListArra", selectedLayerAssetListArray);
+  // Clear existing list items before appending new ones
+  selectedLayerAssetListArray.forEach((list) => {
+    list.innerHTML = ''; // This clears the list
+  });
+  highlightedGraphics.forEach((highlightedGraphic) => {
+    selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
+      if (highlightedGraphic.layerId === selectedLayerAssetList.id) {
+        console.log("highlightedGraphic.layerLabelMask", highlightedGraphic.layerLabelMask);
+        const layerLabelMask = highlightedGraphic.layerLabelMask;
+        console.log("layerLabelMask", layerLabelMask);
+        const highlightedGraphicAttributes = highlightedGraphic.highlightedGraphicAttributes;
+        console.log("highlightedGraphicAttributes", highlightedGraphicAttributes);
+
+        const selectedAssetLabelMask = highlightedGraphicAttributes[layerLabelMask];
+        console.log("selectedAssetLabelMask", selectedAssetLabelMask);
+        const assetLabelMaskListItem = document.createElement("li");
+        assetLabelMaskListItem.innerHTML = selectedAssetLabelMask;
+        selectedLayerAssetList.appendChild(assetLabelMaskListItem);
+        
+      }
+    });
+  });
 }
-
-
 
 initializeMap();
 
