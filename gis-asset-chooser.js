@@ -7,7 +7,12 @@ const mapLayersToAdd = [];
 const featurelayers = [];
 const highlightedGraphics = []; // array to hold highlighted graphics
 
-function renderLabelMask(labelMask, layerPortalID, graphic) {
+function renderLabelMask(
+  labelMask,
+  layerPortalID,
+  highlightedGraphicId,
+  graphic
+) {
   const showlabelMask = document.getElementById(`labelMask${layerPortalID}`);
   const labelMaskItem = document.createElement("li");
   // console.log("Before replacement, labelMask:", labelMask);
@@ -16,7 +21,7 @@ function renderLabelMask(labelMask, layerPortalID, graphic) {
   });
   // Prepend and append a quote to handle static text at the beginning and end
   const finalString = `"${outputString}"`;
-  const removeLabelMask = `<a class="removeLabelMask pull-right" href="#"  onclick="removeLabelMask('${layerPortalID}','${graphic.attributes.FID}',event)">
+  const removeLabelMask = `<a class="removeLabelMask pull-right" href="#"  onclick="removeLabelMask('${layerPortalID}','${highlightedGraphicId}',event)">
   <span class="glyphicons glyphicons-remove small"></span> Remove
   </a>`;
   //console.log("After replacement, modifiedLabelMask:", finalString);
@@ -26,9 +31,7 @@ function renderLabelMask(labelMask, layerPortalID, graphic) {
   showlabelMask.appendChild(labelMaskItem);
 }
 
-function removeLabelMask() {
-
-}
+function removeLabelMask() {}
 
 class GISAssetChooserComponent extends HTMLElement {
   constructor() {
@@ -91,7 +94,7 @@ function initializeMap() {
     const showSearch =
       document.querySelector("gis-asset-chooser").getAttribute("showSearch") ||
       defaultShowSearch;
-      
+
     require([
       "esri/Map",
       "esri/views/MapView",
@@ -132,7 +135,7 @@ function initializeMap() {
             limit: mapLayer.limit,
             required: mapLayer.required,
             serverUrl: mapLayer.serverUrl,
-          }
+          },
         });
         layerToAdd.outFields = ["*"];
         console.log("layerToAdd", layerToAdd);
@@ -150,18 +153,16 @@ function initializeMap() {
               </a>
 
             </h6>
-            ${
-              mapLayer.required
-                ? `<p>Select at least 1 asset.</p>`
-                : ""
-            }
+            ${mapLayer.required ? `<p>Select at least 1 asset.</p>` : ""}
 
             ${
               mapLayer.limit > 0
                 ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>`
                 : ""
             }
-            <ul class="highlighted-asset-data-list" id="labelMask${mapLayer.layerId}">
+            <ul class="highlighted-asset-data-list" id="labelMask${
+              mapLayer.layerId
+            }">
             </ul>
           </div>
         `;
@@ -179,66 +180,83 @@ function initializeMap() {
             // Get the layer info for this graphic
             const layerInfo = response.results[0].layer.portalItem;
             const layerProperties = response.results[0].layer.layerProperties;
-            const layerAssetIDFieldName = response.results[0].layer.layerProperties.layerAssetIDFieldName;
+            const layerAssetIDFieldName =
+              response.results[0].layer.layerProperties.layerAssetIDFieldName;
             console.log("layerAssetIDFieldName", layerAssetIDFieldName);
             console.log("layerProperties", layerProperties);
             console.log("layerInfo", layerInfo);
-              if (
-                !highlightedGraphics.find(
-                  (g) => g.highlightedGraphicId === graphic.attributes[layerAssetIDFieldName]
-                )
-              ) {
-                
-                view.whenLayerView(graphic.layer).then(function (layerView) {
-                  console.log("graphic.layer",graphic.layer)
-                  const layerAssetLimit = graphic.layer.layerProperties.limit;
-                  console.log("layerAssetLimit", layerAssetLimit);
-                  const totalLayerAssetsSelected = highlightedGraphics.filter(
-                    (h) => h.layerId === graphic.layer.layerProperties.layerId
-                  ).length;
-                  console.log("totalLayerAssetsSelected", totalLayerAssetsSelected);
-                  if (layerAssetLimit > 0 && totalLayerAssetsSelected >= layerAssetLimit) {
+            if (
+              !highlightedGraphics.find(
+                (g) =>
+                  g.highlightedGraphicId ===
+                  graphic.attributes[layerAssetIDFieldName]
+              )
+            ) {
+              view.whenLayerView(graphic.layer).then(function (layerView) {
+                console.log("graphic.layer", graphic.layer);
+                const layerAssetLimit = graphic.layer.layerProperties.limit;
+                console.log("layerAssetLimit", layerAssetLimit);
+                const totalLayerAssetsSelected = highlightedGraphics.filter(
+                  (h) => h.layerId === graphic.layer.layerProperties.layerId
+                ).length;
+                console.log(
+                  "totalLayerAssetsSelected",
+                  totalLayerAssetsSelected
+                );
+                if (
+                  layerAssetLimit > 0 &&
+                  totalLayerAssetsSelected >= layerAssetLimit
+                ) {
                   console.log("Layer limit reached");
                   return;
-                } 
+                }
 
-                  highlightedSelection = layerView.highlight(graphic);
-                    console.log(graphic)
+                highlightedSelection = layerView.highlight(graphic);
+                console.log(graphic);
 
-                    const highlightedGraphic = {
-                      highlightedGraphicAttributes: graphic.attributes,
-                      highlightedGraphicId: graphic.attributes[layerAssetIDFieldName],
-                      highlightSelect: highlightedSelection,
-                      layerData: graphic.layer,
-                      layerUid: graphic.layer.uid,
-                      layerId: graphic.layer.layerProperties.layerId,
-                      layerTitle: graphic.layer.title,
-                      layerLabelMask: graphic.layer.layerProperties.labelMask,
-                      layerAssetLimit: graphic.layer.layerProperties.limit,
-                      layerAssetsRequired: graphic.layer.layerProperties.required,
-                    };
+                const highlightedGraphic = {
+                  highlightedGraphicAttributes: graphic.attributes,
+                  highlightedGraphicId:
+                    graphic.attributes[layerAssetIDFieldName],
+                  highlightSelect: highlightedSelection,
+                  layerData: graphic.layer,
+                  layerUid: graphic.layer.uid,
+                  layerId: graphic.layer.layerProperties.layerId,
+                  layerTitle: graphic.layer.title,
+                  layerLabelMask: graphic.layer.layerProperties.labelMask,
+                  layerAssetLimit: graphic.layer.layerProperties.limit,
+                  layerAssetsRequired: graphic.layer.layerProperties.required,
+                };
 
-                  highlightedGraphics.push(highlightedGraphic);
-                  console.log("Graphic now highlighted", graphic);
-                  console.log("highlightedGraphics", highlightedGraphics);
-                  renderLabelMask(graphic.layer.layerProperties.labelMask, graphic.layer.layerProperties.layerId, graphic);
-                });
-            
-              } else {
-                highlightedGraphics.forEach(function (highlight) {
-                  if (highlight.highlightedGraphicId === graphic.attributes[layerAssetIDFieldName]) {
-                    highlight.highlightSelect.remove();
-                  }
-                  console.log("Graphic unhighlighted.", graphic);
-                });
-                const hightlightToRemove = highlightedGraphics.findIndex(
-                  (h) => h.highlightedGraphicId === graphic.attributes[layerAssetIDFieldName]
-                );
-                highlightedGraphics.splice(hightlightToRemove, 1);
+                highlightedGraphics.push(highlightedGraphic);
+                console.log("Graphic now highlighted", graphic);
                 console.log("highlightedGraphics", highlightedGraphics);
-              
-              }
-            // } 
+                renderLabelMask(
+                  graphic.layer.layerProperties.labelMask,
+                  graphic.layer.layerProperties.layerId,
+                  highlightedGraphic.highlightedGraphicId,
+                  graphic
+                );
+              });
+            } else {
+              highlightedGraphics.forEach(function (highlight) {
+                if (
+                  highlight.highlightedGraphicId ===
+                  graphic.attributes[layerAssetIDFieldName]
+                ) {
+                  highlight.highlightSelect.remove();
+                }
+                console.log("Graphic unhighlighted.", graphic);
+              });
+              const hightlightToRemove = highlightedGraphics.findIndex(
+                (h) =>
+                  h.highlightedGraphicId ===
+                  graphic.attributes[layerAssetIDFieldName]
+              );
+              highlightedGraphics.splice(hightlightToRemove, 1);
+              console.log("highlightedGraphics", highlightedGraphics);
+            }
+            // }
           }
         });
       });
