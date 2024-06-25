@@ -316,12 +316,12 @@ function removeLabelMask(highlightedGraphicId, event) {
   console.log("assetValue", assetValue);
   if (assetValue === highlightedGraphicId) liItem.remove();
   removeHighLight(highlightedGraphicId);
-  // console.log(highlightedGraphicId);
-  // const hightlightedGraphicToRemove = highlightedGraphics.findIndex(
-  //   (h) => h.highlightedGraphicId === highlightedGraphicId
-  // );
-  // highlightedGraphics.splice(hightlightedGraphicToRemove, 1);
-  // console.log("highlightedGraphics", highlightedGraphics);
+  console.log(highlightedGraphicId);
+  const hightlightedGraphicToRemove = highlightedGraphics.findIndex(
+    (h) => h.highlightedGraphicId === highlightedGraphicId
+  );
+  highlightedGraphics.splice(hightlightedGraphicToRemove, 1);
+  console.log("highlightedGraphics", highlightedGraphics);
 }
 
 
