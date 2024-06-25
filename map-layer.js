@@ -13,6 +13,7 @@ class MapLayer extends HTMLElement {
       const limit = this.getAttribute("limit") || 0;
       const labelMask = this.getAttribute("label-mask") || "";
       const layerAssetIDFieldName = this.getAttribute("layer-asset-id-field-name") || "";
+      const layerClassUrl = this.getAttribute("layer-class-url") || "";
 
       const layerDetails = {
         layerId,

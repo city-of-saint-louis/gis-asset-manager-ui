@@ -7,59 +7,7 @@ const mapLayersToAdd = [];
 const featurelayers = [];
 const highlightedGraphics = []; // array to hold highlighted graphics
 
-function renderLabelMask(
-  labelMask,
-  layerPortalID,
-  highlightedGraphicId,
-  graphic
-) {
-  const showlabelMask = document.getElementById(`labelMask${layerPortalID}`);
-  const labelMaskItem = document.createElement("li");
-  labelMaskItem.classList.add("asset-list");
-  labelMaskItem.setAttribute("att-asset-id", highlightedGraphicId);
-  // console.log("Before replacement, labelMask:", labelMask);
-  const outputString = labelMask.replace(/\{([^}]+)\}/g, (match, p1) => {
-    return `" + graphic.attributes.${p1} + "`;
-  });
-  // Prepend and append a quote to handle static text at the beginning and end
-  const finalString = `"${outputString}"`;
-  const removeLabelMask = `<a class="removeLabelMask pull-right" href="#"  onclick="removeLabelMask('${highlightedGraphicId}',event)">
-  <span class="glyphicons glyphicons-remove small"></span> Remove
-  </a>`;
-  //console.log("After replacement, modifiedLabelMask:", finalString);
-  // Evaluate the finalString to resolve the attributes and concatenate them
-  labelMaskItem.innerHTML = eval(finalString);
-  labelMaskItem.innerHTML += removeLabelMask;
-  showlabelMask.appendChild(labelMaskItem);
-}
-
-function removeHighLight(highlightedGraphicId) {
-  highlightedGraphics.forEach(function (highlight) {
-    if (highlightedGraphicId === highlightedGraphicId) {
-      highlight.highlightSelect.remove();
-      highlightedGraphics.splice(highlightedGraphics.indexOf(highlight), 1);
-    }
-  });
-  console.log("highlightedGraphics", highlightedGraphics);
-}
-// we have a removeLabelMask variable on line 26 and a removeLabelMask function on line 43
-// we should rename one of them to avoid confusion. i suggest we change the variable onname on line 26 to removeLabelMaskLink
-function removeLabelMask(highlightedGraphicId, event) {
-  const clickedElement = event.target;
-  clickedElement.remove();
-  const liItem = document.querySelector(".asset-list");
-  const assetValue = liItem.getAttribute("att-asset-id");
-  console.log("assetValue", assetValue);
-  if (assetValue === highlightedGraphicId) liItem.remove();
-  removeHighLight(highlightedGraphicId);
-  // console.log(highlightedGraphicId);
-  // const hightlightedGraphicToRemove = highlightedGraphics.findIndex(
-  //   (h) => h.highlightedGraphicId === highlightedGraphicId
-  // );
-  // highlightedGraphics.splice(hightlightedGraphicToRemove, 1);
-  // console.log("highlightedGraphics", highlightedGraphics);
-}
-
+// Define the custom web component
 class GISAssetChooserComponent extends HTMLElement {
   constructor() {
     super(); // always call super() first in the constructor.
@@ -96,7 +44,9 @@ class GISAssetChooserComponent extends HTMLElement {
     }
   }
 }
+// end of component class
 
+// event listener to capture layer data from map-layer.js
 document.addEventListener("layerDetailsProvided", (event) => {
   const mapLayer = event.detail;
   mapLayersToAdd.push(mapLayer);
@@ -104,6 +54,7 @@ document.addEventListener("layerDetailsProvided", (event) => {
   console.log("mapLayersToAdd", mapLayersToAdd);
 });
 
+// Load the map and layers
 function initializeMap() {
   try {
     const zoom = document
@@ -275,13 +226,13 @@ function initializeMap() {
                 }
                 console.log("Graphic unhighlighted.", graphic);
               });
-              // const hightlightToRemove = highlightedGraphics.findIndex(
-              //   (h) =>
-              //     h.highlightedGraphicId ===
-              //     graphic.attributes[layerAssetIDFieldName]
-              // );
-              // highlightedGraphics.splice(hightlightToRemove, 1);
-              // console.log("highlightedGraphics", highlightedGraphics);
+              const hightlightToRemove = highlightedGraphics.findIndex(
+                (h) =>
+                  h.highlightedGraphicId ===
+                  graphic.attributes[layerAssetIDFieldName]
+              );
+              highlightedGraphics.splice(hightlightToRemove, 1);
+              console.log("highlightedGraphics", highlightedGraphics);
              
             }
           }
@@ -318,6 +269,62 @@ function selectFeatureLayer() {
     });
   });
 }
+
+
+function renderLabelMask(
+  labelMask,
+  layerPortalID,
+  highlightedGraphicId,
+  graphic
+) {
+  const showlabelMask = document.getElementById(`labelMask${layerPortalID}`);
+  const labelMaskItem = document.createElement("li");
+  labelMaskItem.classList.add("asset-list");
+  labelMaskItem.setAttribute("att-asset-id", highlightedGraphicId);
+  // console.log("Before replacement, labelMask:", labelMask);
+  const outputString = labelMask.replace(/\{([^}]+)\}/g, (match, p1) => {
+    return `" + graphic.attributes.${p1} + "`;
+  });
+  // Prepend and append a quote to handle static text at the beginning and end
+  const finalString = `"${outputString}"`;
+  const removeLabelMask = `<a class="removeLabelMask pull-right" href="#"  onclick="removeLabelMask('${highlightedGraphicId}',event)">
+  <span class="glyphicons glyphicons-remove small"></span> Remove
+  </a>`;
+  //console.log("After replacement, modifiedLabelMask:", finalString);
+  // Evaluate the finalString to resolve the attributes and concatenate them
+  labelMaskItem.innerHTML = eval(finalString);
+  labelMaskItem.innerHTML += removeLabelMask;
+  showlabelMask.appendChild(labelMaskItem);
+}
+
+function removeHighLight(highlightedGraphicId) {
+  highlightedGraphics.forEach(function (highlight) {
+    if (highlightedGraphicId === highlightedGraphicId) {
+      highlight.highlightSelect.remove();
+      highlightedGraphics.splice(highlightedGraphics.indexOf(highlight), 1);
+    }
+  });
+  console.log("highlightedGraphics", highlightedGraphics);
+}
+// we have a removeLabelMask variable on line 26 and a removeLabelMask function on line 43
+// we should rename one of them to avoid confusion. i suggest we change the variable onname on line 26 to removeLabelMaskLink
+function removeLabelMask(highlightedGraphicId, event) {
+  const clickedElement = event.target;
+  clickedElement.remove();
+  const liItem = document.querySelector(".asset-list");
+  const assetValue = liItem.getAttribute("att-asset-id");
+  console.log("assetValue", assetValue);
+  if (assetValue === highlightedGraphicId) liItem.remove();
+  removeHighLight(highlightedGraphicId);
+  // console.log(highlightedGraphicId);
+  // const hightlightedGraphicToRemove = highlightedGraphics.findIndex(
+  //   (h) => h.highlightedGraphicId === highlightedGraphicId
+  // );
+  // highlightedGraphics.splice(hightlightedGraphicToRemove, 1);
+  // console.log("highlightedGraphics", highlightedGraphics);
+}
+
+
 
 initializeMap();
 
