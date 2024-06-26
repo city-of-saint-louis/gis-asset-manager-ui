@@ -290,9 +290,9 @@ function renderLabelMask() {
         const assetLabelMaskListItem = document.createElement("li");
         assetLabelMaskListItem.innerHTML = `${selectedAssetLabelMask} 
         <br/>
-        <button class="remove-asset-btn" >
-        <span class="glyphicons glyphicons-remove small"></span>
-        </button>
+       
+        <span class="remove-asset-btn glyphicons glyphicons-remove small"></span>
+        
         Remove`;
         selectedLayerAssetList.appendChild(assetLabelMaskListItem);
 
