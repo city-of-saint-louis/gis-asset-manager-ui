@@ -102,20 +102,20 @@ function initializeMap() {
 
       mapLayersToAdd.forEach((mapLayer) => {
         const layerToAdd = new FeatureLayer({
-          // url:"https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Wards_Precincts_Streets/FeatureServer/1"
-          portalItem: {
-            id: mapLayer.layerId,
-            portal: mapLayer.serverUrl,
-            // url:"https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Wards_Precincts_Streets/FeatureServer/1"
-          },
+          url: mapLayer.layerClassUrl,
+          // portalItem: {
+          //   id: mapLayer.layerId,
+          //   portal: mapLayer.serverUrl,
+          // },
           layerProperties: {
             layerName: mapLayer.name,
+            layerClassUrl: mapLayer.layerClassUrl,
             layerAssetIDFieldName: mapLayer.layerAssetIDFieldName,
             labelMask: mapLayer.labelMask,
-            layerId: mapLayer.layerId,
             limit: mapLayer.limit,
             required: mapLayer.required,
-            serverUrl: mapLayer.serverUrl,
+            // layerId: mapLayer.layerId,
+            // serverUrl: mapLayer.serverUrl,
           },
         });
         layerToAdd.outFields = ["*"];
@@ -314,7 +314,7 @@ function renderLabelMask() {
           assetLabelMaskListItem.addEventListener("click", function () {
           // alert('Button clicked!');
           highlightedGraphics.forEach((highlightedGraphic) => {
-            // console.log('removeButton', removeButton);
+            console.log()
             console.log('highlightedGraphic', highlightedGraphic);
             if (
               highlightedGraphic.highlightedGraphicId ===

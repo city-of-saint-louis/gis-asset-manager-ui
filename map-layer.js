@@ -6,19 +6,21 @@ class MapLayer extends HTMLElement {
     console.log("map-layer initialized")
    
     try {
-      const layerId = this.getAttribute("layer-id") || "";
       const name = this.getAttribute("name") || "";
-      const serverUrl = this.getAttribute("server-url") || "";
+      const layerClassUrl = this.getAttribute("layer-class-url") || ""; 
+      // const layerId = this.getAttribute("layer-id") || "";
+      // const serverUrl = this.getAttribute("server-url") || "";
       const required = this.getAttribute("required") || false;
       const limit = this.getAttribute("limit") || 0;
       const labelMask = this.getAttribute("label-mask") || "";
       const layerAssetIDFieldName = this.getAttribute("layer-asset-id-field-name") || "";
-      // const layerClassUrl = this.getAttribute("layer-class-url") || ""; // needed for refactor
+      
 
       const layerDetails = {
-        layerId,
         name,
-        serverUrl,
+        layerClassUrl,
+        // serverUrl,
+        // layerId,
         required,
         limit,
         labelMask,

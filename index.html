@@ -23,9 +23,8 @@
         centerY="38.64"
       >
         <map-layer
-          layer-id="34f817a794c64919affc7ec449677de3"
           name="Parcels"
-          server-url="https://stlcity.maps.arcgis.com/"
+          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
           required=true
           limit=4
@@ -33,15 +32,14 @@
         >
         </map-layer>
         <map-layer
-          layer-id="46bd9d471a184f20a773224f494c45c8"
           name="Street_Trees_Read_Only"
-          server-url="https://stlcity.maps.arcgis.com/"
+          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/CITY_TREES/FeatureServer/0"
           layer-asset-id-field-name="FID"
           limit=3
           label-mask="{COMMON} {LOCATION_T} at {LOCATION}"
         >
         </map-layer>
-        <map-layer
+        <!-- <map-layer
           layer-id="b0a2bf75ab284aba834328a5a8f6e28b"
           name="Bike St. Louis Street Routes"
           server-url="https://stlcity.maps.arcgis.com/"
@@ -58,7 +56,7 @@
           limit=1
           label-mask="Site_Name"
         >
-        </map-layer>
+        </map-layer> -->
       </gis-asset-chooser>
     </main>
     <footer></footer>
@@ -66,3 +64,12 @@
     <script src="gis-asset-chooser.js"></script>
   </body>
 </html>
+
+
+<!-- Parcel layer -->
+<!-- layer-id="34f817a794c64919affc7ec449677de3" -->
+<!-- server-url="https://stlcity.maps.arcgis.com/" -->
+
+<!-- Tree layer -->
+<!-- server-url="https://stlcity.maps.arcgis.com/" -->
+<!-- layer-id="46bd9d471a184f20a773224f494c45c8" -->
