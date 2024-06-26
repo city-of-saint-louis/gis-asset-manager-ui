@@ -138,7 +138,7 @@ function initializeMap() {
           ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>`
           : ""
             }
-            <ul class="highlighted-asset-data-list" id="${mapLayer.layerId}" style="list-style-type: none;">
+            <ul class="highlighted-asset-data-list" id="${mapLayer.layerId}">
             </ul>
           </div>
         `;
@@ -236,6 +236,7 @@ function initializeMap() {
   } catch (e) {
     console.error(e);
   }
+  console.log('highlightedGraphics', highlightedGraphics)
 }
 
 function selectFeatureLayer() {
@@ -262,6 +263,7 @@ function selectFeatureLayer() {
       });
     });
   });
+  console.log('highlightedGraphics', highlightedGraphics)
 }
 
 function renderLabelMask() {
@@ -302,7 +304,9 @@ function renderLabelMask() {
           highlightedGraphics.forEach((highlightedGraphic) => {
             if (highlightedGraphic.highlightedGraphicId === highlightedGraphic.highlightedGraphicId) {
               highlightedGraphic.highlightSelect.remove();
-              document.getElementById(highlightedGraphic.highlightedGraphicId).innerHTML = '';
+              // document.getElementById(highlightedGraphic.highlightedGraphicId).innerHTML = '';
+              const element = document.getElementById(highlightedGraphic.highlightedGraphicId);
+if (element) element.remove();
               const hightlightToRemove = highlightedGraphics.findIndex(
                 (h) => h.highlightedGraphicId === highlightedGraphic.highlightedGraphicId
               );
@@ -315,6 +319,7 @@ function renderLabelMask() {
       }
     });
   });
+  console.log('highlightedGraphics', highlightedGraphics)
 }
 
 
