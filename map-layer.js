@@ -13,7 +13,7 @@ class MapLayer extends HTMLElement {
       const limit = this.getAttribute("limit") || 0;
       const labelMask = this.getAttribute("label-mask") || "";
       const layerAssetIDFieldName = this.getAttribute("layer-asset-id-field-name") || "";
-      const layerClassUrl = this.getAttribute("layer-class-url") || "";
+      // const layerClassUrl = this.getAttribute("layer-class-url") || ""; // needed for refactor
 
       const layerDetails = {
         layerId,
@@ -22,7 +22,7 @@ class MapLayer extends HTMLElement {
         required,
         limit,
         labelMask,
-        layerAssetIDFieldName
+        layerAssetIDFieldName,
       };
       // console.log('layerDetails', layerDetails);
       this.dispatchEvent(new CustomEvent("layerDetailsProvided", { 

@@ -99,14 +99,17 @@ function initializeMap() {
           position: "top-right",
         });
       }
-
+     
       mapLayersToAdd.forEach((mapLayer) => {
         const layerToAdd = new FeatureLayer({
+          // url:"https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Wards_Precincts_Streets/FeatureServer/1"
           portalItem: {
             id: mapLayer.layerId,
             portal: mapLayer.serverUrl,
+            // url:"https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Wards_Precincts_Streets/FeatureServer/1"
           },
           layerProperties: {
+            layerName: mapLayer.name,
             layerAssetIDFieldName: mapLayer.layerAssetIDFieldName,
             labelMask: mapLayer.labelMask,
             layerId: mapLayer.layerId,
@@ -154,8 +157,8 @@ function initializeMap() {
             console.log("response", response.results[0]);
             const graphic = response.results[0].graphic;
             // Get the layer info for this graphic
-            const layerInfo = response.results[0].layer.portalItem;
-            const layerProperties = response.results[0].layer.layerProperties;
+            // const layerInfo = response.results[0].layer.portalItem;
+            // const layerProperties = response.results[0].layer.layerProperties;
             const layerAssetIDFieldName =
               response.results[0].layer.layerProperties.layerAssetIDFieldName;
             // console.log("layerAssetIDFieldName", layerAssetIDFieldName);
@@ -183,6 +186,7 @@ function initializeMap() {
                   layerAssetLimit > 0 &&
                   totalLayerAssetsSelected >= layerAssetLimit
                 ) {
+                  alert(`You have reached the limit of ${layerAssetLimit} assets for ${graphic.layer.layerProperties.layerName}.`)
                   console.log("Layer limit reached");
                   return;
                 }
