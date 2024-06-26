@@ -101,6 +101,7 @@ function initializeMap() {
       }
 
       mapLayersToAdd.forEach((mapLayer) => {
+        console.log("mapLayer", mapLayer);
         const layerToAdd = new FeatureLayer({
           url: mapLayer.layerClassUrl,
           // portalItem: {
@@ -125,20 +126,20 @@ function initializeMap() {
         map.add(layerToAdd);
         document.getElementById("layer-data-div").innerHTML += `
           <div class="map-layer-data-container" class="content-block">
-            <h6>${mapLayer.name}
+            <h6>${layerToAdd.layerProperties.layerName}
               <a href="#" class="selectLayers pull-right" att-layer-id="${
-                mapLayer.layerId
+                layerToAdd.id
               }">
           <span class="glyphicons glyphicons-eye-open"></span>
               </a>
             </h6>
-            ${mapLayer.required ? `<p>Select at least 1 asset.</p>` : ""}
+            ${layerToAdd.layerProperties.required ? `<p>Select at least 1 asset.</p>` : ""}
             ${
-              mapLayer.limit > 0
-                ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>`
+              layerToAdd.layerProperties.limit > 0
+                ? `<p>Select a maximum of ${layerToAdd.layerProperties.limit} assets.</p>`
                 : ""
             }
-            <ul class="highlighted-asset-data-list" id="${mapLayer.layerId}">
+            <ul class="highlighted-asset-data-list" id="${layerToAdd.id}">
             </ul>
           </div>
         `;
@@ -152,15 +153,21 @@ function initializeMap() {
 
           if (response.results.length) {
             console.log("response", response.results[0]);
+
             const graphic = response.results[0].graphic;
+            console.log("graphic", graphic);
             // Get the layer info for this graphic
             // const layerInfo = response.results[0].layer.portalItem;
-            // const layerProperties = response.results[0].layer.layerProperties;
-            const layerAssetIDFieldName =
-              response.results[0].layer.layerProperties.layerAssetIDFieldName;
-            // console.log("layerAssetIDFieldName", layerAssetIDFieldName);
-            // console.log("layerProperties", layerProperties);
             // console.log("layerInfo", layerInfo);
+
+            const layerProperties = response.results[0].layer.layerProperties;
+            console.log("layerProperties", layerProperties);
+
+            const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
+            console.log("layerAssetIDFieldName", layerAssetIDFieldName);
+           
+            const layerId = graphic.layer.id;
+            console.log("layerId", layerId);
             if (
               !highlightedGraphics.find(
                 (g) =>
@@ -170,7 +177,7 @@ function initializeMap() {
             ) {
               view.whenLayerView(graphic.layer).then(function (layerView) {
                 console.log("graphic.layer", graphic.layer);
-                const layerAssetLimit = graphic.layer.layerProperties.limit;
+                const layerAssetLimit = layerProperties.limit;
                 console.log("layerAssetLimit", layerAssetLimit);
                 const totalLayerAssetsSelected = highlightedGraphics.filter(
                   (h) => h.layerId === graphic.layer.layerProperties.layerId
@@ -195,18 +202,18 @@ function initializeMap() {
 
                 const highlightedGraphic = {
                   highlightedGraphicAttributes: graphic.attributes,
-                  highlightedGraphicId:
-                    graphic.attributes[layerAssetIDFieldName],
+                  highlightedGraphicId: `${graphic.layer.title}-${graphic.attributes[layerAssetIDFieldName]}`,
+                    // graphic.attributes[layerAssetIDFieldName],
                   highlightSelect: highlightedSelection,
                   layerData: graphic.layer,
                   layerUid: graphic.layer.uid,
-                  layerId: graphic.layer.layerProperties.layerId,
+                  layerId: `${graphic.layer.title}${layerId}`,
                   layerTitle: graphic.layer.title,
                   layerLabelMask: graphic.layer.layerProperties.labelMask,
                   layerAssetLimit: graphic.layer.layerProperties.limit,
                   layerAssetsRequired: graphic.layer.layerProperties.required,
                 };
-
+// pick up here on thursday 6/27
                 highlightedGraphics.push(highlightedGraphic);
                 console.log("Graphic now highlighted", graphic);
                 console.log("highlightedGraphics", highlightedGraphics);
