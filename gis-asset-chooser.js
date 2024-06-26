@@ -303,6 +303,12 @@ function renderLabelMask() {
             if (highlightedGraphic.highlightedGraphicId === highlightedGraphic.highlightedGraphicId) {
               highlightedGraphic.highlightSelect.remove();
               document.getElementById(highlightedGraphic.highlightedGraphicId).innerHTML = '';
+              const hightlightToRemove = highlightedGraphics.findIndex(
+                (h) => h.highlightedGraphicId === highlightedGraphic.highlightedGraphicId
+              );
+              highlightedGraphics.splice(hightlightToRemove, 1);
+              renderLabelMask();
+              console.log("highlightedGraphics", highlightedGraphics);
             }
           });
         });
@@ -311,9 +317,7 @@ function renderLabelMask() {
   });
 }
 
-function removeHighlight() {
 
-};
 
 
 
