@@ -99,7 +99,7 @@ function initializeMap() {
           position: "top-right",
         });
       }
-     
+
       mapLayersToAdd.forEach((mapLayer) => {
         const layerToAdd = new FeatureLayer({
           // url:"https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Wards_Precincts_Streets/FeatureServer/1"
@@ -127,7 +127,7 @@ function initializeMap() {
           <div class="map-layer-data-container" class="content-block">
             <h6>${mapLayer.name}
               <a href="#" class="selectLayers pull-right" att-layer-id="${
-          mapLayer.layerId
+                mapLayer.layerId
               }">
           <span class="glyphicons glyphicons-eye-open"></span>
               </a>
@@ -135,8 +135,8 @@ function initializeMap() {
             ${mapLayer.required ? `<p>Select at least 1 asset.</p>` : ""}
             ${
               mapLayer.limit > 0
-          ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>`
-          : ""
+                ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>`
+                : ""
             }
             <ul class="highlighted-asset-data-list" id="${mapLayer.layerId}">
             </ul>
@@ -183,7 +183,9 @@ function initializeMap() {
                   layerAssetLimit > 0 &&
                   totalLayerAssetsSelected >= layerAssetLimit
                 ) {
-                  alert(`You have reached the limit of ${layerAssetLimit} assets for ${graphic.layer.layerProperties.layerName}.`)
+                  alert(
+                    `You have reached the limit of ${layerAssetLimit} assets for ${graphic.layer.layerProperties.layerName}.`
+                  );
                   console.log("Layer limit reached");
                   return;
                 }
@@ -236,7 +238,7 @@ function initializeMap() {
   } catch (e) {
     console.error(e);
   }
-  console.log('highlightedGraphics', highlightedGraphics)
+  console.log("highlightedGraphics", highlightedGraphics);
 }
 
 function selectFeatureLayer() {
@@ -263,7 +265,7 @@ function selectFeatureLayer() {
       });
     });
   });
-  console.log('highlightedGraphics', highlightedGraphics)
+  console.log("highlightedGraphics", highlightedGraphics);
 }
 
 function renderLabelMask() {
@@ -273,42 +275,61 @@ function renderLabelMask() {
   console.log("selectedLayerAssetListArra", selectedLayerAssetListArray);
   // Clear existing list items before appending new ones
   selectedLayerAssetListArray.forEach((list) => {
-    list.innerHTML = ''; // This clears the list
+    list.innerHTML = ""; // This clears the list
   });
   highlightedGraphics.forEach((highlightedGraphic) => {
     console.log("highlightedGraphic", highlightedGraphic);
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
       if (highlightedGraphic.layerId === selectedLayerAssetList.id) {
-        console.log("highlightedGraphic.layerLabelMask", highlightedGraphic.layerLabelMask);
+        console.log(
+          "highlightedGraphic.layerLabelMask",
+          highlightedGraphic.layerLabelMask
+        );
         const layerLabelMask = highlightedGraphic.layerLabelMask;
         console.log("layerLabelMask", layerLabelMask);
-        const highlightedGraphicAttributes = highlightedGraphic.highlightedGraphicAttributes;
-        console.log("highlightedGraphicAttributes", highlightedGraphicAttributes);
+        const highlightedGraphicAttributes =
+          highlightedGraphic.highlightedGraphicAttributes;
+        console.log(
+          "highlightedGraphicAttributes",
+          highlightedGraphicAttributes
+        );
 
-        const selectedAssetLabelMask = highlightedGraphicAttributes[layerLabelMask];
+        const selectedAssetLabelMask =
+          highlightedGraphicAttributes[layerLabelMask];
         console.log("selectedAssetLabelMask", selectedAssetLabelMask);
         const assetLabelMaskListItem = document.createElement("li");
 
-        assetLabelMaskListItem.setAttribute("id", highlightedGraphic.highlightedGraphicId);
+        assetLabelMaskListItem.setAttribute(
+          "id",
+          highlightedGraphic.highlightedGraphicId
+        );
 
-        assetLabelMaskListItem.innerHTML = 
-        `${selectedAssetLabelMask} 
+        assetLabelMaskListItem.innerHTML = `${selectedAssetLabelMask} 
         <br/>
         <span class="remove-asset-btn glyphicons glyphicons-remove small"></span>
         Remove`;
         selectedLayerAssetList.appendChild(assetLabelMaskListItem);
 
-        const removeButton = assetLabelMaskListItem.querySelector('.remove-asset-btn');
-        removeButton.addEventListener('click', function() {
+        // const removeButton =
+          assetLabelMaskListItem.addEventListener("click", function () {
           // alert('Button clicked!');
           highlightedGraphics.forEach((highlightedGraphic) => {
-            if (highlightedGraphic.highlightedGraphicId === highlightedGraphic.highlightedGraphicId) {
+            // console.log('removeButton', removeButton);
+            console.log('highlightedGraphic', highlightedGraphic);
+            if (
+              highlightedGraphic.highlightedGraphicId ===
+              highlightedGraphic.highlightedGraphicId
+            ) {
               highlightedGraphic.highlightSelect.remove();
-              // document.getElementById(highlightedGraphic.highlightedGraphicId).innerHTML = '';
-              const element = document.getElementById(highlightedGraphic.highlightedGraphicId);
-if (element) element.remove();
+              
+              const listItemToRemove = document.getElementById(
+                highlightedGraphic.highlightedGraphicId
+              );
+              if (listItemToRemove) listItemToRemove.remove();
               const hightlightToRemove = highlightedGraphics.findIndex(
-                (h) => h.highlightedGraphicId === highlightedGraphic.highlightedGraphicId
+                (h) =>
+                  h.highlightedGraphicId ===
+                  highlightedGraphic.highlightedGraphicId
               );
               highlightedGraphics.splice(hightlightToRemove, 1);
               renderLabelMask();
@@ -319,12 +340,8 @@ if (element) element.remove();
       }
     });
   });
-  console.log('highlightedGraphics', highlightedGraphics)
+  console.log("highlightedGraphics", highlightedGraphics);
 }
-
-
-
-
 
 initializeMap();
 
