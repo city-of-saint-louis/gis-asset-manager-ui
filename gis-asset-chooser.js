@@ -124,24 +124,21 @@ function initializeMap() {
         featurelayers.push(layerToAdd);
         map.add(layerToAdd);
         document.getElementById("layer-data-div").innerHTML += `
-
           <div class="map-layer-data-container" class="content-block">
             <h6>${mapLayer.name}
               <a href="#" class="selectLayers pull-right" att-layer-id="${
-                mapLayer.layerId
+          mapLayer.layerId
               }">
-                <span class="glyphicons glyphicons-eye-open"></span>
+          <span class="glyphicons glyphicons-eye-open"></span>
               </a>
-
             </h6>
             ${mapLayer.required ? `<p>Select at least 1 asset.</p>` : ""}
-
             ${
               mapLayer.limit > 0
-                ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>`
-                : ""
+          ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>`
+          : ""
             }
-            <ul class="highlighted-asset-data-list" id="${mapLayer.layerId}">
+            <ul class="highlighted-asset-data-list" id="${mapLayer.layerId}" style="list-style-type: none;">
             </ul>
           </div>
         `;
@@ -277,6 +274,7 @@ function renderLabelMask() {
     list.innerHTML = ''; // This clears the list
   });
   highlightedGraphics.forEach((highlightedGraphic) => {
+    console.log("highlightedGraphic", highlightedGraphic);
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
       if (highlightedGraphic.layerId === selectedLayerAssetList.id) {
         console.log("highlightedGraphic.layerLabelMask", highlightedGraphic.layerLabelMask);
@@ -288,32 +286,36 @@ function renderLabelMask() {
         const selectedAssetLabelMask = highlightedGraphicAttributes[layerLabelMask];
         console.log("selectedAssetLabelMask", selectedAssetLabelMask);
         const assetLabelMaskListItem = document.createElement("li");
-        assetLabelMaskListItem.innerHTML = `${selectedAssetLabelMask} 
+
+        assetLabelMaskListItem.setAttribute("id", highlightedGraphic.highlightedGraphicId);
+
+        assetLabelMaskListItem.innerHTML = 
+        `${selectedAssetLabelMask} 
         <br/>
-       
         <span class="remove-asset-btn glyphicons glyphicons-remove small"></span>
-        
         Remove`;
         selectedLayerAssetList.appendChild(assetLabelMaskListItem);
 
         const removeButton = assetLabelMaskListItem.querySelector('.remove-asset-btn');
         removeButton.addEventListener('click', function() {
-          alert('Button clicked!');
+          // alert('Button clicked!');
+          highlightedGraphics.forEach((highlightedGraphic) => {
+            if (highlightedGraphic.highlightedGraphicId === highlightedGraphic.highlightedGraphicId) {
+              highlightedGraphic.highlightSelect.remove();
+              document.getElementById(highlightedGraphic.highlightedGraphicId).innerHTML = '';
+            }
+          });
         });
       }
     });
   });
 }
 
-function removeLabelMask(highlightedGraphicId, event) {
-  const clickedElement = event.target;
-  clickedElement.remove();
-  const liItem = document.querySelector(".asset-list");
-  const assetValue = liItem.getAttribute("att-asset-id");
-  console.log("assetValue", assetValue);
-  if (assetValue === highlightedGraphicId) liItem.remove();
-  removeHighLight(highlightedGraphicId);
-}
+function removeHighlight() {
+
+};
+
+
 
 initializeMap();
 
