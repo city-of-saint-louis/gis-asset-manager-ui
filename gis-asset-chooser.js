@@ -288,12 +288,31 @@ function renderLabelMask() {
         const selectedAssetLabelMask = highlightedGraphicAttributes[layerLabelMask];
         console.log("selectedAssetLabelMask", selectedAssetLabelMask);
         const assetLabelMaskListItem = document.createElement("li");
-        assetLabelMaskListItem.innerHTML = selectedAssetLabelMask;
+        assetLabelMaskListItem.innerHTML = `${selectedAssetLabelMask} 
+        <br/>
+        <button class="remove-asset-btn" >
+        <span class="glyphicons glyphicons-remove small"></span>
+        </button>
+        Remove`;
         selectedLayerAssetList.appendChild(assetLabelMaskListItem);
-        
+
+        const removeButton = assetLabelMaskListItem.querySelector('.remove-asset-btn');
+        removeButton.addEventListener('click', function() {
+          alert('Button clicked!');
+        });
       }
     });
   });
+}
+
+function removeLabelMask(highlightedGraphicId, event) {
+  const clickedElement = event.target;
+  clickedElement.remove();
+  const liItem = document.querySelector(".asset-list");
+  const assetValue = liItem.getAttribute("att-asset-id");
+  console.log("assetValue", assetValue);
+  if (assetValue === highlightedGraphicId) liItem.remove();
+  removeHighLight(highlightedGraphicId);
 }
 
 initializeMap();
