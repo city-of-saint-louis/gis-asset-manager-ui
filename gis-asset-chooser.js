@@ -7,6 +7,7 @@ const mapLayersToAdd = [];
 const featurelayers = [];
 const highlightedGraphics = []; // array to hold highlighted graphics
 const chosenAssets = []; // array to hold chosen assets
+let isVaild = false;
 
 // Define the custom web component
 class GISAssetChooserComponent extends HTMLElement {
@@ -227,32 +228,32 @@ function initializeMap() {
                 console.log("highlightedGraphics", highlightedGraphics);
                 renderSelectedAssetLabels();
 
-                // function generateAssetLabel(layerLabelMask, attributes) {
-                //   // Regular expression to find all placeholders like {PROPERTY}
-                //   const placeholderRegex = /{([^}]+)}/g;
-                //   let assetLabel = layerLabelMask;
-                //   // Replace each placeholder with corresponding attribute value
-                //   assetLabel = assetLabel.replace(placeholderRegex, (match, placeholder) => {
-                //     // If the placeholder exists in attributes, return its value; otherwise, return an empty string
-                //     return attributes.hasOwnProperty(placeholder) ? attributes[placeholder] : '';
-                //   });
-                //   return assetLabel;
-                // }
-                // // Extract values from highlightedGraphic
-                // const { highlightedGraphicAttributes, highlightedGraphicId, layerClassUrl, layerLabelMask } = highlightedGraphic;
-                // // Generate assetLabel dynamically
-                // const assetLabel = generateAssetLabel(layerLabelMask, highlightedGraphicAttributes);
-                // // Create chosenAsset object
-                // const chosenAsset = {
-                //   assetId: highlightedGraphicId,
-                //   assetLabel: assetLabel,
-                //   assetAttributes: highlightedGraphicAttributes,
-                //   layerClassUrl: layerClassUrl
-                // };
-                // // console.log('chosenAsset',chosenAsset);
-                // // Add chosenAsset to chosenAssets array
-                // chosenAssets.push(chosenAsset);
-                // console.log('chosenAssets',chosenAssets);
+                function generateAssetLabel(layerLabelMask, attributes) {
+                  // Regular expression to find all placeholders like {PROPERTY}
+                  const placeholderRegex = /{([^}]+)}/g;
+                  let assetLabel = layerLabelMask;
+                  // Replace each placeholder with corresponding attribute value
+                  assetLabel = assetLabel.replace(placeholderRegex, (match, placeholder) => {
+                    // If the placeholder exists in attributes, return its value; otherwise, return an empty string
+                    return attributes.hasOwnProperty(placeholder) ? attributes[placeholder] : '';
+                  });
+                  return assetLabel;
+                }
+                // Extract values from highlightedGraphic
+                const { highlightedGraphicAttributes, highlightedGraphicId, layerClassUrl, layerLabelMask } = highlightedGraphic;
+                // Generate assetLabel dynamically
+                const assetLabel = generateAssetLabel(layerLabelMask, highlightedGraphicAttributes);
+                // Create chosenAsset object
+                const chosenAsset = {
+                  assetId: highlightedGraphicId,
+                  assetLabel: assetLabel,
+                  assetAttributes: highlightedGraphicAttributes,
+                  layerClassUrl: layerClassUrl
+                };
+                // console.log('chosenAsset',chosenAsset);
+                // Add chosenAsset to chosenAssets array
+                chosenAssets.push(chosenAsset);
+                console.log('chosenAssets',chosenAssets);
               });
               
             } else {
