@@ -139,7 +139,11 @@ function initializeMap() {
                 ? `<p>Select a maximum of ${layerToAdd.layerProperties.limit} assets.</p>`
                 : ""
             }
-            <ul class="highlighted-asset-data-list" id="${layerToAdd.id}">
+
+
+            <ul class="highlighted-asset-data-list" id="${layerToAdd.layerProperties.layerName}-${layerToAdd.id}">
+
+
             </ul>
           </div>
         `;
@@ -199,25 +203,25 @@ function initializeMap() {
 
                 highlightedSelection = layerView.highlight(graphic);
                 console.log(graphic);
+                console.log(graphic.layer.layerProperties.layerName);
 
                 const highlightedGraphic = {
                   highlightedGraphicAttributes: graphic.attributes,
-                  highlightedGraphicId: `${graphic.layer.title}-${graphic.attributes[layerAssetIDFieldName]}`,
+                  highlightedGraphicId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
                     // graphic.attributes[layerAssetIDFieldName],
                   highlightSelect: highlightedSelection,
                   layerData: graphic.layer,
-                  layerUid: graphic.layer.uid,
-                  layerId: `${graphic.layer.title}${layerId}`,
+                  // layerUid: graphic.layer.uid,
+                  layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
                   layerTitle: graphic.layer.title,
                   layerLabelMask: graphic.layer.layerProperties.labelMask,
                   layerAssetLimit: graphic.layer.layerProperties.limit,
                   layerAssetsRequired: graphic.layer.layerProperties.required,
                 };
-// pick up here on thursday 6/27
                 highlightedGraphics.push(highlightedGraphic);
                 console.log("Graphic now highlighted", graphic);
                 console.log("highlightedGraphics", highlightedGraphics);
-                renderLabelMask();
+                renderSelectedAssetLabels();
               });
             } else {
               highlightedGraphics.forEach(function (highlight) {
@@ -235,7 +239,7 @@ function initializeMap() {
                   graphic.attributes[layerAssetIDFieldName]
               );
               highlightedGraphics.splice(hightlightToRemove, 1);
-              renderLabelMask();
+              renderSelectedAssetLabels();
               console.log("highlightedGraphics", highlightedGraphics);
             }
           }
@@ -275,7 +279,7 @@ function selectFeatureLayer() {
   console.log("highlightedGraphics", highlightedGraphics);
 }
 
-function renderLabelMask() {
+function renderSelectedAssetLabels() {
   const selectedLayerAssetListArray = document.querySelectorAll(
     ".highlighted-asset-data-list"
   );
@@ -321,11 +325,11 @@ function renderLabelMask() {
           assetLabelMaskListItem.addEventListener("click", function () {
           // alert('Button clicked!');
           highlightedGraphics.forEach((highlightedGraphic) => {
-            console.log()
+            console.log(assetLabelMaskListItem.id);
             console.log('highlightedGraphic', highlightedGraphic);
             if (
               highlightedGraphic.highlightedGraphicId ===
-              highlightedGraphic.highlightedGraphicId
+              assetLabelMaskListItem.id
             ) {
               highlightedGraphic.highlightSelect.remove();
               
@@ -339,7 +343,7 @@ function renderLabelMask() {
                   highlightedGraphic.highlightedGraphicId
               );
               highlightedGraphics.splice(hightlightToRemove, 1);
-              renderLabelMask();
+              renderSelectedAssetLabels();
               console.log("highlightedGraphics", highlightedGraphics);
             }
           });

@@ -6,7 +6,7 @@ class MapLayer extends HTMLElement {
     console.log("map-layer initialized")
    
     try {
-      const name = this.getAttribute("name") || "";
+      const name = (this.getAttribute("name") || "").replace(/\s/g, "-");
       const layerClassUrl = this.getAttribute("layer-class-url") || ""; 
       // const layerId = this.getAttribute("layer-id") || "";
       // const serverUrl = this.getAttribute("server-url") || "";
