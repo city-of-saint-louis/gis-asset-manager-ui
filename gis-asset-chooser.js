@@ -6,6 +6,7 @@ const defaultShowSearch = true;
 const mapLayersToAdd = [];
 const featurelayers = [];
 const highlightedGraphics = []; // array to hold highlighted graphics
+const chosenAssets = []; // array to hold chosen assets
 
 // Define the custom web component
 class GISAssetChooserComponent extends HTMLElement {
@@ -118,7 +119,6 @@ function initializeMap() {
             // serverUrl: mapLayer.serverUrl,
           },
         });
-
         
         layerToAdd.outFields = ["*"];
         console.log("layerToAdd", layerToAdd);
@@ -168,6 +168,12 @@ function initializeMap() {
             const layerProperties = response.results[0].layer.layerProperties;
             // console.log("layerProperties", layerProperties);
             const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
+            const labelMaskValue = eval(
+              `"${graphic.layer.layerProperties.labelMask.replace(
+                /\{([^}]+)\}/g,
+                (match, p1) => `" + graphic.attributes.${p1} + "`
+              )}"`
+            );
             console.log("layerAssetIDFieldName", layerAssetIDFieldName);
             const layerId = graphic.layer.id;
             // console.log("layerId", layerId);
@@ -203,18 +209,16 @@ function initializeMap() {
 
                 highlightedSelection = layerView.highlight(graphic);
                 console.log(graphic);
-                // console.log(graphic.layer.layerProperties.layerName);
 
                 const highlightedGraphic = {
                   highlightedGraphicAttributes: graphic.attributes,
                   highlightedGraphicId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
-                  // graphic.attributes[layerAssetIDFieldName],
                   highlightSelect: highlightedSelection,
                   layerData: graphic.layer,
-                  // layerUid: graphic.layer.uid,
                   layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
                   layerTitle: graphic.layer.title,
-                  layerLabelMask: graphic.layer.layerProperties.labelMask,
+                  layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
+                  layerLabelMask: labelMaskValue,
                   layerAssetLimit: graphic.layer.layerProperties.limit,
                   layerAssetsRequired: graphic.layer.layerProperties.required,
                 };
@@ -222,7 +226,35 @@ function initializeMap() {
                 console.log("Graphic now highlighted", graphic);
                 console.log("highlightedGraphics", highlightedGraphics);
                 renderSelectedAssetLabels();
+
+                // function generateAssetLabel(layerLabelMask, attributes) {
+                //   // Regular expression to find all placeholders like {PROPERTY}
+                //   const placeholderRegex = /{([^}]+)}/g;
+                //   let assetLabel = layerLabelMask;
+                //   // Replace each placeholder with corresponding attribute value
+                //   assetLabel = assetLabel.replace(placeholderRegex, (match, placeholder) => {
+                //     // If the placeholder exists in attributes, return its value; otherwise, return an empty string
+                //     return attributes.hasOwnProperty(placeholder) ? attributes[placeholder] : '';
+                //   });
+                //   return assetLabel;
+                // }
+                // // Extract values from highlightedGraphic
+                // const { highlightedGraphicAttributes, highlightedGraphicId, layerClassUrl, layerLabelMask } = highlightedGraphic;
+                // // Generate assetLabel dynamically
+                // const assetLabel = generateAssetLabel(layerLabelMask, highlightedGraphicAttributes);
+                // // Create chosenAsset object
+                // const chosenAsset = {
+                //   assetId: highlightedGraphicId,
+                //   assetLabel: assetLabel,
+                //   assetAttributes: highlightedGraphicAttributes,
+                //   layerClassUrl: layerClassUrl
+                // };
+                // // console.log('chosenAsset',chosenAsset);
+                // // Add chosenAsset to chosenAssets array
+                // chosenAssets.push(chosenAsset);
+                // console.log('chosenAssets',chosenAssets);
               });
+              
             } else {
               highlightedGraphics.forEach(function (highlight) {
                 console.log("highlight", highlight);
@@ -238,7 +270,7 @@ function initializeMap() {
               const hightlightToRemove = highlightedGraphics.findIndex(
                 (h) =>
                   h.highlightedGraphicId ===
-                  graphic.attributes[layerAssetIDFieldName]
+                 `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
               );
               highlightedGraphics.splice(hightlightToRemove, 1);
               renderSelectedAssetLabels();
@@ -311,8 +343,7 @@ function renderSelectedAssetLabels() {
           highlightedGraphicAttributes
         );
 
-        const selectedAssetLabelMask =
-          highlightedGraphicAttributes[layerLabelMask];
+        const selectedAssetLabelMask = layerLabelMask
         console.log("selectedAssetLabelMask", selectedAssetLabelMask);
         const assetLabelMaskListItem = document.createElement("li");
 
