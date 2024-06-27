@@ -127,23 +127,25 @@ function initializeMap() {
         document.getElementById("layer-data-div").innerHTML += `
           <div class="map-layer-data-container" class="content-block">
             <h6>${layerToAdd.layerProperties.layerName}
-              <a href="#" class="selectLayers pull-right" att-layer-id="${
+              <a href="#" class="selectLayers pull-right" att-layer-id="${layerToAdd.layerProperties.layerName}-${
                 layerToAdd.id
               }">
           <span class="glyphicons glyphicons-eye-open"></span>
               </a>
             </h6>
-            ${layerToAdd.layerProperties.required ? `<p>Select at least 1 asset.</p>` : ""}
+            ${
+              layerToAdd.layerProperties.required
+                ? `<p>Select at least 1 asset.</p>`
+                : ""
+            }
             ${
               layerToAdd.layerProperties.limit > 0
                 ? `<p>Select a maximum of ${layerToAdd.layerProperties.limit} assets.</p>`
                 : ""
             }
-
-
-            <ul class="highlighted-asset-data-list" id="${layerToAdd.layerProperties.layerName}-${layerToAdd.id}">
-
-
+            <ul class="highlighted-asset-data-list" id="${
+              layerToAdd.layerProperties.layerName
+            }-${layerToAdd.id}">
             </ul>
           </div>
         `;
@@ -169,7 +171,7 @@ function initializeMap() {
 
             const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
             console.log("layerAssetIDFieldName", layerAssetIDFieldName);
-           
+
             const layerId = graphic.layer.id;
             console.log("layerId", layerId);
             if (
@@ -208,7 +210,7 @@ function initializeMap() {
                 const highlightedGraphic = {
                   highlightedGraphicAttributes: graphic.attributes,
                   highlightedGraphicId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
-                    // graphic.attributes[layerAssetIDFieldName],
+                  // graphic.attributes[layerAssetIDFieldName],
                   highlightSelect: highlightedSelection,
                   layerData: graphic.layer,
                   // layerUid: graphic.layer.uid,
@@ -253,16 +255,25 @@ function initializeMap() {
 }
 
 function selectFeatureLayer() {
-  // console.log("checked featurelayers", featurelayers);
+  console.log("checked featurelayers", featurelayers);
+
   featurelayers.forEach((outerLayer) => {
+    console.log("outerLayer", outerLayer);
     const selectLayersElements = document.querySelectorAll(".selectLayers");
+   
+
     selectLayersElements.forEach((selectLayer) => {
+      console.log("selectLayer", selectLayer);
       selectLayer.addEventListener("click", (event) => {
+
         const layerId = selectLayer.getAttribute("att-layer-id");
+
+        
+
         const spanElement = selectLayer.querySelector("span");
-        // console.log("spanElement", spanElement);
-        // console.log("Layer ID selected", layerId);
-        if (outerLayer.portalItem.id === layerId) {
+       
+        console.log("Layer ID selected", layerId);
+        if (`${outerLayer.layerProperties.layerName}-${outerLayer.id}` === layerId) {
           if (outerLayer.visible) {
             outerLayer.visible = false;
             spanElement.classList.remove("glyphicons-eye-open");
@@ -321,18 +332,16 @@ function renderSelectedAssetLabels() {
         Remove`;
         selectedLayerAssetList.appendChild(assetLabelMaskListItem);
 
-        // const removeButton =
-          assetLabelMaskListItem.addEventListener("click", function () {
-          // alert('Button clicked!');
+        assetLabelMaskListItem.addEventListener("click", function () {
           highlightedGraphics.forEach((highlightedGraphic) => {
             console.log(assetLabelMaskListItem.id);
-            console.log('highlightedGraphic', highlightedGraphic);
+            console.log("highlightedGraphic", highlightedGraphic);
             if (
               highlightedGraphic.highlightedGraphicId ===
               assetLabelMaskListItem.id
             ) {
               highlightedGraphic.highlightSelect.remove();
-              
+
               const listItemToRemove = document.getElementById(
                 highlightedGraphic.highlightedGraphicId
               );
