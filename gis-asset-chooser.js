@@ -127,9 +127,9 @@ function initializeMap() {
         document.getElementById("layer-data-div").innerHTML += `
           <div class="map-layer-data-container" class="content-block">
             <h6>${layerToAdd.layerProperties.layerName}
-              <a href="#" class="selectLayers pull-right" att-layer-id="${layerToAdd.layerProperties.layerName}-${
-                layerToAdd.id
-              }">
+              <a href="#" class="selectLayers pull-right" att-layer-id="${
+                layerToAdd.layerProperties.layerName
+              }-${layerToAdd.id}">
           <span class="glyphicons glyphicons-eye-open"></span>
               </a>
             </h6>
@@ -158,22 +158,19 @@ function initializeMap() {
           let highlightedSelection;
 
           if (response.results.length) {
-            console.log("response", response.results[0]);
+            // console.log("response", response.results[0]);
 
             const graphic = response.results[0].graphic;
-            console.log("graphic", graphic);
+            // console.log("graphic", graphic);
             // Get the layer info for this graphic
             // const layerInfo = response.results[0].layer.portalItem;
             // console.log("layerInfo", layerInfo);
-
             const layerProperties = response.results[0].layer.layerProperties;
-            console.log("layerProperties", layerProperties);
-
+            // console.log("layerProperties", layerProperties);
             const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
-            console.log("layerAssetIDFieldName", layerAssetIDFieldName);
-
+            // console.log("layerAssetIDFieldName", layerAssetIDFieldName);
             const layerId = graphic.layer.id;
-            console.log("layerId", layerId);
+            // console.log("layerId", layerId);
             if (
               !highlightedGraphics.find(
                 (g) =>
@@ -186,7 +183,7 @@ function initializeMap() {
                 const layerAssetLimit = layerProperties.limit;
                 console.log("layerAssetLimit", layerAssetLimit);
                 const totalLayerAssetsSelected = highlightedGraphics.filter(
-                  (h) => h.layerId === graphic.layer.layerProperties.layerId
+                  (h) => h.layerId === `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
                 ).length;
                 console.log(
                   "totalLayerAssetsSelected",
@@ -204,8 +201,8 @@ function initializeMap() {
                 }
 
                 highlightedSelection = layerView.highlight(graphic);
-                console.log(graphic);
-                console.log(graphic.layer.layerProperties.layerName);
+                // console.log(graphic);
+                // console.log(graphic.layer.layerProperties.layerName);
 
                 const highlightedGraphic = {
                   highlightedGraphicAttributes: graphic.attributes,
@@ -255,25 +252,20 @@ function initializeMap() {
 }
 
 function selectFeatureLayer() {
-  console.log("checked featurelayers", featurelayers);
-
+  // console.log("checked featurelayers", featurelayers);
   featurelayers.forEach((outerLayer) => {
-    console.log("outerLayer", outerLayer);
+    // console.log("outerLayer", outerLayer);
     const selectLayersElements = document.querySelectorAll(".selectLayers");
-   
 
     selectLayersElements.forEach((selectLayer) => {
-      console.log("selectLayer", selectLayer);
-      selectLayer.addEventListener("click", (event) => {
-
+      // console.log("selectLayer", selectLayer);
+      selectLayer.addEventListener("click", () => {
         const layerId = selectLayer.getAttribute("att-layer-id");
-
-        
-
         const spanElement = selectLayer.querySelector("span");
-       
-        console.log("Layer ID selected", layerId);
-        if (`${outerLayer.layerProperties.layerName}-${outerLayer.id}` === layerId) {
+        // console.log("Layer ID selected", layerId);
+        if (
+          `${outerLayer.layerProperties.layerName}-${outerLayer.id}` === layerId
+        ) {
           if (outerLayer.visible) {
             outerLayer.visible = false;
             spanElement.classList.remove("glyphicons-eye-open");
