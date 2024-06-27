@@ -101,7 +101,6 @@ function initializeMap() {
       }
 
       mapLayersToAdd.forEach((mapLayer) => {
-        console.log("mapLayer", mapLayer);
         const layerToAdd = new FeatureLayer({
           url: mapLayer.layerClassUrl,
           // portalItem: {
@@ -119,6 +118,8 @@ function initializeMap() {
             // serverUrl: mapLayer.serverUrl,
           },
         });
+
+        
         layerToAdd.outFields = ["*"];
         console.log("layerToAdd", layerToAdd);
         layerToAdd.popupEnabled = false;
@@ -156,26 +157,26 @@ function initializeMap() {
       view.on("click", (event) => {
         view.hitTest(event).then(function (response) {
           let highlightedSelection;
-
           if (response.results.length) {
             // console.log("response", response.results[0]);
-
             const graphic = response.results[0].graphic;
-            // console.log("graphic", graphic);
+            console.log("graphic", graphic);
+            console.log(`${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`);
             // Get the layer info for this graphic
             // const layerInfo = response.results[0].layer.portalItem;
             // console.log("layerInfo", layerInfo);
             const layerProperties = response.results[0].layer.layerProperties;
             // console.log("layerProperties", layerProperties);
             const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
-            // console.log("layerAssetIDFieldName", layerAssetIDFieldName);
+            console.log("layerAssetIDFieldName", layerAssetIDFieldName);
             const layerId = graphic.layer.id;
             // console.log("layerId", layerId);
             if (
               !highlightedGraphics.find(
                 (g) =>
                   g.highlightedGraphicId ===
-                  graphic.attributes[layerAssetIDFieldName]
+                `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
+                  // graphic.attributes[layerAssetIDFieldName]
               )
             ) {
               view.whenLayerView(graphic.layer).then(function (layerView) {
@@ -201,7 +202,7 @@ function initializeMap() {
                 }
 
                 highlightedSelection = layerView.highlight(graphic);
-                // console.log(graphic);
+                console.log(graphic);
                 // console.log(graphic.layer.layerProperties.layerName);
 
                 const highlightedGraphic = {
@@ -224,9 +225,11 @@ function initializeMap() {
               });
             } else {
               highlightedGraphics.forEach(function (highlight) {
+                console.log("highlight", highlight);
+                console.log("graphic", graphic);
                 if (
                   highlight.highlightedGraphicId ===
-                  graphic.attributes[layerAssetIDFieldName]
+                  `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
                 ) {
                   highlight.highlightSelect.remove();
                 }
