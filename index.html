@@ -26,12 +26,9 @@
           name="STL-Parcels"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
-          required=true
           limit=4
           label-mask="{SITEADDR}"
         >
-        <!-- label-mask="{SITEADDR}" -->
-
         </map-layer>
         <map-layer
           name="CITY TREES"
@@ -41,6 +38,16 @@
           label-mask="{COMMON} {LOCATION_T} at {LOCATION}"
         >
         </map-layer>
+        
+        <map-layer
+          name="Neighborhoods"
+          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Neighborhood/FeatureServer/0"
+          layer-asset-id-field-name="OBJECTID"
+          limit="0"
+          label-mask="{NHD_NAME}"
+        >
+        </map-layer>
+
         <!-- <map-layer
           layer-id="b0a2bf75ab284aba834328a5a8f6e28b"
           name="Bike St. Louis Street Routes"
@@ -75,3 +82,6 @@
 <!-- Tree layer -->
 <!-- server-url="https://stlcity.maps.arcgis.com/" -->
 <!-- layer-id="46bd9d471a184f20a773224f494c45c8" -->
+
+
+    

@@ -7,7 +7,7 @@ const mapLayersToAdd = [];
 const featurelayers = [];
 const highlightedGraphics = []; // array to hold highlighted graphics
 const chosenAssets = []; // array to hold chosen assets
-let isVaild = false;
+// let isValid = false;
 
 // Define the custom web component
 class GISAssetChooserComponent extends HTMLElement {
@@ -120,7 +120,7 @@ function initializeMap() {
             // serverUrl: mapLayer.serverUrl,
           },
         });
-        
+
         layerToAdd.outFields = ["*"];
         console.log("layerToAdd", layerToAdd);
         layerToAdd.popupEnabled = false;
@@ -143,7 +143,7 @@ function initializeMap() {
             ${
               layerToAdd.layerProperties.limit > 0
                 ? `<p>Select a maximum of ${layerToAdd.layerProperties.limit} assets.</p>`
-                : ""
+                : `<p>Select as many assets as needed.</p>`
             }
             <ul class="highlighted-asset-data-list" id="${
               layerToAdd.layerProperties.layerName
@@ -162,7 +162,9 @@ function initializeMap() {
             // console.log("response", response.results[0]);
             const graphic = response.results[0].graphic;
             console.log("graphic", graphic);
-            console.log(`${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`);
+            console.log(
+              `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
+            );
             // Get the layer info for this graphic
             // const layerInfo = response.results[0].layer.portalItem;
             // console.log("layerInfo", layerInfo);
@@ -182,8 +184,8 @@ function initializeMap() {
               !highlightedGraphics.find(
                 (g) =>
                   g.highlightedGraphicId ===
-                `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
-                  // graphic.attributes[layerAssetIDFieldName]
+                  `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
+                // graphic.attributes[layerAssetIDFieldName]
               )
             ) {
               view.whenLayerView(graphic.layer).then(function (layerView) {
@@ -191,7 +193,9 @@ function initializeMap() {
                 const layerAssetLimit = layerProperties.limit;
                 console.log("layerAssetLimit", layerAssetLimit);
                 const totalLayerAssetsSelected = highlightedGraphics.filter(
-                  (h) => h.layerId === `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
+                  (h) =>
+                    h.layerId ===
+                    `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
                 ).length;
                 console.log(
                   "totalLayerAssetsSelected",
@@ -219,6 +223,7 @@ function initializeMap() {
                   layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
                   layerTitle: graphic.layer.title,
                   layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
+                  // edit below property to highlightedGraphicLabel
                   layerLabelMask: labelMaskValue,
                   layerAssetLimit: graphic.layer.layerProperties.limit,
                   layerAssetsRequired: graphic.layer.layerProperties.required,
@@ -227,34 +232,49 @@ function initializeMap() {
                 console.log("Graphic now highlighted", graphic);
                 console.log("highlightedGraphics", highlightedGraphics);
                 renderSelectedAssetLabels();
+               
 
-                function generateAssetLabel(layerLabelMask, attributes) {
-                  // Regular expression to find all placeholders like {PROPERTY}
-                  const placeholderRegex = /{([^}]+)}/g;
-                  let assetLabel = layerLabelMask;
-                  // Replace each placeholder with corresponding attribute value
-                  assetLabel = assetLabel.replace(placeholderRegex, (match, placeholder) => {
-                    // If the placeholder exists in attributes, return its value; otherwise, return an empty string
-                    return attributes.hasOwnProperty(placeholder) ? attributes[placeholder] : '';
-                  });
-                  return assetLabel;
-                }
-                // Extract values from highlightedGraphic
-                const { highlightedGraphicAttributes, highlightedGraphicId, layerClassUrl, layerLabelMask } = highlightedGraphic;
-                // Generate assetLabel dynamically
-                const assetLabel = generateAssetLabel(layerLabelMask, highlightedGraphicAttributes);
-                // Create chosenAsset object
-                const chosenAsset = {
-                  assetId: highlightedGraphicId,
-                  assetLabel: assetLabel,
-                  assetAttributes: highlightedGraphicAttributes,
-                  layerClassUrl: layerClassUrl
-                };
-                // console.log('chosenAsset',chosenAsset);
-                // Add chosenAsset to chosenAssets array
-                chosenAssets.push(chosenAsset);
-                console.log('chosenAssets',chosenAssets);
+                // function generateAssetLabel(layerLabelMask, attributes) {
+                //   // Regular expression to find all placeholders like {PROPERTY}
+                //   const placeholderRegex = /{([^}]+)}/g;
+                //   let assetLabel = layerLabelMask;
+                //   // Replace each placeholder with corresponding attribute value
+                //   assetLabel = assetLabel.replace(
+                //     placeholderRegex,
+                //     (match, placeholder) => {
+                //       // If the placeholder exists in attributes, return its value; otherwise, return an empty string
+                //       return attributes.hasOwnProperty(placeholder)
+                //         ? attributes[placeholder]
+                //         : "";
+                //     }
+                //   );
+                //   return assetLabel;
+                // }
+                // // Extract values from highlightedGraphic
+                // const {
+                //   highlightedGraphicAttributes,
+                //   highlightedGraphicId,
+                //   layerClassUrl,
+                //   layerLabelMask,
+                // } = highlightedGraphic;
+                // // Generate assetLabel dynamically
+                // const assetLabel = generateAssetLabel(
+                //   layerLabelMask,
+                //   highlightedGraphicAttributes
+                // );
+                // // Create chosenAsset object
+                // const chosenAsset = {
+                //   assetId: highlightedGraphicId,
+                //   assetLabel: assetLabel,
+                //   assetAttributes: highlightedGraphicAttributes,
+                //   layerClassUrl: layerClassUrl,
+                // };
+                // // console.log('chosenAsset',chosenAsset);
+                // // Add chosenAsset to chosenAssets array
+                // chosenAssets.push(chosenAsset);
+                // console.log("chosenAssets", chosenAssets);
               });
+
               
             } else {
               highlightedGraphics.forEach(function (highlight) {
@@ -271,10 +291,11 @@ function initializeMap() {
               const hightlightToRemove = highlightedGraphics.findIndex(
                 (h) =>
                   h.highlightedGraphicId ===
-                 `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
+                  `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
               );
               highlightedGraphics.splice(hightlightToRemove, 1);
               renderSelectedAssetLabels();
+
               console.log("highlightedGraphics", highlightedGraphics);
             }
           }
@@ -344,7 +365,7 @@ function renderSelectedAssetLabels() {
           highlightedGraphicAttributes
         );
 
-        const selectedAssetLabelMask = layerLabelMask
+        const selectedAssetLabelMask = layerLabelMask;
         console.log("selectedAssetLabelMask", selectedAssetLabelMask);
         const assetLabelMaskListItem = document.createElement("li");
 
@@ -379,7 +400,8 @@ function renderSelectedAssetLabels() {
                   highlightedGraphic.highlightedGraphicId
               );
               highlightedGraphics.splice(hightlightToRemove, 1);
-              renderSelectedAssetLabels();
+              // renderSelectedAssetLabels();
+
               console.log("highlightedGraphics", highlightedGraphics);
             }
           });
@@ -392,6 +414,7 @@ function renderSelectedAssetLabels() {
 
 initializeMap();
 
+// instantiate the custom component after the page has loaded
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
 });
