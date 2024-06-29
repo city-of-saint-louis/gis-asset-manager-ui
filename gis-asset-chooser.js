@@ -24,9 +24,10 @@ class GISAssetChooserComponent extends HTMLElement {
       // const allowPoints = this.getAttribute("allowPoints") || false;
       this.innerHTML = `
       <section>
-        <h3>${title}</h3>
+       
         <div id="map-container" class="grid-container">
-          <div class="grid-item" id="viewDiv-title">
+          <div class="grid-item" id="map-title-container">
+            <h3 id="map-title">${title}</h3>
             <h4>${hint}</h4>
           </div>
           <div class="grid-item" id="layer-data-title">
