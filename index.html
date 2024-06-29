@@ -28,6 +28,7 @@
           layer-asset-id-field-name="FID"
           limit=4
           label-mask="{SITEADDR}"
+          required=true
         >
         </map-layer>
         <map-layer
@@ -37,16 +38,15 @@
           limit=3
           label-mask="{COMMON} {LOCATION_T} at {LOCATION}"
         >
-        </map-layer>
-        
-        <map-layer
+        </map-layer> 
+        <!-- <map-layer
           name="Neighborhoods"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Neighborhood/FeatureServer/0"
           layer-asset-id-field-name="OBJECTID"
           limit="0"
           label-mask="{NHD_NAME}"
         >
-        </map-layer>
+        </map-layer> -->
 
         <!-- <map-layer
           layer-id="b0a2bf75ab284aba834328a5a8f6e28b"
@@ -73,15 +73,6 @@
     <script src="gis-asset-chooser.js"></script>
   </body>
 </html>
-
-
-<!-- Parcel layer -->
-<!-- layer-id="34f817a794c64919affc7ec449677de3" -->
-<!-- server-url="https://stlcity.maps.arcgis.com/" -->
-
-<!-- Tree layer -->
-<!-- server-url="https://stlcity.maps.arcgis.com/" -->
-<!-- layer-id="46bd9d471a184f20a773224f494c45c8" -->
 
 
     
