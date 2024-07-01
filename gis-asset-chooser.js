@@ -140,10 +140,11 @@ function initializeMap() {
              <ul class="highlighted-asset-data-list" id="${
               layerToAdd.layerProperties.layerName
             }-${layerToAdd.id}">
+            <li id="none-selected" class="stat-title">None selected</li>
             </ul>
             ${
               layerToAdd.layerProperties.required
-                ? `<p>Select at least 1 asset.</p>`
+                ? `<p style="color:red;" id="asset-required-message">At least 1 asset required.</p>`
                 : ""
             }
             ${
@@ -389,9 +390,13 @@ function validateAssetSelection() {
   if (isValid) {
     validityMessage.innerHTML = "Asset selection is valid for submission";
     validityMessage.style.color = "green";
+    document.getElementById("asset-required-message").style.color = "green";
+    // document.getElementById("asset-required-message").classList.add("hidden");
   } else {
     validityMessage.innerHTML = "Please make the required asset selections before submission";
     validityMessage.style.color = "red";
+    document.getElementById("asset-required-message").style.color = "red";
+    // document.getElementById("asset-required-message").classList.remove("hidden");
   }
 }
 
