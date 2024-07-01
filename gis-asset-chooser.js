@@ -23,20 +23,19 @@ class GISAssetChooserComponent extends HTMLElement {
       const hint = this.getAttribute("hint") || "";
       // const allowPoints = this.getAttribute("allowPoints") || false;
       this.innerHTML = `
-      <section>
+      <section id="gis-asset-chooser-container">
        
-        <div id="map-container" class="grid-container">
+        <div id="map-container" class="grid-container stat-container">
           <div class="grid-item" id="map-title-container">
-            <h3 id="map-title">${title}</h3>
-            <h4>${hint}</h4>
+            <h3 id="map-title" class="stat-title">${title}</h3>
+            <h4 >${hint}</h4>
           </div>
           <div class="grid-item" id="layer-data-title">
-            <h5 id="map-layers-headline-desktop">Map Layers</h5>
+           
           </div>
-          
           <div class="grid-item" id="viewDiv">
           </div>
-           <h5 id="map-layers-headline-mobile">Map Layers</h5>
+           
           <div class="grid-item" id="layer-data-div">
           </div>
           <div>
@@ -135,12 +134,16 @@ function initializeMap() {
         document.getElementById("layer-data-div").innerHTML += `
           <div class="map-layer-data-container stat-container">
             <span class="stat-title">${layerToAdd.layerProperties.layerName}
-              <a href="#" class="selectLayers pull-right" att-layer-id="${
+              <a href="#" class="selectLayers" att-layer-id="${
                 layerToAdd.layerProperties.layerName
               }-${layerToAdd.id}">
-          <span class="glyphicons glyphicons-eye-open stat-icon"></span>
+            <span class="glyphicons glyphicons-eye-open "></span>
               </a>
             </span>
+             <ul class="highlighted-asset-data-list" id="${
+              layerToAdd.layerProperties.layerName
+            }-${layerToAdd.id}">
+            </ul>
             ${
               layerToAdd.layerProperties.required
                 ? `<p>Select at least 1 asset.</p>`
@@ -151,10 +154,7 @@ function initializeMap() {
                 ? `<p>Select a maximum of ${layerToAdd.layerProperties.limit} assets.</p>`
                 : `<p>Select as many assets as needed.</p>`
             }
-            <ul class="highlighted-asset-data-list" id="${
-              layerToAdd.layerProperties.layerName
-            }-${layerToAdd.id}">
-            </ul>
+           
           </div>
         `;
       });
@@ -215,7 +215,7 @@ function initializeMap() {
 
                 highlightedSelection = layerView.highlight(graphic);
                 // console.log(graphic);
-
+                // change highlightedGraphic to 'chosenAsset'
                 const highlightedGraphic = {
                   highlightedGraphicAttributes: graphic.attributes,
                   highlightedGraphicId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
@@ -297,7 +297,7 @@ function renderSelectedAssetLabels() {
   const selectedLayerAssetListArray = document.querySelectorAll(
     ".highlighted-asset-data-list"
   );
-  console.log("selectedLayerAssetListArra", selectedLayerAssetListArray);
+  console.log("selectedLayerAssetListArray", selectedLayerAssetListArray);
   // Clear existing list items before appending new ones
   selectedLayerAssetListArray.forEach((list) => {
     list.innerHTML = ""; // This clears the list
@@ -325,10 +325,10 @@ function renderSelectedAssetLabels() {
           "id",
           highlightedGraphic.highlightedGraphicId
         );
+        assetLabelMaskListItem.classList.add("stat-title");
         assetLabelMaskListItem.innerHTML = `${selectedAssetLabelMask} 
-        <br/>
-        <span class="remove-asset-btn glyphicons glyphicons-remove small"></span>
-        Remove`;
+        <span class="remove-asset-btn glyphicons glyphicons-remove small"> Remove</span>
+        `;
         selectedLayerAssetList.appendChild(assetLabelMaskListItem);
         assetLabelMaskListItem.addEventListener("click", function () {
           highlightedGraphics.forEach((highlightedGraphic) => {
