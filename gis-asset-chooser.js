@@ -24,18 +24,15 @@ class GISAssetChooserComponent extends HTMLElement {
       // const allowPoints = this.getAttribute("allowPoints") || false;
       this.innerHTML = `
       <section id="gis-asset-chooser-container">
-       
         <div id="map-container" class="grid-container stat-container">
           <div class="grid-item" id="map-title-container">
             <h3 id="map-title" class="stat-title">${title}</h3>
             <h4 >${hint}</h4>
           </div>
           <div class="grid-item" id="layer-data-title">
-           
           </div>
           <div class="grid-item" id="viewDiv">
           </div>
-           
           <div class="grid-item" id="layer-data-div">
           </div>
           <div>
@@ -154,7 +151,6 @@ function initializeMap() {
                 ? `<p>Select a maximum of ${layerToAdd.layerProperties.limit} assets.</p>`
                 : `<p>Select as many assets as needed.</p>`
             }
-           
           </div>
         `;
       });
@@ -174,6 +170,7 @@ function initializeMap() {
             );
             const layerProperties = response.results[0].layer.layerProperties;
             const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
+            // change labelMaskValue to assetLabelValue
             const labelMaskValue = eval(
               `"${graphic.layer.layerProperties.labelMask.replace(
                 /\{([^}]+)\}/g,
@@ -219,13 +216,13 @@ function initializeMap() {
                 const highlightedGraphic = {
                   highlightedGraphicAttributes: graphic.attributes,
                   highlightedGraphicId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
+                  // change layerLabelMask to highlightedGraphicLabel
+                  layerLabelMask: labelMaskValue,
                   highlightSelect: highlightedSelection,
                   layerData: graphic.layer,
                   layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
                   layerTitle: graphic.layer.title,
                   layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
-                  // edit below property to highlightedGraphicLabel
-                  layerLabelMask: labelMaskValue,
                   layerAssetLimit: graphic.layer.layerProperties.limit,
                   layerAssetsRequired: graphic.layer.layerProperties.required,
                 };

@@ -6,7 +6,6 @@
   display: grid;
   grid-template-columns: 2fr 1fr; /* Adjusted for a 2:1 ratio for larger screens */
   grid-template-rows: auto 1fr; /* Two rows: one for titles, one for content */
-  grid-gap: 10px; /* Adjust gap as needed */
   padding: 2em;
   margin: 1em;
 }
@@ -22,7 +21,7 @@
   margin-left: 1em;
 }
 #layer-data-div {
-  padding-left: 2em;
+  padding-left: 1em;
   margin-left: 1em;
 }
 
