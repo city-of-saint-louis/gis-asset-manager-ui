@@ -43,7 +43,7 @@
 }
 
 #validity-message {
-  font-size: x-large;
+  font-size: medium;
 }
 
 @media (max-width: 768px) {

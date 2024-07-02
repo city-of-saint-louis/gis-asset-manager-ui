@@ -28,7 +28,9 @@ class GISAssetChooserComponent extends HTMLElement {
           <div class="grid-item" id="map-title-container">
             <h3 id="map-title" class="stat-title">${title}</h3>
             <h4 >${hint}</h4>
+            <h6 id="validity-message"></h6>
           </div>
+         
           <div class="grid-item" id="layer-data-title">
           </div>
           <div class="grid-item" id="viewDiv">
@@ -140,17 +142,17 @@ function initializeMap() {
              <ul class="highlighted-asset-data-list" id="${
               layerToAdd.layerProperties.layerName
             }-${layerToAdd.id}">
-            <li id="none-selected" class="stat-title">None selected</li>
+            
             </ul>
             ${
               layerToAdd.layerProperties.required
-                ? `<p style="color:red;" id="asset-required-message">At least 1 asset required.</p>`
+                ? `<p style="color:red; font-size: small;" id="asset-required-message">At least 1 asset required.</p>`
                 : ""
             }
             ${
               layerToAdd.layerProperties.limit > 0
-                ? `<p>Select a maximum of ${layerToAdd.layerProperties.limit} assets.</p>`
-                : `<p>Select as many assets as needed.</p>`
+                ? `<p style="font-size: small;">Select a maximum of ${layerToAdd.layerProperties.limit} assets.</p>`
+                : `<p style="font-size: small;">Select as many assets as needed.</p>`
             }
           </div>
         `;
@@ -308,6 +310,7 @@ function renderSelectedAssetLabels() {
           "highlightedGraphic.layerLabelMask",
           highlightedGraphic.layerLabelMask
         );
+        // change 'layerLabelMask' to 'assetLabel'
         const layerLabelMask = highlightedGraphic.layerLabelMask;
         console.log("layerLabelMask", layerLabelMask);
         const highlightedGraphicAttributes =
@@ -316,25 +319,24 @@ function renderSelectedAssetLabels() {
           "highlightedGraphicAttributes",
           highlightedGraphicAttributes
         );
-        const selectedAssetLabelMask = layerLabelMask;
-        console.log("selectedAssetLabelMask", selectedAssetLabelMask);
-        const assetLabelMaskListItem = document.createElement("li");
-        assetLabelMaskListItem.setAttribute(
+        // const selectedAssetLabelMask = layerLabelMask;
+        const assetLabelListItem = document.createElement("li");
+        assetLabelListItem.setAttribute(
           "id",
           highlightedGraphic.highlightedGraphicId
         );
-        assetLabelMaskListItem.classList.add("stat-title");
-        assetLabelMaskListItem.innerHTML = `${selectedAssetLabelMask} 
-        <span class="remove-asset-btn glyphicons glyphicons-remove small"> Remove</span>
+        assetLabelListItem.classList.add("stat-title");
+        assetLabelListItem.innerHTML = `${layerLabelMask} 
+        <span class="remove-asset-btn glyphicons glyphicons-remove small" style="color: red; margin-left: 100px;"> Remove</span>
         `;
-        selectedLayerAssetList.appendChild(assetLabelMaskListItem);
-        assetLabelMaskListItem.addEventListener("click", function () {
+        selectedLayerAssetList.appendChild(assetLabelListItem);
+        assetLabelListItem.addEventListener("click", function () {
           highlightedGraphics.forEach((highlightedGraphic) => {
-            console.log(assetLabelMaskListItem.id);
+            console.log(assetLabelListItem.id);
             console.log("highlightedGraphic", highlightedGraphic);
             if (
               highlightedGraphic.highlightedGraphicId ===
-              assetLabelMaskListItem.id
+              assetLabelListItem.id
             ) {
               highlightedGraphic.highlightSelect.remove();
 
@@ -391,12 +393,12 @@ function validateAssetSelection() {
     validityMessage.innerHTML = "Asset selection is valid for submission";
     validityMessage.style.color = "green";
     document.getElementById("asset-required-message").style.color = "green";
-    // document.getElementById("asset-required-message").classList.add("hidden");
+    document.getElementById("asset-required-message").innerHTML = "Selection requirements met.";
   } else {
     validityMessage.innerHTML = "Please make the required asset selections before submission";
     validityMessage.style.color = "red";
     document.getElementById("asset-required-message").style.color = "red";
-    // document.getElementById("asset-required-message").classList.remove("hidden");
+    document.getElementById("asset-required-message").innerHTML = "At least 1 asset required.";
   }
 }
 
