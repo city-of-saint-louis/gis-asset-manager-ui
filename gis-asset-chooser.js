@@ -146,7 +146,7 @@ function initializeMap() {
             </ul>
             ${
               layerToAdd.layerProperties.required
-                ? `<p style="color:red; font-size: small;" id="asset-required-message">At least 1 asset required.</p>`
+                ? `<p style="color: red; font-size: small;" id="asset-required-message">At least 1 asset required.</p>`
                 : ""
             }
             ${
