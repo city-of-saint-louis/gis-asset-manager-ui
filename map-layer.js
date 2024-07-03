@@ -12,6 +12,8 @@ class MapLayer extends HTMLElement {
       // const serverUrl = this.getAttribute("server-url") || "";
       const required = this.getAttribute("required") || false;
       const limit = this.getAttribute("limit") || 0;
+      const minimumSelections = this.getAttribute("minimum") || 0;
+      const maximumSelections = this.getAttribute("maximum") || 0;
       const labelMask = this.getAttribute("label-mask") || "";
       const layerAssetIDFieldName = this.getAttribute("layer-asset-id-field-name") || "";
       
@@ -22,6 +24,8 @@ class MapLayer extends HTMLElement {
         // serverUrl,
         // layerId,
         required,
+        minimumSelections,
+        maximumSelections,
         limit,
         labelMask,
         layerAssetIDFieldName,
