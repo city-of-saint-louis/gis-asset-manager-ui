@@ -155,9 +155,7 @@ function initializeMap() {
             </span>
              <ul class="highlighted-asset-data-list" id="${
                layerToAdd.layerProperties.layerName
-             }-${layerToAdd.id}"
-              style="list-style-type: none; padding: 0; margin: 0;">
-            
+             }-${layerToAdd.id}">
             </ul>
             <div style="font-size: small;">
             ${
@@ -291,6 +289,8 @@ function initializeMap() {
               });
             } else {
               highlightedGraphics.forEach(function (highlight) {
+                // console.log("highlight", highlight);
+                // console.log("graphic", graphic);
                 if (
                   highlight.highlightedGraphicId ===
                   `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
@@ -312,6 +312,8 @@ function initializeMap() {
           }
         });
       });
+
+      // validateNumberofAssetsSelected();
     });
   } catch (e) {
     console.error(e);
@@ -361,7 +363,7 @@ function renderSelectedAssetLabels() {
           "highlightedGraphic.assetLabel",
           highlightedGraphic.assetLabel
         );
-       
+        // change 'assetLabel' to 'assetLabel'
         const assetLabel = highlightedGraphic.assetLabel;
         console.log("assetLabel", assetLabel);
         const highlightedGraphicAttributes =
@@ -372,14 +374,13 @@ function renderSelectedAssetLabels() {
         );
         // const selectedAssetLabelMask = assetLabel;
         const assetLabelListItem = document.createElement("li");
-        assetLabelListItem.style.fontSize=".9rem";
         assetLabelListItem.setAttribute(
           "id",
           highlightedGraphic.highlightedGraphicId
         );
         assetLabelListItem.classList.add("stat-title");
         assetLabelListItem.innerHTML = `${assetLabel} 
-          <a class="inverse-button red-button remove-asset-btn "style="color: red; cursor: pointer;"><span class="glyphicons glyphicons-remove small"> Remove</span></a>
+          <a class="inverse-button red-button remove-asset-btn "style="color: red;"><span class="glyphicons glyphicons-remove small"> Remove</span></a>
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
         assetLabelListItem.addEventListener("click", function () {
