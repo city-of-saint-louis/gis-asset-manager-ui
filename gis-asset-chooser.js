@@ -173,7 +173,7 @@ function initializeMap() {
 
             ${
               maxAssetsRequired > 0
-                ? `<p style="font-size: small;" id="${layerToAddId}-max-asset-required-message" class="label label-alert">Select a maximum of ${maxAssetsRequired} assets.</p>`
+                ? `<p style="font-size: small;" id="${layerToAddId}-max-asset-required-message" class="label label-success">Select a maximum of ${maxAssetsRequired} assets.</p>`
                 : `<p style="font-size: small;" id="${layerToAddId}-max-asset-required-message" class="label label-success">No upper limit on asset selection.</p>`
             }
           </div>
@@ -252,7 +252,7 @@ function initializeMap() {
                       .getElementById(
                         `${layerToAddId}-max-asset-required-message`
                       )
-                      .classList.add("label-success");
+                      .classList.add("label-alert");
                   }, 500);
                   return;
                 }
@@ -480,7 +480,10 @@ function validateNumberofAssetsSelected() {
       ).innerHTML = `Maximum of ${layerAssetMax} reached.`;
       document
         .getElementById(`${layerId}-max-asset-required-message`)
-        .classList.add("label", "label-success");
+        .classList.remove("label", "label-success");
+      document
+        .getElementById(`${layerId}-max-asset-required-message`)
+        .classList.add("label", "label-alert");
       isLayerValid = true;
       console.log("isLayerValid", isLayerValid, layerId);
       if (!validLayers.includes(layerId)) {
@@ -491,10 +494,10 @@ function validateNumberofAssetsSelected() {
     if (layerAssetMax > 0 && totalLayerAssetsSelected < layerAssetMax) {
       document
         .getElementById(`${layerId}-max-asset-required-message`)
-        .classList.remove("label", "label-success");
+        .classList.remove("label", "label-alert");
       document
         .getElementById(`${layerId}-max-asset-required-message`)
-        .classList.add("label", "label-alert");
+        .classList.add("label", "label-success");
       document.getElementById(
         `${layerId}-max-asset-required-message`
       ).innerHTML = `Select a maximum of ${layerAssetMax}.`;
