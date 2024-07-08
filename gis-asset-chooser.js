@@ -4,10 +4,12 @@ const defaultCenterY = "38.64";
 const defaultBaseMap = "streets";
 const defaultShowSearch = true;
 const mapLayersToAdd = [];
-const featurelayers = [];
+const featureLayers = [];
 const highlightedGraphics = []; // array to hold highlighted graphics
 const chosenAssets = []; // array to hold chosen assets
 const requiredLayerIds = [];
+const allMapLayerIds = [];
+let validLayers = [];
 let isValid = false;
 
 // Define the custom web component
@@ -130,7 +132,7 @@ function initializeMap() {
         layerToAdd.outFields = ["*"];
         // console.log("layerToAdd", layerToAdd);
         layerToAdd.popupEnabled = false;
-        featurelayers.push(layerToAdd);
+        featureLayers.push(layerToAdd);
         map.add(layerToAdd);
         console.log(layerToAdd);
         const layerToAddId = `${layerToAdd.layerProperties.layerName}-${layerToAdd.id}`;
@@ -171,14 +173,14 @@ function initializeMap() {
 
             ${
               maxAssetsRequired > 0
-                ? `<p style="font-size: small;" id="${layerToAddId}-max-asset-required-message" class="label">Select a maximum of ${maxAssetsRequired} assets.</p>`
+                ? `<p style="font-size: small;" id="${layerToAddId}-max-asset-required-message" class="label label-alert">Select a maximum of ${maxAssetsRequired} assets.</p>`
                 : `<p style="font-size: small;" id="${layerToAddId}-max-asset-required-message" class="label label-success">No upper limit on asset selection.</p>`
             }
           </div>
         `;
       });
-      console.log("featurelayers", featurelayers);
-      extractRequiredLayerIds(featurelayers);
+      console.log("featureLayers", featureLayers);
+      extractAllLayerIds(featureLayers);
 
       selectFeatureLayer();
       // hit test - for any layer graphics that the click 'hits'
@@ -227,22 +229,30 @@ function initializeMap() {
                   layerAssetMax > 0 &&
                   totalLayerAssetsSelected >= layerAssetMax
                 ) {
-                  document.getElementById(
-                    `${layerToAddId}-max-asset-required-message`
-                  ).classList.remove("label-success");
-                  document.getElementById(
-                    `${layerToAddId}-max-asset-required-message`
-                  ).classList.add("label-error");
+                  document
+                    .getElementById(
+                      `${layerToAddId}-max-asset-required-message`
+                    )
+                    .classList.remove("label-success");
+                  document
+                    .getElementById(
+                      `${layerToAddId}-max-asset-required-message`
+                    )
+                    .classList.add("label-error");
                   setTimeout(() => {
                     alert(
                       `You have alreay reached the maximum of ${layerAssetMax} assets for ${graphic.layer.layerProperties.layerName}.`
                     );
-                    document.getElementById(
-                      `${layerToAddId}-max-asset-required-message`
-                    ).classList.remove("label-error");
-                    document.getElementById(
-                      `${layerToAddId}-max-asset-required-message`
-                    ).classList.add("label-success");
+                    document
+                      .getElementById(
+                        `${layerToAddId}-max-asset-required-message`
+                      )
+                      .classList.remove("label-error");
+                    document
+                      .getElementById(
+                        `${layerToAddId}-max-asset-required-message`
+                      )
+                      .classList.add("label-success");
                   }, 500);
                   return;
                 }
@@ -268,7 +278,6 @@ function initializeMap() {
                 // console.log("Graphic now highlighted", graphic);
                 console.log("highlightedGraphics", highlightedGraphics);
                 renderSelectedAssetLabels();
-                // validateAssetSelection();
                 validateNumberofAssetsSelected();
               });
             } else {
@@ -289,15 +298,15 @@ function initializeMap() {
               );
               highlightedGraphics.splice(hightlightToRemove, 1);
               renderSelectedAssetLabels();
-              // validateAssetSelection();
               validateNumberofAssetsSelected();
+
               console.log("highlightedGraphics", highlightedGraphics);
             }
           }
         });
       });
-      // validateAssetSelection();
-      validateNumberofAssetsSelected();
+
+      // validateNumberofAssetsSelected();
     });
   } catch (e) {
     console.error(e);
@@ -306,7 +315,7 @@ function initializeMap() {
 }
 
 function selectFeatureLayer() {
-  featurelayers.forEach((outerLayer) => {
+  featureLayers.forEach((outerLayer) => {
     const selectLayersElements = document.querySelectorAll(".selectLayers");
     selectLayersElements.forEach((selectLayer) => {
       selectLayer.addEventListener("click", () => {
@@ -388,7 +397,6 @@ function renderSelectedAssetLabels() {
               highlightedGraphics.splice(hightlightToRemove, 1);
               // renderSelectedAssetLabels();
               console.log("highlightedGraphics", highlightedGraphics);
-              // validateAssetSelection();
               validateNumberofAssetsSelected();
             }
           });
@@ -397,23 +405,20 @@ function renderSelectedAssetLabels() {
     });
   });
   console.log("highlightedGraphics", highlightedGraphics);
+  // validateNumberofAssetsSelected();
 }
 
 //  extract and store required layer ids
-function extractRequiredLayerIds(featurelayers) {
-  const requiredLayers = featurelayers.filter(
-    (layer) => layer.layerProperties.required
-  );
-  console.log("requiredLayers", requiredLayers);
-  requiredLayers.forEach((layer) => {
-    requiredLayerIds.push(`${layer.layerProperties.layerName}-${layer.id}`);
+function extractAllLayerIds(featureLayers) {
+  featureLayers.forEach((layer) => {
+    allMapLayerIds.push(`${layer.layerProperties.layerName}-${layer.id}`);
   });
-  console.log("requiredLayerIds", requiredLayerIds);
+  console.log("allMapLayerIds", allMapLayerIds);
 }
 
 function validateNumberofAssetsSelected() {
   let isLayerValid;
-  featurelayers.forEach((mapLayer) => {
+  featureLayers.forEach((mapLayer) => {
     const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
     const layerAssetMin = parseInt(
       mapLayer.layerProperties.minimumAssetsRequired
@@ -421,43 +426,111 @@ function validateNumberofAssetsSelected() {
     const layerAssetMax = parseInt(
       mapLayer.layerProperties.maximumAssetsRequired
     );
+
     const totalLayerAssetsSelected = highlightedGraphics.filter(
       (highlightedGraphic) =>
         highlightedGraphic.layerId ===
         `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
     ).length;
+
+    console.log("totalLayerAssetsSelected", totalLayerAssetsSelected);
+    console.log("layerAssetMin", layerAssetMin);
+    console.log("layerAssetMax", layerAssetMax);
+    console.log("layerId", layerId);
     if (layerAssetMin > 0 && totalLayerAssetsSelected >= layerAssetMin) {
       document.getElementById(
         `${layerId}-min-asset-required-message`
       ).innerHTML = "Minimum asset selection requirement met.";
-      document.getElementById(
-        `${layerId}-min-asset-required-message`
-      ).classList.add("label", "label-success");
-    } if (layerAssetMin > 0 && totalLayerAssetsSelected < layerAssetMin) {
+      document
+        .getElementById(`${layerId}-min-asset-required-message`)
+        .classList.add("label", "label-success");
+      isLayerValid = true;
+      console.log("isLayerValid", isLayerValid, layerId);
+
+      if (!validLayers.includes(layerId)) {
+        validLayers.push(layerId);
+      }
+
+      console.log("validLayers", validLayers);
+    }
+    if (layerAssetMin > 0 && totalLayerAssetsSelected < layerAssetMin) {
       document.getElementById(
         `${layerId}-min-asset-required-message`
       ).innerHTML = `At least ${layerAssetMin} required.`;
-      document.getElementById(
-        `${layerId}-min-asset-required-message`
-      ).classList.remove("label", "label-success");
-      document.getElementById(
-        `${layerId}-min-asset-required-message`
-      ).classList.add("label", "label-error");
+      document
+        .getElementById(`${layerId}-min-asset-required-message`)
+        .classList.remove("label", "label-success");
+      document
+        .getElementById(`${layerId}-min-asset-required-message`)
+        .classList.add("label", "label-error");
+      isLayerValid = false;
+      console.log("isLayerValid", isLayerValid, layerId);
+      const layerToRemove = validLayers.findIndex((l) => l === layerId);
+      validLayers.splice(layerToRemove, 1);
+      console.log("validLayers", validLayers);
+      console.log("layerToRemove", layerToRemove);
+
+      validLayers = validLayers.filter((l) => l !== layerId);
+      console.log("validLayers", validLayers);
+
     }
     if (layerAssetMax > 0 && totalLayerAssetsSelected === layerAssetMax) {
       document.getElementById(
         `${layerId}-max-asset-required-message`
       ).innerHTML = `Maximum of ${layerAssetMax} reached.`;
+      document
+        .getElementById(`${layerId}-max-asset-required-message`)
+        .classList.add("label", "label-success");
+      isLayerValid = true;
+      console.log("isLayerValid", isLayerValid, layerId);
+      if (!validLayers.includes(layerId)) {
+        validLayers.push(layerId);
+      }
+      console.log("validLayers", validLayers);
+    }
+    if (layerAssetMax > 0 && totalLayerAssetsSelected < layerAssetMax) {
+      document
+        .getElementById(`${layerId}-max-asset-required-message`)
+        .classList.remove("label", "label-success");
+      document
+        .getElementById(`${layerId}-max-asset-required-message`)
+        .classList.add("label", "label-alert");
       document.getElementById(
         `${layerId}-max-asset-required-message`
-      ).classList.add("label", "label-success");
-    }
-    if (totalLayerAssetsSelected >= layerAssetMin && totalLayerAssetsSelected <= layerAssetMax) {
-       isLayerValid = true;
-    } else {
-       isLayerValid = false;
+      ).innerHTML = `Select a maximum of ${layerAssetMax}.`;
+      isLayerValid = true;
+      console.log("isLayerValid", isLayerValid, layerId);
+      if (!validLayers.includes(layerId)) {
+        validLayers.push(layerId);
+      }
+      console.log("validLayers", validLayers);
     }
   });
+  validateAssetSelection();
+}
+
+function validateAssetSelection() {
+  console.log("############################validateAssetSelection fired");
+  console.log("validLayers", validLayers);
+  console.log("allMapLayerIds", allMapLayerIds);
+  const validityMessage = document.getElementById("validity-message");
+  if (validLayers.length !== allMapLayerIds.length) {
+    isValid = false;
+  }
+  const sortedValidLayers = validLayers.sort();
+  console.log("sortedValidLayers", sortedValidLayers);
+  const sortedAllMapLayerIds = allMapLayerIds.sort();
+  console.log("sortedAllMapLayerIds", sortedAllMapLayerIds);
+  const stringifyValidLayers = JSON.stringify(sortedValidLayers);
+  console.log("stringifyValidLayers", stringifyValidLayers);
+  console.log("stringifyAllMapLayerIds", JSON.stringify(sortedAllMapLayerIds));
+  const stringifyAllMapLayerIds = JSON.stringify(sortedAllMapLayerIds);
+  if (stringifyValidLayers === stringifyAllMapLayerIds) {
+    isValid = true;
+  } else {
+    isValid = false;
+  }
+  console.log("----------------isValid", isValid);
 }
 
 // function to validate asset selection
@@ -492,7 +565,6 @@ function validateNumberofAssetsSelected() {
 // }
 
 initializeMap();
-
 // instantiate the custom component after the page has loaded
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
