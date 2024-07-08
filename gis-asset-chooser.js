@@ -25,23 +25,23 @@ class GISAssetChooserComponent extends HTMLElement {
       const hint = this.getAttribute("hint") || "";
       // const allowPoints = this.getAttribute("allowPoints") || false;
       this.innerHTML = `
-      <section id="gis-asset-chooser-container">
-        <div id="map-container" class="grid-container stat-container">
-          <div class="grid-item" id="map-title-container">
-            <h3 id="map-title" class="stat-title">${title}</h3>
-            <h4 >${hint}</h4>
-            <h6 id="validity-message"></h6>
-          </div>
-          <div class="grid-item" id="layer-data-title">
-          </div>
-          <div class="grid-item" id="viewDiv">
-          </div>
-          <div class="grid-item" id="layer-data-div">
-          </div>
-          <div>
-            <h6 id="validity-message"></h6>
+      <section style="padding: 2rem">
+       <p>
+        <strong>${title}</strong>
+      </p>
+       <p>
+           ${hint}
+       </p>
+      <div class="row">
+	      <div class="col-md-8">
+          <div id="viewDiv" style="width: 100%; height:400px; margin:0; padding:0; background-color:##dedede;">
           </div>
         </div>
+        <div class="col-md-4">
+          <div id="layer-data-div">
+          </div>
+        </div>
+      </div>
       </section>
     `;
     } catch (e) {
@@ -146,30 +146,26 @@ function initializeMap() {
         document.getElementById("layer-data-div").innerHTML += `
           <div class="map-layer-data-container stat-container">
             <span class="stat-title">${layerToAdd.layerProperties.layerName}
-              <a href="#" class="selectLayers" att-layer-id="${
+              <button class="selectLayers" att-layer-id="${
                 layerToAdd.layerProperties.layerName
               }-${layerToAdd.id}">
             <span class="glyphicons glyphicons-eye-open "></span>
-              </a>
+              </button>
             </span>
              <ul class="highlighted-asset-data-list" id="${
                layerToAdd.layerProperties.layerName
              }-${layerToAdd.id}">
             </ul>
-            ${
-              layerToAdd.layerProperties.required
-                ? `<p style="color: red; font-size: small;" id="asset-required-message">Selection required.</p>`
-                : ""
-            }
+         
             ${
               minAssetsRequired === 0
-                ? `<p style="font-size: small;" id="${layerToAddId}-min-asset-required-message" class="label label-success">No asset selection required.</p>`
-                : `<p style="font-size: small;" id="${layerToAddId}-min-asset-required-message" class="label label-error">${minAssetsRequired} required.</p>`
+                ? `<p style="font-size: small;" id="${layerToAddId}-min-asset-required-message" ><span class="label label-success">No asset selection required.</span></p>`
+                : `<p style="font-size: small;" id="${layerToAddId}-min-asset-required-message"><span class="label label-error">${minAssetsRequired} required.</span></p>`
             }
             ${
               maxAssetsRequired > 0
-                ? `<p style="font-size: small;" id="${layerToAddId}-max-asset-required-message" class="label label-success">Select a maximum of ${maxAssetsRequired} assets.</p>`
-                : `<p style="font-size: small;" id="${layerToAddId}-max-asset-required-message" class="label label-success">No upper limit on asset selection.</p>`
+                ? `<p style="font-size: small;" id="${layerToAddId}-max-asset-required-message"><span class="label label-success">Select a maximum of ${maxAssetsRequired} assets.</span></p>`
+                : `<p style="font-size: small;" id="${layerToAddId}-max-asset-required-message"><span class="label label-success">No upper limit on asset selection.</span></p>`
             }
           </div>
         `;
@@ -266,6 +262,8 @@ function initializeMap() {
                   layerAssetMax: graphic.layer.layerProperties.maximumAssetsRequired,
                   highlightSelect: highlightedSelection,
                 };
+                chosenAssets.push(chosenAsset);
+                console.log("chosenAssets", chosenAssets);
 
                 const highlightedGraphic = {
                   highlightedGraphicAttributes: graphic.attributes,
@@ -379,7 +377,7 @@ function renderSelectedAssetLabels() {
         );
         assetLabelListItem.classList.add("stat-title");
         assetLabelListItem.innerHTML = `${layerLabelMask} 
-        <span class="remove-asset-btn glyphicons glyphicons-remove small" style="color: red; margin-left: 100px;"> Remove</span>
+        <button class="remove-asset-btn "style="color: red; margin-left: 100px;"><span class="label-error glyphicons glyphicons-remove small">Remove</span></button>
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
         assetLabelListItem.addEventListener("click", function () {
