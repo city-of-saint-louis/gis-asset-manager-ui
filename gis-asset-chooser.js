@@ -7,7 +7,7 @@ const mapLayersToAdd = [];
 const featureLayers = [];
 const highlightedGraphics = []; // array to hold highlighted graphics
 const chosenAssets = []; // array to hold chosen assets
-const requiredLayerIds = [];
+// const requiredLayerIds = [];
 const allMapLayerIds = [];
 let validLayers = [];
 let isValid = false;
@@ -32,7 +32,6 @@ class GISAssetChooserComponent extends HTMLElement {
             <h4 >${hint}</h4>
             <h6 id="validity-message"></h6>
           </div>
-         
           <div class="grid-item" id="layer-data-title">
           </div>
           <div class="grid-item" id="viewDiv">
@@ -120,17 +119,16 @@ function initializeMap() {
             layerClassUrl: mapLayer.layerClassUrl,
             layerAssetIDFieldName: mapLayer.layerAssetIDFieldName,
             labelMask: mapLayer.labelMask,
-            // limit: mapLayer.limit,
             required: mapLayer.required,
             minimumAssetsRequired: mapLayer.minimumSelections,
             maximumAssetsRequired: mapLayer.maximumSelections,
+            // limit: mapLayer.limit,
             // layerId: mapLayer.layerId,
             // serverUrl: mapLayer.serverUrl,
           },
         });
         console.log("layerToAdd", layerToAdd);
         layerToAdd.outFields = ["*"];
-        // console.log("layerToAdd", layerToAdd);
         layerToAdd.popupEnabled = false;
         featureLayers.push(layerToAdd);
         map.add(layerToAdd);
@@ -157,20 +155,17 @@ function initializeMap() {
              <ul class="highlighted-asset-data-list" id="${
                layerToAdd.layerProperties.layerName
              }-${layerToAdd.id}">
-            
             </ul>
             ${
               layerToAdd.layerProperties.required
                 ? `<p style="color: red; font-size: small;" id="asset-required-message">Selection required.</p>`
                 : ""
             }
-
             ${
               minAssetsRequired === 0
                 ? `<p style="font-size: small;" id="${layerToAddId}-min-asset-required-message" class="label label-success">No asset selection required.</p>`
                 : `<p style="font-size: small;" id="${layerToAddId}-min-asset-required-message" class="label label-error">${minAssetsRequired} required.</p>`
             }
-
             ${
               maxAssetsRequired > 0
                 ? `<p style="font-size: small;" id="${layerToAddId}-max-asset-required-message" class="label label-success">Select a maximum of ${maxAssetsRequired} assets.</p>`
@@ -179,7 +174,7 @@ function initializeMap() {
           </div>
         `;
       });
-      console.log("featureLayers", featureLayers);
+    
       extractAllLayerIds(featureLayers);
 
       selectFeatureLayer();
@@ -260,6 +255,18 @@ function initializeMap() {
                 highlightedSelection = layerView.highlight(graphic);
                 console.log(graphic);
                 // change highlightedGraphic to 'chosenAsset'
+                const chosenAsset = {
+                  assetAttributes: graphic.attributes,
+                  assetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
+                  assetLabel: labelMaskValue,
+                  layerData: graphic.layer,
+                  layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
+                  layerName: graphic.layer.title,
+                  layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
+                  layerAssetMax: graphic.layer.layerProperties.maximumAssetsRequired,
+                  highlightSelect: highlightedSelection,
+                };
+
                 const highlightedGraphic = {
                   highlightedGraphicAttributes: graphic.attributes,
                   highlightedGraphicId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
@@ -270,8 +277,7 @@ function initializeMap() {
                   layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
                   layerName: graphic.layer.title,
                   layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
-                  layerAssetMax:
-                    graphic.layer.layerProperties.maximumAssetsRequired,
+                  layerAssetMax: graphic.layer.layerProperties.maximumAssetsRequired,
                   layerAssetsRequired: graphic.layer.layerProperties.required,
                 };
                 highlightedGraphics.push(highlightedGraphic);
