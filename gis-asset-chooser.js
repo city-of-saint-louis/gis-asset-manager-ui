@@ -299,7 +299,6 @@ function initializeMap() {
               highlightedGraphics.splice(hightlightToRemove, 1);
               renderSelectedAssetLabels();
               validateNumberofAssetsSelected();
-
               console.log("highlightedGraphics", highlightedGraphics);
             }
           }
@@ -309,8 +308,7 @@ function initializeMap() {
   } catch (e) {
     console.error(e);
   }
-  console.log("highlightedGraphics", highlightedGraphics);
-}
+};
 
 function selectFeatureLayer() {
   featureLayers.forEach((outerLayer) => {
@@ -335,7 +333,7 @@ function selectFeatureLayer() {
       });
     });
   });
-}
+};
 
 function renderSelectedAssetLabels() {
   const selectedLayerAssetListArray = document.querySelectorAll(
@@ -403,9 +401,8 @@ function renderSelectedAssetLabels() {
       }
     });
   });
-  console.log("highlightedGraphics", highlightedGraphics);
   // validateNumberofAssetsSelected();
-}
+};
 
 //  extract and store required layer ids
 function extractAllLayerIds(featureLayers) {
@@ -413,11 +410,12 @@ function extractAllLayerIds(featureLayers) {
     allMapLayerIds.push(`${layer.layerProperties.layerName}-${layer.id}`);
   });
   console.log("allMapLayerIds", allMapLayerIds);
-}
+};
 
 function validateNumberofAssetsSelected() {
-  let isLayerValid;
+  
   featureLayers.forEach((mapLayer) => {
+    let isLayerValid = false;
     const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
     const layerAssetMin = parseInt(
       mapLayer.layerProperties.minimumAssetsRequired
@@ -466,8 +464,8 @@ function validateNumberofAssetsSelected() {
       console.log("isLayerValid", isLayerValid, layerId);
       const layerToRemove = validLayers.findIndex((l) => l === layerId);
       validLayers.splice(layerToRemove, 1);
-      console.log("validLayers", validLayers);
-      console.log("layerToRemove", layerToRemove);
+      // console.log("validLayers", validLayers);
+      // console.log("layerToRemove", layerToRemove);
 
       validLayers = validLayers.filter((l) => l !== layerId);
       console.log("validLayers", validLayers);
@@ -483,12 +481,6 @@ function validateNumberofAssetsSelected() {
       document
         .getElementById(`${layerId}-max-asset-required-message`)
         .classList.add("label", "label-alert");
-      isLayerValid = true;
-      console.log("isLayerValid", isLayerValid, layerId);
-      if (!validLayers.includes(layerId)) {
-        validLayers.push(layerId);
-      }
-      console.log("validLayers", validLayers);
     }
     if (layerAssetMax > 0 && totalLayerAssetsSelected < layerAssetMax) {
       document
@@ -500,20 +492,14 @@ function validateNumberofAssetsSelected() {
       document.getElementById(
         `${layerId}-max-asset-required-message`
       ).innerHTML = `Select a maximum of ${layerAssetMax}.`;
-      isLayerValid = true;
-      console.log("isLayerValid", isLayerValid, layerId);
-      if (!validLayers.includes(layerId)) {
-        validLayers.push(layerId);
-      }
-      console.log("validLayers", validLayers);
     }
   });
   validateAssetSelection();
   renderVailidityMessage();
-}
+};
 
 function validateAssetSelection() {
-  console.log("############################validateAssetSelection fired");
+  
   console.log("validLayers", validLayers);
   console.log("allMapLayerIds", allMapLayerIds);
   
@@ -534,7 +520,7 @@ function validateAssetSelection() {
     isValid = false;
   }
   console.log("----------------isValid", isValid);
-}
+};
 
 function renderVailidityMessage() {
   const validityMessage = document.getElementById("validity-message");
@@ -546,7 +532,7 @@ function renderVailidityMessage() {
       "Please make the required asset selections before submission";
     validityMessage.style.color = "red";
   }
-}
+};
 
 initializeMap();
 // instantiate the custom component after the page has loaded
