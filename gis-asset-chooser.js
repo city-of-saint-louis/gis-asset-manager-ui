@@ -7,8 +7,10 @@ const mapLayersToAdd = [];
 const featureLayers = [];
 const chosenAssets = []; 
 const allMapLayerIds = [];
+const layersWithNoSelectionRequired = [];
 let validLayers = [];
 let isValid = false;
+
 
 // Define the custom web component
 class GISAssetChooserComponent extends HTMLElement {
@@ -31,7 +33,7 @@ class GISAssetChooserComponent extends HTMLElement {
        <p>
           ${hint}
        </p>
-       <p id="validity-message" style="color: red;">Please make the required asset selections before submission</p>
+       <p id="validity-message"></p>
       <div class="row">
 	      <div class="col-md-8">
           <div id="viewDiv" style="width: 100%; height:400px; margin:0; padding:0; background-color:##dedede;">
@@ -133,11 +135,11 @@ function initializeMap() {
         console.log("mapDataLayer", mapDataLayer);
         mapDataLayer.outFields = ["*"];
         mapDataLayer.popupEnabled = false;
-        featureLayers.push(mapDataLayer);
-        map.add(mapDataLayer);
         const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
         allMapLayerIds.push(mapDataLayerId);
-        
+        featureLayers.push(mapDataLayer);
+        map.add(mapDataLayer);
+       
         const minAssetsRequired = parseInt(
           mapDataLayer.layerProperties.minimumAssetsRequired
         );
@@ -145,6 +147,19 @@ function initializeMap() {
           mapDataLayer.layerProperties.maximumAssetsRequired
         );
 
+        if (minAssetsRequired === 0) {
+          layersWithNoSelectionRequired.push(mapDataLayerId);
+        }
+       
+        if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
+          isValid = true; 
+          console.log("isValid", isValid); 
+        } else {
+          isValid = false;
+          console.log("isValid", isValid);
+        }
+        renderVailidityMessage();
+        
         document.getElementById("layer-data-div").innerHTML += `
           <div class="map-layer-data-container stat-container">
             <div class="stat-title">${mapDataLayer.layerProperties.layerName}
@@ -179,7 +194,6 @@ function initializeMap() {
           </div>
         `;
       });
-      // console.log("allMapLayerIds", allMapLayerIds);
      
       selectFeatureLayer();
       // hit test - for any layer graphics that the click 'hits'
@@ -388,7 +402,7 @@ function validateNumberofAssetsSelected() {
         `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
     ).length;
 
-    if (layerAssetMin > 0 && totalLayerAssetsSelected >= layerAssetMin) {
+    if (layerAssetMin >= 0 && totalLayerAssetsSelected >= layerAssetMin) {
       document.getElementById(
         `${layerId}-min-asset-required-message`
       ).innerHTML = `${totalLayerAssetsSelected} selected. Minimum of ${layerAssetMin} required.`;
@@ -400,7 +414,7 @@ function validateNumberofAssetsSelected() {
         validLayers.push(layerId);
       }
     }
-    if (layerAssetMin > 0 && totalLayerAssetsSelected < layerAssetMin) {
+    if (layerAssetMin >= 0 && totalLayerAssetsSelected < layerAssetMin) {
       document.getElementById(
         `${layerId}-min-asset-required-message`
       ).innerHTML = `At least ${layerAssetMin} required.`;
@@ -419,17 +433,8 @@ function validateNumberofAssetsSelected() {
       document.getElementById(
         `${layerId}-max-asset-required-message`
       ).innerHTML = `Maximum of ${layerAssetMax} reached.`;
-      // document
-      //   .getElementById(`${layerId}-max-asset-required-message`)
-      //   .classList.remove("label", "label-success");
-      // document
-      //   .getElementById(`${layerId}-max-asset-required-message`)
-      //   .classList.add("label", "label-alert");
     }
     if (layerAssetMax > 0 && totalLayerAssetsSelected < layerAssetMax) {
-      // document
-      //   .getElementById(`${layerId}-max-asset-required-message`)
-      //   .classList.remove("label", "label-alert");
       document
         .getElementById(`${layerId}-max-asset-required-message`)
         .classList.add("label", "label-success");
@@ -465,15 +470,15 @@ function renderVailidityMessage() {
     validityMessage.style.color = "green";
   } else {
     validityMessage.innerHTML =
-      "Please make the required asset selections before submission";
+      "Please make the required asset selections.";
     validityMessage.style.color = "red";
   }
 }
 
 initializeMap();
 console.log("chosenAssets", chosenAssets);
-console.log("isValid", isValid); 
-// instantiate the custom component after the page has loaded
+
+// define the custom component after the page has loaded
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
 });

@@ -8,6 +8,7 @@ class MapLayer extends HTMLElement {
     try {
       const name = (this.getAttribute("name") || "").replace(/\s/g, "-");
       const layerClassUrl = this.getAttribute("layer-class-url") || ""; 
+      // save below for future use
       // const layerId = this.getAttribute("layer-id") || "";
       // const serverUrl = this.getAttribute("server-url") || "";
       const required = this.getAttribute("required") || false;
@@ -21,6 +22,7 @@ class MapLayer extends HTMLElement {
       const layerDetails = {
         name,
         layerClassUrl,
+        // save below for future use
         // serverUrl,
         // layerId,
         required,
@@ -30,7 +32,7 @@ class MapLayer extends HTMLElement {
         labelMask,
         layerAssetIDFieldName,
       };
-      // console.log('layerDetails', layerDetails);
+      
       this.dispatchEvent(new CustomEvent("layerDetailsProvided", { 
         detail: layerDetails,
         bubbles: true,

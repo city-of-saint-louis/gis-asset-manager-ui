@@ -26,33 +26,33 @@
           name="Parcels"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
-          
           label-mask="{SITEADDR}"
-          
-          minimum=2
-          maximum=4
+          minimum=4
+          maximum=6
         >
         </map-layer>
         <map-layer
           name="CITY TREES"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/CITY_TREES/FeatureServer/0"
           layer-asset-id-field-name="FID"
-    
           minimum=2
-          maximum=6
+          maximum=12
           label-mask="{COMMON} {LOCATION_T} at {LOCATION}"
         >
         </map-layer> 
-        <!-- <map-layer
+        <map-layer
           name="Neighborhoods"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Neighborhood/FeatureServer/0"
           layer-asset-id-field-name="OBJECTID"
-          limit="0"
+          minimum=2
+          maximum=8
           label-mask="{NHD_NAME}"
         >
-        </map-layer> -->
+        </map-layer>
 
-        <!-- <map-layer
+        <!-- 
+        save this for future reference
+        <map-layer
           layer-id="b0a2bf75ab284aba834328a5a8f6e28b"
           name="Bike St. Louis Street Routes"
           server-url="https://stlcity.maps.arcgis.com/"
@@ -61,7 +61,9 @@
           label-mask="{COMB_NAME} from {FROM_} to {TO_}"
         >
         </map-layer> -->
-        <!-- <map-layer
+        <!-- 
+        save this for future reference
+        <map-layer
           layer-id="0da094b7d469485e9cd5172625cf6513"
           name="2024 St Louis City Summer Meal Program Locations"
           layer-asset-id-field-name="OBJECTID"
