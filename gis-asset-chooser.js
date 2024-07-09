@@ -5,6 +5,7 @@ const defaultBaseMap = "streets";
 const defaultShowSearch = true;
 const mapLayersToAdd = [];
 const featureLayers = [];
+// highlightGraphics variable to be deleted and replaced by chosenAssets
 const highlightedGraphics = []; // array to hold highlighted graphics
 const chosenAssets = []; // array to hold chosen assets
 // const requiredLayerIds = [];
@@ -30,7 +31,7 @@ class GISAssetChooserComponent extends HTMLElement {
         <strong>${title}</strong>
       </p>
        <p>
-           ${hint}
+          ${hint}
        </p>
        <p id="validity-message" style="color: red;">Please make the required asset selections before submission</p>
       <div class="row">
@@ -133,16 +134,15 @@ function initializeMap() {
         layerToAdd.popupEnabled = false;
         featureLayers.push(layerToAdd);
         map.add(layerToAdd);
-        console.log(layerToAdd);
         const layerToAddId = `${layerToAdd.layerProperties.layerName}-${layerToAdd.id}`;
         const minAssetsRequired = parseInt(
           layerToAdd.layerProperties.minimumAssetsRequired
         );
-        console.log("minAssetsRequired", minAssetsRequired);
+        // console.log("minAssetsRequired", minAssetsRequired);
         const maxAssetsRequired = parseInt(
           layerToAdd.layerProperties.maximumAssetsRequired
         );
-        console.log("maxAssetsRequired", maxAssetsRequired);
+        // console.log("maxAssetsRequired", maxAssetsRequired);
 
         document.getElementById("layer-data-div").innerHTML += `
           <div class="map-layer-data-container stat-container">
@@ -190,7 +190,6 @@ function initializeMap() {
             );
             const layerProperties = response.results[0].layer.layerProperties;
             const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
-            // change labelMaskValue to assetLabelValue
             const labelMaskValue = eval(
               `"${graphic.layer.layerProperties.labelMask.replace(
                 /\{([^}]+)\}/g,
@@ -216,10 +215,7 @@ function initializeMap() {
                     h.layerId ===
                     `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
                 ).length;
-                console.log(
-                  "totalLayerAssetsSelected",
-                  totalLayerAssetsSelected
-                );
+                console.log("totalLayerAssetsSelected",totalLayerAssetsSelected);
                 if (
                   layerAssetMax > 0 &&
                   totalLayerAssetsSelected >= layerAssetMax
@@ -253,7 +249,6 @@ function initializeMap() {
                 }
 
                 highlightedSelection = layerView.highlight(graphic);
-                console.log(graphic);
 
                 // change highlightedGraphic to 'chosenAsset'
                 const chosenAsset = {
@@ -273,7 +268,6 @@ function initializeMap() {
                 const highlightedGraphic = {
                   highlightedGraphicAttributes: graphic.attributes,
                   highlightedGraphicId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
-                  // change layerLabelMask to highlightedGraphicLabel
                   assetLabel: labelMaskValue,
                   highlightSelect: highlightedSelection,
                   layerData: graphic.layer,
@@ -284,7 +278,6 @@ function initializeMap() {
                   layerAssetsRequired: graphic.layer.layerProperties.required,
                 };
                 highlightedGraphics.push(highlightedGraphic);
-                // console.log("Graphic now highlighted", graphic);
                 console.log("highlightedGraphics", highlightedGraphics);
                 renderSelectedAssetLabels();
                 validateNumberofAssetsSelected();
@@ -560,38 +553,3 @@ initializeMap();
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
 });
-
-
-
-
-
-// function to validate asset selection
-// function validateAssetSelection() {
-//   const chosenAssetLayerIds = highlightedGraphics.map(
-//     (highlightedGraphic) => highlightedGraphic.layerId
-//   );
-//   console.log("chosenAssetLayerIds", chosenAssetLayerIds);
-//   if (
-//     requiredLayerIds.every((layerId) => chosenAssetLayerIds.includes(layerId))
-//   ) {
-//     isValid = true;
-//   } else {
-//     isValid = false;
-//   }
-//   console.log("isValid", isValid);
-//   const validityMessage = document.getElementById("validity-message");
-//   if (isValid) {
-//     validityMessage.innerHTML = "Asset selection is valid for submission";
-//     validityMessage.style.color = "green";
-//     document.getElementById("asset-required-message").style.color = "green";
-//     document.getElementById("asset-required-message").innerHTML =
-//       "Selection requirements met.";
-//   } else {
-//     validityMessage.innerHTML =
-//       "Please make the required asset selections before submission";
-//     validityMessage.style.color = "red";
-//     document.getElementById("asset-required-message").style.color = "red";
-//     document.getElementById("asset-required-message").innerHTML =
-//       "Selection required.";
-//   }
-// }
