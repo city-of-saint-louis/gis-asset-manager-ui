@@ -8,7 +8,7 @@ const featureLayers = [];
 const chosenAssets = []; 
 const allMapLayerIds = [];
 const layersWithNoSelectionRequired = [];
-let validLayers = [];
+const validLayers = [];
 let isValid = false;
 
 
@@ -103,14 +103,13 @@ function initializeMap() {
         const searchWidget = new Search({
           view: view,
         });
-        // Add the search widget to the top right corner of the view
+        // Add the search widget to the top right corner of the map view
         view.ui.add(searchWidget, {
           position: "top-right",
         });
       }
 
       mapLayersToAdd.forEach((mapLayer) => {
-        // change var name
         const mapDataLayer = new FeatureLayer({
           url: mapLayer.layerClassUrl,
           // keep lines below for future reference
@@ -139,7 +138,6 @@ function initializeMap() {
         allMapLayerIds.push(mapDataLayerId);
         featureLayers.push(mapDataLayer);
         map.add(mapDataLayer);
-       
         const minAssetsRequired = parseInt(
           mapDataLayer.layerProperties.minimumAssetsRequired
         );
@@ -150,7 +148,6 @@ function initializeMap() {
         if (minAssetsRequired === 0) {
           layersWithNoSelectionRequired.push(mapDataLayerId);
         }
-       
         if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
           isValid = true; 
           console.log("isValid", isValid); 
@@ -159,7 +156,7 @@ function initializeMap() {
           console.log("isValid", isValid);
         }
         renderVailidityMessage();
-        
+
         document.getElementById("layer-data-div").innerHTML += `
           <div class="map-layer-data-container stat-container">
             <div class="stat-title">${mapDataLayer.layerProperties.layerName}
@@ -426,8 +423,9 @@ function validateNumberofAssetsSelected() {
         .classList.add("label", "label-error");
       isLayerValid = false;
       const layerToRemove = validLayers.findIndex((l) => l === layerId);
-      validLayers.splice(layerToRemove, 1);
-      validLayers = validLayers.filter((l) => l !== layerId);
+      if (layerToRemove !== -1) {
+        validLayers.splice(layerToRemove, 1);
+      }
     }
     if (layerAssetMax > 0 && totalLayerAssetsSelected === layerAssetMax) {
       document.getElementById(
