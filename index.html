@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GIS Asset Chooser Development</title>
-    <link rel="stylesheet" href="style.css" />
+    <!-- <link rel="stylesheet" href="style.css" /> -->
     <link
       rel="stylesheet"
       href="https://js.arcgis.com/4.29/esri/themes/light/main.css"
@@ -16,49 +16,62 @@
     <header></header>
     <main>
       <gis-asset-chooser 
-        title="Map Title" 
-        hint="Click on the map to select an asset."
+        title="GIS Asset Chooser" 
+        hint="Click on the map to select required assets. Click again to unselect."
         zoom="12" 
         centerX="-90.25" 
         centerY="38.64"
       >
         <map-layer
-          layer-id="34f817a794c64919affc7ec449677de3"
           name="Parcels"
-          server-url="https://stlcity.maps.arcgis.com/"
+          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
-          required=true
-          limit=4
           label-mask="{SITEADDR}"
+          minimum=0
+          maximum=6
         >
         </map-layer>
         <map-layer
-          layer-id="46bd9d471a184f20a773224f494c45c8"
-          name="Street_Trees_Read_Only"
-          server-url="https://stlcity.maps.arcgis.com/"
+          name="CITY TREES"
+          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/CITY_TREES/FeatureServer/0"
           layer-asset-id-field-name="FID"
-          limit=3
-          label-mask="{COMB_NAME} from {FROM_} to {TO_}"
+          minimum=2
+          maximum=12
+          label-mask="{COMMON} {LOCATION_T} at {LOCATION}"
+        >
+        </map-layer> 
+        <map-layer
+          name="Neighborhoods"
+          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Neighborhood/FeatureServer/0"
+          layer-asset-id-field-name="OBJECTID"
+          minimum=4
+          maximum=0
+          label-mask="{NHD_NAME}"
         >
         </map-layer>
+
+        <!-- 
+        save this for future reference
         <map-layer
           layer-id="b0a2bf75ab284aba834328a5a8f6e28b"
           name="Bike St. Louis Street Routes"
           server-url="https://stlcity.maps.arcgis.com/"
           layer-asset-id-field-name="FID"
           limit=2
-          label-mask="{COMMON} {LOCATION_T} at {LOCATION}"
+          label-mask="{COMB_NAME} from {FROM_} to {TO_}"
         >
-        </map-layer>
+        </map-layer> -->
+        <!-- 
+        save this for future reference
         <map-layer
           layer-id="0da094b7d469485e9cd5172625cf6513"
           name="2024 St Louis City Summer Meal Program Locations"
           layer-asset-id-field-name="OBJECTID"
           server-url="https://stlcity.maps.arcgis.com/"
           limit=1
-          label-mask="{ADDRESS}"
+          label-mask="Site_Name"
         >
-        </map-layer>
+        </map-layer> -->
       </gis-asset-chooser>
     </main>
     <footer></footer>
@@ -66,3 +79,6 @@
     <script src="gis-asset-chooser.js"></script>
   </body>
 </html>
+
+
+    

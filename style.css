@@ -6,30 +6,44 @@
   display: grid;
   grid-template-columns: 2fr 1fr; /* Adjusted for a 2:1 ratio for larger screens */
   grid-template-rows: auto 1fr; /* Two rows: one for titles, one for content */
-  grid-gap: 10px; /* Adjust gap as needed */
+  padding: 2em;
+  margin: 1em;
 }
 
 #viewDiv {
   height: 50vh;
-  border: grey 1px solid;
+  border: lightgray 1px solid;
 }
 
+#layer-data-title {
+  align-self: end; /* Aligns titles to the bottom of their grid cell */
+  padding-left: 2em;
+  margin-left: 1em;
+}
 #layer-data-div {
-  border: grey 1px solid;
+  padding-left: 1em;
+  margin-left: 1em;
 }
 
-#viewDiv-title, #layer-data-title {
+#map-title-container {
   align-self: end; /* Aligns titles to the bottom of their grid cell */
 }
 
 .map-layer-data-container {
-  padding-left: 1em;
-  border: grey 1px solid;
-  margin: 1em;
-  background-color: #f5f5f5}
+  padding-left: 2em;
+  margin-left: 1em;
+}
+
+.remove-asset-btn{
+  cursor: pointer;
+}
 
 #map-layers-headline-mobile {
   display: none; /* Hide layer data on larger screens */
+}
+
+#validity-message {
+  font-size: medium;
 }
 
 @media (max-width: 768px) {
@@ -38,7 +52,10 @@
     grid-template-rows: auto auto 1fr; /* Adjust rows for stacking */
   }
 
-  #viewDiv, #layer-data-div, #viewDiv-title, #layer-data-title {
+  #viewDiv,
+  #layer-data-div,
+  #viewDiv-title,
+  #layer-data-title {
     width: 100%; /* Full width for smaller screens */
   }
   #map-layers-headline-mobile {
@@ -47,5 +64,8 @@
   #map-layers-headline-desktop {
     display: none; /* Hide layer data on smaller screens */
   }
- 
+  #layer-data-div {
+    padding-left: 0; /* Remove padding for smaller screens */
+    margin-left: 0;
+  }
 }

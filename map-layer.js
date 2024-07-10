@@ -6,24 +6,30 @@ class MapLayer extends HTMLElement {
     console.log("map-layer initialized")
    
     try {
-      const layerId = this.getAttribute("layer-id") || "";
-      const name = this.getAttribute("name") || "";
-      const serverUrl = this.getAttribute("server-url") || "";
-      const required = this.getAttribute("required") || false;
+      const name = (this.getAttribute("name") || "").replace(/\s/g, "-");
+      const layerClassUrl = this.getAttribute("layer-class-url") || ""; 
+      // save below for future use
+      // const layerId = this.getAttribute("layer-id") || "";
+      // const serverUrl = this.getAttribute("server-url") || "";
       const limit = this.getAttribute("limit") || 0;
+      const minimumSelections = this.getAttribute("minimum") || 0;
+      const maximumSelections = this.getAttribute("maximum") || 0;
       const labelMask = this.getAttribute("label-mask") || "";
       const layerAssetIDFieldName = this.getAttribute("layer-asset-id-field-name") || "";
-
+      
       const layerDetails = {
-        layerId,
         name,
-        serverUrl,
-        required,
+        layerClassUrl,
+        // save below for future use
+        // serverUrl,
+        // layerId,
+        minimumSelections,
+        maximumSelections,
         limit,
         labelMask,
-        layerAssetIDFieldName
+        layerAssetIDFieldName,
       };
-      // console.log('layerDetails', layerDetails);
+      
       this.dispatchEvent(new CustomEvent("layerDetailsProvided", { 
         detail: layerDetails,
         bubbles: true,

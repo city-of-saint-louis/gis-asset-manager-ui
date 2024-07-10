@@ -4,12 +4,17 @@ const defaultCenterY = "38.64";
 const defaultBaseMap = "streets";
 const defaultShowSearch = true;
 const mapLayersToAdd = [];
-const featurelayers = [];
-const highlightedGraphics = []; // array to hold highlighted graphics
+const featureLayers = [];
+const chosenAssets = []; 
+const allMapLayerIds = [];
+const layersWithNoSelectionRequired = [];
+const validLayers = [];
+let isValid = false;
 
+// Define the custom web component
 class GISAssetChooserComponent extends HTMLElement {
   constructor() {
-    super(); // always call super() first in the constructor.
+    super(); // always call super() first in the constructor for a custom web component
   }
 
   connectedCallback() {
@@ -17,22 +22,27 @@ class GISAssetChooserComponent extends HTMLElement {
     try {
       const title = this.getAttribute("title") || "";
       const hint = this.getAttribute("hint") || "";
+      // keep line below for future reference
       // const allowPoints = this.getAttribute("allowPoints") || false;
       this.innerHTML = `
-      <section>
-        <h3>${title}</h3>
-        <div id="map-container" class="grid-container">
-          <div class="grid-item" id="viewDiv-title"><h4>${hint}</h4>
-          </div>
-          <div class="grid-item" id="layer-data-title">
-            <h5 id="map-layers-headline-desktop">Map Layers</h5>
-          </div>
-          <div class="grid-item" id="viewDiv">
-          </div>
-           <h5 id="map-layers-headline-mobile">Map Layers</h5>
-          <div class="grid-item" id="layer-data-div">
+      <section style="padding: 2rem">
+       <p>
+        <strong>${title}</strong>
+      </p>
+       <p>
+          ${hint}
+       </p>
+       <p id="validity-message"></p>
+      <div class="row">
+	      <div class="col-md-8">
+          <div id="viewDiv" style="width: 100%; height:400px; margin:0; padding:0; background-color:##dedede;">
           </div>
         </div>
+        <div class="col-md-4">
+          <div id="layer-data-div">
+          </div>
+        </div>
+      </div>
       </section>
     `;
     } catch (e) {
@@ -43,14 +53,16 @@ class GISAssetChooserComponent extends HTMLElement {
     }
   }
 }
+// end of component class
 
+// event listener to capture layer data from map-layer.js
 document.addEventListener("layerDetailsProvided", (event) => {
   const mapLayer = event.detail;
   mapLayersToAdd.push(mapLayer);
-  console.log("mapLayer", mapLayer);
-  console.log("mapLayersToAdd", mapLayersToAdd);
 });
+console.log("mapLayersToAdd", mapLayersToAdd);
 
+// initilize the map using the map layers provided
 function initializeMap() {
   try {
     const zoom = document
@@ -68,7 +80,7 @@ function initializeMap() {
     const showSearch =
       document.querySelector("gis-asset-chooser").getAttribute("showSearch") ||
       defaultShowSearch;
-      
+
     require([
       "esri/Map",
       "esri/views/MapView",
@@ -90,116 +102,196 @@ function initializeMap() {
         const searchWidget = new Search({
           view: view,
         });
-        // Add the search widget to the top right corner of the view
+        // Add the search widget to the top right corner of the map view
         view.ui.add(searchWidget, {
           position: "top-right",
         });
       }
 
       mapLayersToAdd.forEach((mapLayer) => {
-        const layerToAdd = new FeatureLayer({
-          portalItem: {
-            id: mapLayer.layerId,
-            portal: mapLayer.serverUrl,
-          },
+        const mapDataLayer = new FeatureLayer({
+          url: mapLayer.layerClassUrl,
+          // keep lines below for future reference
+          // portalItem: {
+          //   id: mapLayer.layerId,
+          //   portal: mapLayer.serverUrl,
+          // },
           layerProperties: {
+            layerName: mapLayer.name,
+            layerClassUrl: mapLayer.layerClassUrl,
             layerAssetIDFieldName: mapLayer.layerAssetIDFieldName,
             labelMask: mapLayer.labelMask,
-            layerId: mapLayer.layerId,
-            limit: mapLayer.limit,
             required: mapLayer.required,
-            serverUrl: mapLayer.serverUrl,
-          }
+            minimumAssetsRequired: mapLayer.minimumSelections,
+            maximumAssetsRequired: mapLayer.maximumSelections,
+            // keep lines below for future reference
+            // limit: mapLayer.limit,
+            // layerId: mapLayer.layerId,
+            // serverUrl: mapLayer.serverUrl,
+          },
         });
-        layerToAdd.outFields = ["*"];
-        // console.log("layerToAdd", layerToAdd);
-        layerToAdd.popupEnabled = false;
-        featurelayers.push(layerToAdd);
-        map.add(layerToAdd);
+        console.log("mapDataLayer", mapDataLayer);
+        mapDataLayer.outFields = ["*"];
+        mapDataLayer.popupEnabled = false;
+        const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
+        allMapLayerIds.push(mapDataLayerId);
+        featureLayers.push(mapDataLayer);
+        map.add(mapDataLayer);
+        const minAssetsRequired = parseInt(
+          mapDataLayer.layerProperties.minimumAssetsRequired
+        );
+        const maxAssetsRequired = parseInt(
+          mapDataLayer.layerProperties.maximumAssetsRequired
+        );
+
+        if (minAssetsRequired === 0) {
+          layersWithNoSelectionRequired.push(mapDataLayerId);
+        }
+        if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
+          isValid = true; 
+          console.log("isValid", isValid); 
+        } else {
+          isValid = false;
+          console.log("isValid", isValid);
+        }
+        renderVailidityMessage();
+
         document.getElementById("layer-data-div").innerHTML += `
+          <div class="map-layer-data-container stat-container">
+            <div class="stat-title">${mapDataLayer.layerProperties.layerName}
+              <button class="selectLayers" att-layer-id="${
+                mapDataLayer.layerProperties.layerName
+              }-${mapDataLayer.id}">
+                <span class="glyphicons glyphicons-eye-open "></span>
+              </button>
+            </div>
+            <div>
+              <span id="asset-selection-counter"></span>
+            </div>
 
-          <div class="map-layer-data-container" class="content-block">
-            <h6>${mapLayer.name}
-              <a href="#" class="selectLayers pull-right" att-layer-id="${
-                mapLayer.layerId
-              }">
-                <span class="glyphicons glyphicons-eye-open"></span>
-              </a>
-
-            </h6>
-            ${
-              mapLayer.required
-                ? `<p>Select at least 1 asset.</p>`
-                : ""
-            }
-
-            ${
-              mapLayer.limit > 0
-                ? `<p>Select a maximum of ${mapLayer.limit} assets.</p>`
-                : ""
-            }
-            <ul class="list-group" id="labelMask${mapLayer.layerId}">
+            <div style="font-size: small;">
+              ${
+                minAssetsRequired === 0
+                  ? `<p id="${mapDataLayerId}-min-asset-required-message" ><span class="label label-success">No asset selection required.</span></p>`
+                  : `<p id="${mapDataLayerId}-min-asset-required-message"><span class="label label-error">At least ${minAssetsRequired} required.</span></p>`
+              }
+              ${
+                maxAssetsRequired > 0
+                  ? `<p id="${mapDataLayerId}-max-asset-required-message"><span class="label label-success">Select a maximum of ${maxAssetsRequired} assets.</span></p>`
+                  : `<p id="${mapDataLayerId}-max-asset-required-message"><span class="label label-success">No upper limit on asset selection.</span></p>`
+              }
+            </div>
+            <ul 
+              class="highlighted-asset-data-list" id="${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}"
+              style="list-style-type: none; padding: 0; margin: 0;"
+            >
+              <li style="font-size: .8rem;">None selected.</li>
             </ul>
           </div>
         `;
       });
-      console.log("featurelayers", featurelayers);
+     
       selectFeatureLayer();
       // hit test - for any layer graphics that the click 'hits'
       view.on("click", (event) => {
         view.hitTest(event).then(function (response) {
           let highlightedSelection;
-
           if (response.results.length) {
-            console.log("response", response.results[0]);
             const graphic = response.results[0].graphic;
-            // Get the layer info for this graphic
-            const layerInfo = response.results[0].layer.portalItem;
+            console.log
             const layerProperties = response.results[0].layer.layerProperties;
-            const layerAssetIDFieldName = response.results[0].layer.layerProperties.layerAssetIDFieldName;
-            console.log("layerAssetIDFieldName", layerAssetIDFieldName);
-            console.log("layerProperties", layerProperties);
-            console.log("layerInfo", layerInfo);
-              if (
-                !highlightedGraphics.find(
-                  (g) => g.highlightedGraphicId === graphic.attributes[layerAssetIDFieldName]
-                )
-              ) {
-                
-                view.whenLayerView(graphic.layer).then(function (layerView) {
-                  highlightedSelection = layerView.highlight(graphic);
-                  console.log(graphic)
-                    const highlightedGraphic = {
-                    highlightedGraphicAttributes: graphic.attributes,
-                    highlightedGraphicId: graphic.attributes[layerAssetIDFieldName],
-                    highlightSelect: highlightedSelection,
-                    layerData: graphic.layer,
-                    layerId: graphic.layer.uid,
-                    layerTitle: graphic.layer.title,
-                    layerLabelMask: graphic.layer.layerProperties.labelMask,
-                    layerAssetLimit: graphic.layer.layerProperties.limit,
-                    };
-                  highlightedGraphics.push(highlightedGraphic);
-                  console.log("Graphic now highlighted", graphic);
-                  console.log("highlightedGraphics", highlightedGraphics);
-              
-                });
-            
-              } else {
-                highlightedGraphics.forEach(function (highlight) {
-                  if (highlight.highlightedGraphicId === graphic.attributes[layerAssetIDFieldName]) {
-                    highlight.highlightSelect.remove();
-                  }
-                  console.log("Graphic unhighlighted.", graphic);
-                });
-                const hightlightToRemove = highlightedGraphics.findIndex(
-                  (h) => h.highlightedGraphicId === graphic.attributes[layerAssetIDFieldName]
-                );
-                highlightedGraphics.splice(hightlightToRemove, 1);
-                console.log("highlightedGraphics", highlightedGraphics);
-              
-              }
-            // } 
+            const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
+            const labelMaskValue = eval(
+              `"${graphic.layer.layerProperties.labelMask.replace(
+                /\{([^}]+)\}/g,
+                (match, p1) => `" + graphic.attributes.${p1} + "`
+              )}"`
+            );
+            const layerId = graphic.layer.id;
+            if (
+              !chosenAssets.find(
+                (a) =>
+                  a.assetId ===
+                  `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
+              )
+            ) {
+              view.whenLayerView(graphic.layer).then(function (layerView) {
+                const mapDataLayerId = `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`;
+                const layerAssetMax = layerProperties.maximumAssetsRequired;
+                const totalLayerAssetsSelected = chosenAssets.filter(
+                  (h) =>
+                    h.layerId ===
+                    `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
+                ).length;
+                if (
+                  layerAssetMax > 0 &&
+                  totalLayerAssetsSelected >= layerAssetMax
+                ) {
+                  document
+                    .getElementById(
+                      `${mapDataLayerId}-max-asset-required-message`
+                    )
+                    .classList.remove("label-success");
+                  document
+                    .getElementById(
+                      `${mapDataLayerId}-max-asset-required-message`
+                    )
+                    .classList.add("label-error");
+                  setTimeout(() => {
+                    alert(
+                      `You have alreay selected the maximum of ${layerAssetMax} assets for ${graphic.layer.layerProperties.layerName}.`
+                    );
+                    document
+                      .getElementById(
+                        `${mapDataLayerId}-max-asset-required-message`
+                      )
+                      .classList.remove("label-error");
+                    document
+                      .getElementById(
+                        `${mapDataLayerId}-max-asset-required-message`
+                      )
+                      .classList.add("label-success");
+                  }, 500);
+                  return;
+                }
+
+                highlightedSelection = layerView.highlight(graphic);
+                console.log('graphic', graphic)
+                const chosenAsset = {
+                  assetAttributes: graphic.attributes,
+                  assetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
+                  assetLabel: labelMaskValue,
+                  layerData: graphic.layer,
+                  layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
+                  layerName: graphic.layer.title,
+                  layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
+                  layerAssetMax: graphic.layer.layerProperties.maximumAssetsRequired,
+                  highlightSelect: highlightedSelection,
+                };
+                chosenAssets.push(chosenAsset);
+                console.log("chosenAssets", chosenAssets);
+                renderSelectedAssetLabels();
+                validateNumberofAssetsSelected();
+              });
+            } else {
+              chosenAssets.forEach(function (asset) {
+                if (
+                  asset.assetId ===
+                  `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
+                ) {
+                  asset.highlightSelect.remove();
+                }
+              });
+              const hightlightToRemove = chosenAssets.findIndex(
+                (a) =>
+                  a.assetId ===
+                  `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
+              );
+              chosenAssets.splice(hightlightToRemove, 1);
+              renderSelectedAssetLabels();
+              validateNumberofAssetsSelected();
+              console.log("chosenAssets", chosenAssets);
+            }
           }
         });
       });
@@ -210,16 +302,15 @@ function initializeMap() {
 }
 
 function selectFeatureLayer() {
-  // console.log("checked featurelayers", featurelayers);
-  featurelayers.forEach((outerLayer) => {
+  featureLayers.forEach((outerLayer) => {
     const selectLayersElements = document.querySelectorAll(".selectLayers");
     selectLayersElements.forEach((selectLayer) => {
-      selectLayer.addEventListener("click", (event) => {
+      selectLayer.addEventListener("click", () => {
         const layerId = selectLayer.getAttribute("att-layer-id");
         const spanElement = selectLayer.querySelector("span");
-        // console.log("spanElement", spanElement);
-        // console.log("Layer ID selected", layerId);
-        if (outerLayer.portalItem.id === layerId) {
+        if (
+          `${outerLayer.layerProperties.layerName}-${outerLayer.id}` === layerId
+        ) {
           if (outerLayer.visible) {
             outerLayer.visible = false;
             spanElement.classList.remove("glyphicons-eye-open");
@@ -235,8 +326,156 @@ function selectFeatureLayer() {
   });
 }
 
-initializeMap();
+function renderSelectedAssetLabels() {
+  const selectedLayerAssetListArray = document.querySelectorAll(
+    ".highlighted-asset-data-list"
+  );
+  // Clear existing list items before appending new ones
+  selectedLayerAssetListArray.forEach((list) => {
+    list.innerHTML = ""; // This clears the list
+  });
+  chosenAssets.forEach((asset) => {
+    selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
+      if (asset.layerId === selectedLayerAssetList.id) {
+        const assetLabel = asset.assetLabel;
+        const assetLabelListItem = document.createElement("li");
+        assetLabelListItem.style.fontSize = ".8rem";
+        assetLabelListItem.setAttribute("id", asset.assetId);
+        assetLabelListItem.classList.add("stat-title");
+        assetLabelListItem.innerHTML = `${assetLabel} <a class="link-button remove-asset-btn" style="cursor: pointer;"><span class="glyphicons glyphicons-remove small"></span>Remove</a>
+        `;
+        selectedLayerAssetList.appendChild(assetLabelListItem);
+        assetLabelListItem.addEventListener("click", function () {
+          chosenAssets.forEach((asset) => {
+            if (
+              asset.assetId === assetLabelListItem.id
+            ) {
+              asset.highlightSelect.remove();
+              const listItemToRemove = document.getElementById(
+                asset.assetId
+              );
+              if (listItemToRemove) listItemToRemove.remove();
+              const hightlightToRemove = chosenAssets.findIndex(
+                (a) =>
+                  a.assetId ===
+                  asset.assetId
+              );
+              chosenAssets.splice(hightlightToRemove, 1);
+              validateNumberofAssetsSelected();
+              console.log("chosenAssets", chosenAssets);
+              selectedLayerAssetListArray.forEach((list) => {
+                if (list.innerHTML === "") {
+                  list.innerHTML = `<li style="font-size: .8rem;">None selected.</li>`;
+                }
+              });
+            }
+          });
+        });
+      }
+    }); 
+  });
+  selectedLayerAssetListArray.forEach((list) => {
+    if (list.innerHTML === "") {
+      list.innerHTML = `<li style="font-size: .8rem;">None selected.</li>`;
+    }
+  });
+};
 
+function validateNumberofAssetsSelected() {
+  featureLayers.forEach((mapLayer) => {
+    let isLayerValid = false;
+    const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
+    const layerAssetMin = parseInt(
+      mapLayer.layerProperties.minimumAssetsRequired
+    );
+    const layerAssetMax = parseInt(
+      mapLayer.layerProperties.maximumAssetsRequired
+    );
+
+    const totalLayerAssetsSelected = chosenAssets.filter(
+      (asset) =>
+        asset.layerId ===
+        `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
+    ).length;
+
+    if (layerAssetMin >= 0 && totalLayerAssetsSelected >= layerAssetMin) {
+      document.getElementById(
+        `${layerId}-min-asset-required-message`
+      ).innerHTML = `${totalLayerAssetsSelected} selected. Minimum of ${layerAssetMin} required.`;
+      document
+        .getElementById(`${layerId}-min-asset-required-message`)
+        .classList.add("label", "label-success");
+      isLayerValid = true;
+      if (!validLayers.includes(layerId)) {
+        validLayers.push(layerId);
+      }
+    }
+    if (layerAssetMin >= 0 && totalLayerAssetsSelected < layerAssetMin) {
+      document.getElementById(
+        `${layerId}-min-asset-required-message`
+      ).innerHTML = `At least ${layerAssetMin} required.`;
+      document
+        .getElementById(`${layerId}-min-asset-required-message`)
+        .classList.remove("label", "label-success");
+      document
+        .getElementById(`${layerId}-min-asset-required-message`)
+        .classList.add("label", "label-error");
+      isLayerValid = false;
+      const layerToRemove = validLayers.findIndex((l) => l === layerId);
+      if (layerToRemove !== -1) {
+        validLayers.splice(layerToRemove, 1);
+      }
+    }
+    if (layerAssetMax > 0 && totalLayerAssetsSelected === layerAssetMax) {
+      document.getElementById(
+        `${layerId}-max-asset-required-message`
+      ).innerHTML = `Maximum of ${layerAssetMax} reached.`;
+    }
+    if (layerAssetMax > 0 && totalLayerAssetsSelected < layerAssetMax) {
+      document
+        .getElementById(`${layerId}-max-asset-required-message`)
+        .classList.add("label", "label-success");
+      document.getElementById(
+        `${layerId}-max-asset-required-message`
+      ).innerHTML = `Select a maximum of ${layerAssetMax}.`;
+    }
+  });
+  validateAssetSelection();
+  renderVailidityMessage();
+}
+
+function validateAssetSelection() {
+  if (validLayers.length !== allMapLayerIds.length) {
+    isValid = false;
+  }
+  const sortedValidLayers = validLayers.sort();
+  const sortedAllMapLayerIds = allMapLayerIds.sort();
+  const stringifyValidLayers = JSON.stringify(sortedValidLayers);
+  const stringifyAllMapLayerIds = JSON.stringify(sortedAllMapLayerIds);
+  if (stringifyValidLayers === stringifyAllMapLayerIds) {
+    isValid = true;
+  } else {
+    isValid = false;
+  }
+  console.log("----------------isValid", isValid);
+}
+
+function renderVailidityMessage() {
+  const validityMessage = document.getElementById("validity-message");
+  if (isValid) {
+    validityMessage.innerHTML = "Asset selection is valid for submission";
+    validityMessage.style.color = "green";
+  } else {
+    validityMessage.innerHTML =
+      "Please make the required asset selections.";
+    validityMessage.style.color = "red";
+  }
+}
+
+initializeMap();
+console.log("chosenAssets", chosenAssets);
+
+// define the custom component after the page has loaded
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
 });
