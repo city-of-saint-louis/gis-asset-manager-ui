@@ -35,7 +35,7 @@ class GISAssetChooserComponent extends HTMLElement {
        <p id="validity-message"></p>
       <div class="row">
 	      <div class="col-md-8">
-          <div id="viewDiv" style="width: 100%; height:400px; margin:0; padding:0; background-color:##dedede;">
+          <div id="viewDiv" style="width: 100%; height: 400px;">
           </div>
         </div>
         <div class="col-md-4">
