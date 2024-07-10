@@ -186,7 +186,7 @@ function initializeMap() {
               class="highlighted-asset-data-list" id="${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}"
               style="list-style-type: none; padding: 0; margin: 0;"
             >
-              <li style="font-size: .9rem;">No assets selected</li>
+              <li style="font-size: .8rem;">None selected.</li>
             </ul>
           </div>
         `;
@@ -199,6 +199,7 @@ function initializeMap() {
           let highlightedSelection;
           if (response.results.length) {
             const graphic = response.results[0].graphic;
+            console.log
             const layerProperties = response.results[0].layer.layerProperties;
             const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
             const labelMaskValue = eval(
@@ -256,7 +257,7 @@ function initializeMap() {
                 }
 
                 highlightedSelection = layerView.highlight(graphic);
-
+                console.log('graphic', graphic)
                 const chosenAsset = {
                   assetAttributes: graphic.attributes,
                   assetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
@@ -339,11 +340,10 @@ function renderSelectedAssetLabels() {
       if (asset.layerId === selectedLayerAssetList.id) {
         const assetLabel = asset.assetLabel;
         const assetLabelListItem = document.createElement("li");
-        assetLabelListItem.style.fontSize = ".9rem";
+        assetLabelListItem.style.fontSize = ".8rem";
         assetLabelListItem.setAttribute("id", asset.assetId);
         assetLabelListItem.classList.add("stat-title");
-        assetLabelListItem.innerHTML = `${assetLabel} 
-          <a class="inverse-button red-button remove-asset-btn "style="color: red; cursor: pointer;"><span class="glyphicons glyphicons-remove small"> Remove</span></a>
+        assetLabelListItem.innerHTML = `${assetLabel} <a class="link-button remove-asset-btn" style="cursor: pointer;"><span class="glyphicons glyphicons-remove small"></span>Remove</a>
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
         assetLabelListItem.addEventListener("click", function () {
@@ -366,7 +366,7 @@ function renderSelectedAssetLabels() {
               console.log("chosenAssets", chosenAssets);
               selectedLayerAssetListArray.forEach((list) => {
                 if (list.innerHTML === "") {
-                  list.innerHTML = `<li style="font-size: .9rem;">No assets selected</li>`;
+                  list.innerHTML = `<li style="font-size: .8rem;">None selected.</li>`;
                 }
               });
             }
@@ -377,7 +377,7 @@ function renderSelectedAssetLabels() {
   });
   selectedLayerAssetListArray.forEach((list) => {
     if (list.innerHTML === "") {
-      list.innerHTML = `<li style="font-size: .9rem;">No assets selected</li>`;
+      list.innerHTML = `<li style="font-size: .8rem;">None selected.</li>`;
     }
   });
 };
