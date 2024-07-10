@@ -256,7 +256,6 @@ function initializeMap() {
                 }
 
                 highlightedSelection = layerView.highlight(graphic);
-                console.log('graphic', graphic)
                 const chosenAsset = {
                   assetAttributes: graphic.attributes,
                   assetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
