@@ -27,17 +27,17 @@ class GISAssetChooserComponent extends HTMLElement {
       this.innerHTML = `
       <section style="padding: 2rem">
        <p>
-        <strong>${title}</strong>
-      </p>
+         <strong>${title}</strong>
+       </p>
        <p>
-          ${hint}
+         ${hint}
        </p>
        <p id="validity-message"></p>
-      <div class="row">
-	      <div class="col-md-8">
-          <div id="viewDiv" style="width: 100%; height: 400px;">
-          </div>
-        </div>
+       <div class="row">
+	       <div class="col-md-8">
+           <div id="viewDiv" style="width: 100%; height: 400px;">
+         </div>
+       </div>
         <div class="col-md-4">
           <div id="layer-data-div">
           </div>
@@ -109,8 +109,11 @@ function initializeMap() {
       }
 
       mapLayersToAdd.forEach((mapLayer) => {
+        console.log("mapLayer", mapLayer);
         const mapDataLayer = new FeatureLayer({
           url: mapLayer.layerClassUrl,
+          minScale: mapLayer.minScale,
+          maxScale: mapLayer.maxScale,
           // keep lines below for future reference
           // portalItem: {
           //   id: mapLayer.layerId,

@@ -16,6 +16,8 @@ class MapLayer extends HTMLElement {
       const maximumSelections = this.getAttribute("maximum") || 0;
       const labelMask = this.getAttribute("label-mask") || "";
       const layerAssetIDFieldName = this.getAttribute("layer-asset-id-field-name") || "";
+      const minScale = this.getAttribute("min-scale") || "";
+      const maxScale = this.getAttribute("max-scale") || "";
       
       const layerDetails = {
         name,
@@ -28,6 +30,8 @@ class MapLayer extends HTMLElement {
         limit,
         labelMask,
         layerAssetIDFieldName,
+        minScale,
+        maxScale,
       };
       
       this.dispatchEvent(new CustomEvent("layerDetailsProvided", { 
