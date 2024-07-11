@@ -33,6 +33,10 @@ class GISAssetChooserComponent extends HTMLElement {
          ${hint}
        </p>
        <p id="validity-message"></p>
+        <p>
+          <button 
+            type="submit" id="submit-button" disabled>Submit</button>
+        </p>
        <div class="row">
 	       <div class="col-md-8">
            <div id="viewDiv" style="width: 100%; height: 400px;">
@@ -67,7 +71,7 @@ function initializeMap() {
   try {
     const zoom = document
       .querySelector("gis-asset-chooser")
-      .getAttribute("zoom");
+      .getAttribute("zoom") || defaultZoom;
     const baseMap =
       document.querySelector("gis-asset-chooser").getAttribute("baseMap") ||
       defaultBaseMap;
@@ -109,7 +113,6 @@ function initializeMap() {
       }
 
       mapLayersToAdd.forEach((mapLayer) => {
-        console.log("mapLayer", mapLayer);
         const mapDataLayer = new FeatureLayer({
           url: mapLayer.layerClassUrl,
           minScale: mapLayer.minScale,
@@ -198,6 +201,10 @@ function initializeMap() {
       // hit test - for any layer graphics that the click 'hits'
       view.on("click", (event) => {
         view.hitTest(event).then(function (response) {
+          if (!response.results[0].layer.layerProperties){
+            alert("Please keep selections witin city limits.")
+            return;
+          }
           let highlightedSelection;
           if (response.results.length) {
             const graphic = response.results[0].graphic;
@@ -460,6 +467,14 @@ function validateAssetSelection() {
     isValid = false;
   }
   console.log("----------------isValid", isValid);
+  if (isValid) {
+    document.getElementById("submit-button").disabled = false;
+    document.getElementById("submit-button").addEventListener("click", () => {
+      alert("Asset selection is valid for submission.");
+    });
+  } else {
+    document.getElementById("submit-button").disabled = true;
+  }
 }
 
 function renderVailidityMessage() {
@@ -469,7 +484,7 @@ function renderVailidityMessage() {
     validityMessage.style.color = "green";
   } else {
     validityMessage.innerHTML =
-      "Please make the required asset selections.";
+      "Please make the required asset selections before submission.";
     validityMessage.style.color = "red";
   }
 }

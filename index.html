@@ -18,16 +18,13 @@
       <gis-asset-chooser 
         title="GIS Asset Chooser" 
         hint="Click on the map to select required assets. Click again to unselect."
-        zoom="12" 
-        centerX="-90.25" 
-        centerY="38.64"
       >
         <map-layer
           name="Parcels"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
           label-mask="{SITEADDR}"
-          minimum=0
+          minimum=2
           maximum=6
           min-scale=20000
         >
@@ -36,7 +33,7 @@
           name="CITY TREES"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/CITY_TREES/FeatureServer/0"
           layer-asset-id-field-name="FID"
-          minimum=2
+          minimum=0
           maximum=12
           label-mask="{COMMON} {LOCATION_T} at {LOCATION}"
           min-scale=10000
