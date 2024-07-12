@@ -33,9 +33,14 @@ class GISAssetChooserComponent extends HTMLElement {
          ${hint}
        </p>
        <p id="validity-message"></p>
-        <p>
-          <button 
-            type="submit" id="submit-button" disabled>Submit</button>
+       <p>
+         <button
+           style="color: lightgray;" 
+           type="submit" 
+           id="submit-button" disabled
+         >
+           Submit
+         </button>
         </p>
        <div class="row">
 	       <div class="col-md-8">
@@ -202,7 +207,7 @@ function initializeMap() {
       view.on("click", (event) => {
         view.hitTest(event).then(function (response) {
           if (!response.results[0].layer.layerProperties){
-            alert("Please keep selections witin city limits.")
+            alert("Please try again. There are no assets to select at that location.")
             return;
           }
           let highlightedSelection;
@@ -264,7 +269,6 @@ function initializeMap() {
                   }, 500);
                   return;
                 }
-
                 highlightedSelection = layerView.highlight(graphic);
                 const chosenAsset = {
                   assetAttributes: graphic.attributes,
@@ -466,7 +470,7 @@ function validateAssetSelection() {
   } else {
     isValid = false;
   }
-  console.log("----------------isValid", isValid);
+  console.log("isValid", isValid);
   if (isValid) {
     document.getElementById("submit-button").disabled = false;
     document.getElementById("submit-button").addEventListener("click", () => {
