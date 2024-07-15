@@ -47,8 +47,8 @@ class GISAssetChooserComponent extends HTMLElement {
            <div id="viewDiv" style="width: 100%; height: 400px;">
          </div>
        </div>
-        <div class="col-md-4">
-          <div id="layer-data-div">
+        <div class="col-md-4 stat-container">
+          <div id="layer-data-div" class="stat-group">
           </div>
         </div>
       </div>
