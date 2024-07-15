@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GIS Asset Chooser Development</title>
-    <!-- <link rel="stylesheet" href="style.css" /> -->
     <link
       rel="stylesheet"
       href="https://js.arcgis.com/4.29/esri/themes/light/main.css"
@@ -35,6 +34,16 @@
         >
         </map-layer>
         <map-layer
+        name="Streets"
+        layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
+        layer-asset-id-field-name="OBJECTID"
+        minimum="4"
+        maximum="0"
+        label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
+        min-scale="20000"
+      >
+      </map-layer>
+        <map-layer
           name="CITY TREES"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/CITY_TREES/FeatureServer/0"
           layer-asset-id-field-name="FID"
@@ -44,64 +53,18 @@
           min-scale="10000"
         >
         </map-layer>
-        <!-- <map-layer
+        <map-layer
           name="Neighborhoods"
-          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Neighborhood/FeatureServer/0"
+          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/PDA/Neighborhoods/MapServer"
           layer-asset-id-field-name="OBJECTID"
           minimum="4"
           maximum="0"
           label-mask="{NHD_NAME}"
-          max-scale="40000"
-        > -->
-        </map-layer>
-        <!-- Line Layer -->
-        <map-layer
-          name="StreetsDisolve"
-          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/StreetsDissolve/FeatureServer"
-          layer-asset-id-field-name="OBJECTID"
-          minimum="2"
-          maximum="8"
-          label-mask="{FULL_NAME}"
-          min-scale="20000"
+          max-scale="4000"
         >
         </map-layer>
-        <!-- Polygon layer -->
-        <map-layer
-          name="St Louis Parks"
-          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/St_Louis_Parks/FeatureServer"
-          layer-asset-id-field-name="OBJECTID"
-          minimum="4"
-          maximum="0"
-          label-mask="{TEXT_}"
-          min-scale=""
-          max-scale=""
-        >
-        </map-layer>
-        <!-- Polygon layer -->
-        <map-layer
-          name="Wards"
-          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/Wards/FeatureServer"
-          layer-asset-id-field-name="OBJECTID"
-          minimum="4"
-          maximum="0"
-          label-mask="Ward {Ward}"
-          min-scale=""
-          max-scale=""
-        >
         </map-layer>
         
-        <!-- Polygon layer -->
-        <map-layer
-          name="City Neighborhoods"
-          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/City_Neighborhoods/FeatureServer"
-          layer-asset-id-field-name="FID"
-          minimum="4"
-          maximum="0"
-          label-mask="{NHD_NAME}"
-          min-scale=""
-          max-scale=""
-        >
-        </map-layer>
 
        
 
@@ -109,19 +72,6 @@
           name=""
           layer-class-url=""
           layer-asset-id-field-name=""
-          minimum="4"
-          maximum="0"
-          label-mask=""
-          min-scale=""
-          max-scale=""
-        >
-        </map-layer> -->
-
-        <!-- Tile layer -->
-        <!-- <map-layer
-          name="GIS_STL_AERIAL_2015"
-          layer-class-url="https://tiles.arcgis.com/tiles/HZXbCkpCSqbGd0vK/arcgis/rest/services/GIS_STL_AERIAL_2015/MapServer"
-          layer-asset-id-field-name="OBJECTID"
           minimum="4"
           maximum="0"
           label-mask=""
