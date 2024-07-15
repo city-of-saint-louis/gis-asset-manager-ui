@@ -43,12 +43,12 @@ class GISAssetChooserComponent extends HTMLElement {
          </button>
         </p>
        <div class="row">
-	       <div class="col-md-8">
+	       <div class="col-md-7">
            <div id="viewDiv" style="width: 100%; height: 400px;">
          </div>
        </div>
-        <div class="col-md-4 stat-container">
-          <div id="layer-data-div" class="stat-group">
+        <div class="col-md-5 stat-container">
+          <div id="layer-data-div" class="stat-group stats-flex">
           </div>
         </div>
       </div>
