@@ -355,7 +355,7 @@ function renderSelectedAssetLabels() {
         assetLabelListItem.style.fontSize = ".8rem";
         assetLabelListItem.setAttribute("id", asset.assetId);
         assetLabelListItem.classList.add("stat-title");
-        assetLabelListItem.innerHTML = `${assetLabel} <a class="link-button remove-asset-btn" style="cursor: pointer;"><span class="glyphicons glyphicons-remove small"></span>Remove</a>
+        assetLabelListItem.innerHTML = `${assetLabel} <button class="link-button remove-asset-btn" style="cursor: pointer;"><span class="glyphicons glyphicons-remove small"></span>Remove</button>
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
         assetLabelListItem.addEventListener("click", function () {
