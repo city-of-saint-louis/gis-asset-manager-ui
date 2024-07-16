@@ -171,7 +171,7 @@ function initializeMap() {
               <span id="asset-selection-counter"></span>
             </div>
 
-            <div style="font-size: small;">
+            <div>
               ${
                 minAssetsRequired === 0
                   ? `<p id="${mapDataLayerId}-min-asset-required-message" ><span class="label label-success">No asset selection required.</span></p>`
@@ -179,15 +179,15 @@ function initializeMap() {
               }
               ${
                 maxAssetsRequired > 0
-                  ? `<p id="${mapDataLayerId}-max-asset-required-message"><span class="label label-success">Select a maximum of ${maxAssetsRequired} assets.</span></p>`
-                  : `<p id="${mapDataLayerId}-max-asset-required-message"><span class="label label-success">No upper limit on asset selection.</span></p>`
+                  ? `<p id="${mapDataLayerId}-max-asset-required-message"><span class="label label-default">Select a maximum of ${maxAssetsRequired} assets.</span></p>`
+                  : `<p id="${mapDataLayerId}-max-asset-required-message"><span class="label label-default">No upper limit on asset selection.</span></p>`
               }
             </div>
             <ul 
               class="highlighted-asset-data-list" id="${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}"
               style="list-style-type: none; padding: 0; margin: 0;"
             >
-              <li style="font-size: .8rem;">None selected.</li>
+              <li>None selected.</li>
             </ul>
           </div>
         `;
@@ -237,7 +237,7 @@ function initializeMap() {
                     .getElementById(
                       `${mapDataLayerId}-max-asset-required-message`
                     )
-                    .classList.remove("label-success");
+                    .classList.remove("label-default");
                   document
                     .getElementById(
                       `${mapDataLayerId}-max-asset-required-message`
@@ -256,7 +256,7 @@ function initializeMap() {
                       .getElementById(
                         `${mapDataLayerId}-max-asset-required-message`
                       )
-                      .classList.add("label-success");
+                      .classList.add("label-default");
                   }, 500);
                   return;
                 }
@@ -344,9 +344,9 @@ function renderSelectedAssetLabels() {
         const assetLabel = asset.assetLabel;
         const assetLabelListItem = document.createElement("li");
         assetLabelListItem.style.margin = "8px 0";
-        assetLabelListItem.style.fontSize = ".8rem";
+        
         assetLabelListItem.setAttribute("id", asset.assetId);
-        // assetLabelListItem.classList.add("stat-title");
+        
         assetLabelListItem.innerHTML = `${assetLabel} <button class="pull-right link-button inverse-button red-button remove-asset-btn" style="cursor: pointer;"><span class="glyphicons glyphicons-remove small"></span>Remove</button>
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
@@ -370,7 +370,7 @@ function renderSelectedAssetLabels() {
               console.log("chosenAssets", chosenAssets);
               selectedLayerAssetListArray.forEach((list) => {
                 if (list.innerHTML === "") {
-                  list.innerHTML = `<li style="font-size: .8rem;">None selected.</li>`;
+                  list.innerHTML = `<li>None selected.</li>`;
                 }
               });
             }
@@ -381,7 +381,7 @@ function renderSelectedAssetLabels() {
   });
   selectedLayerAssetListArray.forEach((list) => {
     if (list.innerHTML === "") {
-      list.innerHTML = `<li style="font-size: .8rem;">None selected.</li>`;
+      list.innerHTML = `<li>None selected.</li>`;
     }
   });
 };
@@ -403,10 +403,36 @@ function validateNumberofAssetsSelected() {
         `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
     ).length;
 
-    if (layerAssetMin >= 0 && totalLayerAssetsSelected >= layerAssetMin) {
+    if (layerAssetMin === 0 && totalLayerAssetsSelected === 0) {
       document.getElementById(
         `${layerId}-min-asset-required-message`
-      ).innerHTML = `${totalLayerAssetsSelected} selected. Minimum of ${layerAssetMin} required.`;
+      ).innerHTML = `No asset selection required.`;
+      document
+        .getElementById(`${layerId}-min-asset-required-message`)
+        .classList.add("label", "label-success");
+      isLayerValid = true;
+      if (!validLayers.includes(layerId)) {
+        validLayers.push(layerId);
+      }
+    }
+
+    if (layerAssetMin === 0 && totalLayerAssetsSelected > 0) {
+      document.getElementById(
+        `${layerId}-min-asset-required-message`
+      ).innerHTML = `${totalLayerAssetsSelected} selected. None required.`;
+      document
+        .getElementById(`${layerId}-min-asset-required-message`)
+        .classList.add("label", "label-success");
+      isLayerValid = true;
+      if (!validLayers.includes(layerId)) {
+        validLayers.push(layerId);
+      }
+    }
+    
+    if (layerAssetMin > 0 && totalLayerAssetsSelected >= layerAssetMin) {
+      document.getElementById(
+        `${layerId}-min-asset-required-message`
+      ).innerHTML = `${totalLayerAssetsSelected} selected. At least ${layerAssetMin} required.`;
       document
         .getElementById(`${layerId}-min-asset-required-message`)
         .classList.add("label", "label-success");
@@ -439,7 +465,7 @@ function validateNumberofAssetsSelected() {
     if (layerAssetMax > 0 && totalLayerAssetsSelected < layerAssetMax) {
       document
         .getElementById(`${layerId}-max-asset-required-message`)
-        .classList.add("label", "label-success");
+        .classList.add("label", "label-default");
       document.getElementById(
         `${layerId}-max-asset-required-message`
       ).innerHTML = `Select a maximum of ${layerAssetMax}.`;
