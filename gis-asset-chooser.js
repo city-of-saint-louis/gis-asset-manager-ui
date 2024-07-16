@@ -323,10 +323,12 @@ function selectFeatureLayer() {
             outerLayer.visible = false;
             spanElement.classList.remove("glyphicons-eye-open");
             spanElement.classList.add("glyphicons-eye-close");
+            spanElement.innerHTML = `<span class="sr-only">show layer</span>`;
           } else {
             outerLayer.visible = true;
             spanElement.classList.remove("glyphicons-eye-close");
             spanElement.classList.add("glyphicons-eye-open");
+            spanElement.innerHTML = `<span class="sr-only">hide layer</span>`;
           }
         }
       });
