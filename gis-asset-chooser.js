@@ -35,11 +35,11 @@ class GISAssetChooserComponent extends HTMLElement {
        <p id="validity-message"></p>
        <div class="row">
 	       <div class="col-md-7">
-           <div id="viewDiv" style="width: 100%; height: 400px;">
+           <div id="viewDiv" style="width: 100%; height: 500px;">
          </div>
        </div>
         <div class="col-md-5 stat-container">
-          <div id="layer-data-div" class="stat-group stats-flex">
+          <div id="layer-data-div" class="stat-group ">
           </div>
         </div>
       </div>
@@ -132,7 +132,6 @@ function initializeMap() {
             // serverUrl: mapLayer.serverUrl,
           },
         });
-        console.log("mapDataLayer", mapDataLayer);
         mapDataLayer.outFields = ["*"];
         mapDataLayer.popupEnabled = false;
         const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
@@ -156,7 +155,7 @@ function initializeMap() {
           isValid = false;
           console.log("isValid", isValid);
         }
-        renderVailidityMessage();
+        renderValidityMessage();
 
         document.getElementById("layer-data-div").innerHTML += `
           <div class="map-layer-data-container stat-container stat-medium">
@@ -170,7 +169,6 @@ function initializeMap() {
             <div>
               <span id="asset-selection-counter"></span>
             </div>
-
             <div>
               ${
                 minAssetsRequired === 0
@@ -472,7 +470,7 @@ function validateNumberofAssetsSelected() {
     }
   });
   validateAssetSelection();
-  renderVailidityMessage();
+  renderValidityMessage();
 }
 
 function validateAssetSelection() {
@@ -492,7 +490,7 @@ function validateAssetSelection() {
  
 }
 
-function renderVailidityMessage() {
+function renderValidityMessage() {
   const validityMessage = document.getElementById("validity-message");
   if (isValid) {
     validityMessage.innerHTML = "Asset selection is valid for submission";

@@ -24,15 +24,6 @@
         hint="Click on the map to select required assets. Click again to unselect."
       >
         <map-layer
-          name="Parcels"
-          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
-          layer-asset-id-field-name="FID"
-          label-mask="{SITEADDR}"
-          min-scale="30000"
-          
-        >
-        </map-layer>
-        <map-layer
           name="Streets"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
           layer-asset-id-field-name="OBJECTID"
@@ -42,6 +33,16 @@
           min-scale="20000"
         >
         </map-layer>
+        <map-layer
+          name="Parcels"
+          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
+          layer-asset-id-field-name="FID"
+          label-mask="{SITEADDR}"
+          min-scale="30000"
+          
+        >
+        </map-layer>
+      
         <map-layer
           name="Neighborhoods"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/PDA/Neighborhoods/MapServer"
