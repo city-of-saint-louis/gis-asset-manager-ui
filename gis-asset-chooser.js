@@ -33,15 +33,6 @@ class GISAssetChooserComponent extends HTMLElement {
          ${hint}
        </p>
        <p id="validity-message"></p>
-       <p>
-         <button
-           style="color: lightgray;" 
-           type="submit" 
-           id="submit-button" disabled
-         >
-           Submit
-         </button>
-        </p>
        <div class="row">
 	       <div class="col-md-7">
            <div id="viewDiv" style="width: 100%; height: 400px;">
@@ -477,23 +468,13 @@ function validateAssetSelection() {
 
 function renderVailidityMessage() {
   const validityMessage = document.getElementById("validity-message");
-  const submitButton = document.getElementById("submit-button");
   if (isValid) {
     validityMessage.innerHTML = "Asset selection is valid for submission";
     validityMessage.style.color = "green";
-    submitButton.disabled = false;
-    submitButton.style.color = "white";
-    submitButton.style.backgroundColor = "green";
-   
-    submitButton.addEventListener("click", () => {
-      alert("Valid submission.");
-    });
   } else {
     validityMessage.innerHTML =
       "Please make the required asset selections before submission.";
     validityMessage.style.color = "red";
-    submitButton.disabled = true;
-
   }
 }
 

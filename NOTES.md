@@ -12,6 +12,17 @@
 <!-- server-url="https://stlcity.maps.arcgis.com/" -->
 <!-- layer-id="46bd9d471a184f20a773224f494c45c8" -->
 
+  <!-- <map-layer
+          name="CITY TREES"
+          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/CITY_TREES/FeatureServer/0"
+          layer-asset-id-field-name="FID"
+          minimum="0"
+          maximum="12"
+          label-mask="{COMMON} {LOCATION_T} at {LOCATION}"
+          min-scale="10000"
+        >
+        </map-layer> -->
+
 <!-- save this for future reference
         <map-layer
           layer-id="b0a2bf75ab284aba834328a5a8f6e28b"
