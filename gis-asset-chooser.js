@@ -345,7 +345,7 @@ function renderSelectedAssetLabels() {
         
         assetLabelListItem.setAttribute("id", asset.assetId);
         
-        assetLabelListItem.innerHTML = `${assetLabel} <button class="pull-right link-button inverse-button red-button remove-asset-btn" style="cursor: pointer;"><span class="glyphicons glyphicons-remove small"></span>Remove</button>
+          assetLabelListItem.innerHTML = `${assetLabel} <button class="pull-right link-button inverse-button red-button small-button transparent-button remove-asset-btn" style="cursor: pointer;"><span class="glyphicons glyphicons-remove small"></span>Remove</button>
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
         assetLabelListItem.addEventListener("click", function () {
