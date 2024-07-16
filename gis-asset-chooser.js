@@ -168,7 +168,7 @@ function initializeMap() {
         renderVailidityMessage();
 
         document.getElementById("layer-data-div").innerHTML += `
-          <div class="map-layer-data-container stat-container">
+          <div class="map-layer-data-container stat-container stat-medium">
             <div class="stat-title">${mapDataLayer.layerProperties.layerName}
               <button class="selectLayers" att-layer-id="${
                 mapDataLayer.layerProperties.layerName
@@ -352,10 +352,11 @@ function renderSelectedAssetLabels() {
       if (asset.layerId === selectedLayerAssetList.id) {
         const assetLabel = asset.assetLabel;
         const assetLabelListItem = document.createElement("li");
+        assetLabelListItem.style.margin = "8px 0";
         assetLabelListItem.style.fontSize = ".8rem";
         assetLabelListItem.setAttribute("id", asset.assetId);
-        assetLabelListItem.classList.add("stat-title");
-        assetLabelListItem.innerHTML = `${assetLabel} <button class="link-button remove-asset-btn" style="cursor: pointer;"><span class="glyphicons glyphicons-remove small"></span>Remove</button>
+        // assetLabelListItem.classList.add("stat-title");
+        assetLabelListItem.innerHTML = `${assetLabel} <button class="pull-right link-button inverse-button red-button remove-asset-btn" style="cursor: pointer;"><span class="glyphicons glyphicons-remove small"></span>Remove</button>
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
         assetLabelListItem.addEventListener("click", function () {
@@ -471,25 +472,28 @@ function validateAssetSelection() {
     isValid = false;
   }
   console.log("isValid", isValid);
-  if (isValid) {
-    document.getElementById("submit-button").disabled = false;
-    document.getElementById("submit-button").addEventListener("click", () => {
-      alert("Asset selection is valid for submission.");
-    });
-  } else {
-    document.getElementById("submit-button").disabled = true;
-  }
+ 
 }
 
 function renderVailidityMessage() {
   const validityMessage = document.getElementById("validity-message");
+  const submitButton = document.getElementById("submit-button");
   if (isValid) {
     validityMessage.innerHTML = "Asset selection is valid for submission";
     validityMessage.style.color = "green";
+    submitButton.disabled = false;
+    submitButton.style.color = "white";
+    submitButton.style.backgroundColor = "green";
+   
+    submitButton.addEventListener("click", () => {
+      alert("Valid submission.");
+    });
   } else {
     validityMessage.innerHTML =
       "Please make the required asset selections before submission.";
     validityMessage.style.color = "red";
+    submitButton.disabled = true;
+
   }
 }
 
