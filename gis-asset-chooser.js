@@ -25,7 +25,7 @@ class GISAssetChooserComponent extends HTMLElement {
       // keep line below for future reference
       // const allowPoints = this.getAttribute("allowPoints") || false;
       this.innerHTML = `
-      <section style="padding: 2rem">
+      <section>
        <p>
          <strong>${title}</strong>
        </p>
@@ -190,7 +190,6 @@ function initializeMap() {
             </div>
             <ul 
               class="list-group highlighted-asset-data-list" id="${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}"
-              style="list-style-type: none; padding: 0; margin: 0;"
             >
               <li>None selected.</li>
             </ul>
