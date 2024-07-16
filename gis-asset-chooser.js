@@ -159,30 +159,37 @@ function initializeMap() {
 
         document.getElementById("layer-data-div").innerHTML += `
           <div class="map-layer-data-container stat-container stat-medium">
-            <div class="stat-title">${mapDataLayer.layerProperties.layerName}
-              <button class="selectLayers" att-layer-id="${
+            <div class="stat-title">
+              <span>
+                <strong>
+                  ${mapDataLayer.layerProperties.layerName}
+                </strong>
+              </span>
+              <button 
+                class="selectLayers" att-layer-id="${
                 mapDataLayer.layerProperties.layerName
               }-${mapDataLayer.id}">
-                <span class="glyphicons glyphicons-eye-open "></span>
+                <span class="glyphicons glyphicons-eye-open ">
+                  <span class="sr-only">
+                    hide layer
+                  </span>
+                </span>
               </button>
-            </div>
-            <div>
-              <span id="asset-selection-counter"></span>
             </div>
             <div>
               ${
                 minAssetsRequired === 0
-                  ? `<p id="${mapDataLayerId}-min-asset-required-message" ><span class="label label-success">No asset selection required.</span></p>`
-                  : `<p id="${mapDataLayerId}-min-asset-required-message"><span class="label label-error">At least ${minAssetsRequired} required.</span></p>`
+                  ? `<span id="${mapDataLayerId}-min-asset-required-message" ><span class="label label-success">No selection required.</span></span>`
+                  : `<span id="${mapDataLayerId}-min-asset-required-message"><span class="label label-error">At least ${minAssetsRequired} required.</span></span>`
               }
               ${
                 maxAssetsRequired > 0
-                  ? `<p id="${mapDataLayerId}-max-asset-required-message"><span class="label label-default">Select a maximum of ${maxAssetsRequired} assets.</span></p>`
-                  : `<p id="${mapDataLayerId}-max-asset-required-message"><span class="label label-default">No upper limit on asset selection.</span></p>`
+                  ? `<span id="${mapDataLayerId}-max-asset-required-message"><span class="label label-default">Select a maximum of ${maxAssetsRequired}.</span></span>`
+                  : ``
               }
             </div>
             <ul 
-              class="highlighted-asset-data-list" id="${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}"
+              class="list-group highlighted-asset-data-list" id="${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}"
               style="list-style-type: none; padding: 0; margin: 0;"
             >
               <li>None selected.</li>
@@ -341,11 +348,16 @@ function renderSelectedAssetLabels() {
       if (asset.layerId === selectedLayerAssetList.id) {
         const assetLabel = asset.assetLabel;
         const assetLabelListItem = document.createElement("li");
-        assetLabelListItem.style.margin = "8px 0";
         
         assetLabelListItem.setAttribute("id", asset.assetId);
-        
-          assetLabelListItem.innerHTML = `${assetLabel} <button class="pull-right link-button inverse-button red-button small-button transparent-button remove-asset-btn" style="cursor: pointer;"><span class="glyphicons glyphicons-remove small"></span>Remove</button>
+        assetLabelListItem.innerHTML = `
+          ${assetLabel} 
+          <button 
+            class="pull-right link-button small-button red-button transparent-button remove-asset-btn" 
+          >
+            <span class="glyphicons glyphicons-remove"></span>
+            Remove
+          </button>
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
         assetLabelListItem.addEventListener("click", function () {
@@ -404,7 +416,7 @@ function validateNumberofAssetsSelected() {
     if (layerAssetMin === 0 && totalLayerAssetsSelected === 0) {
       document.getElementById(
         `${layerId}-min-asset-required-message`
-      ).innerHTML = `No asset selection required.`;
+      ).innerHTML = `No selection required.`;
       document
         .getElementById(`${layerId}-min-asset-required-message`)
         .classList.add("label", "label-success");
