@@ -498,7 +498,6 @@ function validateAssetSelection() {
     isValid = false;
   }
   console.log("isValid", isValid);
- 
 }
 
 function renderValidityMessage() {
