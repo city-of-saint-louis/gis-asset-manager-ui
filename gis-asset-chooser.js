@@ -234,11 +234,11 @@ function initializeMap() {
               view.whenLayerView(graphic.layer).then(function (layerView) {
                 const mapDataLayerId = `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`;
                 const layerAssetMax = layerProperties.maximumAssetsRequired;
-                // const totalLayerAssetsSelected = chosenAssets.filter(
-                //   (h) =>
-                //     h.layerId ===
-                //     `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
-                // ).length;
+                const totalLayerAssetsSelected = chosenAssets.filter(
+                  (h) =>
+                    h.layerId ===
+                    `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
+                ).length;
                 if (
                   layerAssetMax > 0 &&
                   totalLayerAssetsSelected >= layerAssetMax
