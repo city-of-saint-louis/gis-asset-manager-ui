@@ -496,6 +496,8 @@ function validateAssetSelection() {
   const stringifyAllMapLayerIds = JSON.stringify(sortedAllMapLayerIds);
   if (stringifyValidLayers === stringifyAllMapLayerIds) {
     isValid = true;
+    // Dispatch the chosenAssets to the parent application when isValid is true
+    dispatchChosenAssets(chosenAssets)
   } else {
     isValid = false;
   }
@@ -542,6 +544,13 @@ function renderValidityMessage() {
     validityMessage.innerHTML = `${makeMinimunRequireMessage}.`;
     validityMessage.style.color = "red";
   }
+};
+
+function dispatchChosenAssets(chosenAssets) {
+  // Create a custom event with 'chosenAssets' as detail
+  const event = new CustomEvent('chosenAssetsSelectionValidated', { detail: { chosenAssets } });
+  // Dispatch the event so the parent can listen to it
+  document.dispatchEvent(event);
 }
 
 initializeMap();
