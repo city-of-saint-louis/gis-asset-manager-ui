@@ -31,18 +31,18 @@
           minimum="1"
           maximum="3"
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
-          min-scale="20000"
+          min-scale="0"
         >
         </map-layer>
-        <map-layer
+        <!-- <map-layer
           name="Parcels"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
           label-mask="{SITEADDR}"
-          min-scale="30000"
+          min-scale="0"
         >
-        </map-layer>
-        <map-layer
+        </map-layer> -->
+        <!-- <map-layer
           name="Neighborhoods"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/PDA/Neighborhoods/MapServer"
           layer-asset-id-field-name="OBJECTID"
@@ -51,7 +51,7 @@
           label-mask="{NHD_NAME}"
           max-scale="30000"
         >
-        </map-layer>
+        </map-layer> -->
         </map-layer>
       </gis-asset-chooser>
     </main>

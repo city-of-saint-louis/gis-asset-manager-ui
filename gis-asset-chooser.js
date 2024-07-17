@@ -5,7 +5,7 @@ const defaultBaseMap = "streets";
 const defaultShowSearch = true;
 const mapLayersToAdd = [];
 const featureLayers = [];
-const chosenAssets = []; 
+const chosenAssets = [];
 const allMapLayerIds = [];
 const layersWithNoSelectionRequired = [];
 const validLayers = [];
@@ -39,7 +39,7 @@ class GISAssetChooserComponent extends HTMLElement {
          </div>
        </div>
         <div class="col-md-5 stat-container">
-          <div id="layer-data-div" class="stat-group ">
+          <div id="layer-data-div" class="stat-group  ">
           </div>
         </div>
       </div>
@@ -65,9 +65,9 @@ console.log("mapLayersToAdd", mapLayersToAdd);
 // initilize the map using the map layers provided
 function initializeMap() {
   try {
-    const zoom = document
-      .querySelector("gis-asset-chooser")
-      .getAttribute("zoom") || defaultZoom;
+    const zoom =
+      document.querySelector("gis-asset-chooser").getAttribute("zoom") ||
+      defaultZoom;
     const baseMap =
       document.querySelector("gis-asset-chooser").getAttribute("baseMap") ||
       defaultBaseMap;
@@ -126,12 +126,15 @@ function initializeMap() {
             required: mapLayer.required,
             minimumAssetsRequired: mapLayer.minimumSelections,
             maximumAssetsRequired: mapLayer.maximumSelections,
+            minScale: mapLayer.minScale,
+            maxScale: mapLayer.maxScale,
             // keep lines below for future reference
             // limit: mapLayer.limit,
             // layerId: mapLayer.layerId,
             // serverUrl: mapLayer.serverUrl,
           },
         });
+        console.log("mapDataLayer", mapDataLayer);
         mapDataLayer.outFields = ["*"];
         mapDataLayer.popupEnabled = false;
         const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
@@ -149,8 +152,8 @@ function initializeMap() {
           layersWithNoSelectionRequired.push(mapDataLayerId);
         }
         if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
-          isValid = true; 
-          console.log("isValid", isValid); 
+          isValid = true;
+          console.log("isValid", isValid);
         } else {
           isValid = false;
           console.log("isValid", isValid);
@@ -165,10 +168,10 @@ function initializeMap() {
                   ${mapDataLayer.layerProperties.layerName}
                 </strong>
               </span>
-              <button 
+              <button
                 class="selectLayers" att-layer-id="${
-                mapDataLayer.layerProperties.layerName
-              }-${mapDataLayer.id}">
+                  mapDataLayer.layerProperties.layerName
+                }-${mapDataLayer.id}">
                 <span class="glyphicons glyphicons-eye-open ">
                   <span class="sr-only">
                     hide layer
@@ -188,27 +191,31 @@ function initializeMap() {
                   : ``
               }
             </div>
-            <ul 
-              class="list-group highlighted-asset-data-list" id="${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}"
+            <ul
+              class="list-group highlighted-asset-data-list" id="${
+                mapDataLayer.layerProperties.layerName
+              }-${mapDataLayer.id}"
             >
               <li>None selected.</li>
             </ul>
           </div>
         `;
       });
-     
+
       selectFeatureLayer();
       // hit test - for any layer graphics that the click 'hits'
       view.on("click", (event) => {
         view.hitTest(event).then(function (response) {
-          if (!response.results[0].layer.layerProperties){
-            alert("Please try again. There are no assets to select at that location.")
+          if (!response.results[0].layer.layerProperties) {
+            alert(
+              "Please try again. There are no assets to select at that location."
+            );
             return;
           }
           let highlightedSelection;
           if (response.results.length) {
             const graphic = response.results[0].graphic;
-            console.log
+            console.log("graphic:", graphic);
             const layerProperties = response.results[0].layer.layerProperties;
             const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
             const labelMaskValue = eval(
@@ -217,7 +224,20 @@ function initializeMap() {
                 (match, p1) => `" + graphic.attributes.${p1} + "`
               )}"`
             );
+            console.log("graphic:", graphic);
             const layerId = graphic.layer.id;
+
+            //Zoom out from the selected asset
+            const totalLayerAssetsSelected = chosenAssets.filter(
+              (h) =>
+                h.layerId ===
+                `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
+            ).length;
+            //zoom in when users first clicks on the asset
+            if (totalLayerAssetsSelected < 1) {
+              view.goTo(graphic);
+            }
+
             if (
               !chosenAssets.find(
                 (a) =>
@@ -228,11 +248,11 @@ function initializeMap() {
               view.whenLayerView(graphic.layer).then(function (layerView) {
                 const mapDataLayerId = `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`;
                 const layerAssetMax = layerProperties.maximumAssetsRequired;
-                const totalLayerAssetsSelected = chosenAssets.filter(
-                  (h) =>
-                    h.layerId ===
-                    `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
-                ).length;
+                // const totalLayerAssetsSelected = chosenAssets.filter(
+                //   (h) =>
+                //     h.layerId ===
+                //     `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
+                // ).length;
                 if (
                   layerAssetMax > 0 &&
                   totalLayerAssetsSelected >= layerAssetMax
@@ -273,7 +293,8 @@ function initializeMap() {
                   layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
                   layerName: graphic.layer.title,
                   layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
-                  layerAssetMax: graphic.layer.layerProperties.maximumAssetsRequired,
+                  layerAssetMax:
+                    graphic.layer.layerProperties.maximumAssetsRequired,
                   highlightSelect: highlightedSelection,
                 };
                 chosenAssets.push(chosenAsset);
@@ -323,10 +344,12 @@ function selectFeatureLayer() {
             outerLayer.visible = false;
             spanElement.classList.remove("glyphicons-eye-open");
             spanElement.classList.add("glyphicons-eye-close");
+            spanElement.innerHTML = `<span class="sr-only">show layer</span>`;
           } else {
             outerLayer.visible = true;
             spanElement.classList.remove("glyphicons-eye-close");
             spanElement.classList.add("glyphicons-eye-open");
+            spanElement.innerHTML = `<span class="sr-only">hide layer</span>`;
           }
         }
       });
@@ -347,12 +370,12 @@ function renderSelectedAssetLabels() {
       if (asset.layerId === selectedLayerAssetList.id) {
         const assetLabel = asset.assetLabel;
         const assetLabelListItem = document.createElement("li");
-        
+
         assetLabelListItem.setAttribute("id", asset.assetId);
         assetLabelListItem.innerHTML = `
-          ${assetLabel} 
-          <button 
-            class="pull-right link-button small-button red-button transparent-button remove-asset-btn" 
+          ${assetLabel}
+          <button
+            class="pull-right link-button small-button red-button transparent-button remove-asset-btn"
           >
             <span class="glyphicons glyphicons-remove"></span>
             Remove
@@ -361,18 +384,12 @@ function renderSelectedAssetLabels() {
         selectedLayerAssetList.appendChild(assetLabelListItem);
         assetLabelListItem.addEventListener("click", function () {
           chosenAssets.forEach((asset) => {
-            if (
-              asset.assetId === assetLabelListItem.id
-            ) {
+            if (asset.assetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
-              const listItemToRemove = document.getElementById(
-                asset.assetId
-              );
+              const listItemToRemove = document.getElementById(asset.assetId);
               if (listItemToRemove) listItemToRemove.remove();
               const hightlightToRemove = chosenAssets.findIndex(
-                (a) =>
-                  a.assetId ===
-                  asset.assetId
+                (a) => a.assetId === asset.assetId
               );
               chosenAssets.splice(hightlightToRemove, 1);
               validateNumberofAssetsSelected();
@@ -386,14 +403,14 @@ function renderSelectedAssetLabels() {
           });
         });
       }
-    }); 
+    });
   });
   selectedLayerAssetListArray.forEach((list) => {
     if (list.innerHTML === "") {
       list.innerHTML = `<li>None selected.</li>`;
     }
   });
-};
+}
 
 function validateNumberofAssetsSelected() {
   featureLayers.forEach((mapLayer) => {
@@ -408,8 +425,7 @@ function validateNumberofAssetsSelected() {
 
     const totalLayerAssetsSelected = chosenAssets.filter(
       (asset) =>
-        asset.layerId ===
-        `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
+        asset.layerId === `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
     ).length;
 
     if (layerAssetMin === 0 && totalLayerAssetsSelected === 0) {
@@ -437,7 +453,7 @@ function validateNumberofAssetsSelected() {
         validLayers.push(layerId);
       }
     }
-    
+
     if (layerAssetMin > 0 && totalLayerAssetsSelected >= layerAssetMin) {
       document.getElementById(
         `${layerId}-min-asset-required-message`
@@ -502,12 +518,42 @@ function validateAssetSelection() {
 
 function renderValidityMessage() {
   const validityMessage = document.getElementById("validity-message");
+  let makeMinimunRequireMessage = `Please select `;
   if (isValid) {
     validityMessage.innerHTML = "Asset selection is valid for submission";
     validityMessage.style.color = "green";
   } else {
-    validityMessage.innerHTML =
-      "Please make the required asset selections before submission.";
+    featureLayers.forEach((mapLayer) => {
+      const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
+      const layerAssetMin = parseInt(
+        mapLayer.layerProperties.minimumAssetsRequired
+      );
+      const totalLayerAssetsSelected = chosenAssets.filter(
+        (asset) =>
+          asset.layerId ===
+          `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
+      ).length;
+      if (layerAssetMin >= 0 && totalLayerAssetsSelected < layerAssetMin) {
+        makeMinimunRequireMessage += `at least ${layerAssetMin} ${mapLayer.layerProperties.layerName}, `;
+      }
+    });
+    // Remove the last comma and space if present
+    if (makeMinimunRequireMessage.endsWith(", ")) {
+      makeMinimunRequireMessage = makeMinimunRequireMessage.slice(0, -2);
+    }
+    // Replace the last comma with ' and '
+    const lastCommaIndex = makeMinimunRequireMessage.lastIndexOf(", ");
+    if (lastCommaIndex !== -1) {
+      makeMinimunRequireMessage =
+        makeMinimunRequireMessage.substring(0, lastCommaIndex) +
+        " and " +
+        makeMinimunRequireMessage.substring(lastCommaIndex + 2);
+    }
+    makeMinimunRequireMessage = makeMinimunRequireMessage.replace(
+      /at least (\d+ \w+)/g,
+      "at least <strong>$1</strong>"
+    );
+    validityMessage.innerHTML = `${makeMinimunRequireMessage}`;
     validityMessage.style.color = "red";
   }
 }
