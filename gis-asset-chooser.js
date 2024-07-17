@@ -134,7 +134,6 @@ function initializeMap() {
             // serverUrl: mapLayer.serverUrl,
           },
         });
-        console.log("mapDataLayer", mapDataLayer);
         mapDataLayer.outFields = ["*"];
         mapDataLayer.popupEnabled = false;
         const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
@@ -215,7 +214,6 @@ function initializeMap() {
           let highlightedSelection;
           if (response.results.length) {
             const graphic = response.results[0].graphic;
-            console.log("graphic:", graphic);
             const layerProperties = response.results[0].layer.layerProperties;
             const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
             const labelMaskValue = eval(
@@ -226,18 +224,6 @@ function initializeMap() {
             );
             console.log("graphic:", graphic);
             const layerId = graphic.layer.id;
-
-            //Zoom out from the selected asset
-            const totalLayerAssetsSelected = chosenAssets.filter(
-              (h) =>
-                h.layerId ===
-                `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
-            ).length;
-            //zoom in when users first clicks on the asset
-            if (totalLayerAssetsSelected < 1) {
-              view.goTo(graphic);
-            }
-
             if (
               !chosenAssets.find(
                 (a) =>
@@ -534,7 +520,7 @@ function renderValidityMessage() {
           `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
       ).length;
       if (layerAssetMin >= 0 && totalLayerAssetsSelected < layerAssetMin) {
-        makeMinimunRequireMessage += `at least ${layerAssetMin} ${mapLayer.layerProperties.layerName}, `;
+        makeMinimunRequireMessage += `at least ${layerAssetMin} from ${mapLayer.layerProperties.layerName}, `;
       }
     });
     // Remove the last comma and space if present
@@ -553,7 +539,7 @@ function renderValidityMessage() {
       /at least (\d+ \w+)/g,
       "at least <strong>$1</strong>"
     );
-    validityMessage.innerHTML = `${makeMinimunRequireMessage}`;
+    validityMessage.innerHTML = `${makeMinimunRequireMessage}.`;
     validityMessage.style.color = "red";
   }
 }
