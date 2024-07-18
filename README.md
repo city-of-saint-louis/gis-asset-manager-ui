@@ -1,3 +1,53 @@
-## GIS Asset Chooser Development
+# GIS Asset Chooser Development
 
-This repository will be used to begin development on the GIS Asset Chooser component.
+## The asset chooser is made of two reusable custom web components
+
+1. GIS Asset Chooser component
+2. Map Layer component
+
+The GIS Asset Chooser Component is a parent to the Map Layer component. It contains the base map.
+
+The Map Layer component is a child to the GIS Asset Chooser component.
+An instance of the Map Layer component is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of the Map Layer component, one for each layer.
+
+## Use the custom event listener below in the parent application to receive 'chosenAssets' from the GIS Asset Chooser when asset eselection is valid (isValid = true)
+
+```javascript
+// Custom event listener to receive chosenAssets from the asset chooser when asset eselection is valid (isValid = true)
+document.addEventListener("isValidTrue", function (event) {
+  const chosenAssets = event.detail.chosenAssets;
+  // log chosenAssets to the console to verify that it was received
+  console.log("chosenAssets received:", chosenAssets);
+  // your logic here to handle chosenAssets within the parent application
+});
+```
+
+## Once received 'chosenAssets' can be used as needed within the parent application
+
+### Possible integration strategies include
+
+1. using local storage to save 'chosenAssets'
+2. using a submit button to send or store 'chosenAssets' and any other necessary related data
+
+```javascript
+// Custom event listener to receive chosenAssets from the asset chooser when isValid is true
+document.addEventListener("isValidTrue", function (event) {
+  const chosenAssets = event.detail.chosenAssets;
+  console.log("chosenAssets received:", chosenAssets);
+  // possible integration strategy using local storage
+  localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
+  // possible integration strategy with a submit button
+  document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
+  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #008000";
+});
+```
+
+## Use the custom event listener below to handle when asset selection is not valid (isValid = false)
+
+```javascript
+// Custom event listener for when isValid is false
+document.addEventListener("isValidFalse", function (event) {
+  // your logic here to handle when isValid is false 
+});
+
+```
