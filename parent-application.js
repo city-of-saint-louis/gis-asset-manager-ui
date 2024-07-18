@@ -1,6 +1,7 @@
 // This file is simulating the parent application that will receive the chosenAssets from the child application
 
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
+// required to be implemented in the parent application
 document.addEventListener("isValidTrue", function (event) {
   const chosenAssets = event.detail.chosenAssets;
   console.log("chosenAssets received:", chosenAssets);
@@ -12,6 +13,7 @@ document.addEventListener("isValidTrue", function (event) {
 });
 
 // Custom event listener for when isValid is false
+// required to be implemented in the parent application
 document.addEventListener("isValidFalse", function (event) {
   document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
   document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 0px 0px ";
