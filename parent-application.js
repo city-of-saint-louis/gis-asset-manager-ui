@@ -1,4 +1,4 @@
-// This is the parent application that will receive the chosenAssets from the child application
+// This file is simulating the parent application that will receive the chosenAssets from the child application
 
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
 document.addEventListener("isValidTrue", function (event) {
