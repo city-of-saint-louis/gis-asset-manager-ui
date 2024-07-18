@@ -1,16 +1,19 @@
 // This is the parent application that will receive the chosenAssets from the child application
 
-
-document.addEventListener("chosenAssetsSelectionValidated", function (event) {
+// Custom event listener to receive chosenAssets from the asset chooser when isValid is true
+document.addEventListener("isValidTrue", function (event) {
   const chosenAssets = event.detail.chosenAssets;
+  // log chosenAssets to the console to verify that it was received
   console.log("chosenAssets received:", chosenAssets);
-  // possible integration strategy using local storage
-  localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
-  // possible integration strategy with a submit button
-  document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
-  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #008000";
+  // your logic here to handle chosenAssets within the parent application
 });
 
+// Custom event listener for when isValid is false
+document.addEventListener("isValidFalse", function (event) {
+  // your logic here to handle when isValid is false 
+});
+
+// function to submit chosen assets
 function submitChosenAssets(chosenAssets) {
   console.log("submitting chosenAssets:", chosenAssets);
   localStorage.removeItem("chosenAssets");
@@ -30,6 +33,7 @@ function displayChosenAssets() {
   });
 }
 
+// Event listener to display chosen assets on the results page
 document.addEventListener("DOMContentLoaded", () => {
   if (document.location.href.includes("results.html")) {
     displayChosenAssets();
