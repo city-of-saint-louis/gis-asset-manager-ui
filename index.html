@@ -19,6 +19,17 @@
   <body>
     <header></header>
     <main style="padding: 1rem">
+      <div style="padding-top: 2rem; padding-bottom: 2rem; text-align: center;">
+        <button
+          disabled 
+          id="submit-chosen-assets-button"  
+          onclick="submitChosenAssets(chosenAssets)"
+          style="margin: 0 auto;"
+        >
+          Submit Chosen Assets
+        </button>
+      </div>
+      <div id="chosen-asset-container"></div>
       <gis-asset-chooser
         title="GIS Asset Chooser"
         hint="Click on the map to select required assets. Click again to unselect."
@@ -55,6 +66,16 @@
         >
         </map-layer> -->
       </gis-asset-chooser>
+      <!-- <div style="padding-top: 2rem; padding-bottom: 2rem;">
+        <button
+          disabled 
+          id="submit-chosen-assets-button"  
+          onclick="submitChosenAssets(chosenAssets)"
+        >
+          Submit Chosen Assets
+        </button>
+      </div> -->
+      <!-- <div id="chosen-asset-container"></div> -->
     </main>
     <footer></footer>
     <script src="map-layer.js"></script>
