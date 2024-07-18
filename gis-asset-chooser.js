@@ -447,6 +447,9 @@ function validateNumberofAssetsSelected() {
       document
         .getElementById(`${layerId}-min-asset-required-message`)
         .classList.add("label", "label-success");
+      document
+        .getElementById(`${layerId}-min-asset-required-message`)
+        .classList.remove("label-error");
       isLayerValid = true;
       if (!validLayers.includes(layerId)) {
         validLayers.push(layerId);
@@ -497,7 +500,7 @@ function validateAssetSelection() {
   if (stringifyValidLayers === stringifyAllMapLayerIds) {
     isValid = true;
     // Dispatch the chosenAssets to the parent application when isValid is true
-    dispatchChosenAssets(chosenAssets)
+    dispatchChosenAssets(chosenAssets);
   } else {
     isValid = false;
     disableSubmitButton();
@@ -549,7 +552,7 @@ function renderValidityMessage() {
     );
     validityMessage.innerHTML = `${makeMinimunRequireMessage}.`;
   }
-};
+}
 
 // Dispatch the chosenAssets to the parent application
 function dispatchChosenAssets(chosenAssets) {
