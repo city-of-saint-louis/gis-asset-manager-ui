@@ -510,10 +510,12 @@ function renderValidityMessage() {
   let makeMinimunRequireMessage = `Please select `;
   if (isValid) {
     validityMessage.innerHTML = "Asset selection is valid for submission";
-    validityMessage.style.color = "green";
+    // validityMessage.style.color = "green";
+    validityMessage.classList.add("label", "label-success");
   } else {
+    validityMessage.classList.remove("label", "label-success");
     featureLayers.forEach((mapLayer) => {
-      const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
+      // const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
       const layerAssetMin = parseInt(
         mapLayer.layerProperties.minimumAssetsRequired
       );
@@ -523,7 +525,10 @@ function renderValidityMessage() {
           `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
       ).length;
       if (layerAssetMin >= 0 && totalLayerAssetsSelected < layerAssetMin) {
-        makeMinimunRequireMessage += `at least ${layerAssetMin} from ${mapLayer.layerProperties.layerName}, `;
+        makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName}</strong></span>, `;
+      }
+      if (layerAssetMin >= 0 && totalLayerAssetsSelected >= layerAssetMin) {
+        makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName}</strong></span>, `;
       }
     });
     // Remove the last comma and space if present
@@ -543,7 +548,6 @@ function renderValidityMessage() {
       "at least <strong>$1</strong>"
     );
     validityMessage.innerHTML = `${makeMinimunRequireMessage}.`;
-    validityMessage.style.color = "red";
   }
 };
 
@@ -566,3 +570,19 @@ console.log("chosenAssets", chosenAssets);
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
 });
+
+try {
+  const chosenAssetDetails = {
+    chosenAssets,
+    isValid,
+  };
+
+  this.dispatchEvent(
+    new CustomEvent("completeSelection", {
+      detail: chosenAssetDetails,
+      bubbles: true,
+    })
+  );
+} catch (error) {
+  console.error(error);
+}
