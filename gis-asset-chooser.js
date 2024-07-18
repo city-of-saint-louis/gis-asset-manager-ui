@@ -503,7 +503,8 @@ function validateAssetSelection() {
     dispatchChosenAssets(chosenAssets);
   } else {
     isValid = false;
-    disableSubmitButton();
+    // Secure the chosenAssets from parent application when isValid is false
+    secureChosenAssets();
   }
   console.log("isValid", isValid);
 }
@@ -561,7 +562,7 @@ function dispatchChosenAssets(chosenAssets) {
 }
 
 // custom event listener to disable the submit button if the chosenAssets are not valid
-function disableSubmitButton() {
+function secureChosenAssets() {
   const event = new CustomEvent("isValidFalse", { detail: { isValid } });
   document.dispatchEvent(event);
 }
