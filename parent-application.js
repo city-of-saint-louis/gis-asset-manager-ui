@@ -3,14 +3,19 @@
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
 document.addEventListener("isValidTrue", function (event) {
   const chosenAssets = event.detail.chosenAssets;
-  // log chosenAssets to the console to verify that it was received
   console.log("chosenAssets received:", chosenAssets);
-  // your logic here to handle chosenAssets within the parent application
+  // possible integration strategy using local storage
+  localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
+  // possible integration strategy with a submit button
+  document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
+  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #008000";
 });
 
 // Custom event listener for when isValid is false
 document.addEventListener("isValidFalse", function (event) {
-  // your logic here to handle when isValid is false 
+  document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
+  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 0px 0px ";
+  localStorage.removeItem("chosenAssets");
 });
 
 // function to submit chosen assets
