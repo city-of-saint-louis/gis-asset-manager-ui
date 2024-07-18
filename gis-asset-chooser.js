@@ -507,10 +507,10 @@ function renderValidityMessage() {
   let makeMinimunRequireMessage = `Please select `;
   if (isValid) {
     validityMessage.innerHTML = "Asset selection is valid for submission";
-    validityMessage.style.color = "green";
-    // validityMessage.classList.add("label", "label-success");
+    // validityMessage.style.color = "green";
+    validityMessage.classList.add("label", "label-success");
   } else {
-    validityMessage.style.color = "";
+    validityMessage.classList.remove("label", "label-success");
     featureLayers.forEach((mapLayer) => {
       // const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
       const layerAssetMin = parseInt(
