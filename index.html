@@ -4,51 +4,82 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GIS Asset Chooser Development</title>
-    <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
       href="https://js.arcgis.com/4.29/esri/themes/light/main.css"
+    />
+    <link
+      href="https://www.stlouis-mo.gov/style/screen.css"
+      rel="stylesheet"
+      type="text/css"
+      media="all"
     />
     <script src="https://js.arcgis.com/4.29/"></script>
   </head>
   <body>
     <header></header>
-    <main>
-      <gis-asset-chooser 
-        title="Map Title" 
-        hint="GIS asset chooser"
-        zoom="12" 
-        centerX="-90.25" 
-        centerY="38.64"
+    <main style="padding: 1rem">
+      <div style="padding-top: 2rem; padding-bottom: 2rem; text-align: center;">
+        <button
+          disabled 
+          id="submit-chosen-assets-button"  
+          onclick="submitChosenAssets(chosenAssets)"
+          style="margin: 0 auto;"
+        >
+          Submit Chosen Assets
+        </button>
+      </div>
+      <div id="chosen-asset-container"></div>
+      <gis-asset-chooser
+        title="GIS Asset Chooser"
+        hint="Click on the map to select required assets. Click again to unselect."
+        baseMap="topo-vector"
       >
         <map-layer
-          layer-id="34f817a794c64919affc7ec449677de3"
+          name="Streets"
+          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
+          layer-asset-id-field-name="OBJECTID"
+          minimum="1"
+          maximum="3"
+          label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
+          min-scale="0"
+        >
+        </map-layer>
+        <map-layer
           name="Parcels"
-          server-url="https://stlcity.maps.arcgis.com/"
+          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
+          layer-asset-id-field-name="FID"
+          minimum="2"
+          label-mask="{SITEADDR}"
+          min-scale="0"
         >
-        </map-layer>
+        </map-layer
+        ><!--
         <map-layer
-          layer-id="46bd9d471a184f20a773224f494c45c8"
-          name="Trees"
-          server-url="https://stlcity.maps.arcgis.com/"
+          name="Neighborhoods"
+          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/PDA/Neighborhoods/MapServer"
+          layer-asset-id-field-name="OBJECTID"
+          minimum="1"
+          maximum="0"
+          label-mask="{NHD_NAME}"
+          max-scale="30000"
         >
-        </map-layer>
-        <map-layer
-          layer-id="b0a2bf75ab284aba834328a5a8f6e28b"
-          name="Bike"
-          server-url="https://stlcity.maps.arcgis.com/"
-        >
-        </map-layer>
-        <map-layer
-          layer-id="0da094b7d469485e9cd5172625cf6513"
-          name="Food"
-          server-url="https://stlcity.maps.arcgis.com/"
-        >
-        </map-layer>
+        </map-layer> -->
       </gis-asset-chooser>
+      <!-- <div style="padding-top: 2rem; padding-bottom: 2rem;">
+        <button
+          disabled 
+          id="submit-chosen-assets-button"  
+          onclick="submitChosenAssets(chosenAssets)"
+        >
+          Submit Chosen Assets
+        </button>
+      </div> -->
+      <!-- <div id="chosen-asset-container"></div> -->
     </main>
     <footer></footer>
     <script src="map-layer.js"></script>
     <script src="gis-asset-chooser.js"></script>
+    <script src="parent-application.js"></script> 
   </body>
 </html>
