@@ -59,5 +59,11 @@
     <footer></footer>
     <script src="map-layer.js"></script>
     <script src="gis-asset-chooser.js"></script>
+    <script>
+      document.addEventListener("completeSelection", (event) => {
+        const chosenAssets = event.detail;
+      });
+      console.log("chosenAssetsComplete", chosenAssets);
+    </script>
   </body>
 </html>

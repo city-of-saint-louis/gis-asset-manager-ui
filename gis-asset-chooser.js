@@ -60,6 +60,7 @@ document.addEventListener("layerDetailsProvided", (event) => {
   const mapLayer = event.detail;
   mapLayersToAdd.push(mapLayer);
 });
+console.log("mapLayersToAdd", mapLayersToAdd);
 
 // initilize the map using the map layers provided
 function initializeMap() {
@@ -170,7 +171,7 @@ function initializeMap() {
                 class="selectLayers" att-layer-id="${
                   mapDataLayer.layerProperties.layerName
                 }-${mapDataLayer.id}">
-                <span class="glyphicons glyphicons-eye-close">
+                <span class="glyphicons glyphicons-eye-open ">
                   <span class="sr-only">
                     hide layer
                   </span>
@@ -221,6 +222,7 @@ function initializeMap() {
                 (match, p1) => `" + graphic.attributes.${p1} + "`
               )}"`
             );
+            console.log("graphic:", graphic);
             const layerId = graphic.layer.id;
             if (
               !chosenAssets.find(
@@ -269,7 +271,6 @@ function initializeMap() {
                   return;
                 }
                 highlightedSelection = layerView.highlight(graphic);
-                
                 const chosenAsset = {
                   assetAttributes: graphic.attributes,
                   assetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
@@ -327,13 +328,13 @@ function selectFeatureLayer() {
         ) {
           if (outerLayer.visible) {
             outerLayer.visible = false;
-            spanElement.classList.remove("glyphicons-eye-close");
-            spanElement.classList.add("glyphicons-eye-open");
+            spanElement.classList.remove("glyphicons-eye-open");
+            spanElement.classList.add("glyphicons-eye-close");
             spanElement.innerHTML = `<span class="sr-only">show layer</span>`;
           } else {
             outerLayer.visible = true;
-            spanElement.classList.remove("glyphicons-eye-open");
-            spanElement.classList.add("glyphicons-eye-close");
+            spanElement.classList.remove("glyphicons-eye-close");
+            spanElement.classList.add("glyphicons-eye-open");
             spanElement.innerHTML = `<span class="sr-only">hide layer</span>`;
           }
         }
@@ -509,6 +510,7 @@ function renderValidityMessage() {
     validityMessage.style.color = "green";
     // validityMessage.classList.add("label", "label-success");
   } else {
+    validityMessage.style.color = "";
     featureLayers.forEach((mapLayer) => {
       // const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
       const layerAssetMin = parseInt(
@@ -520,7 +522,10 @@ function renderValidityMessage() {
           `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
       ).length;
       if (layerAssetMin >= 0 && totalLayerAssetsSelected < layerAssetMin) {
-        makeMinimunRequireMessage += `at least ${layerAssetMin} from ${mapLayer.layerProperties.layerName}, `;
+        makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName}</strong></span>, `;
+      }
+      if (layerAssetMin >= 0 && totalLayerAssetsSelected >= layerAssetMin) {
+        makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName}</strong></span>, `;
       }
     });
     // Remove the last comma and space if present
@@ -540,9 +545,6 @@ function renderValidityMessage() {
       "at least <strong>$1</strong>"
     );
     validityMessage.innerHTML = `${makeMinimunRequireMessage}.`;
-    validityMessage.style.color = "red";
-    // validityMessage.classList.remove("label-success");
-    // validityMessage.classList.add("label", "label-error");
   }
 }
 
@@ -553,3 +555,19 @@ console.log("chosenAssets", chosenAssets);
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
 });
+
+try {
+  const chosenAssetDetails = {
+    chosenAssets,
+    isValid,
+  };
+
+  this.dispatchEvent(
+    new CustomEvent("completeSelection", {
+      detail: chosenAssetDetails,
+      bubbles: true,
+    })
+  );
+} catch (error) {
+  console.error(error);
+}
