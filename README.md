@@ -1,14 +1,25 @@
 # GIS Asset Chooser Development
 
-## The asset chooser is made of two reusable custom web components
+## The asset chooser is made of four parts
 
-1. GIS Asset Chooser component
-2. Map Layer component
+[1. GIS Asset Chooser component](#gis-asset-chooser-component)
+
+[2. Map Layer component](#map-layer-component)
+
+[3. isValidTrue event listener](#isvalidtrue-event-listener)
+
+[4. isValidFalse event listener](isvalidfalse-event-listener)
+
+### GIS Asset Chooser component
 
 The GIS Asset Chooser Component is a parent to the Map Layer component. It contains the base map.
 
+### Map Layer component
+
 The Map Layer component is a child to the GIS Asset Chooser component.
 An instance of the Map Layer component is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of the Map Layer component, one for each layer.
+
+### Example of using map layer componet inside parent component
 
 ```html
     <main style="padding: 1rem">
@@ -41,7 +52,9 @@ An instance of the Map Layer component is used for each layer placed on the map.
     </main>
   ```
 
-## Use the custom event listener below in the parent application to receive 'chosenAssets' from the GIS Asset Chooser when asset eselection is valid (isValid = true)
+## isValidTrue event listener
+
+### Use the custom event listener below in the parent application to receive 'chosenAssets' from the GIS Asset Chooser when asset eselection is valid (isValid = true)
 
 ```javascript
 // Custom event listener to receive chosenAssets from the asset chooser when asset eselection is valid (isValid = true)
@@ -53,7 +66,9 @@ document.addEventListener("isValidTrue", function (event) {
 });
 ```
 
-## Once received 'chosenAssets' can be used as needed within the parent application
+## isValidFalse  event listener
+
+### Once received 'chosenAssets' can be used as needed within the parent application
 
 ### Possible integration strategies include
 
