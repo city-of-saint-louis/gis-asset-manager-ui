@@ -63,9 +63,20 @@ document.addEventListener("isValidTrue", function (event) {
 });
 ```
 
-## isValidFalse  event listener
+## isValidFalse event listener
 
-### Once received 'chosenAssets' can be used as needed within the parent application
+### Use the custom event listener below to handle when asset selection is not valid (isValid = false)
+
+```javascript
+// Custom event listener for when isValid is false
+// recommended for integration with gis aset chooser - customize as needed
+document.addEventListener("isValidFalse", function (event) {
+  // your logic here to handle when isValid is false 
+});
+
+```
+
+## Once received 'chosenAssets' can be used as needed within the parent application
 
 ### Possible integration strategies include
 
@@ -75,6 +86,8 @@ document.addEventListener("isValidTrue", function (event) {
 4. store to database
 5. use in an API call
 <!-- Other Ideas? -->
+
+### Example
 
 ```javascript
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
@@ -86,17 +99,6 @@ document.addEventListener("isValidTrue", function (event) {
   document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
   document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #008000";
 });
-```
-
-## Use the custom event listener below to handle when asset selection is not valid (isValid = false)
-
-```javascript
-// Custom event listener for when isValid is false
-// recommended for integration with gis aset chooser - customize as needed
-document.addEventListener("isValidFalse", function (event) {
-  // your logic here to handle when isValid is false 
-});
-
 ```
 
 ### Example
