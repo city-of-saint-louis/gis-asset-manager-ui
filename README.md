@@ -51,7 +51,7 @@ An instance of the Map Layer component is used for each layer placed on the map.
 
 ## isValidTrue event listener
 
-### Use the custom event listener below in the parent application to receive 'chosenAssets' from the GIS Asset Chooser when asset eselection is valid (isValid = true)
+### Use the custom event listener below in the parent application to receive 'chosenAssets' from the GIS Asset Chooser when asset selection is valid (isValid = true)
 
 ```javascript
 // Custom event listener to receive chosenAssets from the asset chooser when asset eselection is valid (isValid = true)
