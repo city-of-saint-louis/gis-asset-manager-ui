@@ -10,6 +10,37 @@ The GIS Asset Chooser Component is a parent to the Map Layer component. It conta
 The Map Layer component is a child to the GIS Asset Chooser component.
 An instance of the Map Layer component is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of the Map Layer component, one for each layer.
 
+```html
+    <main style="padding: 1rem">
+      <div id="chosen-asset-container"></div>
+      <gis-asset-chooser
+        title="GIS Asset Chooser"
+        hint="Click on the map to select required assets. Click again to unselect."
+        baseMap="topo-vector"
+      >
+        <map-layer
+          name="Streets"
+          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
+          layer-asset-id-field-name="OBJECTID"
+          minimum=1
+          maximum=3
+          label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
+          min-scale=0
+        >
+        </map-layer>
+        <map-layer
+          name="Parcels"
+          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
+          layer-asset-id-field-name="FID"
+          minimum=1
+          label-mask="{SITEADDR}"
+          min-scale=0
+        >
+        </map-layer>
+      </gis-asset-chooser>
+    </main>
+  ```
+
 ## Use the custom event listener below in the parent application to receive 'chosenAssets' from the GIS Asset Chooser when asset eselection is valid (isValid = true)
 
 ```javascript

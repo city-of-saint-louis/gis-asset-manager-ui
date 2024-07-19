@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GIS Asset Chooser Development</title>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.29/esri/themes/light/main.css"
+    />
+    <link
+      href="https://www.stlouis-mo.gov/style/screen.css"
+      rel="stylesheet"
+      type="text/css"
+      media="all"
+    />
+    <script src="https://js.arcgis.com/4.29/"></script>
+  </head>
+  <body>
+    <header></header>
+
+    <main style="padding: 1rem">
+      <div id="chosen-asset-container"></div>
+      <gis-asset-chooser
+        title="GIS Asset Chooser"
+        hint="Click on the map to select required assets. Click again to unselect."
+        baseMap="topo-vector"
+      >
+        <map-layer
+          name="Streets"
+          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
+          layer-asset-id-field-name="OBJECTID"
+          minimum=1
+          maximum=3
+          label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
+          min-scale=0
+        >
+        </map-layer>
+        <map-layer
+          name="Parcels"
+          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
+          layer-asset-id-field-name="FID"
+          minimum=1
+          label-mask="{SITEADDR}"
+          min-scale=0
+        >
+        </map-layer>
+      </gis-asset-chooser>
+    </main>
+    <footer></footer>
+    <script src="map-layer.js"></script>
+    <script src="gis-asset-chooser.js"></script>
+    <script src="parent-application.js"></script> 
+  </body>
+</html>
