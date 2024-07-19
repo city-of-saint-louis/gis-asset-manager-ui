@@ -1,5 +1,8 @@
 // This file is simulating the parent application that will receive the chosenAssets from the child application
 
+// array for storing case assets for use within parent application
+const caseAssets = [];
+
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
 // recommended for integration with gis aset chooser - customize as needed
 document.addEventListener("isValidTrue", function (event) {
@@ -16,10 +19,14 @@ document.addEventListener("isValidTrue", function (event) {
 // recommended for integration with gis aset chooser - customize as needed
 // example of possible integration strategy with a submit button
 document.addEventListener("isValidFalse", function (event) {
+  console.log("isValidFalse event received.", event);
   document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
   document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 0px 0px ";
   localStorage.removeItem("chosenAssets");
 });
+
+
+// below is an example of how the chosenAssets could be submitted to the parent application using the customevents and custom event listeners
 
 // function to submit chosen assets
 function submitChosenAssets(chosenAssets) {
@@ -27,7 +34,7 @@ function submitChosenAssets(chosenAssets) {
   localStorage.removeItem("chosenAssets");
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
   document.location.href = "results.html";
-}
+};
 
 // Function to display chosen assets
 function displayChosenAssets() {
@@ -41,9 +48,27 @@ function displayChosenAssets() {
   });
 }
 
+// Function to manipulate 'chosenAssets' data for use within parent application
+function convertChosenAssets() {
+  const chosenAssets = JSON.parse(localStorage.getItem("chosenAssets") || '[]');
+  chosenAssets.forEach((asset) => {
+   const caseAsset = {
+     AssetEsriAttributes: asset.assetiAttributes,
+     AssetId: asset.assetGuid,
+     AssetType: asset.layerName,
+     FeatureAssetId: asset.assetGuid,
+     FeatureClass: asset.layerName,
+     Location: asset.assetLabel, 
+   }
+   caseAssets.push(caseAsset);
+   console.log("caseAssets:", caseAssets);
+  });
+}
+
 // Event listener to display chosen assets on the results page
 document.addEventListener("DOMContentLoaded", () => {
   if (document.location.href.includes("results.html")) {
     displayChosenAssets();
+    convertChosenAssets();
   }
 });

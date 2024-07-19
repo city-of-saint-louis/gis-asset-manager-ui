@@ -18,7 +18,7 @@ document.addEventListener("isValidTrue", function (event) {
   const chosenAssets = event.detail.chosenAssets;
   // log chosenAssets to the console to verify that it was received
   console.log("chosenAssets received:", chosenAssets);
-  // your logic here to handle chosenAssets within the parent application
+  // your logic here to handle chosenAssets within the parent application when isValid is true
 });
 ```
 
@@ -27,14 +27,17 @@ document.addEventListener("isValidTrue", function (event) {
 ### Possible integration strategies include
 
 1. using local storage to save 'chosenAssets'
-2. using a submit button to send or store 'chosenAssets' and any other necessary related data
+2. using a submit button to send or store 'chosenAssets' to desired location
+3. storing to database
+4. using in an API call
+<!-- Other Ideas? -->
 
 ```javascript
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
 document.addEventListener("isValidTrue", function (event) {
   const chosenAssets = event.detail.chosenAssets;
   console.log("chosenAssets received:", chosenAssets);
-  // possible integration strategy using local storage and a submit button
+  // example of a possible integration strategy using local storage and a submit button
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
   document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
   document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #008000";
@@ -62,5 +65,28 @@ document.addEventListener("isValidFalse", function (event) {
   document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
   document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 0px 0px ";
   localStorage.removeItem("chosenAssets");
+});
+```
+
+## When you receive 'chosenAssets' in the parent application you may want to manipulate the data for use within the parent application
+
+```javascript
+// Custom event listener to receive chosenAssets from the asset chooser when isValid is true
+// recommended for integration with gis aset chooser - customize as needed
+document.addEventListener("isValidTrue", function (event) {
+  const chosenAssets = event.detail.chosenAssets;
+  console.log("chosenAssets received:", chosenAssets);
+  // possible integration strategy - manipulate 'chosenAssets' as needed for use within the parent app
+  // change properties to names used within the parent application
+  chosenAssets.forEach((asset) => {
+    const caseAsset = {
+      attributes: asset.assetAttributes,
+      id: asset.assetId,
+      sourceLayer: asset.layerName,
+      title: asset.assetLabel, 
+    }
+    caseAssets.push(caseAsset);
+    console.log("caseAssets:", caseAssets);
+   });
 });
 ```
