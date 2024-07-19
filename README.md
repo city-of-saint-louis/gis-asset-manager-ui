@@ -34,9 +34,8 @@ document.addEventListener("isValidTrue", function (event) {
 document.addEventListener("isValidTrue", function (event) {
   const chosenAssets = event.detail.chosenAssets;
   console.log("chosenAssets received:", chosenAssets);
-  // possible integration strategy using local storage
+  // possible integration strategy using local storage and a submit button
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
-  // possible integration strategy with a submit button
   document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
   document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #008000";
 });
@@ -46,8 +45,22 @@ document.addEventListener("isValidTrue", function (event) {
 
 ```javascript
 // Custom event listener for when isValid is false
+// recommended for integration with gis aset chooser - customize as needed
 document.addEventListener("isValidFalse", function (event) {
   // your logic here to handle when isValid is false 
 });
 
+```
+
+### Example
+
+```javascript
+// Custom event listener for when isValid is false
+// recommended for integration with gis aset chooser - customize as needed
+// example of possible integration strategy with a submit button and local storage
+document.addEventListener("isValidFalse", function (event) {
+  document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
+  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 0px 0px ";
+  localStorage.removeItem("chosenAssets");
+});
 ```

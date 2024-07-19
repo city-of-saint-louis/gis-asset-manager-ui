@@ -23,7 +23,7 @@
         <button
           disabled 
           id="submit-chosen-assets-button"  
-          onclick="submitChosenAssets(chosenAssets)"
+          onclick=submitChosenAssets(chosenAssets)
           style="margin: 0 auto;"
         >
           Submit Chosen Assets
@@ -39,7 +39,7 @@
           name="Streets"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
           layer-asset-id-field-name="OBJECTID"
-          minimum=0
+          minimum=1
           maximum=3
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
           min-scale=0

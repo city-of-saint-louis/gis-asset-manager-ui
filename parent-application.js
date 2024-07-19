@@ -1,7 +1,7 @@
 // This file is simulating the parent application that will receive the chosenAssets from the child application
 
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
-// required to be implemented in the parent application
+// recommended for integration with gis aset chooser - customize as needed
 document.addEventListener("isValidTrue", function (event) {
   const chosenAssets = event.detail.chosenAssets;
   console.log("chosenAssets received:", chosenAssets);
@@ -13,7 +13,8 @@ document.addEventListener("isValidTrue", function (event) {
 });
 
 // Custom event listener for when isValid is false
-// required to be implemented in the parent application
+// recommended for integration with gis aset chooser - customize as needed
+// example of possible integration strategy with a submit button
 document.addEventListener("isValidFalse", function (event) {
   document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
   document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 0px 0px ";
