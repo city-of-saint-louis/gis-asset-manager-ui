@@ -2,13 +2,10 @@
 
 ## The asset chooser is made of four parts
 
-[1. GIS Asset Chooser component](#gis-asset-chooser-component)
-
-[2. Map Layer component](#map-layer-component)
-
-[3. isValidTrue event listener](#isvalidtrue-event-listener)
-
-[4. isValidFalse event listener](isvalidfalse-event-listener)
+1. [GIS Asset Chooser component](#gis-asset-chooser-component)
+2. [Map Layer component](#map-layer-component)
+3. [isValidTrue event listener](#isvalidtrue-event-listener)
+4. [isValidFalse event listener](isvalidfalse-event-listener)
 
 ### GIS Asset Chooser component
 
