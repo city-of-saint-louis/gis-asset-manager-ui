@@ -26,7 +26,7 @@ document.addEventListener("isValidFalse", function (event) {
 });
 
 
-// below is an example of how the chosenAssets could be submitted to the parent application using the customevents and custom event listeners
+// below is an example of how the chosenAssets could be submitted to the parent application using the custom events and custom event listeners
 
 // function to submit chosen assets
 function submitChosenAssets(chosenAssets) {
