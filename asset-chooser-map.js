@@ -22,19 +22,19 @@ document.addEventListener("layerDetailsProvided", (event) => {
 function initializeMap() {
   try {
     const zoom =
-      document.querySelector("gis-asset-chooser-container").getAttribute("zoom") ||
+      document.querySelector("asset-chooser-container").getAttribute("zoom") ||
       defaultZoom;
     const baseMap =
-      document.querySelector("gis-asset-chooser-container").getAttribute("baseMap") ||
+      document.querySelector("asset-chooser-container").getAttribute("baseMap") ||
       defaultBaseMap;
     const centerX =
-      document.querySelector("gis-asset-chooser-container").getAttribute("centerX") ||
+      document.querySelector("asset-chooser-container").getAttribute("centerX") ||
       defaultCenterX;
     const centerY =
-      document.querySelector("gis-asset-chooser-container").getAttribute("centerY") ||
+      document.querySelector("asset-chooser-container").getAttribute("centerY") ||
       defaultCenterY;
     const showSearch =
-      document.querySelector("gis-asset-chooser-container").getAttribute("showSearch") ||
+      document.querySelector("asset-chooser-container").getAttribute("showSearch") ||
       defaultShowSearch;
 
     require([
