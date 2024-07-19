@@ -7,7 +7,6 @@ const caseAssets = [];
 // recommended for integration with gis aset chooser - customize as needed
 document.addEventListener("isValidTrue", function (event) {
   const chosenAssets = event.detail.chosenAssets;
-  console.log("chosenAssets received:", chosenAssets);
   // possible integration strategy using local storage
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
   // possible integration strategy with a submit button
@@ -19,7 +18,6 @@ document.addEventListener("isValidTrue", function (event) {
 // recommended for integration with gis aset chooser - customize as needed
 // example of possible integration strategy with a submit button
 document.addEventListener("isValidFalse", function (event) {
-  console.log("isValidFalse event received.", event);
   document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
   document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 0px 0px ";
   localStorage.removeItem("chosenAssets");
@@ -39,9 +37,7 @@ function submitChosenAssets(chosenAssets) {
 // Function to display chosen assets
 function displayChosenAssets() {
   const chosenAssets = JSON.parse(localStorage.getItem("chosenAssets") || '[]');
-  console.log("chosenAssets:", chosenAssets);
   chosenAssets.map((asset) => {
-    console.log(asset);
     const chosenAssetLabel = document.createElement("p");
     chosenAssetLabel.textContent = asset.assetLabel;
     document.getElementById("chosen-assets-display-div").appendChild(chosenAssetLabel);

@@ -60,7 +60,6 @@ document.addEventListener("layerDetailsProvided", (event) => {
   const mapLayer = event.detail;
   mapLayersToAdd.push(mapLayer);
 });
-console.log("mapLayersToAdd", mapLayersToAdd);
 
 // initilize the map using the map layers provided
 function initializeMap() {
@@ -226,7 +225,6 @@ function initializeMap() {
                 (match, p1) => `" + graphic.attributes.${p1} + "`
               )}"`
             );
-            console.log("graphic:", graphic);
             const layerId = graphic.layer.id;
             if (
               !chosenAssets.find(
