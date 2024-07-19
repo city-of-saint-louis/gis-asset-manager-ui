@@ -153,9 +153,13 @@ function initializeMap() {
         if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
           isValid = true;
           console.log("isValid", isValid);
+          // Dispatch the chosenAssets to the parent application when isValid is true
+          dispatchChosenAssets(chosenAssets);
         } else {
           isValid = false;
           console.log("isValid", isValid);
+          // Secure the chosenAssets from parent application when isValid is false
+          secureChosenAssets();
         }
         renderValidityMessage();
 

@@ -39,19 +39,19 @@
           name="Streets"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
           layer-asset-id-field-name="OBJECTID"
-          minimum="1"
-          maximum="3"
+          minimum=0
+          maximum=3
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
-          min-scale="0"
+          min-scale=0
         >
         </map-layer>
         <map-layer
           name="Parcels"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
-          minimum="2"
+          minimum=1
           label-mask="{SITEADDR}"
-          min-scale="0"
+          min-scale=0
         >
         </map-layer
         ><!--
@@ -66,16 +66,6 @@
         >
         </map-layer> -->
       </gis-asset-chooser>
-      <!-- <div style="padding-top: 2rem; padding-bottom: 2rem;">
-        <button
-          disabled 
-          id="submit-chosen-assets-button"  
-          onclick="submitChosenAssets(chosenAssets)"
-        >
-          Submit Chosen Assets
-        </button>
-      </div> -->
-      <!-- <div id="chosen-asset-container"></div> -->
     </main>
     <footer></footer>
     <script src="map-layer.js"></script>
