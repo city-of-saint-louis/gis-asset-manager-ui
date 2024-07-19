@@ -30,10 +30,9 @@
         </button>
       </div>
       <div id="chosen-asset-container"></div>
-      <gis-asset-chooser
+      <gis-asset-chooser-container
         title="GIS Asset Chooser"
         hint="Click on the map to select required assets. Click again to unselect."
-        baseMap="topo-vector"
       >
         <map-layer
           name="Streets"
@@ -65,12 +64,13 @@
           max-scale="30000"
         >
         </map-layer> -->
-      </gis-asset-chooser>
+      </gis-asset-chooser-container>
     </main>
     <footer></footer>
-    <script src="map-layer.js"></script>
-    <script src="gis-asset-chooser.js"></script>
-    <script src="base-map.js"></script>
+    <script src="asset-chooser-map-layer.js"></script>
+    <script src="asset-chooser-map.js"></script>
+    <script src="asset-chooser-container.js"></script>
+    <script src="asset-chooser-utils.js"></script>
     <script src="parent-application.js"></script> 
   </body>
 </html>

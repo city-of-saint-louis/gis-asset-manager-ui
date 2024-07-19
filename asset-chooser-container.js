@@ -1,4 +1,4 @@
-class GISAssetChooserComponent extends HTMLElement {
+class GISAssetChooserContainerComponent extends HTMLElement {
   constructor() {
     super(); // always call super() first in the constructor for a custom web component
   }
@@ -8,8 +8,6 @@ class GISAssetChooserComponent extends HTMLElement {
     try {
       const title = this.getAttribute("title") || "";
       const hint = this.getAttribute("hint") || "";
-      // keep line below for future reference
-      // const allowPoints = this.getAttribute("allowPoints") || false;
       this.innerHTML = `
       <section>
        <p>
@@ -42,5 +40,5 @@ class GISAssetChooserComponent extends HTMLElement {
 
 // define the custom component after the page has loaded
 document.addEventListener("DOMContentLoaded", () => {
-  customElements.define("gis-asset-chooser", GISAssetChooserComponent);
+  customElements.define("gis-asset-chooser-container", GISAssetChooserContainerComponent);
 });
