@@ -574,19 +574,3 @@ console.log("chosenAssets", chosenAssets);
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("gis-asset-chooser", GISAssetChooserComponent);
 });
-
-try {
-  const chosenAssetDetails = {
-    chosenAssets,
-    isValid,
-  };
-
-  this.dispatchEvent(
-    new CustomEvent("completeSelection", {
-      detail: chosenAssetDetails,
-      bubbles: true,
-    })
-  );
-} catch (error) {
-  console.error(error);
-}
