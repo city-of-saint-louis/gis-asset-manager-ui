@@ -12,7 +12,7 @@ document.addEventListener("isValidTrue", function (event) {
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
   // possible integration strategy with a submit button
   document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
-  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #008000";
+  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #538400";
 });
 
 // Custom event listener for when isValid is false
