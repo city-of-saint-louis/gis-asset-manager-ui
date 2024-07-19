@@ -171,7 +171,7 @@ function initializeMap() {
                 class="selectLayers" att-layer-id="${
                   mapDataLayer.layerProperties.layerName
                 }-${mapDataLayer.id}">
-                <span class="glyphicons glyphicons-eye-open ">
+                <span class="glyphicons glyphicons-eye-close">
                   <span class="sr-only">
                     hide layer
                   </span>
@@ -328,13 +328,13 @@ function selectFeatureLayer() {
         ) {
           if (outerLayer.visible) {
             outerLayer.visible = false;
-            spanElement.classList.remove("glyphicons-eye-open");
-            spanElement.classList.add("glyphicons-eye-close");
+            spanElement.classList.remove("glyphicons-eye-close");
+            spanElement.classList.add("glyphicons-eye-open");
             spanElement.innerHTML = `<span class="sr-only">show layer</span>`;
           } else {
             outerLayer.visible = true;
-            spanElement.classList.remove("glyphicons-eye-close");
-            spanElement.classList.add("glyphicons-eye-open");
+            spanElement.classList.remove("glyphicons-eye-open");
+            spanElement.classList.add("glyphicons-eye-close");
             spanElement.innerHTML = `<span class="sr-only">hide layer</span>`;
           }
         }
