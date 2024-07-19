@@ -26,10 +26,11 @@ document.addEventListener("isValidTrue", function (event) {
 
 ### Possible integration strategies include
 
-1. using local storage to save 'chosenAssets'
-2. using a submit button to send or store 'chosenAssets' to desired location
-3. storing to database
-4. using in an API call
+1. store in a new variable scoped for the parent application  
+2. using local storage to save 'chosenAssets'
+3. using a submit button to send or store 'chosenAssets' to desired location
+4. storing to database
+5. using in an API call
 <!-- Other Ideas? -->
 
 ```javascript
