@@ -87,7 +87,7 @@ document.addEventListener("isValidFalse", function (event) {
 5. use in an API call
 <!-- Other Ideas? -->
 
-### Example
+### Example of using 'isValidTrue' event listener
 
 ```javascript
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
@@ -97,11 +97,11 @@ document.addEventListener("isValidTrue", function (event) {
   // example of a possible integration strategy using local storage and a submit button
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
   document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
-  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #008000";
-});
+  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #538400";
+}); 2
 ```
 
-### Example
+### Example of using 'isValidFalse' event listener
 
 ```javascript
 // Custom event listener for when isValid is false
