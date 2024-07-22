@@ -10,10 +10,10 @@ class AssetChooserContainerComponent extends HTMLElement {
       const hint = this.getAttribute("hint") || "";
       this.innerHTML = `
       <section>
-       <p>
-         <strong>${title}</strong>
-       </p>
-       <p>
+        <p>
+          <strong>${title}</strong>
+        </p>
+        <p>
          ${hint}
        </p>
        <p id="validity-message"></p>
@@ -23,10 +23,10 @@ class AssetChooserContainerComponent extends HTMLElement {
          </div>
        </div>
         <div class="col-md-5 stat-container">
-          <div id="layer-data-div" class="stat-group  ">
+          <div id="layer-data-div" class="stat-group ">
           </div>
         </div>
-      </div>
+        </div>
       </section>
     `;
     } catch (e) {

@@ -16,7 +16,7 @@ The GIS Asset Chooser Component is a parent to the Map Layer component. It conta
 The Map Layer component is a child to the GIS Asset Chooser component.
 An instance of the Map Layer component is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of the Map Layer component, one for each layer.
 
-### Example of using map layer componet inside parent component
+### Example of using map layer component inside parent component
 
 ```html
     <main style="padding: 1rem">
