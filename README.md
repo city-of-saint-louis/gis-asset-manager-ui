@@ -51,7 +51,7 @@ An instance of the Map Layer component is used for each layer placed on the map.
 
 ## isValidTrue event listener
 
-### Use the custom event listener below in the parent application to receive 'chosenAssets' from the GIS Asset Chooser when asset selection is valid (isValid = true)
+### Use the custom event listener below in the parent application to receive 'chosenAssets' from the GIS Asset Chooser when asset eselection is valid (isValid = true)
 
 ```javascript
 // Custom event listener to receive chosenAssets from the asset chooser when asset eselection is valid (isValid = true)
@@ -76,7 +76,7 @@ document.addEventListener("isValidFalse", function (event) {
 
 ```
 
-## Once received 'chosenAssets' can be used as needed within the parent application
+### Once received 'chosenAssets' can be used as needed within the parent application
 
 ### Possible integration strategies include
 
@@ -87,7 +87,7 @@ document.addEventListener("isValidFalse", function (event) {
 5. use in an API call
 <!-- Other Ideas? -->
 
-### Example of using 'isValidTrue' event listener
+### Examples
 
 ```javascript
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
@@ -97,11 +97,9 @@ document.addEventListener("isValidTrue", function (event) {
   // example of a possible integration strategy using local storage and a submit button
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
   document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
-  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #538400";
-}); 2
+  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #008000";
+});
 ```
-
-### Example of using 'isValidFalse' event listener
 
 ```javascript
 // Custom event listener for when isValid is false
