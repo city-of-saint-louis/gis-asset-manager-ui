@@ -45,5 +45,5 @@ class MapLayer extends HTMLElement {
   }
 }
 document.addEventListener("DOMContentLoaded", () => {
-  customElements.define("map-layer", MapLayer);
+  customElements.define("asset-chooser-map-layer", MapLayer);
 });

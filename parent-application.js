@@ -6,7 +6,9 @@ const caseAssets = [];
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
 // recommended for integration with gis aset chooser - customize as needed
 document.addEventListener("isValidTrue", function (event) {
+  console.log("isValidTrue event received by parent application.", event);
   const chosenAssets = event.detail.chosenAssets;
+  console.log("isValidTrue event, chosenAssets received:", chosenAssets);
   // possible integration strategy using local storage
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
   // possible integration strategy with a submit button
@@ -23,9 +25,7 @@ document.addEventListener("isValidFalse", function (event) {
   localStorage.removeItem("chosenAssets");
 });
 
-
 // below is an example of how the chosenAssets could be submitted to the parent application using the custom events and custom event listeners
-
 // function to submit chosen assets
 function submitChosenAssets(chosenAssets) {
   console.log("submitting chosenAssets:", chosenAssets);
