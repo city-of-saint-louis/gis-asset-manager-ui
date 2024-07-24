@@ -1,3 +1,5 @@
+// this file contains utility functions for the ArcGIS Asset Chooser application
+
 function selectFeatureLayer() {
   featureLayers.forEach((outerLayer) => {
     const selectLayersElements = document.querySelectorAll(".selectLayers");
