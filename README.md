@@ -1,13 +1,23 @@
-# GIS Asset Chooser Development
+# GIS Asset Chooser Module? or Element? (Should we call this a module, an element, or something else?)
+
+The GIS Asset Chooser
+
+## Contents
+
+### [Parts of the GIS Asset Chooser](#the-asset-chooser-is-made-of-four-parts)
+
+### Usage
 
 ## The asset chooser is made of four parts
 
-1. [GIS Asset Chooser component](#gis-asset-chooser-component)
-2. [Map Layer component](#map-layer-component)
+1. [GIS Asset Chooser Container Component](#gis-asset-chooser-container-component)
+2. [Map Layer Component](#map-layer-component)
 3. [isValidTrue event listener](#isvalidtrue-event-listener)
 4. [isValidFalse event listener](isvalidfalse-event-listener)
 
-### GIS Asset Chooser component
+
+
+### GIS Asset Chooser Container Component
 
 The GIS Asset Chooser Component is a parent to the Map Layer component. It contains the base map.
 
@@ -15,6 +25,8 @@ The GIS Asset Chooser Component is a parent to the Map Layer component. It conta
 
 The Map Layer component is a child to the GIS Asset Chooser component.
 An instance of the Map Layer component is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of the Map Layer component, one for each layer.
+
+## How To Use the GIS Asset Chooser
 
 ### Example of using map layer component inside parent component
 
