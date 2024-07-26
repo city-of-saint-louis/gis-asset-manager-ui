@@ -1,5 +1,5 @@
 // this file contains utility functions for the ArcGIS Asset Chooser application
-console.log('utils');
+// console.log('utils');
 
 // function selectFeatureLayer() {
 //   featureLayers.forEach((outerLayer) => {

@@ -5,7 +5,7 @@ const caseAssets = [];
 
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
 // recommended for integration with gis aset chooser - customize as needed
-document.addEventListener("isValidTrue", function (event) {
+document.addEventListener("isValidTrue", (event) => {
   console.log("isValidTrue event received by parent application.", event);
   const chosenAssets = event.detail.chosenAssets;
   console.log("isValidTrue event, chosenAssets received:", chosenAssets);
@@ -19,7 +19,7 @@ document.addEventListener("isValidTrue", function (event) {
 // Custom event listener for when isValid is false
 // recommended for integration with gis aset chooser - customize as needed
 // example of possible integration strategy with a submit button
-document.addEventListener("isValidFalse", function (event) {
+document.addEventListener("isValidFalse", (event) => {
   document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
   document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 0px 0px ";
   localStorage.removeItem("chosenAssets");
@@ -27,7 +27,7 @@ document.addEventListener("isValidFalse", function (event) {
 
 // below is an example of how the chosenAssets could be submitted to the parent application using the custom events and custom event listeners
 // function to submit chosen assets
-function submitChosenAssets(chosenAssets) {
+const submitChosenAssets = (chosenAssets) => {
   console.log("submitting chosenAssets:", chosenAssets);
   localStorage.removeItem("chosenAssets");
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
@@ -35,31 +35,31 @@ function submitChosenAssets(chosenAssets) {
 };
 
 // Function to display chosen assets
-function displayChosenAssets() {
+const displayChosenAssets = () => {
   const chosenAssets = JSON.parse(localStorage.getItem("chosenAssets") || '[]');
   chosenAssets.map((asset) => {
     const chosenAssetLabel = document.createElement("p");
     chosenAssetLabel.textContent = asset.assetLabel;
     document.getElementById("chosen-assets-display-div").appendChild(chosenAssetLabel);
   });
-}
+};
 
 // Function to manipulate 'chosenAssets' data for use within parent application
-function convertChosenAssets() {
+const convertChosenAssets = () => {
   const chosenAssets = JSON.parse(localStorage.getItem("chosenAssets") || '[]');
   chosenAssets.forEach((asset) => {
-   const caseAsset = {
-     AssetEsriAttributes: asset.assetiAttributes,
-     AssetId: asset.assetGuid,
-     AssetType: asset.layerName,
-     FeatureAssetId: asset.assetGuid,
-     FeatureClass: asset.layerName,
-     Location: asset.assetLabel, 
-   }
-   caseAssets.push(caseAsset);
-   console.log("caseAssets:", caseAssets);
+    const caseAsset = {
+      AssetEsriAttributes: asset.assetiAttributes,
+      AssetId: asset.assetGuid,
+      AssetType: asset.layerName,
+      FeatureAssetId: asset.assetGuid,
+      FeatureClass: asset.layerName,
+      Location: asset.assetLabel,
+    };
+    caseAssets.push(caseAsset);
+    console.log("caseAssets:", caseAssets);
   });
-}
+};
 
 // Event listener to display chosen assets on the results page
 document.addEventListener("DOMContentLoaded", () => {
