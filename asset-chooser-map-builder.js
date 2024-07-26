@@ -43,7 +43,6 @@ const selectFeatureLayer = () => {
 
 const renderSelectedAssetLabels = () => {
   const selectedLayerAssetListArray = document.querySelectorAll(".highlighted-asset-data-list");
-
   // Clear existing list items before appending new ones
   selectedLayerAssetListArray.forEach(list => {
     list.innerHTML = ""; // This clears the list
