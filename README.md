@@ -1,21 +1,17 @@
-# GIS Asset Chooser Module? or Element? (Should we call this a module, an element, or something else?)
+# ArcGIS Asset Chooser Module? or Element? (Should we call this a module, an element, or something else?)
 
-The GIS Asset Chooser
+The ArcGIS Asset Chooser Module (Element?) utilizes the ArcGIS Maps SDK for JavaScript to create an interactive map that can be configured with various different graphic layers. Users can select assets contained within the layers by mouse click. Developers can configure the module with available graphic layers and asset selection requirements to fit their specific use case. The Asset Chooser is not a standalone application. It is intended for use within a parent application and was built with flexibility in mind. When the asset collection requirements have been met by the user, the array of chosen assets ('chosenAssets') becomes available to the parent application through a custom event.  
 
 ## Contents
 
-### [Parts of the GIS Asset Chooser](#the-asset-chooser-is-made-of-four-parts)
+- [Parts of the GIS Asset Chooser](#the-asset-chooser-is-made-of-four-parts)
+- [Usage](#how-to-use-the-gis-asset-chooser)
 
-### Usage
+## The ArcGIS Asset Chooser is made of four JavaScript files
 
-## The asset chooser is made of four parts
-
-1. [GIS Asset Chooser Container Component](#gis-asset-chooser-container-component)
-2. [Map Layer Component](#map-layer-component)
-3. [isValidTrue event listener](#isvalidtrue-event-listener)
-4. [isValidFalse event listener](isvalidfalse-event-listener)
-
-
+1. [GIS Asset Chooser Container Component](#gis-asset-chooser-container-component) (assest-chooser-container-component.js)
+2. [Map Layer Component](#map-layer-component) (asset-chooser-map-layer-component.js)
+3. []
 
 ### GIS Asset Chooser Container Component
 
@@ -25,8 +21,6 @@ The GIS Asset Chooser Component is a parent to the Map Layer component. It conta
 
 The Map Layer component is a child to the GIS Asset Chooser component.
 An instance of the Map Layer component is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of the Map Layer component, one for each layer.
-
-## How To Use the GIS Asset Chooser
 
 ### Example of using map layer component inside parent component
 
@@ -60,6 +54,13 @@ An instance of the Map Layer component is used for each layer placed on the map.
       </gis-asset-chooser>
     </main>
   ```
+
+## How To Use the GIS Asset Chooser
+
+### Custom Event Listeners for the parent application
+
+[isValidTrue event listener](#isvalidtrue-event-listener)
+[isValidFalse event listener](isvalidfalse-event-listener)
 
 ## isValidTrue event listener
 

@@ -1,4 +1,5 @@
 // This file holds the logic that provides functionality for the GIS Asset Chooser.
+console.log("map builder");
 const defaultZoom = "12";
 const defaultCenterX = "-90.25";
 const defaultCenterY = "38.64";
@@ -20,22 +21,28 @@ document.addEventListener("layerDetailsProvided", (event) => {
 
 // initilize the map using the map layers provided
 function initializeMap() {
+  console.log("initializeMap function runs");
+  console.log("chosenAssets", chosenAssets);
   try {
     const zoom =
       document.querySelector("asset-chooser-container").getAttribute("zoom") ||
       defaultZoom;
     const baseMap =
-      document.querySelector("asset-chooser-container").getAttribute("baseMap") ||
-      defaultBaseMap;
+      document
+        .querySelector("asset-chooser-container")
+        .getAttribute("baseMap") || defaultBaseMap;
     const centerX =
-      document.querySelector("asset-chooser-container").getAttribute("centerX") ||
-      defaultCenterX;
+      document
+        .querySelector("asset-chooser-container")
+        .getAttribute("centerX") || defaultCenterX;
     const centerY =
-      document.querySelector("asset-chooser-container").getAttribute("centerY") ||
-      defaultCenterY;
+      document
+        .querySelector("asset-chooser-container")
+        .getAttribute("centerY") || defaultCenterY;
     const showSearch =
-      document.querySelector("asset-chooser-container").getAttribute("showSearch") ||
-      defaultShowSearch;
+      document
+        .querySelector("asset-chooser-container")
+        .getAttribute("showSearch") || defaultShowSearch;
 
     require([
       "esri/Map",
@@ -268,4 +275,3 @@ function initializeMap() {
 }
 
 initializeMap();
-console.log("chosenAssets", chosenAssets);
