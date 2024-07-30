@@ -49,10 +49,10 @@ const convertChosenAssets = () => {
   const chosenAssets = JSON.parse(localStorage.getItem("chosenAssets") || '[]');
   chosenAssets.forEach((asset) => {
     const caseAsset = {
-      AssetEsriAttributes: asset.assetiAttributes,
-      AssetId: asset.assetGuid,
+      AssetEsriAttributes: asset.assetAttributes,
+      AssetId: asset.assetAttributes.GUID,
       AssetType: asset.layerName,
-      FeatureAssetId: asset.assetGuid,
+      FeatureAssetId: asset.assetAttributes.GUID,
       FeatureClass: asset.layerName,
       Location: asset.assetLabel,
     };

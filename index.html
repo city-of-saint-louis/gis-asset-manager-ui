@@ -19,56 +19,46 @@
   <body>
     <header></header>
     <main style="padding: 1rem">
-      <div style="padding-top: 2rem; padding-bottom: 2rem; text-align: center;">
+      <div style="padding-top: 2rem; padding-bottom: 2rem; text-align: center">
         <button
-          disabled 
-          id="submit-chosen-assets-button"  
-          onclick=submitChosenAssets(chosenAssets)
-          style="margin: 0 auto;"
+          disabled
+          id="submit-chosen-assets-button"
+          onclick="submitChosenAssets(chosenAssets)"
+          style="margin: 0 auto"
         >
           Submit Chosen Assets
         </button>
       </div>
-      <div id="chosen-asset-container"></div>
       <asset-chooser-container
         title="GIS Asset Chooser"
         hint="Click on the map to select required assets. Click again to unselect."
+        show-search=false
       >
         <asset-chooser-map-layer
           name="Streets"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
           layer-asset-id-field-name="OBJECTID"
-          minimum=1
-          maximum=3
+          minimum="1"
+          maximum="3"
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
-          min-scale=0
+          
         >
         </asset-chooser-map-layer>
         <asset-chooser-map-layer
           name="Parcels"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
-          minimum=1
-          label-mask="{SITEADDR}"
-          min-scale=0
-        >
-        </asset-chooser-map-layer
-        ><!--
-        <map-layer
-          name="Neighborhoods"
-          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/PDA/Neighborhoods/MapServer"
-          layer-asset-id-field-name="OBJECTID"
           minimum="1"
-          maximum="0"
-          label-mask="{NHD_NAME}"
-          max-scale="30000"
+          maximum=0
+          label-mask="{SITEADDR}"
+          
         >
-        </map-layer> -->
+        </asset-chooser-map-layer>
       </asset-chooser-container>
     </main>
     <footer></footer>
-    <script src="parent-application.js"></script> 
-    <script src="asset-chooser-map-builder.js"></script>
+    <script src="parent-application.js"></script>
+    <script src="asset-chooser.js"></script>
     <script src="asset-chooser-map-layer-component.js"></script>
     <script src="asset-chooser-container-component.js"></script>
   </body>

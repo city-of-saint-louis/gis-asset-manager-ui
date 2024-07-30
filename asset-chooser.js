@@ -54,7 +54,7 @@ const renderSelectedAssetLabels = () => {
         const assetLabel = asset.assetLabel;
         const assetLabelListItem = document.createElement("li");
 
-        assetLabelListItem.setAttribute("id", asset.assetId);
+        assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
           ${assetLabel}
           <button
@@ -68,11 +68,11 @@ const renderSelectedAssetLabels = () => {
 
         assetLabelListItem.addEventListener("click", () => {
           chosenAssets.forEach(asset => {
-            if (asset.assetId === assetLabelListItem.id) {
+            if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
-              const listItemToRemove = document.getElementById(asset.assetId);
+              const listItemToRemove = document.getElementById(asset.internalAssetId);
               if (listItemToRemove) listItemToRemove.remove();
-              const hightlightToRemove = chosenAssets.findIndex(a => a.assetId === asset.assetId);
+              const hightlightToRemove = chosenAssets.findIndex(a => a.internalAssetId === asset.internalAssetId);
               chosenAssets.splice(hightlightToRemove, 1);
               validateNumberofAssetsSelected();
               console.log("chosenAssets", chosenAssets);
@@ -225,7 +225,7 @@ const dispatchChosenAssets = chosenAssets => {
   document.dispatchEvent(event);
 };
 
-// custom event listener to disable the submit button if the chosenAssets are not valid
+// custom event listener to signal when chosenAssets are not valid
 const secureChosenAssets = () => {
   const event = new CustomEvent("isValidFalse", { detail: { isValid } });
   document.dispatchEvent(event);
@@ -249,8 +249,8 @@ const initializeMap = () => {
     const baseMap = document.querySelector("asset-chooser-container").getAttribute("baseMap") || defaultBaseMap;
     const centerX = document.querySelector("asset-chooser-container").getAttribute("centerX") || defaultCenterX;
     const centerY = document.querySelector("asset-chooser-container").getAttribute("centerY") || defaultCenterY;
-    const showSearch = document.querySelector("asset-chooser-container").getAttribute("showSearch") || defaultShowSearch;
-
+    const showSearch = document.querySelector("asset-chooser-container").getAttribute("show-search") || defaultShowSearch;
+    console.log("showSearch", showSearch);
     require([
       "esri/Map",
       "esri/views/MapView",
@@ -353,7 +353,7 @@ const initializeMap = () => {
             const labelMaskValue = eval(`"${graphic.layer.layerProperties.labelMask.replace(/\{([^}]+)\}/g, (match, p1) => `" + graphic.attributes.${p1} + "`)}"`);
             console.log("graphic:", graphic);
             const layerId = graphic.layer.id;
-            if (!chosenAssets.find((a) => a.assetId === `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`)) {
+            if (!chosenAssets.find((a) => a.internalAssetId === `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`)) {
               view.whenLayerView(graphic.layer).then((layerView) => {
                 const mapDataLayerId = `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`;
                 const layerAssetMax = layerProperties.maximumAssetsRequired;
@@ -371,7 +371,8 @@ const initializeMap = () => {
                 highlightedSelection = layerView.highlight(graphic);
                 const chosenAsset = {
                   assetAttributes: graphic.attributes,
-                  assetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
+                  internalAssetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
+                  assetId: graphic.attributes.GUID,
                   assetLabel: labelMaskValue,
                   layerData: graphic.layer,
                   layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
@@ -387,11 +388,11 @@ const initializeMap = () => {
               });
             } else {
               chosenAssets.forEach((asset) => {
-                if (asset.assetId === `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`) {
+                if (asset.internalAssetId === `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`) {
                   asset.highlightSelect.remove();
                 }
               });
-              const hightlightToRemove = chosenAssets.findIndex((a) => a.assetId === `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`);
+              const hightlightToRemove = chosenAssets.findIndex((a) => a.internalAssetId === `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`);
               chosenAssets.splice(hightlightToRemove, 1);
               renderSelectedAssetLabels();
               validateNumberofAssetsSelected();

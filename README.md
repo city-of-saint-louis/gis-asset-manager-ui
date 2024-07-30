@@ -1,58 +1,74 @@
 # ArcGIS Asset Chooser Module? or Element? (Should we call this a module, an element, or something else?)
 
-The ArcGIS Asset Chooser Module (Element?) utilizes the ArcGIS Maps SDK for JavaScript to create an interactive map that can be configured with various different graphic layers. Users can select assets contained within the layers by mouse click. Developers can configure the module with available graphic layers and asset selection requirements to fit their specific use case. The Asset Chooser is not a standalone application. It is intended for use within a parent application and was built with flexibility in mind. When the asset collection requirements have been met by the user, the array of chosen assets ('chosenAssets') becomes available to the parent application through a custom event.  
+The ArcGIS Asset Chooser Module (Element?) utilizes the ArcGIS Maps SDK for JavaScript to create an interactive map that can be configured with various different graphic layers. Users can select assets contained within the layers by mouse click. Developers can configure the module with available graphic layers and asset selection requirements to fit their specific use case. The Asset Chooser is not a standalone application. It is intended for use within a parent application and was built with flexibility in mind. When the asset collection requirements have been met by the user, the array of chosen assets ('chosenAssets') becomes available to the parent application through a custom event.
 
 ## Contents
 
-- [Parts of the GIS Asset Chooser](#the-asset-chooser-is-made-of-four-parts)
+- [Parts of the GIS Asset Chooser](#the-arcgis-asset-chooser-is-made-of-three-javascript-files)
 - [Usage](#how-to-use-the-gis-asset-chooser)
 
-## The ArcGIS Asset Chooser is made of four JavaScript files
+## The ArcGIS Asset Chooser is made of three JavaScript files
 
-1. [GIS Asset Chooser Container Component](#gis-asset-chooser-container-component) (assest-chooser-container-component.js)
-2. [Map Layer Component](#map-layer-component) (asset-chooser-map-layer-component.js)
-3. []
+1. [Asset Chooser Container Component](#asset-chooser-container-component) (assest-chooser-container-component.js)
+2. [Asset Chooser Map Layer Component](#asset-chooser-map-layer-component) (asset-chooser-map-layer-component.js)
+3. [Asset Chooser Map Builder](#asset-chooser-map-builder) (asset-chooser-map-builder.js)
 
-### GIS Asset Chooser Container Component
+### Asset Chooser Container Component
+
+assest-chooser-container-component.js
+
+```html
+<asset-chooser-container
+  title="GIS Asset Chooser"
+  hint="Click on the map to select required assets. Click again to unselect."
+  zoom
+  
+>
+</asset-chooser-container>
+```
 
 The GIS Asset Chooser Component is a parent to the Map Layer component. It contains the base map.
 
-### Map Layer component
+### Asset Chooser Map Layer component
 
-The Map Layer component is a child to the GIS Asset Chooser component.
-An instance of the Map Layer component is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of the Map Layer component, one for each layer.
+asset-chooser-map-layer-component.js
 
-### Example of using map layer component inside parent component
+The Asset Chooser Map Layer Component is a child to the Asset Chooser Container component.
+An instance of the Map Layer Component is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of the Map Layer Component, one for each layer.
+
+### Asset Chooser Map Builder
+
+asset-chooser-map-builder.js
+
+### Example of using the Map Layer Component inside of the Asset Chooser Container Component
 
 ```html
-    <main style="padding: 1rem">
-      <div id="chosen-asset-container"></div>
-      <gis-asset-chooser
+    <div>
+      <asset-chooser-container
         title="GIS Asset Chooser"
         hint="Click on the map to select required assets. Click again to unselect."
-        baseMap="topo-vector"
       >
-        <map-layer
+        <asset-chooser-map-layer
           name="Streets"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
           layer-asset-id-field-name="OBJECTID"
-          minimum=1
-          maximum=3
+          minimum="1"
+          maximum="3"
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
-          min-scale=0
+          min-scale="0"
         >
-        </map-layer>
-        <map-layer
+        </asset-chooser-map-layer>
+        <asset-chooser-map-layer
           name="Parcels"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
-          minimum=1
+          minimum="1"
           label-mask="{SITEADDR}"
-          min-scale=0
+          min-scale="0"
         >
-        </map-layer>
-      </gis-asset-chooser>
-    </main>
+        </asset-chooser-map-layer>
+      </asset-chooser-container>
+    </div>
   ```
 
 ## How To Use the GIS Asset Chooser
@@ -91,7 +107,7 @@ document.addEventListener("isValidFalse", function (event) {
 
 ### Once received 'chosenAssets' can be used as needed within the parent application
 
-### Possible integration strategies include
+### Some possible integration strategies include
 
 1. store in a new variable scoped for the parent application  
 2. use local storage to save 'chosenAssets'

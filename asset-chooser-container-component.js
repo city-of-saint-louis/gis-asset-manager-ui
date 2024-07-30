@@ -9,7 +9,7 @@ class AssetChooserContainerComponent extends HTMLElement {
       const title = this.getAttribute("title") || "";
       const hint = this.getAttribute("hint") || "";
       this.innerHTML = `
-      <section>
+      <section class="stat-container">
         <p>
           <strong>${title}</strong>
         </p>
@@ -22,7 +22,7 @@ class AssetChooserContainerComponent extends HTMLElement {
            <div id="viewDiv" style="width: 100%; height: 500px;">
          </div>
        </div>
-        <div class="col-md-5 stat-container">
+        <div class="col-md-5">
           <div id="layer-data-div" class="stat-group ">
           </div>
         </div>
