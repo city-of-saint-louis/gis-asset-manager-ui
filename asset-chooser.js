@@ -1,5 +1,4 @@
 // This file holds the logic that provides functionality for the GIS Asset Chooser.
-console.log("map builder");
 const defaultZoom = "12";
 const defaultCenterX = "-90.25";
 const defaultCenterY = "38.64";
@@ -264,7 +263,6 @@ captureMapLayers();
 
 // initilize the map using the map layers provided
 const initializeMap = () => {
-  console.log("initializeMap function runs");
   console.log("chosenAssets", chosenAssets);
   try {
     const zoom =
@@ -286,7 +284,6 @@ const initializeMap = () => {
       document
         .querySelector("asset-chooser-container")
         .getAttribute("show-search") || defaultShowSearch;
-    console.log("showSearch", showSearch);
     require([
       "esri/Map",
       "esri/views/MapView",
