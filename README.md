@@ -11,7 +11,7 @@ The ArcGIS Asset Chooser Module (Element?) utilizes the ArcGIS Maps SDK for Java
 
 1. [Asset Chooser Container Component](#asset-chooser-container-component) (assest-chooser-container-component.js)
 2. [Asset Chooser Map Layer Component](#asset-chooser-map-layer-component) (asset-chooser-map-layer-component.js)
-3. [Asset Chooser Map Builder](#asset-chooser-map-builder) (asset-chooser-map-builder.js)
+3. [Asset Chooser JS](#asset-chooser-js) (asset-chooser.js)
 
 ### Asset Chooser Container Component
 
@@ -36,9 +36,9 @@ asset-chooser-map-layer-component.js
 The Asset Chooser Map Layer Component is a child to the Asset Chooser Container component.
 An instance of the Map Layer Component is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of the Map Layer Component, one for each layer.
 
-### Asset Chooser Map Builder
+### Asset Chooser JS
 
-asset-chooser-map-builder.js
+asset-chooser.js
 
 ### Example of using the Map Layer Component inside of the Asset Chooser Container Component
 
@@ -72,6 +72,8 @@ asset-chooser-map-builder.js
   ```
 
 ## How To Use the GIS Asset Chooser
+
+### [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest)
 
 ### Custom Event Listeners for the parent application
 
