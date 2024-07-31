@@ -273,15 +273,15 @@ const initializeMap = () => {
     const baseMap =
       document
         .querySelector("asset-chooser-container")
-        .getAttribute("baseMap") || defaultBaseMap;
+        .getAttribute("base-map") || defaultBaseMap;
     const centerX =
       document
         .querySelector("asset-chooser-container")
-        .getAttribute("centerX") || defaultCenterX;
+        .getAttribute("center-x") || defaultCenterX;
     const centerY =
       document
         .querySelector("asset-chooser-container")
-        .getAttribute("centerY") || defaultCenterY;
+        .getAttribute("center-y") || defaultCenterY;
     const showSearch =
       document
         .querySelector("asset-chooser-container")
