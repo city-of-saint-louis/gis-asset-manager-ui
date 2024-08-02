@@ -1,7 +1,7 @@
 // This file holds the logic that provides functionality for the GIS Asset Chooser.
-const defaultZoom = "12";
-const defaultCenterX = "-90.25";
-const defaultCenterY = "38.64";
+const defaultZoom = 12;
+const defaultCenterX = -90.25;
+const defaultCenterY = 38.64;
 const defaultBaseMap = "topo-vector";
 const defaultShowSearch = true;
 const mapLayersToAdd = [];
@@ -190,7 +190,7 @@ const validateAssetSelection = () => {
 
 const renderValidityMessage = () => {
   const validityMessage = document.getElementById("validity-message");
-  let makeMinimunRequireMessage = `Please select `;
+  let makeMinimunRequireMessage = `Select `;
 
   if (isValid) {
     validityMessage.innerHTML = "Asset selection is valid for submission";
@@ -351,15 +351,20 @@ const initializeMap = () => {
         }
         renderValidityMessage();
 
-        document.getElementById("layer-data-div").innerHTML += `
-          <div class="map-layer-data-container stat-container stat-medium">
+        const layerDataDiv = document.getElementById("layer-data-div");
+        layerDataDiv.innerHTML += `
+          <div 
+            class="map-layer-data-container stat-container stat-medium"
+            aria-live="polite" aria-atomic="true"
+          >
             <div class="stat-title">
-              <span>
-                <strong>${mapDataLayer.layerProperties.layerName}</strong>
-              </span>
+             <span >
+               <strong>${mapDataLayer.layerProperties.layerName}</strong>
+             </span>
               <button class="selectLayers" att-layer-id="${
                 mapDataLayer.layerProperties.layerName
-              }-${mapDataLayer.id}">
+              }-${mapDataLayer.id}"
+              >
                 <span class="glyphicons glyphicons-eye-close">
                   <span class="sr-only">hide layer</span>
                 </span>
@@ -379,7 +384,8 @@ const initializeMap = () => {
             </div>
             <ul class="list-group highlighted-asset-data-list" id="${
               mapDataLayer.layerProperties.layerName
-            }-${mapDataLayer.id}">
+            }-${mapDataLayer.id}"
+            >
               <li>None selected.</li>
             </ul>
           </div>
@@ -458,7 +464,8 @@ const initializeMap = () => {
                 const chosenAsset = {
                   assetAttributes: graphic.attributes,
                   internalAssetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
-                  assetId: graphic.attributes.GUID,
+                  assetId: `${graphic.attributes[layerAssetIDFieldName]}`,
+                  assetIdType: layerAssetIDFieldName,
                   assetLabel: labelMaskValue,
                   layerData: graphic.layer,
                   layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,

@@ -50,7 +50,8 @@ const convertChosenAssets = () => {
   chosenAssets.forEach((asset) => {
     const caseAsset = {
       AssetEsriAttributes: asset.assetAttributes,
-      AssetId: asset.assetAttributes.GUID,
+      AssetId: asset.assetId,
+      AssetIdType: asset.assetIdType,
       AssetType: asset.layerName,
       FeatureAssetId: asset.assetAttributes.GUID,
       FeatureClass: asset.layerName,

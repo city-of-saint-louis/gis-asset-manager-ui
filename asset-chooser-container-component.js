@@ -16,7 +16,11 @@ class AssetChooserContainerComponent extends HTMLElement {
         <p>
          ${hint}
        </p>
-       <p id="validity-message"></p>
+       <p 
+         id="validity-message"
+         aria-live="polite" aria-atomic="true"
+       >
+       </p>
        <div class="row">
 	       <div class="col-md-7">
            <div id="viewDiv" style="width: 100%; height: 500px;">
