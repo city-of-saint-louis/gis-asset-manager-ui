@@ -11,7 +11,6 @@ class MapLayer extends HTMLElement {
       // save below for future use
       // const layerId = this.getAttribute("layer-id") || "";
       // const serverUrl = this.getAttribute("server-url") || "";
-      // const limit = this.getAttribute("limit") || 0;
       const minimumSelections = this.getAttribute("minimum") || 0;
       const maximumSelections = this.getAttribute("maximum") || 0;
       const labelMask = this.getAttribute("label-mask") || "";

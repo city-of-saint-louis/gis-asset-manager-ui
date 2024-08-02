@@ -317,13 +317,13 @@ const initializeMap = () => {
             layerClassUrl: mapLayer.layerClassUrl,
             layerAssetIDFieldName: mapLayer.layerAssetIDFieldName,
             labelMask: mapLayer.labelMask,
-            required: mapLayer.required,
             minimumAssetsRequired: mapLayer.minimumSelections,
             maximumAssetsRequired: mapLayer.maximumSelections,
             minScale: mapLayer.minScale,
             maxScale: mapLayer.maxScale,
           },
         });
+        console.log("mapDataLayer", mapDataLayer);
         mapDataLayer.outFields = ["*"];
         mapDataLayer.popupEnabled = false;
         const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;

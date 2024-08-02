@@ -4,7 +4,7 @@
 
 The ArcGIS Asset Chooser Module utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) to create an interactive map that can be configured with various different graphic layers.
 
-Users can select assets contained within the graphic layers by mouse click. Developers can configure the module to fit a specific use case by passing property values to the module's two custom elements. (Asset Chooser Container Component and Asset Chooser Map Layer Component)
+Users can select assets contained within the graphic layers by mouse click. Developers can configure the module to fit a specific use case by passing property values to the module's two custom elements. (Asset Chooser Container and Asset Chooser Map Layer)
 
 The ArcGIS Asset Chooser Module is not a standalone application. It is intended for use within a parent application and was built with flexibility in mind.
 
@@ -14,71 +14,118 @@ The parent application can then receive the 'chosenAssets' array through the use
 
 ## **Contents**
 
-- [Parts of the GIS Asset Chooser](#parts-of-the-arcgis-asset-chooser)
+- [Parts of the GIS Asset Chooser](#parts-of-the-arcgis-asset-chooser-module)
 - [How To Use the ArcGIS Asset Chooser](#how-to-use-the-arcgis-asset-chooser)
 
-## Parts of the ArcGIS Asset Chooser
+## Parts of the ArcGIS Asset Chooser Module
 
-### **The ArcGIS Asset Chooser is made of three JavaScript files**
+### **The ArcGIS Asset Chooser Module is made of three JavaScript files**
 
-1. [Asset Chooser Container Component](#asset-chooser-container-component) (assest-chooser-container-component.js)
-2. [Asset Chooser Map Layer Component](#asset-chooser-map-layer-component) (asset-chooser-map-layer-component.js)
-3. [Asset Chooser JS](#asset-chooser-js) (asset-chooser.js)
+1. [assest-chooser-container.js](#assest-chooser-containerjs)
+2. [asset-chooser-map-layer.js](#asset-chooser-map-layerjs)
+3. [asset-chooser.js](#asset-chooserjs)
 
-#### **Asset Chooser Container Component**
+#### **assest-chooser-container.js**
 
-**assest-chooser-container-component.js**: The Asset Chooser Container Component is a reusuable [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components). This is where the map and the ArcGIS Asset Chooser will be rendered. It is a parent to the Asset Chooser Map Layer Component (asset-chooser-map-layer-componente.js). The Asset Chooser can be configured as needed by passing values for the following properties to the container component.
+ A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Chooser, including the map, is rendered. It is a parent to **asset-chooser-map-layer.js**.
 
-1. title
+The Asset Chooser can be configured as needed by passing values for the following properties to the container element.
+
+1. **title**
    - type: string
    - description: An appropriate title based on the specific implementation of the ArcGIS Asset Chooser
    - default value: none
-2. hint
+2. **hint**
    - type: string
    - description: A simple statement to let the user know what to do with the ArcGIS Asset Chooser for the specific implementation
    - default value: none
-3. zoom
+3. **zoom**
    - type: number
    - description: Sets the zoom level for the map when it first loads. The lower the number, the farther out the zoom level.
    - default value: 12
-4. base-map
+4. **base-map**
    - type: string
    - description: Sets the base map to be used for the ArcGIS Asset Chooser.
    - default value: "topo-vector"
-5. center-x
+5. **center-x**
    - type: number
    - description: Sets the X coordinate for where the map will be entered
    - default value: -90.25
-6. center-y
+6. **center-y**
    - type: number
    - description:
    - default value: 38.64
-7. show-search
+7. **show-search**
    - type: boolean
    - description: Determines if the search box is shown on the map or not.
    - default value: true
 
-** Please note. If a string is passed in instead of a number or a boolean, such as "12" instead of 12, or "false", instead of false, it will be converted to the proper data type.
+**Please note:**
+
+***If a string is passed in instead of a number or a boolean, such as "12" instead of 12, or "false", instead of false, it will be converted to the proper data type.***
+
+***If a property is not included the default value will take effect.***
 
 ```html
 <asset-chooser-container
-  title="GIS Asset Chooser"
-  hint="Click on the map to select required assets. Click again to unselect."
-  zoom
+  title="Parade Permit Application"
+  hint="Select the street segments for your proposed parade route."
 >
 </asset-chooser-container>
 ```
 
-The GIS Asset Chooser Component is a parent to the Map Layer component. It contains the base map.
+#### **asset-chooser-map-layer.js**
 
-#### **Asset Chooser Map Layer component**
+A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. A child to **assest-chooser-container.js**. An instance of the map layer element is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of **asset-chooser-map-layer.js** (one for each layer) and pass each instance the necessary properties.
 
-**asset-chooser-map-layer-component.js**: The Asset Chooser Map Layer Component is a child to the Asset Chooser Container component.
-An instance of the Map Layer Component is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of the Map Layer Component, one for each layer.
+A map layer can be configured as needed by passing values for the following properties to the map layer element.
 
-#### **Asset Chooser JS**
+1. **minimum**
+   - type: number
+   - description:
+   - default value:
+2. **maximum**
+   - type: number
+   - description:
+   - default value:
+3. **label-mask**
+   - type:
+   - description:
+   - default value:
+4. **layer-asset-id-field-name**
+   - type:
+   - description:
+   - default value:
+5. **min-scale**
+   - type: number
+   - description:
+   - default value:
+6. **max-scale**
+   - type: number
+   - description:
+   - default value:
 
-**asset-chooser.js**: Asset Chooser JS is a JavaScript file that holds the logic to make the ArcGIS Asset Chooser Module work.
+**Please note:**
+
+***If a string is passed in instead of a number, such as "4" instead of 4, it will be converted to the proper data type.***
+
+***If a property is not included the default value will take effect.***
+
+```html
+<asset-chooser-map-layer
+  name="Streets"
+  layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
+  layer-asset-id-field-name="OBJECTID"
+  minimum="1"
+  maximum="3"
+  label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
+>
+</asset-chooser-map-layer>
+```
+
+#### **asset-chooser.js**
+
+This file holds the logic to make the ArcGIS Asset Chooser Module work. This is where the magic happens.
 
 ### Example of using the Map Layer Component inside of the Asset Chooser Container Component
 

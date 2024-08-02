@@ -37,8 +37,8 @@
           name="Streets"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
           layer-asset-id-field-name="OBJECTID"
-          minimum="1"
-          maximum="3"
+          minimum=1
+          maximum=3
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
         >
         </asset-chooser-map-layer>
@@ -46,10 +46,9 @@
           name="Parcels"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
-          minimum="1"
+          minimum=1
           maximum=0
           label-mask="{SITEADDR}"
-          
         >
         </asset-chooser-map-layer>
       </asset-chooser-container>
@@ -57,7 +56,7 @@
     <footer></footer>
     <script src="parent-application.js"></script>
     <script src="asset-chooser.js"></script>
-    <script src="asset-chooser-map-layer-component.js"></script>
-    <script src="asset-chooser-container-component.js"></script>
+    <script src="asset-chooser-map-layer.js"></script>
+    <script src="asset-chooser-container.js"></script>
   </body>
 </html>
