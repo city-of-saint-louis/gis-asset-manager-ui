@@ -323,7 +323,6 @@ const initializeMap = () => {
             maxScale: mapLayer.maxScale,
           },
         });
-        console.log("mapDataLayer", mapDataLayer);
         mapDataLayer.outFields = ["*"];
         mapDataLayer.popupEnabled = false;
         const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
@@ -412,7 +411,6 @@ const initializeMap = () => {
                 (match, p1) => `" + graphic.attributes.${p1} + "`
               )}"`
             );
-            console.log("graphic:", graphic);
             const layerId = graphic.layer.id;
             if (
               !chosenAssets.find(

@@ -6,7 +6,7 @@
     <title>GIS Asset Chooser Development</title>
     <link
       rel="stylesheet"
-      href="https://js.arcgis.com/4.29/esri/themes/light/main.css"
+      href="https://js.arcgis.com/4.30/esri/themes/light/main.css"
     />
     <link
       href="https://www.stlouis-mo.gov/style/screen.css"
@@ -14,7 +14,7 @@
       type="text/css"
       media="all"
     />
-    <script src="https://js.arcgis.com/4.29/"></script>
+    <script src="https://js.arcgis.com/4.30/"></script>
   </head>
   <body>
     <header></header>
@@ -40,6 +40,7 @@
           minimum=1
           maximum=3
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
+          min-scale=10000
         >
         </asset-chooser-map-layer>
         <asset-chooser-map-layer
@@ -49,6 +50,7 @@
           minimum=1
           maximum=0
           label-mask="{SITEADDR}"
+          max-scale=10000
         >
         </asset-chooser-map-layer>
       </asset-chooser-container>

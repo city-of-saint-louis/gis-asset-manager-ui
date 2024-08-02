@@ -1,12 +1,12 @@
-# **ArcGIS Asset Chooser Module**
+# **GIS GIS Asset Chooser Module**
 
 ## **Description**
 
-The ArcGIS Asset Chooser Module utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) to create an interactive map that can be configured with various different graphic layers.
+The GIS Asset Chooser Module utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) to create an interactive map that can be configured with various different graphic layers.
 
 Users can select assets contained within the graphic layers by mouse click. Developers can configure the module to fit a specific use case by passing property values to the module's two custom elements. (Asset Chooser Container and Asset Chooser Map Layer)
 
-The ArcGIS Asset Chooser Module is not a standalone application. It is intended for use within a parent application and was built with flexibility in mind.
+The GIS Asset Chooser Module is not a standalone application. It is intended for use within a parent application and was built with flexibility in mind.
 
 When the asset selection requirements have been met by the user, the array of chosen assets ('chosenAssets') becomes available to the parent application through a custom event.
 
@@ -14,18 +14,16 @@ The parent application can then receive the 'chosenAssets' array through the use
 
 ## **Contents**
 
-- [Parts of the GIS Asset Chooser](#parts-of-the-arcgis-asset-chooser-module)
-- [How To Use the ArcGIS Asset Chooser](#how-to-use-the-arcgis-asset-chooser)
+- [Parts of the GIS Asset Chooser Module](#parts-of-the-gis-asset-chooser-module)
+- [How To Use the GIS Asset Chooser Module](#how-to-use-the-gis-asset-chooser-module)
 
-## Parts of the ArcGIS Asset Chooser Module
-
-### **The ArcGIS Asset Chooser Module is made of three JavaScript files**
+## Parts of the GIS Asset Chooser Module
 
 1. [assest-chooser-container.js](#assest-chooser-containerjs)
 2. [asset-chooser-map-layer.js](#asset-chooser-map-layerjs)
 3. [asset-chooser.js](#asset-chooserjs)
 
-#### **assest-chooser-container.js**
+### **assest-chooser-container.js**
 
  A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Chooser, including the map, is rendered. It is a parent to **asset-chooser-map-layer.js**.
 
@@ -34,31 +32,31 @@ The Asset Chooser can be configured as needed by passing values for the followin
 1. **title**
    - type: string
    - description: An appropriate title based on the specific implementation of the ArcGIS Asset Chooser
-   - default value: none
+   - default value: **none**
 2. **hint**
    - type: string
    - description: A simple statement to let the user know what to do with the ArcGIS Asset Chooser for the specific implementation
-   - default value: none
+   - default value: **none**
 3. **zoom**
    - type: number
    - description: Sets the zoom level for the map when it first loads. The lower the number, the farther out the zoom level.
-   - default value: 12
+   - default value: **12**
 4. **base-map**
    - type: string
    - description: Sets the base map to be used for the ArcGIS Asset Chooser.
-   - default value: "topo-vector"
+   - default value: **"topo-vector"**
 5. **center-x**
    - type: number
    - description: Sets the X coordinate for where the map will be entered
-   - default value: -90.25
+   - default value: **-90.25** (By default the map centers on the center of the City of St. Louis.)
 6. **center-y**
    - type: number
-   - description:
-   - default value: 38.64
+   - description: Sets the Y coordinate for where the map will be entered
+   - default value: **38.64** (By default the map centers on the center of the City of St. Louis.)
 7. **show-search**
    - type: boolean
    - description: Determines if the search box is shown on the map or not.
-   - default value: true
+   - default value: **true**
 
 **Please note:**
 
@@ -74,36 +72,44 @@ The Asset Chooser can be configured as needed by passing values for the followin
 </asset-chooser-container>
 ```
 
-#### **asset-chooser-map-layer.js**
+### **asset-chooser-map-layer.js**
 
 A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. A child to **assest-chooser-container.js**. An instance of the map layer element is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of **asset-chooser-map-layer.js** (one for each layer) and pass each instance the necessary properties.
 
 A map layer can be configured as needed by passing values for the following properties to the map layer element.
 
-1. **minimum**
+1. **layer-class-url**
+   - type: string
+   - description: The url for the ArcGIS map layer that you want to use.
+   - default value: none
+2. **minimum**
    - type: number
-   - description:
-   - default value:
-2. **maximum**
+   - description: The minimum number of assets that must be selected from this layer by a user.
+   - default value: 0
+3. **maximum**
    - type: number
-   - description:
-   - default value:
-3. **label-mask**
-   - type:
-   - description:
-   - default value:
-4. **layer-asset-id-field-name**
-   - type:
-   - description:
-   - default value:
-5. **min-scale**
+   - description: The maximum number of assets that can be selected from this layer by a user.
+   - default value: 0
+4. **label-mask**
+   - type: string
+   - description: Template for how the asset will be labeled on the screen when selected by the user. Parts of the string that
+     change dynamically based on asset selection must be surrounded by curly braces in your string. You do not need to use backticks. See examples below.
+   - default value: none
+   - **Example:** The label mask for the streets layer is "**{FULLNAME} from {From_Stree} to {To_Street}**". The parts in brackets
+     are filled in dynamically based on the asset selected. When a street segement is selected, it renders on the screen as follows: "**N GRAND BLVD from MONTGOMERY ST to ST. LOUIS AVE**"
+5. **layer-asset-id-field-name**
+   - type: string
+   - description: The type of unique asset ID for this layer. Each graphic layer has a unique ID for identifying the assets
+     connected to that layer. These are not always uniform from layer to layer. Some possible ID types that may be used are "OBJECTID", "FID", or "GUID". Pass in thte appropriate ID type for the layer you are using.
+   - default value: "GUID"
+6. **min-scale**
    - type: number
-   - description:
-   - default value:
-6. **max-scale**
+   - description: Use "min-scale" and "max-scale" if you want a map layer to only appear at certain zoom levels.
+   - default value: none
+7. **max-scale**
    - type: number
-   - description:
-   - default value:
+   - description: Use "min-scale" and "max-scale" if you want a map layer to only appear at certain zoom levels.
+   - default value: none
 
 **Please note:**
 
@@ -116,18 +122,51 @@ A map layer can be configured as needed by passing values for the following prop
   name="Streets"
   layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
   layer-asset-id-field-name="OBJECTID"
-  minimum="1"
-  maximum="3"
+  minimum=1
+  maximum=3
   label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
+  min-scale=10000
 >
 </asset-chooser-map-layer>
 ```
 
-#### **asset-chooser.js**
+### **asset-chooser.js**
 
-This file holds the logic to make the ArcGIS Asset Chooser Module work. This is where the magic happens.
+This file holds the logic to make the GIS Asset Chooser Module work. This is where the magic happens.
 
-### Example of using the Map Layer Component inside of the Asset Chooser Container Component
+## How To Use the GIS Asset Chooser Module
+
+### [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest)
+
+The GIS Asset Chooser Module utilizes the ArcGIS Maps SDK for JavaScript and is intended for use with base maps and map layers made through ArcGIS.
+
+In order for the GIS Asset Chooser you must bring the ArcGIS Maps SDK for JavaScript into your application. You can do this through [CDN](https://developers.arcgis.com/javascript/latest/get-started-cdn/) or [npm](https://developers.arcgis.com/javascript/latest/get-started-npm/). For our system CDN was the way to go. This READme demonstrates CDN implementation. For information on using npm see the [ArcGIS documentation](https://developers.arcgis.com/javascript/latest/get-started-npm/)
+
+To utilize the CDN there are two tags, one for CSS and one for JavaScript. Their documentation recommends putting both in the HEAD of your HTML.
+
+```html
+<link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css" />
+<script src="https://js.arcgis.com/4.30/"></script>
+```
+
+### Bring in the 3 JavaScript files that make up the GIS Asset Chooser
+
+To use the GIS Asset Chooser Module you will need to pull in the module's 3 JavaScript files. Place the script tags in your HTML just before the closing body tag.
+
+asset-chooser-map-layer-js **MUST** load before asset-chooser-container.js or the map will render without any layers in place. We recommed placing the script tags in the order seen below.
+
+```html
+    <script src="asset-chooser.js"></script>
+    <script src="asset-chooser-map-layer.js"></script>
+    <script src="asset-chooser-container.js"></script>
+  </body>
+```
+
+### Use Custom Elements in the HTML
+
+Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, simply use the custom elements in your HTML and pass the necessary property values to both components.
+
+### Example Implementation of the GIS Asset Chooser module
 
 ```html
     <div>
@@ -139,28 +178,23 @@ This file holds the logic to make the ArcGIS Asset Chooser Module work. This is 
           name="Streets"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
           layer-asset-id-field-name="OBJECTID"
-          minimum="1"
-          maximum="3"
+          minimum=1
+          maximum=3
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
-          min-scale="0"
+          min-scale=10000
         >
         </asset-chooser-map-layer>
         <asset-chooser-map-layer
           name="Parcels"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
-          minimum="1"
+          minimum=1
           label-mask="{SITEADDR}"
-          min-scale="0"
         >
         </asset-chooser-map-layer>
       </asset-chooser-container>
     </div>
   ```
-
-## How To Use the ArcGIS Asset Chooser
-
-### [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest)
 
 ### Custom Event Listeners for the parent application
 
