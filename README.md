@@ -10,7 +10,7 @@ The GIS Asset Chooser Module is not a standalone application. It is intended for
 
 When the asset selection requirements have been met by the user, the array of chosen assets ('chosenAssets') becomes available to the parent application through a custom event.
 
-The parent application can then receive the 'chosenAssets' array through the use of a custom event listener.
+The parent application can then receive the 'chosenAssets' array through the use of a custom event listener and use the data as needed.
 
 ## **Contents**
 
