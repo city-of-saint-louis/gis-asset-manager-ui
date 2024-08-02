@@ -1,4 +1,4 @@
-# **GIS GIS Asset Chooser Module**
+# **GIS Asset Chooser Module**
 
 ## **Description**
 
