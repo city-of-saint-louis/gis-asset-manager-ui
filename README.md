@@ -4,13 +4,13 @@
 
 The GIS Asset Chooser Module utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) to create an interactive map that can be configured with various different graphic layers.
 
-Users can select assets contained within the graphic layers by mouse click. Developers can configure the module to fit a specific use case by passing property values to the module's two custom elements. (Asset Chooser Container and Asset Chooser Map Layer)
+Users can select assets contained within the graphic layers by mouse click. Developers can configure the module to fit a specific use case by passing property values to the module's two custom elements.
 
 The GIS Asset Chooser Module is not a standalone application. It is intended for use within a parent application and was built with flexibility in mind.
 
 When the asset selection requirements have been met by the user, the array of chosen assets ('chosenAssets') becomes available to the parent application through a custom event.
 
-The parent application can then receive the 'chosenAssets' array through the use of a custom event listener and use the data as needed.
+The parent application can then receive the 'chosenAssets' array through the use of a custom event listener and consume the data as needed.
 
 ## **Contents**
 
@@ -134,7 +134,7 @@ A map layer can be configured as needed by passing values for the following prop
 
 This file holds the logic to make the GIS Asset Chooser Module work. This is where the magic happens.
 
-## How To Use the GIS Asset Chooser Module
+## **How To Use the GIS Asset Chooser Module**
 
 1. [Bring in ArcGIS Maps SDK for JavaScript](#bring-in-arcgis-maps-sdk-for-javascript)
 2. [Bring in GIS Asset Chooser Module JavaScript](#bring-in-gis-asset-chooser-module-javascript)
@@ -142,7 +142,7 @@ This file holds the logic to make the GIS Asset Chooser Module work. This is whe
 4. [Place custom event listeners in parent application](#place-custom-event-listeners-in-parent-application)
 5. [Further customize event listeners to fit your use case](#further-customize-event-listeners-to-fit-your-use-case)
 
-### Bring in ArcGIS Maps SDK for JavaScript
+### **Bring in ArcGIS Maps SDK for JavaScript**
 
 The GIS Asset Chooser Module utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) and is intended for use with base maps and map layers made through ArcGIS.
 
@@ -155,7 +155,7 @@ To utilize the CDN there are two tags, one for CSS and one for JavaScript. ArcGI
 <script src="https://js.arcgis.com/4.30/"></script>
 ```
 
-### Bring in GIS Asset Chooser Module JavaScript
+### **Bring in GIS Asset Chooser Module JavaScript**
 
 To use the GIS Asset Chooser Module you will need to pull in the module's 3 JavaScript files. Place the script tags in your HTML just before the closing body tag.
 
@@ -168,11 +168,11 @@ asset-chooser-map-layer-js **MUST** load before asset-chooser-container.js or th
   </body>
 ```
 
-### Use Custom Elements in HTML
+### **Use Custom Elements in HTML**
 
 Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, simply use the custom elements in your HTML and pass the necessary property values to both elements as needed.
 
-### Example Implementation of the GIS Asset Chooser module's two custom elements
+### **Example Implementation of the GIS Asset Chooser module's two custom elements**
 
 ```html
 <!DOCTYPE html>
@@ -232,7 +232,7 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
 </html>
 ```
 
-### Place custom event listeners in parent application
+### **Place custom event listeners in parent application**
 
 - [isValidTrue event listener](#isvalidtrue-event-listener)
 - [isValidFalse event listener](isvalidfalse-event-listener)
@@ -241,7 +241,7 @@ When assets are selected by a user they are added to an array 'chosenAssets'. Wh
 
 If after the 'isValidTrue' event has been triggered, assets are unselected, and the items within 'chosenAssets' no longer meet the selection criteria, a second custom event 'isValidFalse' is triggered. The 'isValidFalse' event listener can be used to handle any necssary logic that needs to run at that time. For example if when 'isValidTrue' fires, a button is enabled to submit 'chosenAssets', you would probably want to disable the button when 'isValidFalse' is triggered. You also might want to secure 'chosenAssets' so it is no longer available in the parent application.
 
-#### isValidTrue event listener
+#### **isValidTrue event listener**
 
 Use the custom event listener below in the parent application to receive 'chosenAssets' from the GIS Asset Chooser when asset selection is valid (isValid = true)
 
@@ -255,7 +255,7 @@ document.addEventListener("isValidTrue", function (event) {
 });
 ```
 
-#### isValidFalse event listener
+#### **isValidFalse event listener**
 
 Use the custom event listener below to handle when asset selection is not valid (isValid = false)
 
@@ -268,9 +268,9 @@ document.addEventListener("isValidFalse", function (event) {
 
 ```
 
-### Further customize event listeners to fit your use case
+### **Further customize event listeners to fit your use case**
 
-Once received 'chosenAssets' can be used as needed within the parent application. Customize the event listeners to fit your needs. The event listeners can also be used to handle any necessary changes to the user interface.
+Customize the event listeners to fit your needs. Once received 'chosenAssets' can be consumed as needed within the parent application.  The event listeners can also be used to handle any necessary changes to the user interface, or run any other necessary logic.
 
 #### Some possible integration strategies include
 
