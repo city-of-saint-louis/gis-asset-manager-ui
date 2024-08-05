@@ -136,9 +136,14 @@ This file holds the logic to make the GIS Asset Chooser Module work. This is whe
 
 ## How To Use the GIS Asset Chooser Module
 
-### [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest)
+1. [Bring in ArcGIS Maps SDK for JavaScript](#bring-in-arcgis-maps-sdk-for-javascript)
+2. [Bring in GIS Asset Chooser Module JavaScript](#bring-in-gis-asset-chooser-module-javascript)
+3. [Use Custom Elements in HTML](#use-custom-elements-in-html)
+4. [Place custom event listeners in parent application](#place-custom-event-listeners-in-parent-application)
 
-The GIS Asset Chooser Module utilizes the ArcGIS Maps SDK for JavaScript and is intended for use with base maps and map layers made through ArcGIS.
+### Bring in ArcGIS Maps SDK for JavaScript
+
+The GIS Asset Chooser Module utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) and is intended for use with base maps and map layers made through ArcGIS.
 
 In order for the GIS Asset Chooser you must bring the ArcGIS Maps SDK for JavaScript into your application. You can do this through [CDN](https://developers.arcgis.com/javascript/latest/get-started-cdn/) or [npm](https://developers.arcgis.com/javascript/latest/get-started-npm/). For our system CDN was the way to go. This READme demonstrates CDN implementation. For information on using npm see the [ArcGIS documentation](https://developers.arcgis.com/javascript/latest/get-started-npm/)
 
@@ -149,7 +154,7 @@ To utilize the CDN there are two tags, one for CSS and one for JavaScript. Their
 <script src="https://js.arcgis.com/4.30/"></script>
 ```
 
-### Bring in the 3 JavaScript files that make up the GIS Asset Chooser
+### Bring in GIS Asset Chooser Module JavaScript
 
 To use the GIS Asset Chooser Module you will need to pull in the module's 3 JavaScript files. Place the script tags in your HTML just before the closing body tag.
 
@@ -162,18 +167,36 @@ asset-chooser-map-layer-js **MUST** load before asset-chooser-container.js or th
   </body>
 ```
 
-### Use Custom Elements in the HTML
+### Use Custom Elements in HTML
 
-Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, simply use the custom elements in your HTML and pass the necessary property values to both components.
+Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, simply use the custom elements in your HTML and pass the necessary property values to both elements as needed.
 
-### Example Implementation of the GIS Asset Chooser module
+### Example Implementation of the GIS Asset Chooser module's two custom elements
 
 ```html
-    <div>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GIS Asset Chooser Demo</title>
+    <!-- Bring in ArcGIS CSS -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css" />
+    <!-- Bring in ArcGIS JavaScript -->
+    <script src="https://js.arcgis.com/4.30/"></script>
+  </head>
+  <body>
+    <header>
+    </header>
+    <main style="padding: 1rem">
+      <!-- Insert the container element into html. Pass in property values as needed. -->
+      <!-- Title and hint are the only properties with no default value.  -->
       <asset-chooser-container
-        title="GIS Asset Chooser"
+        title="Select Assets Required For Your Use Case"
         hint="Click on the map to select required assets. Click again to unselect."
       >
+        <!-- Use the map layer element inside the container element. -->
+        <!-- Instance of the map layer custom element used for "Streets" layer. -->
         <asset-chooser-map-layer
           name="Streets"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
@@ -184,19 +207,30 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
           min-scale=10000
         >
         </asset-chooser-map-layer>
+        <!-- Instance of the map layer custom element used for "Parcels" layer. -->
         <asset-chooser-map-layer
           name="Parcels"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
           minimum=1
+          maximum=0
           label-mask="{SITEADDR}"
+          max-scale=10000
         >
         </asset-chooser-map-layer>
       </asset-chooser-container>
-    </div>
+    </main>
+    <footer>
+    </footer>
+    <!-- GIS Asset Chooser script tags -->
+    <script src="asset-chooser.js"></script>
+    <script src="asset-chooser-map-layer.js"></script>
+    <script src="asset-chooser-container.js"></script>
+  </body>
+</html>
   ```
 
-### Custom Event Listeners for the parent application
+### Place custom event listeners in parent application
 
 [isValidTrue event listener](#isvalidtrue-event-listener)
 [isValidFalse event listener](isvalidfalse-event-listener)
