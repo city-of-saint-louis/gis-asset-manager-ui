@@ -140,6 +140,7 @@ This file holds the logic to make the GIS Asset Chooser Module work. This is whe
 2. [Bring in GIS Asset Chooser Module JavaScript](#bring-in-gis-asset-chooser-module-javascript)
 3. [Use Custom Elements in HTML](#use-custom-elements-in-html)
 4. [Place custom event listeners in parent application](#place-custom-event-listeners-in-parent-application)
+5. [Further customize event listeners to fit your use case](#further-customize-event-listeners-to-fit-your-use-case)
 
 ### Bring in ArcGIS Maps SDK for JavaScript
 
@@ -147,7 +148,7 @@ The GIS Asset Chooser Module utilizes the [ArcGIS Maps SDK for JavaScript](https
 
 In order for the GIS Asset Chooser you must bring the ArcGIS Maps SDK for JavaScript into your application. You can do this through [CDN](https://developers.arcgis.com/javascript/latest/get-started-cdn/) or [npm](https://developers.arcgis.com/javascript/latest/get-started-npm/). For our system CDN was the way to go. This READme demonstrates CDN implementation. For information on using npm see the [ArcGIS documentation](https://developers.arcgis.com/javascript/latest/get-started-npm/)
 
-To utilize the CDN there are two tags, one for CSS and one for JavaScript. Their documentation recommends putting both in the HEAD of your HTML.
+To utilize the CDN there are two tags, one for CSS and one for JavaScript. ArcGIS documentation recommends putting both in the HEAD of your HTML.
 
 ```html
 <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css" />
@@ -196,7 +197,8 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
         hint="Click on the map to select required assets. Click again to unselect."
       >
         <!-- Use the map layer element inside the container element. -->
-        <!-- Instance of the map layer custom element used for "Streets" layer. -->
+        <!-- Use a new instance of the map layer element for each layer you want to put on the map. -->
+        <!-- Instance of the map layer custom element used to add "Streets" layer. -->
         <asset-chooser-map-layer
           name="Streets"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
@@ -207,7 +209,7 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
           min-scale=10000
         >
         </asset-chooser-map-layer>
-        <!-- Instance of the map layer custom element used for "Parcels" layer. -->
+        <!-- Instance of the map layer custom element used to add "Parcels" layer. -->
         <asset-chooser-map-layer
           name="Parcels"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
@@ -222,58 +224,66 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
     </main>
     <footer>
     </footer>
-    <!-- GIS Asset Chooser script tags -->
+    <!-- Include GIS Asset Chooser script tags in this order. Place them below the footer and before the closing body tag </body> -->
     <script src="asset-chooser.js"></script>
     <script src="asset-chooser-map-layer.js"></script>
     <script src="asset-chooser-container.js"></script>
   </body>
 </html>
-  ```
+```
 
 ### Place custom event listeners in parent application
 
-[isValidTrue event listener](#isvalidtrue-event-listener)
-[isValidFalse event listener](isvalidfalse-event-listener)
+- [isValidTrue event listener](#isvalidtrue-event-listener)
+- [isValidFalse event listener](isvalidfalse-event-listener)
 
-## isValidTrue event listener
+When assets are selected by a user they are added to an array 'chosenAssets'. When the selections in 'chosenAssets' meet the selection criteria, a custom event 'isValidTrue' is triggered. This event makes the 'chosenAssets' array available to the parent application. Use the 'isValidTrue' event listener to bring 'chosenAssets' into the parent application.
 
-### Use the custom event listener below in the parent application to receive 'chosenAssets' from the GIS Asset Chooser when asset eselection is valid (isValid = true)
+If after the 'isValidTrue' event has been triggered, assets are unselected, and the items within 'chosenAssets' no longer meet the selection criteria, a second custom event 'isValidFalse' is triggered. The 'isValidFalse' event listener can be used to handle any necssary logic that needs to run at that time. For example if when 'isValidTrue' fires, a button is enabled to submit 'chosenAssets', you would probably want to disable the button when 'isValidFalse' is triggered. You also might want to secure 'chosenAssets' so it is no longer available in the parent application.
+
+#### isValidTrue event listener
+
+Use the custom event listener below in the parent application to receive 'chosenAssets' from the GIS Asset Chooser when asset selection is valid (isValid = true)
 
 ```javascript
-// Custom event listener to receive chosenAssets from the asset chooser when asset eselection is valid (isValid = true)
+// Custom event listener to receive chosenAssets from the asset chooser when asset selection is valid (isValid = true)
 document.addEventListener("isValidTrue", function (event) {
   const chosenAssets = event.detail.chosenAssets;
-  // log chosenAssets to the console to verify that it was received
-  console.log("chosenAssets received:", chosenAssets);
+  // log chosenAssets to the console to verify that 'chosenAssets' is available to parent app
+  console.log("chosenAssets available to parent:", chosenAssets);
   // your logic here to handle chosenAssets within the parent application when isValid is true
 });
 ```
 
-## isValidFalse event listener
+#### isValidFalse event listener
 
-### Use the custom event listener below to handle when asset selection is not valid (isValid = false)
+Use the custom event listener below to handle when asset selection is not valid (isValid = false)
 
 ```javascript
-// Custom event listener for when isValid is false
-// recommended for integration with gis aset chooser - customize as needed
+// Custom event listener for when isValid is false (isValid = false)
+// Further customize as needed to fit your use case
 document.addEventListener("isValidFalse", function (event) {
   // your logic here to handle when isValid is false 
 });
 
 ```
 
-### Once received 'chosenAssets' can be used as needed within the parent application
+### Further customize event listeners to fit your use case
 
-### Some possible integration strategies include
+Once received 'chosenAssets' can be used as needed within the parent application. Customize the event listeners to fit your needs. The event listeners can also be used to handle any necessary changes to the user interface.
 
-1. store in a new variable scoped for the parent application  
+#### Some possible integration strategies include
+
+1. save chosen asset data to a new variable scoped for the parent application  
 2. use local storage to save 'chosenAssets'
 3. use a submit button to send or store 'chosenAssets' to desired location
 4. store to database
 5. use in an API call
-<!-- Other Ideas? -->
+6. change the user interface when isValid = true
+7. change the user interface when isValid = false
+8. your idea here
 
-### Example of using 'isValidTrue' event listener
+#### Example of using 'isValidTrue' event listener
 
 ```javascript
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
@@ -287,38 +297,14 @@ document.addEventListener("isValidTrue", function (event) {
 }); 2
 ```
 
-### Example of using 'isValidFalse' event listener
+#### Example of using 'isValidFalse' event listener
 
 ```javascript
 // Custom event listener for when isValid is false
-// recommended for integration with gis aset chooser - customize as needed
 // example of possible integration strategy with a submit button and local storage
 document.addEventListener("isValidFalse", function (event) {
   document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
   document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 0px 0px ";
   localStorage.removeItem("chosenAssets");
-});
-```
-
-## When you receive 'chosenAssets' in the parent application you may want to manipulate the data for use within the parent application
-
-```javascript
-// Custom event listener to receive chosenAssets from the asset chooser when isValid is true
-// recommended for integration with gis aset chooser - customize as needed
-document.addEventListener("isValidTrue", function (event) {
-  const chosenAssets = event.detail.chosenAssets;
-  console.log("chosenAssets received:", chosenAssets);
-  // possible integration strategy - manipulate 'chosenAssets' as needed for use within the parent app
-  // change properties to names used within the parent application
-  chosenAssets.forEach((asset) => {
-    const caseAsset = {
-      attributes: asset.assetAttributes,
-      id: asset.assetId,
-      sourceLayer: asset.layerName,
-      title: asset.assetLabel, 
-    }
-    caseAssets.push(caseAsset);
-    console.log("caseAssets:", caseAssets);
-   });
 });
 ```
