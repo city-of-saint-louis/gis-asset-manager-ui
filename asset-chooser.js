@@ -48,13 +48,11 @@ const renderSelectedAssetLabels = () => {
   selectedLayerAssetListArray.forEach((list) => {
     list.innerHTML = ""; // This clears the list
   });
-
   chosenAssets.forEach((asset) => {
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
       if (asset.layerId === selectedLayerAssetList.id) {
         const assetLabel = asset.assetLabel;
         const assetLabelListItem = document.createElement("li");
-
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
           ${assetLabel}
@@ -354,7 +352,7 @@ const initializeMap = () => {
         layerDataDiv.innerHTML += `
           <div 
             class="map-layer-data-container stat-container stat-medium"
-            aria-live="polite" aria-atomic="true"
+            
           >
             <div class="stat-title">
              <span >
@@ -372,8 +370,8 @@ const initializeMap = () => {
             <div>
               ${
                 minAssetsRequired === 0
-                  ? `<span id="${mapDataLayerId}-min-asset-required-message"><span class="label label-success">No selection required.</span></span>`
-                  : `<span id="${mapDataLayerId}-min-asset-required-message"><span class="label label-error">At least ${minAssetsRequired} required.</span></span>`
+                  ? `<span id="${mapDataLayerId}-min-asset-required-message" role="alert"><span class="label label-success">No selection required.</span></span>`
+                  : `<span id="${mapDataLayerId}-min-asset-required-message" role="alert"><span class="label label-error">At least ${minAssetsRequired} required.</span></span>`
               }
               ${
                 maxAssetsRequired > 0
@@ -507,3 +505,6 @@ const initializeMap = () => {
 };
 
 initializeMap();
+
+
+// aria-live="polite" aria-atomic="true"

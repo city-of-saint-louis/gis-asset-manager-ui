@@ -18,7 +18,6 @@ class AssetChooserContainerComponent extends HTMLElement {
        </p>
        <p 
          id="validity-message"
-         aria-live="polite" aria-atomic="true"
        >
        </p>
        <div class="row">
