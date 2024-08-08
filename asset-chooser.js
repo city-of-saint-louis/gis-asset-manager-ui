@@ -10,7 +10,9 @@ const chosenAssets = [];
 const allMapLayerIds = [];
 const layersWithNoSelectionRequired = [];
 const validLayers = [];
+// const baseToggleDiv = document.getElementById("baseToggleDiv");
 let isValid = false;
+
 
 // functions to build the map and provide functionality for the GIS Asset Chooser
 const selectFeatureLayer = () => {
@@ -287,8 +289,27 @@ const initializeMap = () => {
       "esri/views/MapView",
       "esri/layers/FeatureLayer",
       "esri/widgets/Search",
-    ], (Map, MapView, FeatureLayer, Search) => {
-      const map = new Map({ basemap: baseMap });
+      "esri/Basemap",
+      "esri/widgets/BasemapToggle",
+    ], (Map, MapView, FeatureLayer, Search, Basemap, BasemapToggle) => {
+
+      const highContrastLightBasemap = new Basemap({
+        portalItem: {
+          id: "084291b0ecad4588b8c8853898d72445"
+        },
+        title: "High contrast light theme",
+        id: "high-contrast-light"
+      });
+      
+      const highContrastDarkBasemap = new Basemap({
+        portalItem: {
+          id: "3e23478909194c54992eaaee78b5f754"
+        },
+        title: "High contrast dark theme",
+        id: "high-contrast-dark"
+      });
+
+      const map = new Map({ basemap: highContrastLightBasemap });
 
       const view = new MapView({
         map: map,
@@ -304,6 +325,18 @@ const initializeMap = () => {
       } else {
         view.ui.remove(searchWidget);
       }
+
+      const baseToggleWidget = new BasemapToggle({ 
+        view: view, 
+        nextBasemap: highContrastDarkBasemap, 
+        // container: baseToggleDiv 
+      });
+
+      view.ui.add(baseToggleWidget, "bottom-right");
+
+     
+
+
 
       mapLayersToAdd.forEach((mapLayer) => {
         const mapDataLayer = new FeatureLayer({

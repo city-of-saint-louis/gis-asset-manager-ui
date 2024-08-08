@@ -2,7 +2,6 @@ class AssetChooserContainerComponent extends HTMLElement {
   constructor() {
     super(); // always call super() first in the constructor for a custom web component
   }
-
   connectedCallback() {
     console.log("asset-chooser-container initialized");
     try {
@@ -23,6 +22,8 @@ class AssetChooserContainerComponent extends HTMLElement {
        <div class="row">
 	       <div class="col-md-7">
            <div id="viewDiv" style="width: 100%; height: 500px;">
+             <div id="baseToggleDiv"></div>
+           </div>
          </div>
        </div>
         <div class="col-md-5">
