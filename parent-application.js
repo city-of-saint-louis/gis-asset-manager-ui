@@ -14,12 +14,14 @@ document.addEventListener("isValidTrue", (event) => {
   // possible integration strategy with a submit button
   document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
   document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #538400";
+  document.getElementById("submit-chosen-assets-button").textContent = "Submit assets";
 });
 
 // Custom event listener for when isValid is false
 // recommended for integration with gis aset chooser - customize as needed
 // example of possible integration strategy with a submit button
 document.addEventListener("isValidFalse", (event) => {
+  document.getElementById("submit-chosen-assets-button").textContent = "Select assets";
   document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
   document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 0px 0px ";
   localStorage.removeItem("chosenAssets");

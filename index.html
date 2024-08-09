@@ -21,12 +21,13 @@
     <main style="padding: 1rem">
       <div style="padding-top: 2rem; padding-bottom: 2rem; text-align: center">
         <button
+          aria-live="polite"
           disabled
           id="submit-chosen-assets-button"
           onclick="submitChosenAssets(chosenAssets)"
           style="margin: 0 auto"
         >
-          Submit Chosen Assets
+          Select assets
         </button>
       </div>
       <asset-chooser-container
@@ -34,7 +35,7 @@
         hint="Click on the map to select required assets. Click again to unselect."
       >
         <asset-chooser-map-layer
-          name="Streets"
+          name="Street"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
           layer-asset-id-field-name="OBJECTID"
           minimum=1
@@ -44,7 +45,7 @@
         >
         </asset-chooser-map-layer>
         <asset-chooser-map-layer
-          name="Parcels"
+          name="Parcel"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
           minimum=1

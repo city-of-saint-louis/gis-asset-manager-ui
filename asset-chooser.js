@@ -13,10 +13,10 @@ const validLayers = [];
 // const baseToggleDiv = document.getElementById("baseToggleDiv");
 let isValid = false;
 
-
 // functions to build the map and provide functionality for the GIS Asset Chooser
 const selectFeatureLayer = () => {
   featureLayers.forEach((outerLayer) => {
+    const layerName = outerLayer.layerProperties.layerName;
     const selectLayersElements = document.querySelectorAll(".selectLayers");
     selectLayersElements.forEach((selectLayer) => {
       selectLayer.addEventListener("click", () => {
@@ -29,12 +29,14 @@ const selectFeatureLayer = () => {
             outerLayer.visible = false;
             spanElement.classList.remove("glyphicons-eye-close");
             spanElement.classList.add("glyphicons-eye-open");
-            spanElement.innerHTML = `<span class="sr-only">show layer</span>`;
+            spanElement.innerHTML = `<span class="sr-only">show ${layerName} layer</span>`;
+            selectLayer.setAttribute("aria-label", `show ${layerName} layer`);
           } else {
             outerLayer.visible = true;
             spanElement.classList.remove("glyphicons-eye-open");
             spanElement.classList.add("glyphicons-eye-close");
-            spanElement.innerHTML = `<span class="sr-only">hide layer</span>`;
+            spanElement.innerHTML = `<span class="sr-only">hide ${layerName} layer</span>`;
+            selectLayer.setAttribute("aria-label", `hide ${layerName} layer`);
           }
         }
       });
@@ -57,18 +59,23 @@ const renderSelectedAssetLabels = () => {
         const assetLabelListItem = document.createElement("li");
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
+          <span tabindex="0">
           ${assetLabel}
+          </span>
           <button
             class="pull-right link-button small-button red-button transparent-button remove-asset-btn"
           >
             <span class="glyphicons glyphicons-remove"></span>
             Remove
+            <span class="sr-only">${assetLabel}</span>
           </button>
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
 
         assetLabelListItem.addEventListener("click", () => {
           chosenAssets.forEach((asset) => {
+            console.log("asset", asset);
+            const layerName = asset.layerData.layerProperties.layerName;
             if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
               const listItemToRemove = document.getElementById(
@@ -82,8 +89,10 @@ const renderSelectedAssetLabels = () => {
               validateNumberofAssetsSelected();
               console.log("chosenAssets", chosenAssets);
               selectedLayerAssetListArray.forEach((list) => {
+                const layerName = list.getAttribute("data-layer-name");
+                console.log("list", list);
                 if (list.innerHTML === "") {
-                  list.innerHTML = `<li>None selected.</li>`;
+                  list.innerHTML = `<li tabindex="0">None selected <span class="sr-only">from ${layerName} layer</span></li>`;
                 }
               });
             }
@@ -92,10 +101,11 @@ const renderSelectedAssetLabels = () => {
       }
     });
   });
-
   selectedLayerAssetListArray.forEach((list) => {
+    const layerName = list.getAttribute("data-layer-name");
+    console.log("list", list);
     if (list.innerHTML === "") {
-      list.innerHTML = `<li>None selected.</li>`;
+      list.innerHTML = `<li tabindex="0">None selected <span class="sr-only">from ${layerName} layer</span></li>`;
     }
   });
 };
@@ -131,7 +141,7 @@ const validateNumberofAssetsSelected = () => {
     }
 
     if (layerAssetMin === 0 && totalLayerAssetsSelected > 0) {
-      minAssetMessageElement.innerHTML = `${totalLayerAssetsSelected} selected. None required.`;
+      minAssetMessageElement.innerHTML = `${totalLayerAssetsSelected} selected. None required`;
       minAssetMessageElement.classList.add("label", "label-success");
       isLayerValid = true;
       if (!validLayers.includes(layerId)) validLayers.push(layerId);
@@ -209,11 +219,11 @@ const renderValidityMessage = () => {
       ).length;
 
       if (layerAssetMin >= 0 && totalLayerAssetsSelected < layerAssetMin) {
-        makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName}</strong></span>, `;
+        makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName} Layer</strong></span>, `;
       }
 
       if (layerAssetMin >= 0 && totalLayerAssetsSelected >= layerAssetMin) {
-        makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName}</strong></span>, `;
+        makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName} Layer</strong></span>, `;
       }
     });
 
@@ -236,7 +246,7 @@ const renderValidityMessage = () => {
       "at least <strong>$1</strong>"
     );
 
-    validityMessage.innerHTML = `${makeMinimunRequireMessage}.`;
+    validityMessage.innerHTML = `${makeMinimunRequireMessage}`;
   }
 };
 
@@ -292,21 +302,20 @@ const initializeMap = () => {
       "esri/Basemap",
       "esri/widgets/BasemapToggle",
     ], (Map, MapView, FeatureLayer, Search, Basemap, BasemapToggle) => {
-
       const highContrastLightBasemap = new Basemap({
         portalItem: {
-          id: "084291b0ecad4588b8c8853898d72445"
+          id: "084291b0ecad4588b8c8853898d72445",
         },
         title: "High contrast light theme",
-        id: "high-contrast-light"
+        id: "high-contrast-light",
       });
-      
+
       const highContrastDarkBasemap = new Basemap({
         portalItem: {
-          id: "3e23478909194c54992eaaee78b5f754"
+          id: "3e23478909194c54992eaaee78b5f754",
         },
         title: "High contrast dark theme",
-        id: "high-contrast-dark"
+        id: "high-contrast-dark",
       });
 
       const map = new Map({ basemap: highContrastLightBasemap });
@@ -326,10 +335,10 @@ const initializeMap = () => {
         view.ui.remove(searchWidget);
       }
 
-      const baseToggleWidget = new BasemapToggle({ 
-        view: view, 
-        nextBasemap: highContrastDarkBasemap, 
-        // container: baseToggleDiv 
+      const baseToggleWidget = new BasemapToggle({
+        view: view,
+        nextBasemap: highContrastDarkBasemap,
+        // container: baseToggleDiv
       });
 
       view.ui.add(baseToggleWidget, "bottom-right");
@@ -376,43 +385,72 @@ const initializeMap = () => {
           secureChosenAssets();
         }
         renderValidityMessage();
-
+        const layerName = mapDataLayer.layerProperties.layerName;
         const layerDataDiv = document.getElementById("layer-data-div");
         layerDataDiv.innerHTML += `
           <div 
             class="map-layer-data-container stat-container stat-medium"
-            
           >
             <div class="stat-title">
-             <span >
-               <strong>${mapDataLayer.layerProperties.layerName}</strong>
+             <span tabindex="0">
+               <strong>${layerName} Layer</strong>
              </span>
-              <button class="selectLayers" att-layer-id="${
-                mapDataLayer.layerProperties.layerName
-              }-${mapDataLayer.id}"
-              >
+              <button class="selectLayers" att-layer-id="${layerName}-${mapDataLayer.id}"
+              aria-label="hide ${layerName} layer">
                 <span class="glyphicons glyphicons-eye-close">
-                  <span class="sr-only">hide layer</span>
                 </span>
               </button>
             </div>
-            <div>
+            <div aria-live="polite">
+            <span tabindex="0" class="sr-only">Asset selection requirements and status for ${layerName} layer"</span>
               ${
                 minAssetsRequired === 0
-                  ? `<span id="${mapDataLayerId}-min-asset-required-message"><span class="label label-success">No selection required.</span></span>`
-                  : `<span id="${mapDataLayerId}-min-asset-required-message"><span class="label label-error">At least ${minAssetsRequired} required.</span></span>`
+                  ? `
+                  <span tabindex="0" id="${mapDataLayerId}-min-asset-required-message">
+                    <span class="label label-success">
+                      No selection required
+                        <span class="sr-only">
+                          from ${layerName} layer
+                        </span>
+                    </span>
+                  </span>   
+                  `
+                  : 
+                  `
+                  <span tabindex="0" id="${mapDataLayerId}-min-asset-required-message">
+                    <span class="label label-error">
+                      At least ${minAssetsRequired} required
+                        <span class="sr-only">
+                           from ${layerName} layer
+                        </span>
+                    </span>
+                  </span>
+                  `
               }
               ${
                 maxAssetsRequired > 0
-                  ? `<span id="${mapDataLayerId}-max-asset-required-message"><span class="label label-default">Select a maximum of ${maxAssetsRequired}.</span></span>`
-                  : ``
+                  ? `
+                  <span tabindex="0" id="${mapDataLayerId}-max-asset-required-message">
+                    <span class="label label-default">Select a maximum of ${maxAssetsRequired}
+                      <span class="sr-only">
+                        from ${layerName} layer
+                      </span>
+                    </span>
+                  </span>`
+                  : 
+                  ``
               }
             </div>
-            <ul class="list-group highlighted-asset-data-list" id="${
+            <ul data-layer-name=${mapDataLayer.layerProperties.layerName} class="list-group highlighted-asset-data-list" id="${
               mapDataLayer.layerProperties.layerName
             }-${mapDataLayer.id}"
             >
-              <li>None selected.</li>
+              <li tabindex="0">
+                None selected
+                  <span class="sr-only">
+                    from ${layerName} layer
+                  </span>
+              </li>
             </ul>
           </div>
         `;
@@ -470,7 +508,7 @@ const initializeMap = () => {
                     .classList.add("label-error");
                   setTimeout(() => {
                     alert(
-                      `You have already selected the maximum of ${layerAssetMax} assets for ${graphic.layer.layerProperties.layerName}.`
+                      `You have already selected the maximum of ${layerAssetMax} assets from the ${graphic.layer.layerProperties.layerName} layer.`
                     );
                     document
                       .getElementById(
@@ -534,6 +572,5 @@ const initializeMap = () => {
 };
 
 initializeMap();
-
 
 // aria-live="polite" aria-atomic="true"
