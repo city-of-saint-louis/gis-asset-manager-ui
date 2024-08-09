@@ -25,12 +25,10 @@ class AssetChooserContainerComponent extends HTMLElement {
              <div id="baseToggleDiv"></div>
            </div>
          </div>
+         <div class="col-md-5">
+           <div id="layer-data-div" class="stat-group"></div>
+         </div>
        </div>
-        <div class="col-md-5">
-          <div id="layer-data-div" class="stat-group ">
-          </div>
-        </div>
-        </div>
       </section>
     `;
     } catch (e) {

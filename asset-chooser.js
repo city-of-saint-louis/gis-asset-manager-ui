@@ -334,10 +334,6 @@ const initializeMap = () => {
 
       view.ui.add(baseToggleWidget, "bottom-right");
 
-     
-
-
-
       mapLayersToAdd.forEach((mapLayer) => {
         const mapDataLayer = new FeatureLayer({
           url: mapLayer.layerClassUrl,
@@ -403,8 +399,8 @@ const initializeMap = () => {
             <div>
               ${
                 minAssetsRequired === 0
-                  ? `<span id="${mapDataLayerId}-min-asset-required-message" role="alert"><span class="label label-success">No selection required.</span></span>`
-                  : `<span id="${mapDataLayerId}-min-asset-required-message" role="alert"><span class="label label-error">At least ${minAssetsRequired} required.</span></span>`
+                  ? `<span id="${mapDataLayerId}-min-asset-required-message"><span class="label label-success">No selection required.</span></span>`
+                  : `<span id="${mapDataLayerId}-min-asset-required-message"><span class="label label-error">At least ${minAssetsRequired} required.</span></span>`
               }
               ${
                 maxAssetsRequired > 0
