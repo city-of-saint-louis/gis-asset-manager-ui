@@ -1,3 +1,4 @@
+// test
 // This file holds the logic that provides functionality for the GIS Asset Chooser.
 const defaultZoom = 12;
 const defaultCenterX = -90.25;
@@ -75,7 +76,7 @@ const renderSelectedAssetLabels = () => {
         assetLabelListItem.addEventListener("click", () => {
           chosenAssets.forEach((asset) => {
             console.log("asset", asset);
-            const layerName = asset.layerData.layerProperties.layerName;
+            // const layerName = asset.layerData.layerProperties.layerName;
             if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
               const listItemToRemove = document.getElementById(
