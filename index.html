@@ -38,8 +38,8 @@
           name="Street"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
           layer-asset-id-field-name="OBJECTID"
-          minimum=1
-          maximum=3
+          minimum=0
+          maximum=0
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
           min-scale=10000
         >
@@ -48,10 +48,10 @@
           name="Parcel"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
-          minimum=1
-          maximum=0
+          minimum=4
+          maximum=12
           label-mask="{SITEADDR}"
-          max-scale=10000
+          max-scale=0
         >
         </asset-chooser-map-layer>
       </asset-chooser-container>

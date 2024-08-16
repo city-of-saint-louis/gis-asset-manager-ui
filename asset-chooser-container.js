@@ -9,19 +9,20 @@ class AssetChooserContainerComponent extends HTMLElement {
       const hint = this.getAttribute("hint") || "";
       this.innerHTML = `
       <section class="stat-container">
-        <p>
+        <h3>
           <strong>${title}</strong>
-        </p>
-        <p>
-         ${hint}
-       </p>
+        </h3>
+        <h4>
+          ${hint}
+        </h4>
        <p 
          id="validity-message"
+         
        >
        </p>
        <div class="row">
 	       <div class="col-md-7">
-           <div tabindex="0" id="viewDiv" style="width: 100%; height: 500px;" aria-label="interactive map for selecting assets">
+           <div id="viewDiv" style="width: 100%; height: 500px;" aria-label="interactive map for selecting assets">
              <div id="baseToggleDiv"></div>
            </div>
          </div>

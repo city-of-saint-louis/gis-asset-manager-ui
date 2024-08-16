@@ -54,13 +54,14 @@ const renderSelectedAssetLabels = () => {
     list.innerHTML = ""; // This clears the list
   });
   chosenAssets.forEach((asset) => {
+    console.log(asset);
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
       if (asset.layerId === selectedLayerAssetList.id) {
         const assetLabel = asset.assetLabel;
         const assetLabelListItem = document.createElement("li");
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
-          <span tabindex="0">
+          <span>
           ${assetLabel}
           </span>
           <button
@@ -93,7 +94,7 @@ const renderSelectedAssetLabels = () => {
                 const layerName = list.getAttribute("data-layer-name");
                 console.log("list", list);
                 if (list.innerHTML === "") {
-                  list.innerHTML = `<li tabindex="0">None selected <span class="sr-only">from ${layerName} layer</span></li>`;
+                  list.innerHTML = `<li>None selected</li>`;
                 }
               });
             }
@@ -106,7 +107,7 @@ const renderSelectedAssetLabels = () => {
     const layerName = list.getAttribute("data-layer-name");
     console.log("list", list);
     if (list.innerHTML === "") {
-      list.innerHTML = `<li tabindex="0">None selected <span class="sr-only">from ${layerName} layer</span></li>`;
+      list.innerHTML = `<li>None selected</li>`;
     }
   });
 };
@@ -206,8 +207,10 @@ const renderValidityMessage = () => {
   if (isValid) {
     validityMessage.innerHTML = "Asset selection is valid for submission";
     validityMessage.classList.add("label", "label-success");
+    validityMessage.setAttribute("aria-live", "assertive");
   } else {
     validityMessage.classList.remove("label", "label-success");
+    validityMessage.removeAttribute("aria-live");
 
     featureLayers.forEach((mapLayer) => {
       const layerAssetMin = parseInt(
@@ -393,7 +396,7 @@ const initializeMap = () => {
             class="map-layer-data-container stat-container stat-medium"
           >
             <div class="stat-title">
-             <span tabindex="0">
+             <span>
                <strong>${layerName} Layer</strong>
              </span>
               <button class="selectLayers" att-layer-id="${layerName}-${mapDataLayer.id}"
@@ -402,28 +405,26 @@ const initializeMap = () => {
                 </span>
               </button>
             </div>
-            <div aria-live="polite">
-            <span tabindex="0" class="sr-only">Asset selection requirements and status for ${layerName} layer"</span>
+            
+            <div
+            aria-live="polite"
+              aria-atomic="true"
+            >
+              <span class="sr-only">Asset selection requirements and status for ${layerName} layer</span>
               ${
                 minAssetsRequired === 0
                   ? `
-                  <span tabindex="0" id="${mapDataLayerId}-min-asset-required-message">
+                  <span id="${mapDataLayerId}-min-asset-required-message">
                     <span class="label label-success">
                       No selection required
-                        <span class="sr-only">
-                          from ${layerName} layer
-                        </span>
                     </span>
                   </span>   
                   `
                   : 
                   `
-                  <span tabindex="0" id="${mapDataLayerId}-min-asset-required-message">
+                  <span id="${mapDataLayerId}-min-asset-required-message">
                     <span class="label label-error">
                       At least ${minAssetsRequired} required
-                        <span class="sr-only">
-                           from ${layerName} layer
-                        </span>
                     </span>
                   </span>
                   `
@@ -431,26 +432,23 @@ const initializeMap = () => {
               ${
                 maxAssetsRequired > 0
                   ? `
-                  <span tabindex="0" id="${mapDataLayerId}-max-asset-required-message">
+                  <span id="${mapDataLayerId}-max-asset-required-message">
                     <span class="label label-default">Select a maximum of ${maxAssetsRequired}
-                      <span class="sr-only">
-                        from ${layerName} layer
-                      </span>
                     </span>
                   </span>`
                   : 
                   ``
               }
             </div>
-            <ul data-layer-name=${mapDataLayer.layerProperties.layerName} class="list-group highlighted-asset-data-list" id="${
-              mapDataLayer.layerProperties.layerName
-            }-${mapDataLayer.id}"
+            <ul 
+              data-layer-name=${mapDataLayer.layerProperties.layerName} 
+              class="list-group highlighted-asset-data-list" 
+              id="${ mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}"
+              aria-live="polite"
+              aria-atomic="true"
             >
-              <li tabindex="0">
+              <li>
                 None selected
-                  <span class="sr-only">
-                    from ${layerName} layer
-                  </span>
               </li>
             </ul>
           </div>
