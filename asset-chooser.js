@@ -54,7 +54,6 @@ const renderSelectedAssetLabels = () => {
     list.innerHTML = ""; // This clears the list
   });
   chosenAssets.forEach((asset) => {
-    console.log(asset);
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
       if (asset.layerId === selectedLayerAssetList.id) {
         const assetLabel = asset.assetLabel;
@@ -76,7 +75,6 @@ const renderSelectedAssetLabels = () => {
 
         assetLabelListItem.addEventListener("click", () => {
           chosenAssets.forEach((asset) => {
-            console.log("asset", asset);
             // const layerName = asset.layerData.layerProperties.layerName;
             if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
@@ -92,7 +90,6 @@ const renderSelectedAssetLabels = () => {
               console.log("chosenAssets", chosenAssets);
               selectedLayerAssetListArray.forEach((list) => {
                 const layerName = list.getAttribute("data-layer-name");
-                console.log("list", list);
                 if (list.innerHTML === "") {
                   list.innerHTML = `<li>None selected</li>`;
                 }
@@ -104,8 +101,6 @@ const renderSelectedAssetLabels = () => {
     });
   });
   selectedLayerAssetListArray.forEach((list) => {
-    const layerName = list.getAttribute("data-layer-name");
-    console.log("list", list);
     if (list.innerHTML === "") {
       list.innerHTML = `<li>None selected</li>`;
     }
