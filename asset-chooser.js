@@ -75,7 +75,6 @@ const renderSelectedAssetLabels = () => {
 
         assetLabelListItem.addEventListener("click", () => {
           chosenAssets.forEach((asset) => {
-            // const layerName = asset.layerData.layerProperties.layerName;
             if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
               const listItemToRemove = document.getElementById(
@@ -89,7 +88,6 @@ const renderSelectedAssetLabels = () => {
               validateNumberofAssetsSelected();
               console.log("chosenAssets", chosenAssets);
               selectedLayerAssetListArray.forEach((list) => {
-                const layerName = list.getAttribute("data-layer-name");
                 if (list.innerHTML === "") {
                   list.innerHTML = `<li>None selected</li>`;
                 }
