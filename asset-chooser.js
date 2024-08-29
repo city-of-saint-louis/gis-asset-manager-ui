@@ -1,4 +1,3 @@
-// test
 // This file holds the logic that provides functionality for the GIS Asset Chooser.
 const defaultZoom = 12;
 const defaultCenterX = -90.25;
@@ -14,7 +13,7 @@ const validLayers = [];
 // const baseToggleDiv = document.getElementById("baseToggleDiv");
 let isValid = false;
 
-// functions to build the map and provide functionality for the GIS Asset Chooser
+// functions to provide functionality for the GIS Asset Chooser
 const selectFeatureLayer = () => {
   featureLayers.forEach((outerLayer) => {
     const layerName = outerLayer.layerProperties.layerName;
@@ -335,7 +334,6 @@ const initializeMap = () => {
       const baseToggleWidget = new BasemapToggle({
         view: view,
         nextBasemap: highContrastDarkBasemap,
-        // container: baseToggleDiv
       });
 
       view.ui.add(baseToggleWidget, "bottom-right");
@@ -384,15 +382,51 @@ const initializeMap = () => {
         renderValidityMessage();
         const layerName = mapDataLayer.layerProperties.layerName;
         const layerDataDiv = document.getElementById("layer-data-div");
+        const layerMinScale = mapDataLayer.minScale;
+        const layerMaxScale = mapDataLayer.maxScale;
+
+        // Listen for the layerview-create event
+        view.on("layerview-create", function (event) {
+          if (event.layer === mapDataLayer) {
+            // Watch for changes in the visibleAtCurrentScale property
+            event.layerView.watch(
+              "visibleAtCurrentScale",
+              function (visibleAtCurrentScale) {
+                const zoomAlertSpan = document.getElementById(
+                  `${layerName}-zoom-alert-span`
+                );
+                if (zoomAlertSpan) {
+                  if (visibleAtCurrentScale) {
+                    zoomAlertSpan.textContent = ``;
+                  } else {
+                    zoomAlertSpan.textContent = `${
+                      layerMinScale > 0 ? `Zoom in to see this layer.` : ""
+                    } ${
+                      layerMaxScale > 0 ? `Zoom out to see this layer.` : ""
+                    }`;
+                  }
+                }
+              }
+            );
+          }
+        });
+
         layerDataDiv.innerHTML += `
           <div 
             class="map-layer-data-container stat-container stat-medium"
           >
-            <div class="stat-title">
+            <div class="stat-title" id="${layerName}-layer-selected-asset-container">
              <span>
                <strong>${layerName} Layer</strong>
+               <br><br/>
+               <span id="${layerName}-zoom-alert-span" style="height: 14px; line-height: 14px; display: inline-block">
+                ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
+               </span>
              </span>
-              <button class="selectLayers" att-layer-id="${layerName}-${mapDataLayer.id}"
+            
+              <button class="selectLayers" att-layer-id="${layerName}-${
+          mapDataLayer.id
+        }"
               aria-label="hide ${layerName} layer">
                 <span class="glyphicons glyphicons-eye-close">
                 </span>
@@ -413,8 +447,7 @@ const initializeMap = () => {
                     </span>
                   </span>   
                   `
-                  : 
-                  `
+                  : `
                   <span id="${mapDataLayerId}-min-asset-required-message">
                     <span class="label label-error">
                       At least ${minAssetsRequired} required
@@ -429,14 +462,13 @@ const initializeMap = () => {
                     <span class="label label-default">Select a maximum of ${maxAssetsRequired}
                     </span>
                   </span>`
-                  : 
-                  ``
+                  : ``
               }
             </div>
             <ul 
-              data-layer-name=${mapDataLayer.layerProperties.layerName} 
+              data-layer-name=${layerName} 
               class="list-group highlighted-asset-data-list" 
-              id="${ mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}"
+              id="${layerName}-${mapDataLayer.id}"
               aria-live="polite"
               aria-atomic="true"
             >
@@ -564,5 +596,3 @@ const initializeMap = () => {
 };
 
 initializeMap();
-
-// aria-live="polite" aria-atomic="true"
