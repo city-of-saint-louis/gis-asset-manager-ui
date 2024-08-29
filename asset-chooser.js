@@ -419,7 +419,7 @@ const initializeMap = () => {
              <span>
                <strong>${layerName} Layer</strong>
                <br><br/>
-               <span id="${layerName}-zoom-alert-span" style="height: 14px; line-height: 14px; display: inline-block">
+               <span id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
                 ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
                </span>
              </span>
