@@ -14,7 +14,7 @@ const validLayers = [];
 let isValid = false;
 
 // functions to provide functionality for the GIS Asset Chooser
-const selectFeatureLayer = () => {
+const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
     const layerName = outerLayer.layerProperties.layerName;
     const selectLayersElements = document.querySelectorAll(".selectLayers");
@@ -339,6 +339,7 @@ const initializeMap = () => {
       view.ui.add(baseToggleWidget, "bottom-right");
 
       mapLayersToAdd.forEach((mapLayer) => {
+        console.log("mapLayer", mapLayer);
         const mapDataLayer = new FeatureLayer({
           url: mapLayer.layerClassUrl,
           minScale: mapLayer.minScale,
@@ -354,6 +355,7 @@ const initializeMap = () => {
             maxScale: mapLayer.maxScale,
           },
         });
+        console.log("mapDataLayer", mapDataLayer);
         mapDataLayer.outFields = ["*"];
         mapDataLayer.popupEnabled = false;
         const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
@@ -490,9 +492,10 @@ const initializeMap = () => {
         `;
       });
 
-      selectFeatureLayer();
+      hideOrShowLayer();
       view.on("click", (event) => {
         view.hitTest(event).then((response) => {
+          console.log("response", response);
           if (!response.results[0].layer.layerProperties) {
             alert(
               "Please try again. There are no assets to select at that location."
