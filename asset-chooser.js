@@ -392,18 +392,30 @@ const initializeMap = () => {
             event.layerView.watch(
               "visibleAtCurrentScale",
               function (visibleAtCurrentScale) {
+                const showHideLayerBtn = document.getElementById(`${layerName}-show-hide-layer-btn`);
+                const layerEyeBtnSpan = document.getElementById(`${layerName}-eye-btn-span`);
                 const zoomAlertSpan = document.getElementById(
                   `${layerName}-zoom-alert-span`
                 );
                 if (zoomAlertSpan) {
                   if (visibleAtCurrentScale) {
+                    // if layer is visible at current scale
                     zoomAlertSpan.textContent = ``;
+                    showHideLayerBtn.style.backgroundColor = "#f8f8f8";
+                    layerEyeBtnSpan.classList.add("glyphicons-eye-close");
+                    layerEyeBtnSpan.classList.remove("glyphicons-eye-open");
+                    showHideLayerBtn.removeAttribute("disabled");
                   } else {
+                    // if layer is not visible at current scale
                     zoomAlertSpan.textContent = `${
                       layerMinScale > 0 ? `Zoom in to see this layer.` : ""
                     } ${
                       layerMaxScale > 0 ? `Zoom out to see this layer.` : ""
                     }`;
+                    showHideLayerBtn.style.backgroundColor = "#dfdfdf";
+                    layerEyeBtnSpan.classList.add("glyphicons-eye-open");
+                    layerEyeBtnSpan.classList.remove("glyphicons-eye-close");
+                    showHideLayerBtn.setAttribute("disabled", true);
                   }
                 }
               }
@@ -424,11 +436,9 @@ const initializeMap = () => {
                </span>
              </span>
             
-              <button class="selectLayers" att-layer-id="${layerName}-${
-          mapDataLayer.id
-        }"
-              aria-label="hide ${layerName} layer">
-                <span class="glyphicons glyphicons-eye-close">
+              <button id="${layerName}-show-hide-layer-btn" class="selectLayers" att-layer-id="${layerName}-${mapDataLayer.id}"
+              aria-label="hide ${layerName} layer" ${layerMinScale > 0 ? 'disabled' : ''} style="background-color: ${layerMinScale > 0 ? '#dfdfdf' : ''}">
+                <span class="${layerMinScale > 0 ? 'glyphicons glyphicons-eye-open' : 'glyphicons glyphicons-eye-close'}" id="${layerName}-eye-btn-span">
                 </span>
               </button>
             </div>
