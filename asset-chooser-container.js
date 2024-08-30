@@ -23,7 +23,6 @@ class AssetChooserContainerComponent extends HTMLElement {
        <div class="row">
 	       <div class="col-md-7">
            <div id="viewDiv" style="width: 100%; height: 500px;" aria-label="interactive map for selecting assets">
-             <div id="baseToggleDiv"></div>
            </div>
          </div>
          <div class="col-md-5">
