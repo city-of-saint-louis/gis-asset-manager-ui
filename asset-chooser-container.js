@@ -17,7 +17,6 @@ class AssetChooserContainerComponent extends HTMLElement {
         </h3>
        <p 
          id="validity-message"
-         
        >
        </p>
        <div class="row">
