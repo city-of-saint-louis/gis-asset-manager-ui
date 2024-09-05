@@ -43,7 +43,17 @@
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
           min-scale=10000
         >
-        </asset-chooser-map-layer>
+        </asset-chooser-map-layer> -->
+        <asset-chooser-map-layer
+        name="Street"
+        layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
+        layer-asset-id-field-name="OBJECTID"
+        minimum=1
+        maximum=6
+        label-mask="{FULLNAME}"
+        min-scale=10000
+      >
+      </asset-chooser-map-layer>
         <asset-chooser-map-layer
           name="Parcel"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
@@ -53,7 +63,7 @@
           label-mask="{SITEADDR}"
           min-scale=20000
         >
-        </asset-chooser-map-layer> -->
+        </asset-chooser-map-layer> 
         <asset-chooser-map-layer
           name="Neighborhood"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/City_Neighborhoods/FeatureServer"

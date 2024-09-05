@@ -325,13 +325,13 @@ const initializeMap = () => {
 
       console.log("featureLayers", featureLayers);
 
-      // const searchWidget = new Search({ view: view });
+      const searchWidget1 = new Search({ view: view });
 
-      // if (showSearch === "true" || showSearch === true) {
-      //   view.ui.add(searchWidget, { position: "top-right" });
-      // } else {
-      //   view.ui.remove(searchWidget);
-      // }
+      if (showSearch === "true" || showSearch === true) {
+        view.ui.add(searchWidget1, { position: "top-right" });
+      } else {
+        view.ui.remove(searchWidget1);
+      }
 
       const baseToggleWidget = new BasemapToggle({
         view: view,
@@ -354,6 +354,8 @@ const initializeMap = () => {
             maximumAssetsRequired: mapLayer.maximumSelections,
             minScale: mapLayer.minScale,
             maxScale: mapLayer.maxScale,
+            searchFields: mapLayer.labelMask,
+            displayField: mapLayer.labelMask,
           },
         });
         mapDataLayer.outFields = ["*"];
@@ -504,16 +506,28 @@ const initializeMap = () => {
         `;
       });
 
-    
-
       // Create an array of sources based on the feature layers
       const searchSources = featureLayers.map((layer) => {
         console.log("layer", layer);
+        // Clean the search fields and display field
+  const searchFields = layer.layerProperties.searchFields
+  .replace(/\{|\}/g, '') // Remove all curly braces
+  .replace(/\s+/g, ' '); // Replace multiple spaces with a single space
+
+const displayField = layer.layerProperties.displayField
+  .replace(/\{|\}/g, '') // Remove all curly braces
+  .replace(/\s+/g, ' '); // Replace multiple spaces with a single space
         return {
           layer: layer,
-          searchFields: ["NHD_NAME"], // Adjust this to the appropriate search field(s) for your layers
-          displayField: "NHD_NAME", // Adjust this to the appropriate display field for your layers
-          exactMatch: true,
+          searchFields: [
+            layer.layerProperties.searchFields
+              .replace(/^\{|\}$/g, "")
+              .replace(/\s+/g, " "),
+          ],
+          displayField: layer.layerProperties.displayField
+            .replace(/^\{|\}$/g, "")
+            .replace(/\s+/g, " "),
+          exactMatch: false,
           outFields: ["*"],
           name: layer.layerProperties.layerName,
           placeholder: `Search ${layer.layerProperties.layerName}`,
@@ -522,16 +536,17 @@ const initializeMap = () => {
 
       console.log("searchSources", searchSources);
 
-      const searchWidget = new Search({ 
+      const searchWidget = new Search({
         view: view,
         sources: searchSources,
         includeDefaultSources: false,
+        allPlaceholder: "Search for assets",
       });
 
       // Listen to the search-complete event
-searchWidget.on("search-complete", (event) => {
-  console.log("search-complete", event);
-});
+      searchWidget.on("search-complete", (event) => {
+        console.log("search-complete", event);
+      });
 
       if (showSearch === "true" || showSearch === true) {
         view.ui.add(searchWidget, { position: "top-right" });
