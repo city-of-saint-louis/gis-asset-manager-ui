@@ -9,12 +9,12 @@ class AssetChooserContainerComponent extends HTMLElement {
       const hint = this.getAttribute("hint") || "";
       this.innerHTML = `
       <section class="stat-container">
-        <h3>
+        <h2>
           <strong>${title}</strong>
-        </h3>
-        <h4>
+        </h2>
+        <h3>
           ${hint}
-        </h4>
+        </h3>
        <p 
          id="validity-message"
          

@@ -324,6 +324,13 @@ const initializeMap = () => {
       });
 
       const searchWidget = new Search({ view: view });
+// console.log("featureLayers", featureLayers);
+//       const searchWidget = new Search({ 
+//        view: view,
+//        includeDefaultSources: false,
+//        sources:
+
+//       });
 
       if (showSearch === "true" || showSearch === true) {
         view.ui.add(searchWidget, { position: "top-right" });

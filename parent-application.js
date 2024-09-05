@@ -54,7 +54,7 @@ const convertChosenAssets = () => {
       AssetId: asset.assetId,
       AssetIdType: asset.assetIdType,
       AssetType: asset.layerName,
-      FeatureAssetId: asset.assetAttributes.GUID,
+      FeatureAssetId: asset.assetId,
       FeatureClass: asset.layerName,
       Location: asset.assetLabel,
     };
