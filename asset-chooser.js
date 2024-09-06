@@ -509,24 +509,21 @@ const initializeMap = () => {
       // Create an array of sources based on the feature layers
       const searchSources = featureLayers.map((layer) => {
         console.log("layer", layer);
-        // Clean the search fields and display field
-  const searchFields = layer.layerProperties.searchFields
-  .replace(/\{|\}/g, '') // Remove all curly braces
-  .replace(/\s+/g, ' '); // Replace multiple spaces with a single space
 
-const displayField = layer.layerProperties.displayField
-  .replace(/\{|\}/g, '') // Remove all curly braces
-  .replace(/\s+/g, ' '); // Replace multiple spaces with a single space
+        const searchFields = layer.layerProperties.searchFields
+          .replace(/\{|\}/g, "") // Remove all curly braces
+          .replace(/\s+/g, " "); // Replace multiple spaces with a single space
+
+        const displayField = layer.layerProperties.displayField
+          .replace(/\{|\}/g, "") // Remove all curly braces
+          .replace(/\s+/g, " "); // Replace multiple spaces with a single space
+
+        console.log("searchFields", searchFields);
+        console.log("displayField", displayField);
         return {
           layer: layer,
-          searchFields: [
-            layer.layerProperties.searchFields
-              .replace(/^\{|\}$/g, "")
-              .replace(/\s+/g, " "),
-          ],
-          displayField: layer.layerProperties.displayField
-            .replace(/^\{|\}$/g, "")
-            .replace(/\s+/g, " "),
+          searchFields: [searchFields],
+          displayField: displayField,
           exactMatch: false,
           outFields: ["*"],
           name: layer.layerProperties.layerName,
