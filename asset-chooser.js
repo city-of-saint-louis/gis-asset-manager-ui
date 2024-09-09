@@ -7,7 +7,7 @@ const defaultShowSearch = true;
 const mapLayersToAdd = [];
 const featureLayers = [];
 const chosenAssets = [];
-const chosenAssetFormDta = [];
+const chosenAssetFormData = [];
 const allMapLayerIds = [];
 const layersWithNoSelectionRequired = [];
 const validLayers = [];
@@ -64,6 +64,7 @@ const renderSelectedAssetLabels = () => {
           ${assetLabel}
           </span>
           <button
+            id="remove-${asset.internalAssetId}-btn"
             class="pull-right link-button small-button red-button transparent-button remove-asset-btn"
           >
             <span class="glyphicons glyphicons-remove"></span>
@@ -73,7 +74,11 @@ const renderSelectedAssetLabels = () => {
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
 
-        assetLabelListItem.addEventListener("click", () => {
+        const removeAssetBtn = document.getElementById(
+          `remove-${asset.internalAssetId}-btn`
+        );
+        
+        removeAssetBtn.addEventListener("click", () => {
           chosenAssets.forEach((asset) => {
             if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
@@ -298,16 +303,7 @@ const initializeMap = () => {
       "esri/widgets/Search",
       "esri/Basemap",
       "esri/widgets/BasemapToggle",
-      "esri/core/reactiveUtils",
-    ], (
-      Map,
-      MapView,
-      FeatureLayer,
-      Search,
-      Basemap,
-      BasemapToggle,
-      reactiveUtils
-    ) => {
+    ], (Map, MapView, FeatureLayer, Search, Basemap, BasemapToggle) => {
       const highContrastLightBasemap = new Basemap({
         portalItem: {
           id: "084291b0ecad4588b8c8853898d72445",
@@ -444,13 +440,13 @@ const initializeMap = () => {
             class="map-layer-data-container stat-container stat-medium"
           >
             <div class="stat-title" id="${layerName}-layer-selected-asset-container">
-             <span>
-               <strong>${layerName} Layer</strong>
+             <div>
+               <span> <strong>${layerName} Layer</strong></span>
                <br><br/>
                <span id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
                 ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
                </span>
-             </span>
+             </div>
             
               <button id="${layerName}-show-hide-layer-btn" class="selectLayers" att-layer-id="${layerName}-${
           mapDataLayer.id

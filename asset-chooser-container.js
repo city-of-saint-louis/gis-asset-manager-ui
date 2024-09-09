@@ -5,12 +5,14 @@ class AssetChooserContainerComponent extends HTMLElement {
   }
   connectedCallback() {
     console.log("asset-chooser-container initialized");
-
+   
     const handleAccomodationButtonClick = () => {
       console.log("accomodation button clicked");
       const assetChooserInterface = document.getElementById(
         "asset-chooser-interface"
       );
+
+      const accomodationButton = document.getElementById("accomodation-button");
     
       if (this.isOriginalState) {
         console.log("featureLayers", featureLayers);
@@ -38,7 +40,12 @@ class AssetChooserContainerComponent extends HTMLElement {
         const htmlContent = `
          <form id="submit-asset-form">
            ${inputsContent}
-           <button id="accomodation-asset-submission-button" type="submit">Submit</button>
+           <button 
+             id="accomodation-asset-submission-button" 
+             type="submit" 
+             class="link-button">
+               Submit
+           </button>
          </form>
         `;
 
@@ -47,6 +54,8 @@ class AssetChooserContainerComponent extends HTMLElement {
         // Add event listener for the form submission
         const submitAssetForm = document.getElementById("submit-asset-form");
         submitAssetForm.addEventListener("submit", handleAssetFormSubmit);
+
+        accomodationButton.textContent = "Cancel";
 
       } else {
         location.reload(); // reload the page
@@ -60,11 +69,11 @@ class AssetChooserContainerComponent extends HTMLElement {
       const formData = new FormData(event.target);
       formData.forEach((value, key) => {
         // console.log(`${key}: ${value}`);
-        chosenAssetFormDta.push({ key, value });
-        console.log("chosenAssetFormDta", chosenAssetFormDta);
+        chosenAssetFormData.push({ key, value });
+        console.log("chosenAssetFormDta", chosenAssetFormData);
       });
-      isValid = true;
-      console.log("isValid", isValid);
+      // isValid = true;
+      // console.log("isValid", isValid);
     };
 
     try {
@@ -75,6 +84,8 @@ class AssetChooserContainerComponent extends HTMLElement {
         <div id="accomodation-button-container">
           <button 
             id="accomodation-button"
+            class="link-button"
+            aria-label="Click here to select assets if you are using a screen reader and are unable to select assets on the map."
           >
             Accomodation
           </button>
@@ -86,20 +97,17 @@ class AssetChooserContainerComponent extends HTMLElement {
           <h4>
             ${hint}
           </h4>
-        <p 
-          id="validity-message"
-        >
-        </p>
-        <div class="row">
-          <div class="col-md-7">
-            <div id="viewDiv" style="width: 100%; height: 500px;" aria-label="interactive map for selecting assets" >
+          <p id="validity-message"></p>
+          <div class="row">
+            <div class="col-md-7">
+              <div id="viewDiv" style="width: 100%; height: 500px;" aria-label="interactive map for selecting assets" >
             </div>
           </div>
-          <div class="col-md-5">
-            <div id="layer-data-div" class="stat-group"></div>
+            <div class="col-md-5">
+              <div id="layer-data-div" class="stat-group"></div>
+            </div>
           </div>
         </div>
-       </div>
       </section>
       `;
 
