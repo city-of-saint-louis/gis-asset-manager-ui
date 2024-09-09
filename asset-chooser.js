@@ -7,6 +7,7 @@ const defaultShowSearch = true;
 const mapLayersToAdd = [];
 const featureLayers = [];
 const chosenAssets = [];
+const chosenAssetFormDta = [];
 const allMapLayerIds = [];
 const layersWithNoSelectionRequired = [];
 const validLayers = [];
@@ -297,7 +298,16 @@ const initializeMap = () => {
       "esri/widgets/Search",
       "esri/Basemap",
       "esri/widgets/BasemapToggle",
-    ], (Map, MapView, FeatureLayer, Search, Basemap, BasemapToggle) => {
+      "esri/core/reactiveUtils",
+    ], (
+      Map,
+      MapView,
+      FeatureLayer,
+      Search,
+      Basemap,
+      BasemapToggle,
+      reactiveUtils
+    ) => {
       const highContrastLightBasemap = new Basemap({
         portalItem: {
           id: "084291b0ecad4588b8c8853898d72445",
@@ -394,8 +404,12 @@ const initializeMap = () => {
             event.layerView.watch(
               "visibleAtCurrentScale",
               function (visibleAtCurrentScale) {
-                const showHideLayerBtn = document.getElementById(`${layerName}-show-hide-layer-btn`);
-                const layerEyeBtnSpan = document.getElementById(`${layerName}-eye-btn-span`);
+                const showHideLayerBtn = document.getElementById(
+                  `${layerName}-show-hide-layer-btn`
+                );
+                const layerEyeBtnSpan = document.getElementById(
+                  `${layerName}-eye-btn-span`
+                );
                 const zoomAlertSpan = document.getElementById(
                   `${layerName}-zoom-alert-span`
                 );
@@ -438,9 +452,17 @@ const initializeMap = () => {
                </span>
              </span>
             
-              <button id="${layerName}-show-hide-layer-btn" class="selectLayers" att-layer-id="${layerName}-${mapDataLayer.id}"
-              aria-label="hide ${layerName} layer" ${layerMinScale > 0 ? 'disabled' : ''} style="background-color: ${layerMinScale > 0 ? '#dfdfdf' : ''}">
-                <span class="${layerMinScale > 0 ? 'glyphicons glyphicons-eye-open' : 'glyphicons glyphicons-eye-close'}" id="${layerName}-eye-btn-span">
+              <button id="${layerName}-show-hide-layer-btn" class="selectLayers" att-layer-id="${layerName}-${
+          mapDataLayer.id
+        }"
+              aria-label="hide ${layerName} layer" ${
+          layerMinScale > 0 ? "disabled" : ""
+        } style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}">
+                <span class="${
+                  layerMinScale > 0
+                    ? "glyphicons glyphicons-eye-open"
+                    : "glyphicons glyphicons-eye-close"
+                }" id="${layerName}-eye-btn-span">
                 </span>
               </button>
             </div>

@@ -11,23 +11,60 @@ class AssetChooserContainerComponent extends HTMLElement {
       const assetChooserInterface = document.getElementById(
         "asset-chooser-interface"
       );
-      const accomodationButton = document.getElementById("accomodation-button");
+    
       if (this.isOriginalState) {
         console.log("featureLayers", featureLayers);
-        // Generate the HTML content
-        const htmlContent = featureLayers
+        // Generate the HTML content for inputs
+        const inputsContent = featureLayers
           .map((layer) => {
-            return `<span>${layer.layerProperties.layerName}</span>`;
+            return `
+             <div>
+              <label>${layer.layerProperties.layerName}</label>
+              <br>
+              <input
+                size="60"
+                type="text"
+                name="${layer.layerProperties.layerName}"
+                id="${layer.layerProperties.layerName}"
+                value=""
+                placeholder="Enter any ${layer.layerProperties.layerName} assets required for your request."
+              />
+             </div>
+            `;
           })
           .join("");
 
-          document.getElementById("asset-chooser-interface").innerHTML = htmlContent; 
+        // Combine inputs with a single form and submit button
+        const htmlContent = `
+         <form id="submit-asset-form">
+           ${inputsContent}
+           <button id="accomodation-asset-submission-button" type="submit">Submit</button>
+         </form>
+        `;
 
+        assetChooserInterface.innerHTML = htmlContent;
+
+        // Add event listener for the form submission
+        const submitAssetForm = document.getElementById("submit-asset-form");
+        submitAssetForm.addEventListener("submit", handleAssetFormSubmit);
 
       } else {
         location.reload(); // reload the page
       }
       this.isOriginalState = !this.isOriginalState; // toggle the state
+    };
+
+    const handleAssetFormSubmit = (event) => {
+      event.preventDefault();
+      console.log("form submitted");
+      const formData = new FormData(event.target);
+      formData.forEach((value, key) => {
+        // console.log(`${key}: ${value}`);
+        chosenAssetFormDta.push({ key, value });
+        console.log("chosenAssetFormDta", chosenAssetFormDta);
+      });
+      isValid = true;
+      console.log("isValid", isValid);
     };
 
     try {
@@ -74,6 +111,15 @@ class AssetChooserContainerComponent extends HTMLElement {
           handleAccomodationButtonClick
         );
       }
+
+      // Add event listener for the form submission
+      // const assetChooserInterface = this.querySelector("#asset-chooser-interface");
+      // if (assetChooserInterface) {
+      //   assetChooserInterface.addEventListener(
+      //     "submit",
+      //     handleAssetFormSubmit
+      //   );
+      // }
     } catch (e) {
       console.error(e);
       document.getElementById(
