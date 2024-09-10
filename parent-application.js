@@ -22,7 +22,7 @@ document.addEventListener("isValidTrue", (event) => {
 // recommended for integration with gis aset chooser - customize as needed
 // example of possible integration strategy with a submit button
 document.addEventListener("isValidFalse", (event) => {
-  document.getElementById("submit-chosen-assets-button").textContent = "Select assets";
+  document.getElementById("submit-chosen-assets-button").textContent = "Submit Selected Assets";
   document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
   document.getElementById("submit-chosen-assets-button").classList.add("disabled-button");
   // document.getElementById("submit-chosen-assets-button").classList.remove("link-button");

@@ -89,7 +89,6 @@ class AssetChooserContainerComponent extends HTMLElement {
       const hint = this.getAttribute("hint") || "";
       this.innerHTML = `
       <section class="stat-container">
-       
         <div id="asset-chooser-interface">
           <h2>
             <strong>${title}</strong>
@@ -97,15 +96,16 @@ class AssetChooserContainerComponent extends HTMLElement {
           <h3>
             ${hint}
           </h3>
-           <div id="accomodation-button-container">
-          <button 
-            id="accomodation-button"
-            class="link-button"
-            aria-label="Click here to select assets if you are using a screen reader and are unable to select assets on the map."
-          >
-            Accomodation
-          </button>
-        </div>
+          <h4>Please click the buttton below if you are unable to select assets on the map.</h4>
+          <div id="accomodation-button-container">
+            <button 
+              id="accomodation-button"
+              class="link-button"
+              aria-label="Click here to select assets if you are using a screen reader and are unable to select assets on the map."
+            >
+              Accessible Option
+            </button>
+          </div>
           <p id="validity-message"></p>
           <div class="row">
             <div class="col-md-7">
@@ -129,14 +129,6 @@ class AssetChooserContainerComponent extends HTMLElement {
         );
       }
 
-      // Add event listener for the form submission
-      // const assetChooserInterface = this.querySelector("#asset-chooser-interface");
-      // if (assetChooserInterface) {
-      //   assetChooserInterface.addEventListener(
-      //     "submit",
-      //     handleAssetFormSubmit
-      //   );
-      // }
     } catch (e) {
       console.error(e);
       document.getElementById(
