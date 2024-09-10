@@ -7,6 +7,7 @@ const defaultShowSearch = true;
 const mapLayersToAdd = [];
 const featureLayers = [];
 const chosenAssets = [];
+const chosenAssetFormData = [];
 const allMapLayerIds = [];
 const layersWithNoSelectionRequired = [];
 const validLayers = [];
@@ -14,7 +15,7 @@ const validLayers = [];
 let isValid = false;
 
 // functions to provide functionality for the GIS Asset Chooser
-const selectFeatureLayer = () => {
+const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
     const layerName = outerLayer.layerProperties.layerName;
     const selectLayersElements = document.querySelectorAll(".selectLayers");
@@ -63,6 +64,7 @@ const renderSelectedAssetLabels = () => {
           ${assetLabel}
           </span>
           <button
+            id="remove-${asset.internalAssetId}-btn"
             class="pull-right link-button small-button red-button transparent-button remove-asset-btn"
           >
             <span class="glyphicons glyphicons-remove"></span>
@@ -72,7 +74,11 @@ const renderSelectedAssetLabels = () => {
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
 
-        assetLabelListItem.addEventListener("click", () => {
+        const removeAssetBtn = document.getElementById(
+          `remove-${asset.internalAssetId}-btn`
+        );
+        
+        removeAssetBtn.addEventListener("click", () => {
           chosenAssets.forEach((asset) => {
             if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
@@ -392,8 +398,12 @@ const initializeMap = () => {
             event.layerView.watch(
               "visibleAtCurrentScale",
               function (visibleAtCurrentScale) {
-                const showHideLayerBtn = document.getElementById(`${layerName}-show-hide-layer-btn`);
-                const layerEyeBtnSpan = document.getElementById(`${layerName}-eye-btn-span`);
+                const showHideLayerBtn = document.getElementById(
+                  `${layerName}-show-hide-layer-btn`
+                );
+                const layerEyeBtnSpan = document.getElementById(
+                  `${layerName}-eye-btn-span`
+                );
                 const zoomAlertSpan = document.getElementById(
                   `${layerName}-zoom-alert-span`
                 );
@@ -428,17 +438,25 @@ const initializeMap = () => {
             class="map-layer-data-container stat-container stat-medium"
           >
             <div class="stat-title" id="${layerName}-layer-selected-asset-container">
-             <span>
-               <strong>${layerName} Layer</strong>
+             <div>
+               <span> <strong>${layerName} Layer</strong></span>
                <br><br/>
                <span id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
                 ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
                </span>
-             </span>
+             </div>
             
-              <button id="${layerName}-show-hide-layer-btn" class="selectLayers" att-layer-id="${layerName}-${mapDataLayer.id}"
-              aria-label="hide ${layerName} layer" ${layerMinScale > 0 ? 'disabled' : ''} style="background-color: ${layerMinScale > 0 ? '#dfdfdf' : ''}">
-                <span class="${layerMinScale > 0 ? 'glyphicons glyphicons-eye-open' : 'glyphicons glyphicons-eye-close'}" id="${layerName}-eye-btn-span">
+              <button id="${layerName}-show-hide-layer-btn" class="selectLayers" att-layer-id="${layerName}-${
+          mapDataLayer.id
+        }"
+              aria-label="hide ${layerName} layer" ${
+          layerMinScale > 0 ? "disabled" : ""
+        } style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}">
+                <span class="${
+                  layerMinScale > 0
+                    ? "glyphicons glyphicons-eye-open"
+                    : "glyphicons glyphicons-eye-close"
+                }" id="${layerName}-eye-btn-span">
                 </span>
               </button>
             </div>
@@ -490,7 +508,7 @@ const initializeMap = () => {
         `;
       });
 
-      selectFeatureLayer();
+      hideOrShowLayer();
       view.on("click", (event) => {
         view.hitTest(event).then((response) => {
           if (!response.results[0].layer.layerProperties) {
