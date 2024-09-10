@@ -329,15 +329,13 @@ const initializeMap = () => {
         container: document.querySelector("#viewDiv"),
       });
 
-      console.log("featureLayers", featureLayers);
+      const searchWidget = new Search({ view: view });
 
-      // const searchWidget = new Search({ view: view });
-
-      // if (showSearch === "true" || showSearch === true) {
-      //   view.ui.add(searchWidget, { position: "top-right" });
-      // } else {
-      //   view.ui.remove(searchWidget);
-      // }
+      if (showSearch === "true" || showSearch === true) {
+        view.ui.add(searchWidget, { position: "top-right" });
+      } else {
+        view.ui.remove(searchWidget);
+      }
 
       const baseToggleWidget = new BasemapToggle({
         view: view,
@@ -347,7 +345,6 @@ const initializeMap = () => {
       view.ui.add(baseToggleWidget, "bottom-right");
 
       mapLayersToAdd.forEach((mapLayer) => {
-        console.log("mapLayer", mapLayer);
         const mapDataLayer = new FeatureLayer({
           url: mapLayer.layerClassUrl,
           minScale: mapLayer.minScale,
@@ -363,7 +360,6 @@ const initializeMap = () => {
             maxScale: mapLayer.maxScale,
           },
         });
-        console.log("mapDataLayer", mapDataLayer);
         mapDataLayer.outFields = ["*"];
         mapDataLayer.popupEnabled = false;
         const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;

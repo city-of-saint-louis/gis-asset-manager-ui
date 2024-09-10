@@ -7,15 +7,11 @@ class AssetChooserContainerComponent extends HTMLElement {
     console.log("asset-chooser-container initialized");
    
     const handleAccomodationButtonClick = () => {
-      console.log("accomodation button clicked");
       const assetChooserInterface = document.getElementById(
         "asset-chooser-interface"
       );
-
       const accomodationButton = document.getElementById("accomodation-button");
-    
       if (this.isOriginalState) {
-        console.log("featureLayers", featureLayers);
         // Generate the HTML content for inputs
         const inputsContent = featureLayers
           .map((layer) => {
