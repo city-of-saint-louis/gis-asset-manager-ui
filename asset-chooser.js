@@ -7,6 +7,7 @@ const defaultShowSearch = true;
 const mapLayersToAdd = [];
 const featureLayers = [];
 const chosenAssets = [];
+const chosenAssetFormData = [];
 const allMapLayerIds = [];
 const layersWithNoSelectionRequired = [];
 const validLayers = [];
@@ -14,7 +15,7 @@ const validLayers = [];
 let isValid = false;
 
 // functions to provide functionality for the GIS Asset Chooser
-const showOrHideLayer = () => {
+const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
     const layerName = outerLayer.layerProperties.layerName;
     const selectLayersElements = document.querySelectorAll(".selectLayers");
@@ -63,6 +64,7 @@ const renderSelectedAssetLabels = () => {
           ${assetLabel}
           </span>
           <button
+            id="remove-${asset.internalAssetId}-btn"
             class="pull-right link-button small-button red-button transparent-button remove-asset-btn"
           >
             <span class="glyphicons glyphicons-remove"></span>
@@ -72,7 +74,11 @@ const renderSelectedAssetLabels = () => {
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
 
-        assetLabelListItem.addEventListener("click", () => {
+        const removeAssetBtn = document.getElementById(
+          `remove-${asset.internalAssetId}-btn`
+        );
+        
+        removeAssetBtn.addEventListener("click", () => {
           chosenAssets.forEach((asset) => {
             if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
@@ -341,6 +347,7 @@ const initializeMap = () => {
       view.ui.add(baseToggleWidget, "bottom-right");
 
       mapLayersToAdd.forEach((mapLayer) => {
+        console.log("mapLayer", mapLayer);
         const mapDataLayer = new FeatureLayer({
           url: mapLayer.layerClassUrl,
           minScale: mapLayer.minScale,
@@ -356,6 +363,7 @@ const initializeMap = () => {
             maxScale: mapLayer.maxScale,
           },
         });
+        console.log("mapDataLayer", mapDataLayer);
         mapDataLayer.outFields = ["*"];
         mapDataLayer.popupEnabled = false;
         const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
@@ -434,13 +442,13 @@ const initializeMap = () => {
             class="map-layer-data-container stat-container stat-medium"
           >
             <div class="stat-title" id="${layerName}-layer-selected-asset-container">
-             <span>
-               <strong>${layerName} Layer</strong>
+             <div>
+               <span> <strong>${layerName} Layer</strong></span>
                <br><br/>
                <span id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
                 ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
                </span>
-             </span>
+             </div>
             
               <button id="${layerName}-show-hide-layer-btn" class="selectLayers" att-layer-id="${layerName}-${
           mapDataLayer.id
@@ -504,42 +512,7 @@ const initializeMap = () => {
         `;
       });
 
-    
-
-      // Create an array of sources based on the feature layers
-      const searchSources = featureLayers.map((layer) => {
-        console.log("layer", layer);
-        return {
-          layer: layer,
-          searchFields: ["NHD_NAME"], // Adjust this to the appropriate search field(s) for your layers
-          displayField: "NHD_NAME", // Adjust this to the appropriate display field for your layers
-          exactMatch: true,
-          outFields: ["*"],
-          name: layer.layerProperties.layerName,
-          placeholder: `Search ${layer.layerProperties.layerName}`,
-        };
-      });
-
-      console.log("searchSources", searchSources);
-
-      const searchWidget = new Search({ 
-        view: view,
-        sources: searchSources,
-        includeDefaultSources: false,
-      });
-
-      // Listen to the search-complete event
-searchWidget.on("search-complete", (event) => {
-  console.log("search-complete", event);
-});
-
-      if (showSearch === "true" || showSearch === true) {
-        view.ui.add(searchWidget, { position: "top-right" });
-      } else {
-        view.ui.remove(searchWidget);
-      }
-
-      showOrHideLayer();
+      hideOrShowLayer();
       view.on("click", (event) => {
         view.hitTest(event).then((response) => {
           if (!response.results[0].layer.layerProperties) {

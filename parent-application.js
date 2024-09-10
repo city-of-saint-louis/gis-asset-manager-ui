@@ -12,7 +12,9 @@ document.addEventListener("isValidTrue", (event) => {
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
   // possible integration strategy with a submit button
   document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
-  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #538400";
+  document.getElementById("submit-chosen-assets-button").classList.remove("disabled-button");
+  // document.getElementById("submit-chosen-assets-button").classList.add("link-button");
+  // document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #538400";
   document.getElementById("submit-chosen-assets-button").textContent = "Submit assets";
 });
 
@@ -22,7 +24,9 @@ document.addEventListener("isValidTrue", (event) => {
 document.addEventListener("isValidFalse", (event) => {
   document.getElementById("submit-chosen-assets-button").textContent = "Select assets";
   document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
-  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 0px 0px ";
+  document.getElementById("submit-chosen-assets-button").classList.add("disabled-button");
+  // document.getElementById("submit-chosen-assets-button").classList.remove("link-button");
+  // document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 0px 0px ";
   localStorage.removeItem("chosenAssets");
 });
 
