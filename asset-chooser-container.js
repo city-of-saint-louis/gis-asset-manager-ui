@@ -17,20 +17,22 @@ class AssetChooserContainerComponent extends HTMLElement {
       if (this.isOriginalState) {
         console.log("featureLayers", featureLayers);
         // Generate the HTML content for inputs
-        const inputsContent = featureLayers
-          .map((layer) => {
+        const inputsContent = featureLayers.map((layer) => {
+          console.log("layer", layer);
+          const isRequired = layer.layerProperties.minimumAssetsRequired >= 1 ? 'required' : '';
             return `
              <div>
-              <label>${layer.layerProperties.layerName}</label>
-              <br>
-              <input
-                size="60"
-                type="text"
-                name="${layer.layerProperties.layerName}"
-                id="${layer.layerProperties.layerName}"
-                value=""
-                placeholder="Enter any ${layer.layerProperties.layerName} assets required for your request."
-              />
+               <label>${layer.layerProperties.layerName}</label>
+               <br>
+               <input
+                 size="60"
+                 type="text"
+                 name="${layer.layerProperties.layerName}"
+                 id="${layer.layerProperties.layerName}"
+                 value=""
+                 placeholder="Enter any ${layer.layerProperties.layerName} assets required for your request."
+                 ${isRequired}
+               />
              </div>
             `;
           })
@@ -38,24 +40,27 @@ class AssetChooserContainerComponent extends HTMLElement {
 
         // Combine inputs with a single form and submit button
         const htmlContent = `
+         <div>
+           <h2>Enter information on the assets related to your request</h2>
+           <h3>Please be as complete as possible</h3>
+         </div>
          <form id="submit-asset-form">
            ${inputsContent}
            <button 
              id="accomodation-asset-submission-button" 
              type="submit" 
-             class="link-button">
-               Submit
+             class="link-button"
+           >
+             Submit
            </button>
          </form>
         `;
 
         assetChooserInterface.innerHTML = htmlContent;
-
         // Add event listener for the form submission
         const submitAssetForm = document.getElementById("submit-asset-form");
         submitAssetForm.addEventListener("submit", handleAssetFormSubmit);
-
-        accomodationButton.textContent = "Cancel";
+        accomodationButton.textContent = "Back To Map";
 
       } else {
         location.reload(); // reload the page
@@ -68,12 +73,15 @@ class AssetChooserContainerComponent extends HTMLElement {
       console.log("form submitted");
       const formData = new FormData(event.target);
       formData.forEach((value, key) => {
-        // console.log(`${key}: ${value}`);
-        chosenAssetFormData.push({ key, value });
-        console.log("chosenAssetFormDta", chosenAssetFormData);
+      // console.log(`${key}: ${value}`);
+      chosenAssetFormData.push({ key, value });
+      console.log("chosenAssetFormData", chosenAssetFormData);
       });
-      // isValid = true;
+      isValid = true;
       // console.log("isValid", isValid);
+
+      // Clear the form
+      event.target.reset();
     };
 
     try {
@@ -81,7 +89,15 @@ class AssetChooserContainerComponent extends HTMLElement {
       const hint = this.getAttribute("hint") || "";
       this.innerHTML = `
       <section class="stat-container">
-        <div id="accomodation-button-container">
+       
+        <div id="asset-chooser-interface">
+          <h2>
+            <strong>${title}</strong>
+          </h2>
+          <h3>
+            ${hint}
+          </h3>
+           <div id="accomodation-button-container">
           <button 
             id="accomodation-button"
             class="link-button"
@@ -90,13 +106,6 @@ class AssetChooserContainerComponent extends HTMLElement {
             Accomodation
           </button>
         </div>
-        <div id="asset-chooser-interface">
-          <h3>
-            <strong>${title}</strong>
-          </h3>
-          <h4>
-            ${hint}
-          </h4>
           <p id="validity-message"></p>
           <div class="row">
             <div class="col-md-7">
