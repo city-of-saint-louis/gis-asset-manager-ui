@@ -61,7 +61,7 @@ const renderSelectedAssetLabels = () => {
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
           <span>
-          ${assetLabel}
+            ${assetLabel}
           </span>
           <button
             id="remove-${asset.internalAssetId}-btn"
