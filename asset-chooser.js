@@ -513,7 +513,6 @@ const initializeMap = () => {
       hideOrShowLayer();
       view.on("click", (event) => {
         view.hitTest(event).then((response) => {
-          console.log("response", response);
           if (!response.results[0].layer.layerProperties) {
             alert(
               "Please try again. There are no assets to select at that location."
