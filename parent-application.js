@@ -6,10 +6,13 @@ const caseAssets = [];
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
 // recommended for integration with gis aset chooser - customize as needed
 document.addEventListener("isValidTrue", (event) => {
+  console.log('chosenAssetFormData', event.detail.chosenAssetFormData);
   const chosenAssets = event.detail.chosenAssets;
+  const chosenAssetFormData = event.detail.chosenAssetFormData;
   console.log("isValidTrue event, chosenAssets available to parent app:", event, chosenAssets);
   // possible integration strategy using local storage
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
+  localStorage.setItem("chosenAssetFormData", JSON.stringify(chosenAssetFormData));
   // possible integration strategy with a submit button
   document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
   document.getElementById("submit-chosen-assets-button").classList.remove("disabled-button");
@@ -42,11 +45,25 @@ const submitChosenAssets = (chosenAssets) => {
 // Function to display chosen assets
 const displayChosenAssets = () => {
   const chosenAssets = JSON.parse(localStorage.getItem("chosenAssets") || '[]');
+  if (chosenAssets.length === 0) {
+    const chosenAssetFormData = JSON.parse(localStorage.getItem("chosenAssetFormData") || '[]');
+    if (chosenAssetFormData){
+      chosenAssetFormData.map((data) => {
+        console.log("data:", data);
+        const chosenAssetData = document.createElement("p");
+        chosenAssetData.textContent = `${data.key}: ${data.value ? data.value : "No asset data provided"}`;
+        document.getElementById("chosen-assets-display-div").appendChild(chosenAssetData);
+      });
+    }
+  } 
   chosenAssets.map((asset) => {
+    console.log("asset:", asset);
     const chosenAssetLabel = document.createElement("p");
     chosenAssetLabel.textContent = asset.assetLabel;
     document.getElementById("chosen-assets-display-div").appendChild(chosenAssetLabel);
   });
+
+  
 };
 
 // Function to manipulate 'chosenAssets' data for use within parent application
