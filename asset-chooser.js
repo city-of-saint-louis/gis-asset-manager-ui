@@ -13,7 +13,6 @@ const layersWithNoSelectionRequired = [];
 const validLayers = [];
 // const baseToggleDiv = document.getElementById("baseToggleDiv");
 let isValid = false;
-console.log('chosenAssetFormData', chosenAssetFormData);
 // functions to provide functionality for the GIS Asset Chooser
 const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
@@ -91,7 +90,6 @@ const renderSelectedAssetLabels = () => {
               );
               chosenAssets.splice(hightlightToRemove, 1);
               validateNumberofAssetsSelected();
-              console.log("chosenAssets", chosenAssets);
               selectedLayerAssetListArray.forEach((list) => {
                 if (list.innerHTML === "") {
                   list.innerHTML = `<li>None selected</li>`;
@@ -195,7 +193,6 @@ const validateAssetSelection = () => {
     // Secure the chosenAssets from parent application when isValid is false
     secureChosenAssets();
   }
-  console.log("isValid", isValid);
 };
 
 const renderValidityMessage = () => {
@@ -275,7 +272,6 @@ captureMapLayers();
 
 // initilize the map using the map layers provided
 const initializeMap = () => {
-  console.log("chosenAssets", chosenAssets);
   try {
     const zoom =
       document.querySelector("asset-chooser-container").getAttribute("zoom") ||
@@ -354,11 +350,9 @@ const initializeMap = () => {
         }
         if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
           isValid = true;
-          console.log("isValid", isValid);
           dispatchChosenAssets(chosenAssets);
         } else {
           isValid = false;
-          console.log("isValid", isValid);
           secureChosenAssets();
         }
         renderValidityMessage();
@@ -565,7 +559,6 @@ const initializeMap = () => {
                   highlightSelect: highlightedSelection,
                 };
                 chosenAssets.push(chosenAsset);
-                console.log("chosenAssets", chosenAssets);
                 renderSelectedAssetLabels();
                 validateNumberofAssetsSelected();
               });
@@ -586,7 +579,6 @@ const initializeMap = () => {
               chosenAssets.splice(hightlightToRemove, 1);
               renderSelectedAssetLabels();
               validateNumberofAssetsSelected();
-              console.log("chosenAssets", chosenAssets);
             }
           }
         });

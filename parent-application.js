@@ -6,18 +6,14 @@ const caseAssets = [];
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
 // recommended for integration with gis aset chooser - customize as needed
 document.addEventListener("isValidTrue", (event) => {
-  console.log('chosenAssetFormData', event.detail.chosenAssetFormData);
   const chosenAssets = event.detail.chosenAssets;
   const chosenAssetFormData = event.detail.chosenAssetFormData;
-  console.log("isValidTrue event, chosenAssets available to parent app:", event, chosenAssets);
   // possible integration strategy using local storage
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
   localStorage.setItem("chosenAssetFormData", JSON.stringify(chosenAssetFormData));
   // possible integration strategy with a submit button
   document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
   document.getElementById("submit-chosen-assets-button").classList.remove("disabled-button");
-  // document.getElementById("submit-chosen-assets-button").classList.add("link-button");
-  // document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #538400";
   document.getElementById("submit-chosen-assets-button").textContent = "Submit assets";
 });
 
@@ -28,8 +24,6 @@ document.addEventListener("isValidFalse", (event) => {
   document.getElementById("submit-chosen-assets-button").textContent = "Submit Selected Assets";
   document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
   document.getElementById("submit-chosen-assets-button").classList.add("disabled-button");
-  // document.getElementById("submit-chosen-assets-button").classList.remove("link-button");
-  // document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 0px 0px ";
   localStorage.removeItem("chosenAssets");
 });
 
@@ -49,7 +43,6 @@ const displayChosenAssets = () => {
     const chosenAssetFormData = JSON.parse(localStorage.getItem("chosenAssetFormData") || '[]');
     if (chosenAssetFormData){
       chosenAssetFormData.map((data) => {
-        console.log("data:", data);
         const chosenAssetData = document.createElement("p");
         chosenAssetData.textContent = `${data.key}: ${data.value ? data.value : "No asset data provided"}`;
         document.getElementById("chosen-assets-display-div").appendChild(chosenAssetData);
@@ -57,7 +50,6 @@ const displayChosenAssets = () => {
     }
   } 
   chosenAssets.map((asset) => {
-    console.log("asset:", asset);
     const chosenAssetLabel = document.createElement("p");
     chosenAssetLabel.textContent = asset.assetLabel;
     document.getElementById("chosen-assets-display-div").appendChild(chosenAssetLabel);

@@ -4,12 +4,9 @@ class AssetChooserContainerComponent extends HTMLElement {
     this.isOriginalState = true; // flag to track the state of the interface
   }
   connectedCallback() {
-    console.log("asset-chooser-container initialized");
-    console.log('chosenAssetFormData', chosenAssetFormData);
     const generateInputsContent = () => {
       return featureLayers
         .map((layer) => {
-          console.log("layer", layer);
           const isRequired =
             layer.layerProperties.minimumAssetsRequired >= 1
               ? "required"
@@ -37,12 +34,10 @@ class AssetChooserContainerComponent extends HTMLElement {
       if (chosenAssets.length > 0) {
         // remove assets from chosenAssets array
         chosenAssets.splice(0, chosenAssets.length);
-        console.log("chosenAssets", chosenAssets);
       }
       if (chosenAssetFormData.length > 0) {
         // remove assets from chosenAssetFormData array
         chosenAssetFormData.splice(0, chosenAssetFormData.length);
-        console.log("chosenAssetFormData", chosenAssetFormData);
       }
       const assetChooserInterface = document.getElementById(
         "asset-chooser-interface"
@@ -82,9 +77,7 @@ class AssetChooserContainerComponent extends HTMLElement {
     };
 
     const handleCancelSelectionsClick = () => {
-      console.log("cancel selections clicked");
       chosenAssetFormData.splice(0, chosenAssetFormData.length);
-      console.log("chosenAssetFormData", chosenAssetFormData);
       const inputsContent = generateInputsContent();
       document.getElementById("asset-form-container").innerHTML = `
       <h2>Enter the assets you require for your request</h2>
@@ -101,7 +94,6 @@ class AssetChooserContainerComponent extends HTMLElement {
          </form>
          `;
       isValid = false;
-      console.log("isValid", isValid);
       const customEvent = new CustomEvent("isValidFalse", {
         detail: { chosenAssets: [], chosenAssetFormData },
         bubbles: true,
@@ -114,15 +106,11 @@ class AssetChooserContainerComponent extends HTMLElement {
 
     const handleAssetFormSubmit = (event) => {
       event.preventDefault();
-      console.log("form submitted");
       const formData = new FormData(event.target);
       formData.forEach((value, key) => {
-      // console.log(`${key}: ${value}`);
-      chosenAssetFormData.push({ key, value });
-      console.log("chosenAssetFormData", chosenAssetFormData);
+        chosenAssetFormData.push({ key, value });
       });
       isValid = true;
-      console.log("isValid", isValid);
       // Dispatch custom event when isValid becomes true
       if (isValid) {
       const customEvent = new CustomEvent("isValidTrue", {
