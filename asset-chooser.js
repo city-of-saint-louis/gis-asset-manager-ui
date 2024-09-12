@@ -13,7 +13,7 @@ const layersWithNoSelectionRequired = [];
 const validLayers = [];
 // const baseToggleDiv = document.getElementById("baseToggleDiv");
 let isValid = false;
-
+console.log('chosenAssetFormData', chosenAssetFormData);
 // functions to provide functionality for the GIS Asset Chooser
 const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
@@ -61,7 +61,7 @@ const renderSelectedAssetLabels = () => {
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
           <span>
-          ${assetLabel}
+            ${assetLabel}
           </span>
           <button
             id="remove-${asset.internalAssetId}-btn"
@@ -254,7 +254,7 @@ const renderValidityMessage = () => {
 
 // Dispatch the chosenAssets to the parent application
 const dispatchChosenAssets = (chosenAssets) => {
-  const event = new CustomEvent("isValidTrue", { detail: { chosenAssets } });
+  const event = new CustomEvent("isValidTrue", { detail: { chosenAssets, chosenAssetFormData: [] } });
   document.dispatchEvent(event);
 };
 
