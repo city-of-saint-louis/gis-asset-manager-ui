@@ -5,60 +5,75 @@ class AssetChooserContainerComponent extends HTMLElement {
   }
   connectedCallback() {
     console.log("asset-chooser-container initialized");
-
+    console.log('chosenAssetFormData', chosenAssetFormData);
+    const generateInputsContent = () => {
+      return featureLayers
+        .map((layer) => {
+          console.log("layer", layer);
+          const isRequired =
+            layer.layerProperties.minimumAssetsRequired >= 1
+              ? "required"
+              : "";
+          return `
+           <div>
+            <label>${layer.layerProperties.layerName}</label>
+            <br>
+            <input
+              style="margin: 5px;"
+              size="60"
+              type="text"
+              name="${layer.layerProperties.layerName}"
+              id="${layer.layerProperties.layerName}"
+              value=""
+              placeholder="Enter any ${layer.layerProperties.layerName} assets required for your request."
+              ${isRequired}
+            />
+           </div>
+          `;
+        })
+        .join("");
+    };
     const handleAccomodationButtonClick = () => {
+      if (chosenAssets.length > 0) {
+        // remove assets from chosenAssets array
+        chosenAssets.splice(0, chosenAssets.length);
+        console.log("chosenAssets", chosenAssets);
+      }
+      if (chosenAssetFormData.length > 0) {
+        // remove assets from chosenAssetFormData array
+        chosenAssetFormData.splice(0, chosenAssetFormData.length);
+        console.log("chosenAssetFormData", chosenAssetFormData);
+      }
       const assetChooserInterface = document.getElementById(
         "asset-chooser-interface"
       );
       const accomodationButton = document.getElementById("accomodation-button");
+      const buttonHint = document.getElementById("button-hint");
       if (this.isOriginalState) {
+        buttonHint.textContent = "Please click the button below to switch back to the map.";
         // Generate the HTML content for inputs
-        const inputsContent = featureLayers
-          .map((layer) => {
-            console.log("layer", layer);
-            const isRequired =
-              layer.layerProperties.minimumAssetsRequired >= 1
-                ? "required"
-                : "";
-            return `
-             <div>
-              <label>${layer.layerProperties.layerName}</label>
-              <br>
-              <input
-                size="60"
-                type="text"
-                name="${layer.layerProperties.layerName}"
-                id="${layer.layerProperties.layerName}"
-                value=""
-                placeholder="Enter any ${layer.layerProperties.layerName} assets required for your request."
-                ${isRequired}
-              />
-             </div>
-            `;
-          })
-          .join("");
-
+        const inputsContent = generateInputsContent();
         // Combine inputs with a single form and submit button
         const htmlContent = `
+        <div id="asset-form-container">
          <h2>Enter the assets you require for your request</h2>
          <h3>Please provide as much information as you can.</h3>
          <form id="submit-asset-form">
            ${inputsContent}
-           <button 
+           <button
+             style="margin-top: 5px;" 
              id="accomodation-asset-submission-button" 
              type="submit" 
              class="link-button">
-               Submit
+               Confirm Asset Information
            </button>
          </form>
+         </div>
         `;
-
         assetChooserInterface.innerHTML = htmlContent;
-
         // Add event listener for the form submission
         const submitAssetForm = document.getElementById("submit-asset-form");
         submitAssetForm.addEventListener("submit", handleAssetFormSubmit);
-
         accomodationButton.textContent = "Switch Back To Map";
       } else {
         location.reload(); // reload the page
@@ -66,25 +81,82 @@ class AssetChooserContainerComponent extends HTMLElement {
       this.isOriginalState = !this.isOriginalState; // toggle the state
     };
 
+    const handleCancelSelectionsClick = () => {
+      console.log("cancel selections clicked");
+      chosenAssetFormData.splice(0, chosenAssetFormData.length);
+      console.log("chosenAssetFormData", chosenAssetFormData);
+      const inputsContent = generateInputsContent();
+      document.getElementById("asset-form-container").innerHTML = `
+      <h2>Enter the assets you require for your request</h2>
+         <h3>Please provide as much information as you can.</h3>
+         <form id="submit-asset-form">
+           ${inputsContent}
+           <button
+             style="margin-top: 5px;" 
+             id="accomodation-asset-submission-button" 
+             type="submit" 
+             class="link-button">
+               Confirm Asset Information
+           </button>
+         </form>
+         `;
+      isValid = false;
+      console.log("isValid", isValid);
+      const customEvent = new CustomEvent("isValidFalse", {
+        detail: { chosenAssets: [], chosenAssetFormData },
+        bubbles: true,
+      });
+      document.dispatchEvent(customEvent);
+       // Re-add event listener for the form submission
+       const submitAssetForm = document.getElementById("submit-asset-form");
+       submitAssetForm.addEventListener("submit", handleAssetFormSubmit);
+    };
+
     const handleAssetFormSubmit = (event) => {
       event.preventDefault();
       console.log("form submitted");
       const formData = new FormData(event.target);
       formData.forEach((value, key) => {
-        // console.log(`${key}: ${value}`);
-        chosenAssetFormData.push({ key, value });
-        console.log("chosenAssetFormDta", chosenAssetFormData);
+      // console.log(`${key}: ${value}`);
+      chosenAssetFormData.push({ key, value });
+      console.log("chosenAssetFormData", chosenAssetFormData);
       });
-      // isValid = true;
-      // console.log("isValid", isValid);
+      isValid = true;
+      console.log("isValid", isValid);
+      // Dispatch custom event when isValid becomes true
+      if (isValid) {
+      const customEvent = new CustomEvent("isValidTrue", {
+        detail: { chosenAssets: [], chosenAssetFormData },
+        bubbles: true,
+      });
+      document.dispatchEvent(customEvent);
+      }
+      // Clear the form
+      event.target.reset();
+      document.getElementById("asset-form-container").innerHTML = `
+      <h2>Thank you</h2>
+      <h3>The asset information has been added to your case. Please continue.</h3>
+      <button
+        id="cancel-asset-selection-button"
+        class="link-button"
+      >
+       Cancel Selections
+      </button>
+      `;
+      // Add event listener for the dynamically created cancel button
+      const cancelSelectionsButton = this.querySelector("#cancel-asset-selection-button");
+      if (cancelSelectionsButton) {
+        cancelSelectionsButton.addEventListener(
+          "click",
+          handleCancelSelectionsClick
+        );
+      }
     };
-
     try {
       const title = this.getAttribute("title") || "";
       const hint = this.getAttribute("hint") || "";
       this.innerHTML = `
       <section class="stat-container">
-       
         <div id="asset-chooser-interface">
           <h2>
             <strong>${title}</strong>
@@ -92,7 +164,6 @@ class AssetChooserContainerComponent extends HTMLElement {
           <h3>
             ${hint}
           </h3>
-          
           <p id="validity-message"></p>
           <div class="row">
             <div class="col-md-7">
@@ -105,7 +176,7 @@ class AssetChooserContainerComponent extends HTMLElement {
           </div>
         </div>
          <div id="accomodation-button-container">
-         <h4>Please click the button below if you are unable to use the map.</h4>
+         <h4 id="button-hint">Please click the button below if you are unable to use the map.</h4>
           <button 
             id="accomodation-button"
             class="link-button"
@@ -116,8 +187,7 @@ class AssetChooserContainerComponent extends HTMLElement {
         </div>
       </section>
       `;
-
-      // Add event listener for the button click
+      // Add event listener for the accomodation button click
       const accomodationButton = this.querySelector("#accomodation-button");
       if (accomodationButton) {
         accomodationButton.addEventListener(
