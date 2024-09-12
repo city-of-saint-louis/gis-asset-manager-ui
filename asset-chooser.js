@@ -11,8 +11,8 @@ const chosenAssetFormData = [];
 const allMapLayerIds = [];
 const layersWithNoSelectionRequired = [];
 const validLayers = [];
-// const baseToggleDiv = document.getElementById("baseToggleDiv");
 let isValid = false;
+
 // functions to provide functionality for the GIS Asset Chooser
 const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
@@ -50,7 +50,7 @@ const renderSelectedAssetLabels = () => {
   );
   // Clear existing list items before appending new ones
   selectedLayerAssetListArray.forEach((list) => {
-    list.innerHTML = ""; // This clears the list
+    list.innerHTML = "";
   });
   chosenAssets.forEach((asset) => {
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
