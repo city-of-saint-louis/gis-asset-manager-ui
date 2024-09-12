@@ -301,26 +301,9 @@ const initializeMap = () => {
       "esri/views/MapView",
       "esri/layers/FeatureLayer",
       "esri/widgets/Search",
-      "esri/Basemap",
-      "esri/widgets/BasemapToggle",
-    ], (Map, MapView, FeatureLayer, Search, Basemap, BasemapToggle) => {
-      const highContrastLightBasemap = new Basemap({
-        portalItem: {
-          id: "084291b0ecad4588b8c8853898d72445",
-        },
-        title: "High contrast light theme",
-        id: "high-contrast-light",
-      });
+    ], (Map, MapView, FeatureLayer, Search) => {
 
-      const highContrastDarkBasemap = new Basemap({
-        portalItem: {
-          id: "3e23478909194c54992eaaee78b5f754",
-        },
-        title: "High contrast dark theme",
-        id: "high-contrast-dark",
-      });
-
-      const map = new Map({ basemap: highContrastLightBasemap });
+      const map = new Map({ basemap: baseMap });
 
       const view = new MapView({
         map: map,
@@ -336,13 +319,6 @@ const initializeMap = () => {
       } else {
         view.ui.remove(searchWidget);
       }
-
-      const baseToggleWidget = new BasemapToggle({
-        view: view,
-        nextBasemap: highContrastDarkBasemap,
-      });
-
-      view.ui.add(baseToggleWidget, "bottom-right");
 
       mapLayersToAdd.forEach((mapLayer) => {
         const mapDataLayer = new FeatureLayer({
@@ -445,13 +421,12 @@ const initializeMap = () => {
                 ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
                </span>
              </div>
-            
-              <button id="${layerName}-show-hide-layer-btn" class="selectLayers" att-layer-id="${layerName}-${
-          mapDataLayer.id
-        }"
-              aria-label="hide ${layerName} layer" ${
-          layerMinScale > 0 ? "disabled" : ""
-        } style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}">
+              <button 
+                id="${layerName}-show-hide-layer-btn" 
+                class="selectLayers" 
+                att-layer-id="${layerName}-${mapDataLayer.id}"
+                aria-label="hide ${layerName} layer" ${layerMinScale > 0 ? "disabled" : ""} style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}"
+              >
                 <span class="${
                   layerMinScale > 0
                     ? "glyphicons glyphicons-eye-open"
@@ -460,7 +435,6 @@ const initializeMap = () => {
                 </span>
               </button>
             </div>
-            
             <div
             aria-live="polite"
               aria-atomic="true"
