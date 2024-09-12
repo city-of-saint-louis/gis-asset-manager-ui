@@ -6,7 +6,6 @@ class AssetChooserContainerComponent extends HTMLElement {
   connectedCallback() {
     console.log("asset-chooser-container initialized");
     console.log('chosenAssetFormData', chosenAssetFormData);
-
     const generateInputsContent = () => {
       return featureLayers
         .map((layer) => {
@@ -34,9 +33,6 @@ class AssetChooserContainerComponent extends HTMLElement {
         })
         .join("");
     };
-
-
-
     const handleAccomodationButtonClick = () => {
       if (chosenAssets.length > 0) {
         // remove assets from chosenAssets array
@@ -48,24 +44,20 @@ class AssetChooserContainerComponent extends HTMLElement {
         chosenAssetFormData.splice(0, chosenAssetFormData.length);
         console.log("chosenAssetFormData", chosenAssetFormData);
       }
-
       const assetChooserInterface = document.getElementById(
         "asset-chooser-interface"
       );
       const accomodationButton = document.getElementById("accomodation-button");
       const buttonHint = document.getElementById("button-hint");
       if (this.isOriginalState) {
-        buttonHint.textContent =
-          "Please click the button below to switch back to the map.";
-       // Generate the HTML content for inputs
-       const inputsContent = generateInputsContent();
-
+        buttonHint.textContent = "Please click the button below to switch back to the map.";
+        // Generate the HTML content for inputs
+        const inputsContent = generateInputsContent();
         // Combine inputs with a single form and submit button
         const htmlContent = `
         <div id="asset-form-container">
          <h2>Enter the assets you require for your request</h2>
          <h3>Please provide as much information as you can.</h3>
-
          <form id="submit-asset-form">
            ${inputsContent}
            <button
@@ -78,13 +70,10 @@ class AssetChooserContainerComponent extends HTMLElement {
          </form>
          </div>
         `;
-
         assetChooserInterface.innerHTML = htmlContent;
-
         // Add event listener for the form submission
         const submitAssetForm = document.getElementById("submit-asset-form");
         submitAssetForm.addEventListener("submit", handleAssetFormSubmit);
-
         accomodationButton.textContent = "Switch Back To Map";
       } else {
         location.reload(); // reload the page
@@ -163,7 +152,6 @@ class AssetChooserContainerComponent extends HTMLElement {
         );
       }
     };
-
     try {
       const title = this.getAttribute("title") || "";
       const hint = this.getAttribute("hint") || "";
@@ -176,7 +164,6 @@ class AssetChooserContainerComponent extends HTMLElement {
           <h3>
             ${hint}
           </h3>
-          
           <p id="validity-message"></p>
           <div class="row">
             <div class="col-md-7">
@@ -200,8 +187,7 @@ class AssetChooserContainerComponent extends HTMLElement {
         </div>
       </section>
       `;
-
-      // Add event listener for the button click
+      // Add event listener for the accomodation button click
       const accomodationButton = this.querySelector("#accomodation-button");
       if (accomodationButton) {
         accomodationButton.addEventListener(
@@ -209,9 +195,6 @@ class AssetChooserContainerComponent extends HTMLElement {
           handleAccomodationButtonClick
         );
       }
-
-
-
     } catch (e) {
       console.error(e);
       document.getElementById(
