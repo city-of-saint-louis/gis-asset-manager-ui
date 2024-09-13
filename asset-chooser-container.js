@@ -13,7 +13,9 @@ class AssetChooserContainerComponent extends HTMLElement {
               : "";
           return `
            <div>
-            <label>${layer.layerProperties.layerName}</label>
+            <label
+              for="${layer.layerProperties.layerName}"
+            >${layer.layerProperties.layerName}</label>
             <br>
             <input
               style="margin: 5px;"
@@ -24,12 +26,34 @@ class AssetChooserContainerComponent extends HTMLElement {
               value=""
               placeholder="Enter any ${layer.layerProperties.layerName} assets required for your request."
               ${isRequired}
-            />
+            >
+            <br>
            </div>
           `;
         })
         .join("");
     };
+
+    const generateFormHTML = (inputsContent) => {
+      return `
+        <div id="asset-form-container">
+          <h2>Enter the assets required for your request</h2>
+          <h3>Please provide as much information as you can.</h3>
+          <form id="submit-asset-form">
+           ${inputsContent}
+            <button
+              style="margin-top: 5px;" 
+              id="accomodation-asset-submission-button" 
+              type="submit" 
+              class="link-button"
+            >
+             Confirm Asset Information
+            </button>
+          </form>
+        </div>
+      `;
+    };
+
     const handleAccomodationButtonClick = () => {
       if (chosenAssets.length > 0) {
         // remove assets from chosenAssets array
@@ -39,37 +63,24 @@ class AssetChooserContainerComponent extends HTMLElement {
         // remove assets from chosenAssetFormData array
         chosenAssetFormData.splice(0, chosenAssetFormData.length);
       }
-      const assetChooserInterface = document.getElementById(
-        "asset-chooser-interface"
-      );
+      const assetChooserInterface = document.getElementById("asset-chooser-interface");
       const accomodationButton = document.getElementById("accomodation-button");
       const buttonHint = document.getElementById("button-hint");
       if (this.isOriginalState) {
-        buttonHint.textContent = "Please click the button below to switch back to the map.";
         // Generate the HTML content for inputs
         const inputsContent = generateInputsContent();
-        // Combine inputs with a single form and submit button
-        const htmlContent = `
-        <div id="asset-form-container">
-         <h2>Enter the assets you require for your request</h2>
-         <h3>Please provide as much information as you can.</h3>
-         <form id="submit-asset-form">
-           ${inputsContent}
-           <button
-             style="margin-top: 5px;" 
-             id="accomodation-asset-submission-button" 
-             type="submit" 
-             class="link-button">
-               Confirm Asset Information
-           </button>
-         </form>
-         </div>
-        `;
+        buttonHint.textContent = "Please click the button below to switch back to the map.";
+        accomodationButton.textContent = "Switch Back To Map";
+        // Combine inputs with the form and submit button
+        const htmlContent = generateFormHTML(inputsContent);
         assetChooserInterface.innerHTML = htmlContent;
         // Add event listener for the form submission
         const submitAssetForm = document.getElementById("submit-asset-form");
-        submitAssetForm.addEventListener("submit", handleAssetFormSubmit);
-        accomodationButton.textContent = "Switch Back To Map";
+        if (submitAssetForm) {
+          submitAssetForm.addEventListener("submit", handleAssetFormSubmit);
+        } else {
+          console.error("Form not found");
+        }
       } else {
         location.reload(); // reload the page
       }
@@ -79,29 +90,20 @@ class AssetChooserContainerComponent extends HTMLElement {
     const handleCancelSelectionsClick = () => {
       chosenAssetFormData.splice(0, chosenAssetFormData.length);
       const inputsContent = generateInputsContent();
-      document.getElementById("asset-form-container").innerHTML = `
-      <h2>Enter the assets you require for your request</h2>
-         <h3>Please provide as much information as you can.</h3>
-         <form id="submit-asset-form">
-           ${inputsContent}
-           <button
-             style="margin-top: 5px;" 
-             id="accomodation-asset-submission-button" 
-             type="submit" 
-             class="link-button">
-               Confirm Asset Information
-           </button>
-         </form>
-         `;
+      document.getElementById("asset-form-container").innerHTML = generateFormHTML(inputsContent);
       isValid = false;
       const customEvent = new CustomEvent("isValidFalse", {
         detail: { chosenAssets: [], chosenAssetFormData },
         bubbles: true,
       });
       document.dispatchEvent(customEvent);
-       // Re-add event listener for the form submission
-       const submitAssetForm = document.getElementById("submit-asset-form");
-       submitAssetForm.addEventListener("submit", handleAssetFormSubmit);
+      // Re-add event listener for the form submission
+      const submitAssetForm = document.getElementById("submit-asset-form");
+      if (submitAssetForm) {
+        submitAssetForm.addEventListener("submit", handleAssetFormSubmit);
+      } else {
+        console.error("Form not found");
+      }
     };
 
     const handleAssetFormSubmit = (event) => {
@@ -122,14 +124,14 @@ class AssetChooserContainerComponent extends HTMLElement {
       // Clear the form
       event.target.reset();
       document.getElementById("asset-form-container").innerHTML = `
-      <h2>Thank you</h2>
-      <h3>The asset information has been added to your case. Please continue.</h3>
-      <button
-        id="cancel-asset-selection-button"
-        class="link-button"
-      >
-       Cancel Selections
-      </button>
+        <h2>Thank you</h2>
+        <h3>The asset information has been added to your case. Please continue.</h3>
+        <button
+          id="cancel-asset-selection-button"
+          class="link-button"
+        >
+          Cancel Selections
+        </button>
       `;
       // Add event listener for the dynamically created cancel button
       const cancelSelectionsButton = this.querySelector("#cancel-asset-selection-button");
@@ -140,6 +142,7 @@ class AssetChooserContainerComponent extends HTMLElement {
         );
       }
     };
+
     try {
       const title = this.getAttribute("title") || "";
       const hint = this.getAttribute("hint") || "";
@@ -163,7 +166,7 @@ class AssetChooserContainerComponent extends HTMLElement {
             </div>
           </div>
         </div>
-         <div id="accomodation-button-container">
+        <div id="accomodation-button-container">
          <h4 id="button-hint">Please click the button below if you are unable to use the map.</h4>
           <button 
             id="accomodation-button"
