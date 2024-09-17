@@ -13,6 +13,7 @@ const layersWithNoSelectionRequired = [];
 const validLayers = [];
 // const baseToggleDiv = document.getElementById("baseToggleDiv");
 let isValid = false;
+console.log('chosenAssetFormData', chosenAssetFormData);
 // functions to provide functionality for the GIS Asset Chooser
 const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
@@ -90,6 +91,7 @@ const renderSelectedAssetLabels = () => {
               );
               chosenAssets.splice(hightlightToRemove, 1);
               validateNumberofAssetsSelected();
+              console.log("chosenAssets", chosenAssets);
               selectedLayerAssetListArray.forEach((list) => {
                 if (list.innerHTML === "") {
                   list.innerHTML = `<li>None selected</li>`;
@@ -193,6 +195,7 @@ const validateAssetSelection = () => {
     // Secure the chosenAssets from parent application when isValid is false
     secureChosenAssets();
   }
+  console.log("isValid", isValid);
 };
 
 const renderValidityMessage = () => {
@@ -272,6 +275,7 @@ captureMapLayers();
 
 // initilize the map using the map layers provided
 const initializeMap = () => {
+  console.log("chosenAssets", chosenAssets);
   try {
     const zoom =
       document.querySelector("asset-chooser-container").getAttribute("zoom") ||
@@ -297,9 +301,26 @@ const initializeMap = () => {
       "esri/views/MapView",
       "esri/layers/FeatureLayer",
       "esri/widgets/Search",
-    ], (Map, MapView, FeatureLayer, Search) => {
+      "esri/Basemap",
+      "esri/widgets/BasemapToggle",
+    ], (Map, MapView, FeatureLayer, Search, Basemap, BasemapToggle) => {
+      const highContrastLightBasemap = new Basemap({
+        portalItem: {
+          id: "084291b0ecad4588b8c8853898d72445",
+        },
+        title: "High contrast light theme",
+        id: "high-contrast-light",
+      });
 
-      const map = new Map({ basemap: baseMap });
+      const highContrastDarkBasemap = new Basemap({
+        portalItem: {
+          id: "3e23478909194c54992eaaee78b5f754",
+        },
+        title: "High contrast dark theme",
+        id: "high-contrast-dark",
+      });
+
+      const map = new Map({ basemap: highContrastLightBasemap });
 
       const view = new MapView({
         map: map,
@@ -308,12 +329,12 @@ const initializeMap = () => {
         container: document.querySelector("#viewDiv"),
       });
 
-      const searchWidget1 = new Search({ view: view });
+      const searchWidget = new Search({ view: view });
 
       if (showSearch === "true" || showSearch === true) {
-        view.ui.add(searchWidget1, { position: "top-right" });
+        view.ui.add(searchWidget, { position: "top-right" });
       } else {
-        view.ui.remove(searchWidget1);
+        view.ui.remove(searchWidget);
       }
 
       const baseToggleWidget = new BasemapToggle({
@@ -337,8 +358,6 @@ const initializeMap = () => {
             maximumAssetsRequired: mapLayer.maximumSelections,
             minScale: mapLayer.minScale,
             maxScale: mapLayer.maxScale,
-            searchFields: mapLayer.labelMask,
-            displayField: mapLayer.labelMask,
           },
         });
         mapDataLayer.outFields = ["*"];
@@ -359,9 +378,11 @@ const initializeMap = () => {
         }
         if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
           isValid = true;
+          console.log("isValid", isValid);
           dispatchChosenAssets(chosenAssets);
         } else {
           isValid = false;
+          console.log("isValid", isValid);
           secureChosenAssets();
         }
         renderValidityMessage();
@@ -424,12 +445,13 @@ const initializeMap = () => {
                 ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
                </span>
              </div>
-              <button 
-                id="${layerName}-show-hide-layer-btn" 
-                class="selectLayers" 
-                att-layer-id="${layerName}-${mapDataLayer.id}"
-                aria-label="hide ${layerName} layer" ${layerMinScale > 0 ? "disabled" : ""} style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}"
-              >
+            
+              <button id="${layerName}-show-hide-layer-btn" class="selectLayers" att-layer-id="${layerName}-${
+          mapDataLayer.id
+        }"
+              aria-label="hide ${layerName} layer" ${
+          layerMinScale > 0 ? "disabled" : ""
+        } style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}">
                 <span class="${
                   layerMinScale > 0
                     ? "glyphicons glyphicons-eye-open"
@@ -438,6 +460,7 @@ const initializeMap = () => {
                 </span>
               </button>
             </div>
+            
             <div
             aria-live="polite"
               aria-atomic="true"
@@ -485,52 +508,7 @@ const initializeMap = () => {
         `;
       });
 
-      // Create an array of sources based on the feature layers
-      const searchSources = featureLayers.map((layer) => {
-        console.log("layer", layer);
-
-        const searchFields = layer.layerProperties.searchFields
-          .replace(/\{|\}/g, "") // Remove all curly braces
-          .replace(/\s+/g, " "); // Replace multiple spaces with a single space
-
-        const displayField = layer.layerProperties.displayField
-          .replace(/\{|\}/g, "") // Remove all curly braces
-          .replace(/\s+/g, " "); // Replace multiple spaces with a single space
-
-        console.log("searchFields", searchFields);
-        console.log("displayField", displayField);
-        return {
-          layer: layer,
-          searchFields: [searchFields],
-          displayField: displayField,
-          exactMatch: false,
-          outFields: ["*"],
-          name: layer.layerProperties.layerName,
-          placeholder: `Search ${layer.layerProperties.layerName}`,
-        };
-      });
-
-      console.log("searchSources", searchSources);
-
-      const searchWidget = new Search({
-        view: view,
-        sources: searchSources,
-        includeDefaultSources: false,
-        allPlaceholder: "Search for assets",
-      });
-
-      // Listen to the search-complete event
-      searchWidget.on("search-complete", (event) => {
-        console.log("search-complete", event);
-      });
-
-      if (showSearch === "true" || showSearch === true) {
-        view.ui.add(searchWidget, { position: "top-right" });
-      } else {
-        view.ui.remove(searchWidget);
-      }
-
-      showOrHideLayer();
+      hideOrShowLayer();
       view.on("click", (event) => {
         view.hitTest(event).then((response) => {
           if (!response.results[0].layer.layerProperties) {
@@ -613,6 +591,7 @@ const initializeMap = () => {
                   highlightSelect: highlightedSelection,
                 };
                 chosenAssets.push(chosenAsset);
+                console.log("chosenAssets", chosenAssets);
                 renderSelectedAssetLabels();
                 validateNumberofAssetsSelected();
               });
@@ -633,6 +612,7 @@ const initializeMap = () => {
               chosenAssets.splice(hightlightToRemove, 1);
               renderSelectedAssetLabels();
               validateNumberofAssetsSelected();
+              console.log("chosenAssets", chosenAssets);
             }
           }
         });
