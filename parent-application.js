@@ -10,20 +10,33 @@ document.addEventListener("isValidTrue", (event) => {
   const chosenAssetFormData = event.detail.chosenAssetFormData;
   // possible integration strategy using local storage
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
-  localStorage.setItem("chosenAssetFormData", JSON.stringify(chosenAssetFormData));
+  localStorage.setItem(
+    "chosenAssetFormData",
+    JSON.stringify(chosenAssetFormData)
+  );
   // possible integration strategy with a submit button
-  document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
-  document.getElementById("submit-chosen-assets-button").classList.remove("disabled-button");
-  document.getElementById("submit-chosen-assets-button").textContent = "Submit assets";
+  document
+    .getElementById("submit-chosen-assets-button")
+    .removeAttribute("disabled");
+  document
+    .getElementById("submit-chosen-assets-button")
+    .classList.remove("disabled-button");
+  document.getElementById("submit-chosen-assets-button").textContent =
+    "Submit assets";
 });
 
 // Custom event listener for when isValid is false
 // recommended for integration with gis aset chooser - customize as needed
 // example of possible integration strategy with a submit button
 document.addEventListener("isValidFalse", (event) => {
-  document.getElementById("submit-chosen-assets-button").textContent = "Submit Selected Assets";
-  document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
-  document.getElementById("submit-chosen-assets-button").classList.add("disabled-button");
+  document.getElementById("submit-chosen-assets-button").textContent =
+    "Submit Selected Assets";
+  document
+    .getElementById("submit-chosen-assets-button")
+    .setAttribute("disabled", true);
+  document
+    .getElementById("submit-chosen-assets-button")
+    .classList.add("disabled-button");
   localStorage.removeItem("chosenAssets");
 });
 
@@ -38,29 +51,37 @@ const submitChosenAssets = (chosenAssets) => {
 
 // Function to display chosen assets
 const displayChosenAssets = () => {
-  const chosenAssets = JSON.parse(localStorage.getItem("chosenAssets") || '[]');
+  const chosenAssets = JSON.parse(localStorage.getItem("chosenAssets") || "[]");
+  console.log("chosenAssets:", chosenAssets);
   if (chosenAssets.length === 0) {
-    const chosenAssetFormData = JSON.parse(localStorage.getItem("chosenAssetFormData") || '[]');
-    if (chosenAssetFormData){
+    const chosenAssetFormData = JSON.parse(
+      localStorage.getItem("chosenAssetFormData") || "[]"
+    );
+    console.log("chosenAssetFormData:", chosenAssetFormData);
+    if (chosenAssetFormData) {
       chosenAssetFormData.map((data) => {
         const chosenAssetData = document.createElement("p");
-        chosenAssetData.textContent = `${data.key}: ${data.value ? data.value : "No asset data provided"}`;
-        document.getElementById("chosen-assets-display-div").appendChild(chosenAssetData);
+        chosenAssetData.textContent = `${data.key}: ${
+          data.value ? data.value : "No asset data provided"
+        }`;
+        document
+          .getElementById("chosen-assets-display-div")
+          .appendChild(chosenAssetData);
       });
     }
-  } 
+  }
   chosenAssets.map((asset) => {
     const chosenAssetLabel = document.createElement("p");
     chosenAssetLabel.textContent = asset.assetLabel;
-    document.getElementById("chosen-assets-display-div").appendChild(chosenAssetLabel);
+    document
+      .getElementById("chosen-assets-display-div")
+      .appendChild(chosenAssetLabel);
   });
-
-  
 };
 
 // Function to manipulate 'chosenAssets' data for use within parent application
 const convertChosenAssets = () => {
-  const chosenAssets = JSON.parse(localStorage.getItem("chosenAssets") || '[]');
+  const chosenAssets = JSON.parse(localStorage.getItem("chosenAssets") || "[]");
   chosenAssets.forEach((asset) => {
     const caseAsset = {
       AssetEsriAttributes: asset.assetAttributes,
