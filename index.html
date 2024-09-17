@@ -21,13 +21,14 @@
     <main style="padding: 1rem">
       <div style="padding-top: 2rem; padding-bottom: 2rem; text-align: center">
         <button
+          class="link-button disabled-button"
           aria-live="polite"
           disabled
           id="submit-chosen-assets-button"
           onclick="submitChosenAssets(chosenAssets)"
           style="margin: 0 auto"
         >
-          Select assets
+          Submit Selected Assets
         </button>
       </div>
       <asset-chooser-container
@@ -58,12 +59,12 @@
           name="Parcel"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
-          minimum=0
+          minimum=1
           maximum=0
           label-mask="{SITEADDR}"
           min-scale=20000
         >
-        </asset-chooser-map-layer> 
+        </asset-chooser-map-layer>
         <asset-chooser-map-layer
           name="Neighborhood"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/City_Neighborhoods/FeatureServer"

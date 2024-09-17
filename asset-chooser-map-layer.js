@@ -3,8 +3,6 @@ class MapLayer extends HTMLElement {
     super();
   }
   connectedCallback() {
-    console.log("map-layer initialized")
-   
     try {
       const name = (this.getAttribute("name") || "").replace(/\s/g, "-");
       const layerClassUrl = this.getAttribute("layer-class-url") || ""; 

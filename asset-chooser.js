@@ -7,14 +7,14 @@ const defaultShowSearch = true;
 const mapLayersToAdd = [];
 const featureLayers = [];
 const chosenAssets = [];
+const chosenAssetFormData = [];
 const allMapLayerIds = [];
 const layersWithNoSelectionRequired = [];
 const validLayers = [];
 // const baseToggleDiv = document.getElementById("baseToggleDiv");
 let isValid = false;
-
 // functions to provide functionality for the GIS Asset Chooser
-const showOrHideLayer = () => {
+const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
     const layerName = outerLayer.layerProperties.layerName;
     const selectLayersElements = document.querySelectorAll(".selectLayers");
@@ -60,9 +60,10 @@ const renderSelectedAssetLabels = () => {
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
           <span>
-          ${assetLabel}
+            ${assetLabel}
           </span>
           <button
+            id="remove-${asset.internalAssetId}-btn"
             class="pull-right link-button small-button red-button transparent-button remove-asset-btn"
           >
             <span class="glyphicons glyphicons-remove"></span>
@@ -72,7 +73,11 @@ const renderSelectedAssetLabels = () => {
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
 
-        assetLabelListItem.addEventListener("click", () => {
+        const removeAssetBtn = document.getElementById(
+          `remove-${asset.internalAssetId}-btn`
+        );
+        
+        removeAssetBtn.addEventListener("click", () => {
           chosenAssets.forEach((asset) => {
             if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
@@ -85,7 +90,6 @@ const renderSelectedAssetLabels = () => {
               );
               chosenAssets.splice(hightlightToRemove, 1);
               validateNumberofAssetsSelected();
-              console.log("chosenAssets", chosenAssets);
               selectedLayerAssetListArray.forEach((list) => {
                 if (list.innerHTML === "") {
                   list.innerHTML = `<li>None selected</li>`;
@@ -189,7 +193,6 @@ const validateAssetSelection = () => {
     // Secure the chosenAssets from parent application when isValid is false
     secureChosenAssets();
   }
-  console.log("isValid", isValid);
 };
 
 const renderValidityMessage = () => {
@@ -248,7 +251,7 @@ const renderValidityMessage = () => {
 
 // Dispatch the chosenAssets to the parent application
 const dispatchChosenAssets = (chosenAssets) => {
-  const event = new CustomEvent("isValidTrue", { detail: { chosenAssets } });
+  const event = new CustomEvent("isValidTrue", { detail: { chosenAssets, chosenAssetFormData: [] } });
   document.dispatchEvent(event);
 };
 
@@ -269,7 +272,6 @@ captureMapLayers();
 
 // initilize the map using the map layers provided
 const initializeMap = () => {
-  console.log("chosenAssets", chosenAssets);
   try {
     const zoom =
       document.querySelector("asset-chooser-container").getAttribute("zoom") ||
@@ -295,26 +297,9 @@ const initializeMap = () => {
       "esri/views/MapView",
       "esri/layers/FeatureLayer",
       "esri/widgets/Search",
-      "esri/Basemap",
-      "esri/widgets/BasemapToggle",
-    ], (Map, MapView, FeatureLayer, Search, Basemap, BasemapToggle) => {
-      const highContrastLightBasemap = new Basemap({
-        portalItem: {
-          id: "084291b0ecad4588b8c8853898d72445",
-        },
-        title: "High contrast light theme",
-        id: "high-contrast-light",
-      });
+    ], (Map, MapView, FeatureLayer, Search) => {
 
-      const highContrastDarkBasemap = new Basemap({
-        portalItem: {
-          id: "3e23478909194c54992eaaee78b5f754",
-        },
-        title: "High contrast dark theme",
-        id: "high-contrast-dark",
-      });
-
-      const map = new Map({ basemap: highContrastLightBasemap });
+      const map = new Map({ basemap: baseMap });
 
       const view = new MapView({
         map: map,
@@ -322,8 +307,6 @@ const initializeMap = () => {
         zoom: zoom,
         container: document.querySelector("#viewDiv"),
       });
-
-      console.log("featureLayers", featureLayers);
 
       const searchWidget1 = new Search({ view: view });
 
@@ -376,11 +359,9 @@ const initializeMap = () => {
         }
         if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
           isValid = true;
-          console.log("isValid", isValid);
           dispatchChosenAssets(chosenAssets);
         } else {
           isValid = false;
-          console.log("isValid", isValid);
           secureChosenAssets();
         }
         renderValidityMessage();
@@ -436,20 +417,19 @@ const initializeMap = () => {
             class="map-layer-data-container stat-container stat-medium"
           >
             <div class="stat-title" id="${layerName}-layer-selected-asset-container">
-             <span>
-               <strong>${layerName} Layer</strong>
+             <div>
+               <span> <strong>${layerName} Layer</strong></span>
                <br><br/>
                <span id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
                 ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
                </span>
-             </span>
-            
-              <button id="${layerName}-show-hide-layer-btn" class="selectLayers" att-layer-id="${layerName}-${
-          mapDataLayer.id
-        }"
-              aria-label="hide ${layerName} layer" ${
-          layerMinScale > 0 ? "disabled" : ""
-        } style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}">
+             </div>
+              <button 
+                id="${layerName}-show-hide-layer-btn" 
+                class="selectLayers" 
+                att-layer-id="${layerName}-${mapDataLayer.id}"
+                aria-label="hide ${layerName} layer" ${layerMinScale > 0 ? "disabled" : ""} style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}"
+              >
                 <span class="${
                   layerMinScale > 0
                     ? "glyphicons glyphicons-eye-open"
@@ -458,7 +438,6 @@ const initializeMap = () => {
                 </span>
               </button>
             </div>
-            
             <div
             aria-live="polite"
               aria-atomic="true"
@@ -634,7 +613,6 @@ const initializeMap = () => {
                   highlightSelect: highlightedSelection,
                 };
                 chosenAssets.push(chosenAsset);
-                console.log("chosenAssets", chosenAssets);
                 renderSelectedAssetLabels();
                 validateNumberofAssetsSelected();
               });
@@ -655,7 +633,6 @@ const initializeMap = () => {
               chosenAssets.splice(hightlightToRemove, 1);
               renderSelectedAssetLabels();
               validateNumberofAssetsSelected();
-              console.log("chosenAssets", chosenAssets);
             }
           }
         });
