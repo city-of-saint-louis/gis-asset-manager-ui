@@ -18,7 +18,7 @@ class AssetChooserContainerComponent extends HTMLElement {
             >Enter any ${layer.layerProperties.layerName}s required for your request.</label>
             <br>
             <input
-              style="margin: 5px;"
+              style="margin: 5px 0 5px 0;"
               size="60"
               type="text"
               name="${layer.layerProperties.layerName}"
@@ -37,21 +37,25 @@ class AssetChooserContainerComponent extends HTMLElement {
       return `
         <dialog id="asset-modal" class="modal">
           <div class="modal-content">
-            <button class="close" aria-label="Close">&times;</button>
-            <h2>Enter the assets required for your request.</h2>
-            <h3>Please provide as much information as you can.</h3>
-            <p>Helpful information includes name, address, ID (if applicable), description, etc.</p>
-            <form id="modal-asset-form">
-              ${inputsContent}
-              <button
-                style="margin-top: 5px;" 
-                id="accomodation-asset-submission-button" 
-                type="submit" 
-                class="link-button"
-              >
-                Confirm Asset Information
-              </button>
-            </form>
+            <div class="modal-header">
+              <button class="close" type="buttonaria-label="Close">&times;</button>
+              <h2 id="accomodation-title">Enter the assets required for your request.</h2>
+              <h3 id="accomodation-subtitle">Please provide as much information as you can.</h3>
+              <p class="modal-header-hint">Helpful information includes name, address, ID (if applicable), description, etc.</p>
+            </div>
+            <div class="modal-body">
+              <form id="modal-asset-form">
+                ${inputsContent}
+                <button
+                  style="margin-top: 5px;" 
+                  id="accomodation-asset-submission-button" 
+                  type="submit" 
+                  class="link-button"
+                >
+                  Confirm Asset Information
+                </button>
+              </form>
+            </div>  
           </div>
         </dialog>
       `;
@@ -211,13 +215,16 @@ class AssetChooserContainerComponent extends HTMLElement {
             ${hint}
           </h3>
            <div id="accomodation-button-container">
-         <h4 id="button-hint">Please click the button below if you are unable to use the map.</h4>
-          <button 
+         <span id="button-hint">Please click below if you need assistance.</span>
+         <br>
+          <button
+            style="margin-top: 5px; margin-bottom: 5px;" 
             id="accomodation-button"
             class="link-button"
             aria-label="Click here to select assets if you are using a screen reader and are unable to select assets on the map."
           >
-            Accessiblity Settings
+            <span class="glyphicons-svg glyphicons-svg-outstretched "></span>
+            Accessiblity Options
           </button>
         </div>
           <p id="validity-message"></p>
