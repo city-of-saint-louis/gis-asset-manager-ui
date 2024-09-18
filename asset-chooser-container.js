@@ -40,7 +40,7 @@ class AssetChooserContainerComponent extends HTMLElement {
             <button class="close" aria-label="Close">&times;</button>
             <h2>Enter the assets required for your request.</h2>
             <h3>Please provide as much information as you can.</h3>
-            <p>Helpful information includes name, address, description, etc.</p>
+            <p>Helpful information includes name, address, ID (if applicable), description, etc.</p>
             <form id="modal-asset-form">
               ${inputsContent}
               <button
