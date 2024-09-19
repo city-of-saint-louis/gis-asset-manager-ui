@@ -40,8 +40,7 @@ class AssetChooserContainerComponent extends HTMLElement {
             <div class="modal-header">
               <button class="close" type="buttonaria-label="Close">&times;</button>
               <h2 id="accomodation-title">Enter the assets required for your request.</h2>
-              <h3 id="accomodation-subtitle">Please provide as much information as you can.</h3>
-              <p class="modal-header-hint">Helpful information includes name, address, ID (if applicable), description, etc.</p>
+              <h3 id="accomodation-subtitle">Please provide as much information as you can such as name, address, ID, description, etc.</h3>
             </div>
             <div class="modal-body">
               <form id="modal-asset-form">
@@ -223,7 +222,7 @@ class AssetChooserContainerComponent extends HTMLElement {
             class="link-button"
             aria-label="Click here to select assets if you are using a screen reader and are unable to select assets on the map."
           >
-            <span class="glyphicons-svg glyphicons-svg-outstretched "></span>
+            <span class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched "></span>
             Accessiblity Options
           </button>
         </div>
