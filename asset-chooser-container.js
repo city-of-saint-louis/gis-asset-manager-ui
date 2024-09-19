@@ -94,6 +94,7 @@ class AssetChooserContainerComponent extends HTMLElement {
     };
 
     const clearStoredModalFormAssetData = () => {
+      console.log('chosenAssetFormData', chosenAssetFormData);
       chosenAssetFormData.splice(0, chosenAssetFormData.length);
       isValid = false;
       const customEvent = new CustomEvent("isValidFalse", {
@@ -101,6 +102,7 @@ class AssetChooserContainerComponent extends HTMLElement {
         bubbles: true,
       });
       document.dispatchEvent(customEvent);
+      console.log('chosenAssetFormData', chosenAssetFormData);
     };
 
     const handleAccomodationButtonClick = () => {
@@ -115,10 +117,21 @@ class AssetChooserContainerComponent extends HTMLElement {
       openModal();
     };
 
+    // const handleCancelSelectionsClick = () => {
+    //   clearStoredModalFormAssetData();
+    //   // Reload the page
+    //   location.reload();
+    // };
+
     const handleCancelSelectionsClick = () => {
       clearStoredModalFormAssetData();
-      // Reload the page
-      location.reload();
+      // Remove the existing modal if it exists
+      const existingModal = document.getElementById("asset-modal");
+      if (existingModal) {
+        existingModal.remove();
+      }
+      // Call openModal with prefilled data
+      openModal();
     };
 
     const handleAssetEditButtonClick = () => {
