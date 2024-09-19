@@ -94,7 +94,7 @@ class AssetChooserContainerComponent extends HTMLElement {
     };
 
     const clearStoredModalFormAssetData = () => {
-      console.log('chosenAssetFormData', chosenAssetFormData);
+      console.log("chosenAssetFormData", chosenAssetFormData);
       chosenAssetFormData.splice(0, chosenAssetFormData.length);
       isValid = false;
       const customEvent = new CustomEvent("isValidFalse", {
@@ -102,7 +102,7 @@ class AssetChooserContainerComponent extends HTMLElement {
         bubbles: true,
       });
       document.dispatchEvent(customEvent);
-      console.log('chosenAssetFormData', chosenAssetFormData);
+      console.log("chosenAssetFormData", chosenAssetFormData);
     };
 
     const handleAccomodationButtonClick = () => {
@@ -117,22 +117,54 @@ class AssetChooserContainerComponent extends HTMLElement {
       openModal();
     };
 
-    // const handleCancelSelectionsClick = () => {
-    //   clearStoredModalFormAssetData();
-    //   // Reload the page
-    //   location.reload();
-    // };
-
     const handleCancelSelectionsClick = () => {
       clearStoredModalFormAssetData();
-      // Remove the existing modal if it exists
       const existingModal = document.getElementById("asset-modal");
       if (existingModal) {
         existingModal.remove();
       }
-      // Call openModal with prefilled data
-      openModal();
+      // this.isOriginalState = true; // Set the flag to true
+      // empty the store featureLayers array
+      featureLayers.splice(0, featureLayers.length);
+      this.connectedCallback(); // Re-render the component
+      initializeMap();
     };
+
+    // const handleCancelSelectionsClick = () => {
+    //   clearStoredModalFormAssetData();
+    //   // Remove the existing modal if it exists
+    //   const existingModal = document.getElementById("asset-modal");
+    //   if (existingModal) {
+    //     existingModal.remove();
+    //   }
+    //   // Call openModal with prefilled data
+    //   openModal();
+    // };
+
+    // const handleCancelSelectionsClick = () => {
+    //   clearStoredModalFormAssetData();
+    //   // Remove the existing modal if it exists
+    //   const existingModal = document.getElementById("asset-modal");
+    //   if (existingModal) {
+    //     existingModal.remove();
+    //   }
+    //   // Call openModal with prefilled data
+    //   openModal();
+    // };
+
+    // const handleCancelSelectionsClick = () => {
+    //   // Clear stored data
+    //   clearStoredModalFormAssetData();
+    //   // Reset the custom element to its original state
+    //   const assetChooserContainer = document.querySelector('asset-chooser-container');
+    //   if (assetChooserContainer) {
+    //     const parent = assetChooserContainer.parentNode;
+    //     const newElement = assetChooserContainer.cloneNode(true);
+    //     parent.replaceChild(newElement, assetChooserContainer);
+    //   }
+    //   // Reinitialize the map
+    //   initializeMap();
+    // };
 
     const handleAssetEditButtonClick = () => {
       // Create a prefill data object from chosenAssetFormData
@@ -218,7 +250,7 @@ class AssetChooserContainerComponent extends HTMLElement {
       const title = this.getAttribute("title") || "";
       const hint = this.getAttribute("hint") || "";
       this.innerHTML = `
-      <section class="stat-container">
+      <section id="asset-chooser-section" class="stat-container">
         <div id="asset-chooser-interface">
           <h2>
             <strong>${title}</strong>
@@ -235,7 +267,7 @@ class AssetChooserContainerComponent extends HTMLElement {
             class="link-button"
             aria-label="Click here to select assets if you are using a screen reader and are unable to select assets on the map."
           >
-            <span class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched "></span>
+            <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched"></span>
             Accessiblity Options
           </button>
         </div>
@@ -269,7 +301,7 @@ class AssetChooserContainerComponent extends HTMLElement {
   }
 }
 
-// define the custom component after the page has loaded
+// define the custom element after the page has loaded
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define(
     "asset-chooser-container",
