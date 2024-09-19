@@ -64,7 +64,11 @@
 
 #accomodation-subtitle {
   margin: 0;
-  font-size: 1em;
+  /* font-size: 1em; */
+}
+
+#accessibility-icon {
+  margin-right: 5px;
 }
 
 /* media queries */

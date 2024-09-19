@@ -40,7 +40,7 @@ class AssetChooserContainerComponent extends HTMLElement {
             <div class="modal-header">
               <button class="close" type="buttonaria-label="Close">&times;</button>
               <h2 id="accomodation-title">Enter the assets required for your request.</h2>
-              <h3 id="accomodation-subtitle">Please provide as much information as you can such as name, address, ID, description, etc.</h3>
+              <p id="accomodation-subtitle">Please provide as much information as you can such as name, address, ID, description, etc.</p>
             </div>
             <div class="modal-body">
               <form id="modal-asset-form">
@@ -61,6 +61,11 @@ class AssetChooserContainerComponent extends HTMLElement {
     };
 
     const openModal = (prefillData = {}) => {
+      const existingModal = document.getElementById("asset-modal");
+      if (existingModal) {
+        existingModal.remove();
+      }
+    
       const inputsContent = generateInputsContent(prefillData);
       const modalHTML = generateModalHTML(inputsContent);
       document.body.insertAdjacentHTML("beforeend", modalHTML);
@@ -85,7 +90,6 @@ class AssetChooserContainerComponent extends HTMLElement {
     const closeModal = () => {
       const modal = document.getElementById("asset-modal");
       if (modal) {
-        // modal.style.display = "none";
         modal.setAttribute("aria-hidden", "true");
         modal.close();
         document.body.classList.remove("no-scroll");
@@ -123,15 +127,29 @@ class AssetChooserContainerComponent extends HTMLElement {
     //   location.reload();
     // };
 
+    // const handleCancelSelectionsClick = () => {
+    //   clearStoredModalFormAssetData();
+    //   // Remove the existing modal if it exists
+    //   const existingModal = document.getElementById("asset-modal");
+    //   if (existingModal) {
+    //     existingModal.remove();
+    //   }
+    //   // Call openModal with prefilled data
+    //   openModal();
+    // };
+
     const handleCancelSelectionsClick = () => {
+      // Clear stored data
       clearStoredModalFormAssetData();
-      // Remove the existing modal if it exists
-      const existingModal = document.getElementById("asset-modal");
-      if (existingModal) {
-        existingModal.remove();
+      // Reset the custom element to its original state
+      const assetChooserContainer = document.querySelector('asset-chooser-container');
+      if (assetChooserContainer) {
+        const parent = assetChooserContainer.parentNode;
+        const newElement = assetChooserContainer.cloneNode(true);
+        parent.replaceChild(newElement, assetChooserContainer);
       }
-      // Call openModal with prefilled data
-      openModal();
+      // Reinitialize the map
+      initializeMap();
     };
 
     const handleAssetEditButtonClick = () => {
@@ -235,8 +253,8 @@ class AssetChooserContainerComponent extends HTMLElement {
             class="link-button"
             aria-label="Click here to select assets if you are using a screen reader and are unable to select assets on the map."
           >
-            <span class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched "></span>
-            Accessiblity Options
+            <span class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched" id="accessibility-icon"></span>
+            Accessiblity
           </button>
         </div>
           <p id="validity-message"></p>
