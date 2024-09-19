@@ -76,7 +76,7 @@ const renderSelectedAssetLabels = () => {
         const removeAssetBtn = document.getElementById(
           `remove-${asset.internalAssetId}-btn`
         );
-        
+
         removeAssetBtn.addEventListener("click", () => {
           chosenAssets.forEach((asset) => {
             if (asset.internalAssetId === assetLabelListItem.id) {
@@ -251,7 +251,9 @@ const renderValidityMessage = () => {
 
 // Dispatch the chosenAssets to the parent application
 const dispatchChosenAssets = (chosenAssets) => {
-  const event = new CustomEvent("isValidTrue", { detail: { chosenAssets, chosenAssetFormData: [] } });
+  const event = new CustomEvent("isValidTrue", {
+    detail: { chosenAssets, chosenAssetFormData: [] },
+  });
   document.dispatchEvent(event);
 };
 
@@ -298,7 +300,6 @@ const initializeMap = () => {
       "esri/layers/FeatureLayer",
       "esri/widgets/Search",
     ], (Map, MapView, FeatureLayer, Search) => {
-
       const map = new Map({ basemap: baseMap });
 
       const view = new MapView({
@@ -308,13 +309,13 @@ const initializeMap = () => {
         container: document.querySelector("#viewDiv"),
       });
 
-      const searchWidget = new Search({ view: view });
+      // const searchWidget1 = new Search({ view: view });
 
-      if (showSearch === "true" || showSearch === true) {
-        view.ui.add(searchWidget, { position: "top-right" });
-      } else {
-        view.ui.remove(searchWidget);
-      }
+      // if (showSearch === "true" || showSearch === true) {
+      //   view.ui.add(searchWidget1, { position: "top-right" });
+      // } else {
+      //   view.ui.remove(searchWidget1);
+      // }
 
       mapLayersToAdd.forEach((mapLayer) => {
         const mapDataLayer = new FeatureLayer({
@@ -330,8 +331,11 @@ const initializeMap = () => {
             maximumAssetsRequired: mapLayer.maximumSelections,
             minScale: mapLayer.minScale,
             maxScale: mapLayer.maxScale,
+            searchFields: [mapLayer.labelMask],
+            displayField: mapLayer.labelMask,
           },
         });
+        console.log("mapDataLayer", mapDataLayer);
         mapDataLayer.outFields = ["*"];
         mapDataLayer.popupEnabled = false;
         const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
@@ -360,6 +364,18 @@ const initializeMap = () => {
         const layerDataDiv = document.getElementById("layer-data-div");
         const layerMinScale = mapDataLayer.minScale;
         const layerMaxScale = mapDataLayer.maxScale;
+
+        //   const searchWidget = new Search({
+        //     view: view,
+        //     allPlaceholder: `Search for ${layerName}s`,
+        //     sources: searchSources,
+        //   });
+
+        //   if (showSearch === "true" || showSearch === true) {
+        //   view.ui.add(searchWidget, { position: "top-right" });
+        // } else {
+        //   view.ui.remove(searchWidget);
+        // }
 
         // Listen for the layerview-create event
         view.on("layerview-create", function (event) {
@@ -419,7 +435,9 @@ const initializeMap = () => {
                 id="${layerName}-show-hide-layer-btn" 
                 class="selectLayers" 
                 att-layer-id="${layerName}-${mapDataLayer.id}"
-                aria-label="hide ${layerName} layer" ${layerMinScale > 0 ? "disabled" : ""} style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}"
+                aria-label="hide ${layerName} layer" ${
+          layerMinScale > 0 ? "disabled" : ""
+        } style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}"
               >
                 <span class="${
                   layerMinScale > 0
@@ -475,6 +493,51 @@ const initializeMap = () => {
           </div>
         `;
       });
+
+      // Create an array of sources based on the feature layers
+      const searchSources = featureLayers.map((layer) => {
+        console.log("layer", layer);
+
+        // Extract field names from the search fields
+        const searchFields = layer.layerProperties.searchFields.map((field) =>
+          field.replace(/\{|\}/g, "")
+        );
+
+        // Extract the display field name
+        const displayField = layer.layerProperties.displayField
+          .match(/\{(.*?)\}/)[1] // Match text within curly braces and get the first match
+          .replace(/\{|\}/g, ""); // Remove curly braces
+
+        return {
+          layer: layer,
+          searchFields: searchFields, // Use the extracted search fields as an array
+          displayField: displayField, // Use the first field name as the display field
+          exactMatch: false,
+          outFields: ["*"],
+          name: layer.layerProperties.layerName,
+          placeholder: `Search ${layer.layerProperties.layerName}`,
+        };
+      });
+
+      console.log("searchSources", searchSources);
+
+      const searchWidget = new Search({
+        view: view,
+        sources: searchSources,
+        includeDefaultSources: false,
+        allPlaceholder: "Search for assets",
+      });
+
+      // Listen to the search-complete event
+      searchWidget.on("search-complete", (event) => {
+        console.log("search-complete", event);
+      });
+
+      if (showSearch === "true" || showSearch === true) {
+        view.ui.add(searchWidget, { position: "top-right" });
+      } else {
+        view.ui.remove(searchWidget);
+      }
 
       hideOrShowLayer();
       view.on("click", (event) => {
