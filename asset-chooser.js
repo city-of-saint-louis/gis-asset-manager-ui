@@ -499,10 +499,10 @@ const initializeMap = () => {
           name: layer.layerProperties.layerName,
           placeholder: `Search ${layer.layerProperties.layerName}`,
           searchTemplate: searchTemplate,
-          suggeestionsEnabled: true,
+          suggestionsEnabled: true,
           suggestionTemplate: searchTemplate,
+          maxSuggestions: 50000,
         });
-        
       });
 
       console.log("searchSources", searchSources);
