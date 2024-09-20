@@ -299,7 +299,8 @@ const initializeMap = () => {
       "esri/views/MapView",
       "esri/layers/FeatureLayer",
       "esri/widgets/Search",
-    ], (Map, MapView, FeatureLayer, Search) => {
+      "esri/widgets/Search/LayerSearchSource",
+    ], (Map, MapView, FeatureLayer, Search, LayerSearchSource) => {
       const map = new Map({ basemap: baseMap });
 
       const view = new MapView({
@@ -308,14 +309,6 @@ const initializeMap = () => {
         zoom: zoom,
         container: document.querySelector("#viewDiv"),
       });
-
-      // const searchWidget1 = new Search({ view: view });
-
-      // if (showSearch === "true" || showSearch === true) {
-      //   view.ui.add(searchWidget1, { position: "top-right" });
-      // } else {
-      //   view.ui.remove(searchWidget1);
-      // }
 
       mapLayersToAdd.forEach((mapLayer) => {
         const mapDataLayer = new FeatureLayer({
@@ -364,18 +357,6 @@ const initializeMap = () => {
         const layerDataDiv = document.getElementById("layer-data-div");
         const layerMinScale = mapDataLayer.minScale;
         const layerMaxScale = mapDataLayer.maxScale;
-
-        //   const searchWidget = new Search({
-        //     view: view,
-        //     allPlaceholder: `Search for ${layerName}s`,
-        //     sources: searchSources,
-        //   });
-
-        //   if (showSearch === "true" || showSearch === true) {
-        //   view.ui.add(searchWidget, { position: "top-right" });
-        // } else {
-        //   view.ui.remove(searchWidget);
-        // }
 
         // Listen for the layerview-create event
         view.on("layerview-create", function (event) {
@@ -499,24 +480,29 @@ const initializeMap = () => {
         console.log("layer", layer);
 
         // Extract field names from the search fields
-        const searchFields = layer.layerProperties.searchFields.map((field) =>
-          field.replace(/\{|\}/g, "")
-        );
+        const searchFields = layer.layerProperties.labelMask.match(/\{([^}]+)\}/g).map(field => field.replace(/\{|\}/g, ""));
 
         // Extract the display field name
         const displayField = layer.layerProperties.displayField
           .match(/\{(.*?)\}/)[1] // Match text within curly braces and get the first match
           .replace(/\{|\}/g, ""); // Remove curly braces
 
-        return {
+        // Create searchTemplate with curly braces around each item
+        const searchTemplate = searchFields.map(field => `{${field}}`).join(", ");
+
+        return new LayerSearchSource({
           layer: layer,
           searchFields: searchFields, // Use the extracted search fields as an array
           displayField: displayField, // Use the first field name as the display field
-          exactMatch: false,
+          exactMatch: true,
           outFields: ["*"],
           name: layer.layerProperties.layerName,
           placeholder: `Search ${layer.layerProperties.layerName}`,
-        };
+          searchTemplate: searchTemplate,
+          suggeestionsEnabled: true,
+          suggestionTemplate: searchTemplate,
+        });
+        
       });
 
       console.log("searchSources", searchSources);
@@ -526,14 +512,109 @@ const initializeMap = () => {
         sources: searchSources,
         includeDefaultSources: false,
         allPlaceholder: "Search for assets",
+        
       });
 
       // Listen to the search-complete event
       searchWidget.on("search-complete", (event) => {
         console.log("search-complete", event);
-        const searchResults = event.results;
-        const searchResult = searchResults[0];
-        console.log("searchResult", searchResult);
+        let highlightedSelection;
+        if (event.results.length) {
+          const graphic = event.results[0].results[0].feature;
+          console.log("graphic", graphic);
+          const layerProperties = graphic.layer.layerProperties;
+          const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
+          const labelMaskValue = eval(
+            `"${graphic.layer.layerProperties.labelMask.replace(
+              /\{([^}]+)\}/g,
+              (match, p1) => `" + graphic.attributes.${p1} + "`
+            )}"`
+          );
+          const layerId = graphic.layer.id;
+          if (
+            !chosenAssets.find(
+              (a) =>
+                a.internalAssetId ===
+                `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
+            )
+          ) {
+            view.whenLayerView(graphic.layer).then((layerView) => {
+              const mapDataLayerId = `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`;
+              const layerAssetMax = layerProperties.maximumAssetsRequired;
+              const totalLayerAssetsSelected = chosenAssets.filter(
+                (h) =>
+                  h.layerId ===
+                  `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
+              ).length;
+              if (
+                layerAssetMax > 0 &&
+                totalLayerAssetsSelected >= layerAssetMax
+              ) {
+                document
+                  .getElementById(
+                    `${mapDataLayerId}-max-asset-required-message`
+                  )
+                  .classList.remove("label-default");
+                document
+                  .getElementById(
+                    `${mapDataLayerId}-max-asset-required-message`
+                  )
+                  .classList.add("label-error");
+                setTimeout(() => {
+                  alert(
+                    `You have already selected the maximum of ${layerAssetMax} assets from the ${graphic.layer.layerProperties.layerName} layer.`
+                  );
+                  document
+                    .getElementById(
+                      `${mapDataLayerId}-max-asset-required-message`
+                    )
+                    .classList.remove("label-error");
+                  document
+                    .getElementById(
+                      `${mapDataLayerId}-max-asset-required-message`
+                    )
+                    .classList.add("label-default");
+                }, 500);
+                return;
+              }
+              highlightedSelection = layerView.highlight(graphic);
+              const chosenAsset = {
+                assetAttributes: graphic.attributes,
+                internalAssetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
+                assetId: `${graphic.attributes[layerAssetIDFieldName]}`,
+                assetIdType: layerAssetIDFieldName,
+                assetLabel: labelMaskValue,
+                layerData: graphic.layer,
+                layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
+                layerName: graphic.layer.title,
+                layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
+                layerAssetMax:
+                  graphic.layer.layerProperties.maximumAssetsRequired,
+                highlightSelect: highlightedSelection,
+              };
+              chosenAssets.push(chosenAsset);
+              renderSelectedAssetLabels();
+              validateNumberofAssetsSelected();
+            });
+          } else {
+            chosenAssets.forEach((asset) => {
+              if (
+                asset.internalAssetId ===
+                `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
+              ) {
+                asset.highlightSelect.remove();
+              }
+            });
+            const hightlightToRemove = chosenAssets.findIndex(
+              (a) =>
+                a.internalAssetId ===
+                `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
+            );
+            chosenAssets.splice(hightlightToRemove, 1);
+            renderSelectedAssetLabels();
+            validateNumberofAssetsSelected();
+          }
+        }
       });
 
       if (showSearch === "true" || showSearch === true) {
