@@ -250,7 +250,7 @@ class AssetChooserContainerComponent extends HTMLElement {
       const title = this.getAttribute("title") || "";
       const hint = this.getAttribute("hint") || "";
       this.innerHTML = `
-      <section id="asset-chooser-section" class="stat-container">
+      <section id="asset-chooser-section" >
         <div id="asset-chooser-interface">
           <h2>
             <strong>${title}</strong>

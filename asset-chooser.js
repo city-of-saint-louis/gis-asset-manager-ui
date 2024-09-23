@@ -481,14 +481,15 @@ const initializeMap = () => {
 
         // Extract field names from the search fields
         const searchFields = layer.layerProperties.labelMask.match(/\{([^}]+)\}/g).map(field => field.replace(/\{|\}/g, ""));
-
+        console.log("searchFields", searchFields);
         // Extract the display field name
         const displayField = layer.layerProperties.displayField
           .match(/\{(.*?)\}/)[1] // Match text within curly braces and get the first match
           .replace(/\{|\}/g, ""); // Remove curly braces
-
+          console.log("displayField", displayField);
         // Create searchTemplate with curly braces around each item
         const searchTemplate = searchFields.map(field => `{${field}}`).join(", ");
+        console.log("searchTemplate", searchTemplate);
 
         return new LayerSearchSource({
           layer: layer,
@@ -499,8 +500,8 @@ const initializeMap = () => {
           name: layer.layerProperties.layerName,
           placeholder: `Search ${layer.layerProperties.layerName}`,
           searchTemplate: searchTemplate,
-          suggestionsEnabled: true,
           suggestionTemplate: searchTemplate,
+          suggestionsEnabled: true,
           maxSuggestions: 50000,
         });
       });
@@ -512,7 +513,6 @@ const initializeMap = () => {
         sources: searchSources,
         includeDefaultSources: false,
         allPlaceholder: "Search for assets",
-        
       });
 
       // Listen to the search-complete event
