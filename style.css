@@ -81,13 +81,9 @@
 
 
 /* media queries */
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 1280px) {
   .modal {
-    width: 70%;
+    width: 90%;
   }
-  @media screen and (max-width: 778px) {
-    .modal {
-      width: 90%;
-    }
-  }
+ 
 }
