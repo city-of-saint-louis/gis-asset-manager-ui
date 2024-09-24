@@ -54,7 +54,7 @@ class AssetChooserContainerComponent extends HTMLElement {
                 </button>
               </form>
             </div>  
-             <p>Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please cancel your entry and return to the map to make your selections.</p>
+             <p>Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please close this window and return to the map to make your selections.</p>
           </div>
         </dialog>
       `;
@@ -147,13 +147,16 @@ class AssetChooserContainerComponent extends HTMLElement {
       }
       // Call openModal with prefilled data
       openModal(prefillData);
-      clearStoredModalFormAssetData();
+      // clearStoredModalFormAssetData();
     };
 
     const handleModalAssetFormSubmit = (event) => {
       event.preventDefault();
       // const scrollPosition = window.scrollY;
       const formData = new FormData(event.target);
+      if (chosenAssetFormData.length > 0) {
+        chosenAssetFormData.splice(0, chosenAssetFormData.length);
+      }
       formData.forEach((value, key) => {
         chosenAssetFormData.push({ key, value });
       });
@@ -227,14 +230,14 @@ class AssetChooserContainerComponent extends HTMLElement {
           <h2>${this.title}</h2>
           <h3>${hint}</h3>
            <div id="accomodation-button-container">
-          <p id="button-hint">Please click below if you are using assistive technology and unable to select assets on the map.</p>
+          <p id="button-hint">Please click below if you are using assistive technology and are unable to select assets on the map.</p>
           <button
             id="accomodation-button"
             class="link-button inverse-button"
             aria-label="Click here to enter assets if you are using assistive technology and unable to select assets on the map."
           >
             <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched"></span>
-            Switch To Keyboard Accessible Asset Entry
+            Click for Accommodation
           </button>
         </div>
           <p id="validity-message"></p>
