@@ -29,29 +29,18 @@
   background-color: rgba(255, 255, 255, 1);
   border: 1px solid #888;
   width: 60%;
-  /* max-width: 800px; */
   border-radius:5px;
-  position: relative;
 }
 
 .modal-header {
+  margin: -16px -16px 0 -16px;
   background-color: #efefef; 
-  position: absolute;
   padding: 14px;
-  top: 0;
-  left: 0;
-  right: 0;
-  /* Adjust height as needed */
-  height: 100px; 
-  /* height: 170px;  */
-  border-top-left-radius: 5px; /* Match the modal's border radius */
-  border-top-right-radius: 5px; /* Match the modal's border radius */
 }
 
 .modal-body {
   padding: 10px 0 10px 0;
-  margin-top: 100px; 
-  /* margin-top: 160px;  */
+  margin-top: 20px; 
 }
 
 .close {
@@ -96,59 +85,9 @@
   .modal {
     width: 70%;
   }
-  .modal-header {
-    height: 110px;
-  }
-}
-
-@media screen and (max-width: 778px) {
-  .modal {
-    width: 90%;
-  }
-}
-
-
-
-
-@media screen and (max-width: 610px) {
-  .modal-header {
-    height: 120px; 
-  }
-  .modal-body {
-    margin-top: 160px; 
-  }
-}
-
-@media screen and (max-width: 541px) {
-  
-  .modal-header {
-    height: 140px;
-  }
-}
-
-@media screen and (max-width: 508px) {
-  .modal-header {
-    height: 160px;
-  }
-  .modal-body {
-    margin-top: 170px;
-  }
-}
-
-@media screen and (max-width: 400px) {
-  .modal-header {
-    height: 180px; 
-  }
-  .modal-body {
-    margin-top: 180px; 
-  }
-}
-
-@media screen and (max-width: 360px) {
-  .modal-header {
-    height: 200px; 
-  }
-  .modal-body {
-    margin-top: 200px; 
+  @media screen and (max-width: 778px) {
+    .modal {
+      width: 90%;
+    }
   }
 }
