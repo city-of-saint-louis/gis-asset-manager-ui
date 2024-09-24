@@ -308,3 +308,5 @@ document.addEventListener("isValidFalse", function (event) {
   localStorage.removeItem("chosenAssets");
 });
 ```
+
+Switch to Accesible Asset Entry
