@@ -76,7 +76,7 @@ const renderSelectedAssetLabels = () => {
         const removeAssetBtn = document.getElementById(
           `remove-${asset.internalAssetId}-btn`
         );
-        
+
         removeAssetBtn.addEventListener("click", () => {
           chosenAssets.forEach((asset) => {
             if (asset.internalAssetId === assetLabelListItem.id) {
@@ -153,7 +153,24 @@ const validateNumberofAssetsSelected = () => {
       if (!validLayers.includes(layerId)) validLayers.push(layerId);
     }
 
-    if (layerAssetMin >= 0 && totalLayerAssetsSelected < layerAssetMin) {
+    if (layerAssetMin === 1 && totalLayerAssetsSelected === layerAssetMin) {
+      minAssetMessageElement.innerHTML = `${totalLayerAssetsSelected} selected. ${layerAssetMin} required.`;
+      minAssetMessageElement.classList.add("label", "label-success");
+      minAssetMessageElement.classList.remove("label-error");
+      isLayerValid = true;
+      if (!validLayers.includes(layerId)) validLayers.push(layerId);
+    }
+
+    if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
+      minAssetMessageElement.innerHTML = `${layerAssetMin} required.`;
+      minAssetMessageElement.classList.remove("label", "label-success");
+      minAssetMessageElement.classList.add("label", "label-error");
+      isLayerValid = false;
+      const layerToRemove = validLayers.findIndex((l) => l === layerId);
+      if (layerToRemove !== -1) validLayers.splice(layerToRemove, 1);
+    }
+
+    if (layerAssetMin > 1 && totalLayerAssetsSelected < layerAssetMin) {
       minAssetMessageElement.innerHTML = `At least ${layerAssetMin} required.`;
       minAssetMessageElement.classList.remove("label", "label-success");
       minAssetMessageElement.classList.add("label", "label-error");
@@ -217,11 +234,19 @@ const renderValidityMessage = () => {
           `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
       ).length;
 
-      if (layerAssetMin >= 0 && totalLayerAssetsSelected < layerAssetMin) {
+      if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
+        makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName} Layer</strong></span>, `;
+      }
+
+      if (layerAssetMin > 1 && totalLayerAssetsSelected < layerAssetMin) {
         makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName} Layer</strong></span>, `;
       }
 
-      if (layerAssetMin >= 0 && totalLayerAssetsSelected >= layerAssetMin) {
+      if (layerAssetMin === 1 && totalLayerAssetsSelected === layerAssetMin) {
+        makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName} Layer</strong></span>, `;
+      }
+
+      if (layerAssetMin > 1 && totalLayerAssetsSelected >= layerAssetMin) {
         makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName} Layer</strong></span>, `;
       }
     });
@@ -251,7 +276,9 @@ const renderValidityMessage = () => {
 
 // Dispatch the chosenAssets to the parent application
 const dispatchChosenAssets = (chosenAssets) => {
-  const event = new CustomEvent("isValidTrue", { detail: { chosenAssets, chosenAssetFormData: [] } });
+  const event = new CustomEvent("isValidTrue", {
+    detail: { chosenAssets, chosenAssetFormData: [] },
+  });
   document.dispatchEvent(event);
 };
 
@@ -298,7 +325,6 @@ const initializeMap = () => {
       "esri/layers/FeatureLayer",
       "esri/widgets/Search",
     ], (Map, MapView, FeatureLayer, Search) => {
-
       const map = new Map({ basemap: baseMap });
 
       const view = new MapView({
@@ -410,8 +436,8 @@ const initializeMap = () => {
             <div class="stat-title" id="${layerName}-layer-selected-asset-container">
              <div>
                <span> <strong>${layerName} Layer</strong></span>
-               <br><br/>
-               <span id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
+               <br>
+               <span class="zoom-alert-span" id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
                 ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
                </span>
              </div>
@@ -419,7 +445,9 @@ const initializeMap = () => {
                 id="${layerName}-show-hide-layer-btn" 
                 class="selectLayers" 
                 att-layer-id="${layerName}-${mapDataLayer.id}"
-                aria-label="hide ${layerName} layer" ${layerMinScale > 0 ? "disabled" : ""} style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}"
+                aria-label="hide ${layerName} layer" ${
+          layerMinScale > 0 ? "disabled" : ""
+        } style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}"
               >
                 <span class="${
                   layerMinScale > 0
@@ -442,6 +470,14 @@ const initializeMap = () => {
                       No selection required
                     </span>
                   </span>   
+                  `
+                  : minAssetsRequired === 1
+                  ? `
+                  <span id="${mapDataLayerId}-min-asset-required-message">
+                    <span class="label label-error">
+                     ${minAssetsRequired} required
+                    </span>
+                  </span>
                   `
                   : `
                   <span id="${mapDataLayerId}-min-asset-required-message">
