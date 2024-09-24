@@ -227,14 +227,14 @@ class AssetChooserContainerComponent extends HTMLElement {
           <h2>${this.title}</h2>
           <h3>${hint}</h3>
            <div id="accomodation-button-container">
-          <span id="button-hint">Please click below if you are using assistive technology and unable to select assets on the map.</span>
-          <br>
+          <p id="button-hint">Please click below if you are using assistive technology and unable to select assets on the map.</p>
           <button
             id="accomodation-button"
-            class="link-button"
+            class="link-button inverse-button"
             aria-label="Click here to enter assets if you are using assistive technology and unable to select assets on the map."
           >
             <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched"></span>
+            Switch To Keyboard Accessible Asset Entry
           </button>
         </div>
           <p id="validity-message"></p>

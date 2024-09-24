@@ -2,11 +2,6 @@
 .zoom-alert-span {
   margin-top: 5px;
 }
-#accomodation-button {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  border-radius: 50%;
-}
 
 #accessibility-icon {
   margin-right: 5px;
@@ -79,11 +74,9 @@
   margin-right: 5px;
 }
 
-
 /* media queries */
 @media screen and (max-width: 1280px) {
   .modal {
     width: 90%;
   }
- 
 }
