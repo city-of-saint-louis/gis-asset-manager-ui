@@ -10,7 +10,7 @@
       href="https://js.arcgis.com/4.30/esri/themes/light/main.css"
     />
     <link
-      href="https://stlouis-mo.gov/style/screen.css"
+      href="https://www.stlouis-mo.gov/style/screen.css"
       rel="stylesheet"
       type="text/css"
       media="all"
@@ -61,7 +61,7 @@
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
           layer-asset-id-field-name="FID"
           minimum=1
-          maximum=0
+          maximum=1
           label-mask="{SITEADDR}"
           min-scale=20000
         >
@@ -70,8 +70,8 @@
           name="Neighborhood"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/City_Neighborhoods/FeatureServer"
           layer-asset-id-field-name="FID"
-          minimum=1
-          maximum=3
+          minimum=0
+          maximum=0
           label-mask="{NHD_NAME}"
           max-scale=30000
         >

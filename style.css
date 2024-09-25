@@ -1,3 +1,19 @@
+/* asset-chooser */
+.zoom-alert-span {
+  margin-top: 5px;
+}
+
+#accessibility-icon {
+  margin-right: 5px;
+}
+
+#edit-asset-selection-button {
+  margin: 5px;
+}
+#cancel-asset-selection-button {
+  margin: 5px;
+}
+
 /* Modal styles */
 .modal::backdrop {
   background-color: rgb(0,0,0); /* Fallback color */
@@ -7,42 +23,29 @@
 .modal {
   background-color: rgba(255, 255, 255, 1);
   border: 1px solid #888;
-  width: 100%;
+  width: 60%;
   border-radius:5px;
-  position: relative;
 }
 
 .modal-header {
+  margin: -16px -16px 0 -16px;
   background-color: #efefef; 
-  position: absolute;
-  padding: 20px;
-  top: 0;
-  left: 0;
-  right: 0;
-  /* Adjust height as needed */
-  height: 100px; 
-  /* height: 170px;  */
-  border-top-left-radius: 5px; /* Match the modal's border radius */
-  border-top-right-radius: 5px; /* Match the modal's border radius */
-}
-
-.modal-header-hint {
-  font-size: 0.9em;
-  margin-top: 2px;
+  padding: 14px;
 }
 
 .modal-body {
   padding: 10px 0 10px 0;
-  margin-top: 100px; 
-  /* margin-top: 160px;  */
+  margin-top: 20px; 
 }
 
 .close {
   color: #888;
   float: right;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
   border: none;
+  margin-top: -12px;
+  margin-right: -12px;
 }
 
 .close:hover {
@@ -64,7 +67,7 @@
 
 #accomodation-subtitle {
   margin: 0;
-  font-size: 1em;
+  /* font-size: 1em; */
 }
 
 #accessibility-icon {
@@ -72,32 +75,8 @@
 }
 
 /* media queries */
-@media screen and (max-width: 900px) {
-  .modal-header {
-    height: 110px; 
-  }
-}
-
-@media screen and (max-width: 590px) {
-  .modal-header {
-    height: 160px; 
-  }
-  .modal-body {
-    margin-top: 160px; 
-  }
-}
-
-@media screen and (max-width: 490px) {
-  .modal-header {
-    height: 170px;
-  }
-}
-
-@media screen and (max-width: 400px) {
-  .modal-header {
-    height: 220px; 
-  }
-  .modal-body {
-    margin-top: 220px; 
+@media screen and (max-width: 1280px) {
+  .modal {
+    width: 90%;
   }
 }
