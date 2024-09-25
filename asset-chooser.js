@@ -262,7 +262,7 @@ const renderValidityMessage = () => {
       makeMinimunRequireMessage = `${makeMinimunRequireMessage.substring(
         0,
         lastCommaIndex
-      )} and ${makeMinimunRequireMessage.substring(lastCommaIndex + 2)}`;
+      )}, and ${makeMinimunRequireMessage.substring(lastCommaIndex + 2)}`;
     }
 
     makeMinimunRequireMessage = makeMinimunRequireMessage.replace(
