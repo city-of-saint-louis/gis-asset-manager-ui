@@ -3,6 +3,7 @@ class AssetChooserContainerComponent extends HTMLElement {
     super(); // always call super() first in the constructor for a custom web component
     this.isOriginalState = true; // flag to track the state of the interface
     this.title = this.getAttribute("title") || "";
+    this.hint = this.getAttribute("hint") || "";
   }
   connectedCallback() {
     const generateInputsContent = (prefillData = {}) => {
@@ -193,9 +194,9 @@ class AssetChooserContainerComponent extends HTMLElement {
           id="cancel-asset-selection-button"
           class="link-button"
         >
-          Cancel and Return to Map
+          Cancel Entry and Return to Map
         </button>
-        <p>Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please cancel your entry and reurn to the map to make your selections.</p>
+        <p>Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please cancel your entry and return to the map to make your selections.</p>
       `;
       closeModal();
       // window.scrollTo(0, scrollPosition);
@@ -223,12 +224,12 @@ class AssetChooserContainerComponent extends HTMLElement {
 
     try {
       // const title = this.getAttribute("title") || "";
-      const hint = this.getAttribute("hint") || "";
+      // const hint = this.getAttribute("hint") || "";
       this.innerHTML = `
       <section id="asset-chooser-section">
         <div id="asset-chooser-interface">
           <h2>${this.title}</h2>
-          <h3>${hint}</h3>
+          <h3>${this.hint}</h3>
            <div id="accomodation-button-container">
           <p id="button-hint">Please click below if you are using assistive technology and are unable to select assets on the map.</p>
           <button
@@ -237,7 +238,7 @@ class AssetChooserContainerComponent extends HTMLElement {
             aria-label="Click here to enter assets if you are using assistive technology and unable to select assets on the map."
           >
             <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched"></span>
-            Click for Accommodation
+            Click for Accessible Accommodation
           </button>
         </div>
           <p id="validity-message"></p>
