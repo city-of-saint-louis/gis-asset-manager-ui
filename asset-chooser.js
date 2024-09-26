@@ -210,6 +210,7 @@ const validateAssetSelection = () => {
     // Secure the chosenAssets from parent application when isValid is false
     secureChosenAssets();
   }
+  console.log("chosenAssets", chosenAssets);
 };
 
 const renderValidityMessage = () => {
@@ -334,7 +335,10 @@ const initializeMap = () => {
         container: document.querySelector("#viewDiv"),
       });
 
-      const searchWidget = new Search({ view: view });
+      const searchWidget = new Search({ 
+        view: view,
+        popupEnabled: false,
+      });
 
       if (showSearch === "true" || showSearch === true) {
         view.ui.add(searchWidget, { position: "top-right" });
