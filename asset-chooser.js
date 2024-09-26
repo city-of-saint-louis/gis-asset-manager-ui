@@ -14,6 +14,11 @@ const validLayers = [];
 let isValid = false;
 
 // functions to provide functionality for the GIS Asset Chooser
+const clearSearchInput = () => {
+  const searchInput = document.querySelector(".esri-search__input");
+  searchInput.value = "";
+};
+
 const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
     const layerName = outerLayer.layerProperties.layerName;
@@ -78,7 +83,12 @@ const renderSelectedAssetLabels = () => {
         );
 
         removeAssetBtn.addEventListener("click", () => {
+          const closeButton = document.querySelector(".esri-icon-close");
+          if (closeButton) {
+            closeButton.click();
+          }
           chosenAssets.forEach((asset) => {
+            console.log("asset", asset);
             if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
               const listItemToRemove = document.getElementById(
@@ -95,6 +105,8 @@ const renderSelectedAssetLabels = () => {
                   list.innerHTML = `<li>None selected</li>`;
                 }
               });
+              // clearSearchInput();
+              console.log("chosenAssets", chosenAssets);
             }
           });
         });
@@ -511,17 +523,20 @@ const initializeMap = () => {
       // Create an array of sources based on the feature layers
       const searchSources = featureLayers.map((layer) => {
         console.log("layer", layer);
-
         // Extract field names from the search fields
-        const searchFields = layer.layerProperties.labelMask.match(/\{([^}]+)\}/g).map(field => field.replace(/\{|\}/g, ""));
+        const searchFields = layer.layerProperties.labelMask
+          .match(/\{([^}]+)\}/g)
+          .map((field) => field.replace(/\{|\}/g, ""));
         console.log("searchFields", searchFields);
         // Extract the display field name
         const displayField = layer.layerProperties.displayField
           .match(/\{(.*?)\}/)[1] // Match text within curly braces and get the first match
           .replace(/\{|\}/g, ""); // Remove curly braces
-          console.log("displayField", displayField);
+        console.log("displayField", displayField);
         // Create searchTemplate with curly braces around each item
-        const searchTemplate = searchFields.map(field => `{${field}}`).join(", ");
+        const searchTemplate = searchFields
+          .map((field) => `{${field}}`)
+          .join(", ");
         console.log("searchTemplate", searchTemplate);
 
         return new LayerSearchSource({
@@ -550,6 +565,12 @@ const initializeMap = () => {
 
       // Listen to the search-complete event
       searchWidget.on("search-complete", (event) => {
+        clearSearchInput();
+        // Trigger a click on the button with class "esri-icon-close"
+        // const closeButton = document.querySelector(".esri-icon-close");
+        // if (closeButton) {
+        //   closeButton.click();
+        // }
         console.log("search-complete", event);
         let highlightedSelection;
         if (event.results.length) {
