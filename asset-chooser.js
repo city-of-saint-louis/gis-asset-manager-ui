@@ -307,10 +307,8 @@ captureMapLayers();
 
 // initilize the map using the map layers provided
 const initializeMap = () => {
-  // if (allMapLayerIds.length > 0) {
-  //   allMapLayerIds.length = 0;
-  // }
-  
+  document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
+  document.getElementById("submit-chosen-assets-button").classList.add("disabled-button");
   try {
     const zoom =
       document.querySelector("asset-chooser-container").getAttribute("zoom") ||

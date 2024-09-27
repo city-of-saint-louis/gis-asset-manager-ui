@@ -66,7 +66,7 @@ class AssetChooserContainerComponent extends HTMLElement {
       if (existingModal) {
         existingModal.remove();
       }
-    
+
       const inputsContent = generateInputsContent(prefillData);
       const modalHTML = generateModalHTML(inputsContent);
       document.body.insertAdjacentHTML("beforeend", modalHTML);
@@ -94,7 +94,7 @@ class AssetChooserContainerComponent extends HTMLElement {
     };
 
     const clearStoredModalFormAssetData = () => {
-      console.log("chosenAssetFormData", chosenAssetFormData);
+      console.log("clearing - chosenAssetFormData", chosenAssetFormData);
       chosenAssetFormData.splice(0, chosenAssetFormData.length);
       isValid = false;
       const customEvent = new CustomEvent("isValidFalse", {
@@ -102,7 +102,7 @@ class AssetChooserContainerComponent extends HTMLElement {
         bubbles: true,
       });
       document.dispatchEvent(customEvent);
-      console.log("chosenAssetFormData", chosenAssetFormData);
+      console.log("cleared - chosenAssetFormData", chosenAssetFormData);
     };
 
     const handleAccomodationButtonClick = () => {
@@ -124,12 +124,21 @@ class AssetChooserContainerComponent extends HTMLElement {
       if (existingModal) {
         existingModal.close();
       }
-      // empty the store featureLayers array
+      // empty the stored featureLayers array
       featureLayers.splice(0, featureLayers.length);
+      // empty the stored allMapLayerIds array
       allMapLayerIds.splice(0, allMapLayerIds.length);
-      
+      // re-render the component
       this.connectedCallback(); // Re-render the component
       initializeMap();
+      console.log("chosenAssets after cancel", chosenAssets);
+      console.log("chosenAssetFormData after cancel", chosenAssetFormData);
+      document
+        .getElementById("submit-chosen-assets-button")
+        .setAttribute("disabled", true);
+      document
+        .getElementById("submit-chosen-assets-button")
+        .classList.add("disabled-button");
     };
 
     const handleAssetEditButtonClick = () => {
@@ -174,13 +183,15 @@ class AssetChooserContainerComponent extends HTMLElement {
         <p>You entered:</p>
         <ul>
           ${chosenAssetFormData
-        .map(
-          (asset) =>
-            `<li><strong>${asset.key}</strong>: ${
-          asset.value ? asset.value : `Nothing entered for ${asset.key} layer`
-            }</li>`
-        )
-        .join("")}
+            .map(
+              (asset) =>
+                `<li><strong>${asset.key}</strong>: ${
+                  asset.value
+                    ? asset.value
+                    : `Nothing entered for ${asset.key} layer`
+                }</li>`
+            )
+            .join("")}
         </ul>
         <button
           id="edit-asset-selection-button"
@@ -197,7 +208,9 @@ class AssetChooserContainerComponent extends HTMLElement {
         <p>Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please cancel your entry and return to the map to make your selections.</p>
       `;
       closeModal();
-      document.getElementById("asset-chooser-interface").scrollIntoView({ behavior: "smooth", block: "start" });
+      document
+        .getElementById("asset-chooser-interface")
+        .scrollIntoView({ behavior: "smooth", block: "start" });
       // Add event listener for the dynamically created cancel button
       const cancelSelectionsButton = this.querySelector(
         "#cancel-asset-selection-button"

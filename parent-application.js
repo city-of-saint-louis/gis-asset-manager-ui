@@ -38,6 +38,7 @@ document.addEventListener("isValidFalse", (event) => {
     .getElementById("submit-chosen-assets-button")
     .classList.add("disabled-button");
   localStorage.removeItem("chosenAssets");
+  localStorage.removeItem("chosenAssetFormData");
 });
 
 // below is an example of how the chosenAssets could be submitted to the parent application using the custom events and custom event listeners
