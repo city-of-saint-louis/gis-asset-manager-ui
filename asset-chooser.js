@@ -19,6 +19,14 @@ const clearSearchInput = () => {
   searchInput.value = "";
 };
 
+// Trigger a click on the button with class "esri-icon-close"
+const triggerCloseSearchEntry = () => {
+  const closeButton = document.querySelector(".esri-icon-close");
+  if (closeButton) {
+    closeButton.click();
+  }
+};
+
 const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
     const layerName = outerLayer.layerProperties.layerName;
@@ -337,14 +345,37 @@ const initializeMap = () => {
       "esri/layers/FeatureLayer",
       "esri/widgets/Search",
       "esri/widgets/Search/LayerSearchSource",
-    ], (Map, MapView, FeatureLayer, Search, LayerSearchSource) => {
+      "esri/widgets/Search/LocatorSearchSource",
+      "esri/geometry/Extent",
+    ], (
+      Map,
+      MapView,
+      FeatureLayer,
+      Search,
+      LayerSearchSource,
+      LocatorSearchSource,
+      Extent
+    ) => {
       const map = new Map({ basemap: baseMap });
+
+      // Define the extent for the city limits of St. Louis
+      const stLouisExtent = new Extent({
+        xmin: -90.3103,
+        ymin: 38.5244,
+        xmax: -90.14,
+        ymax: 38.7744,
+        spatialReference: { wkid: 4326 },
+      });
 
       const view = new MapView({
         map: map,
         center: [centerX, centerY],
         zoom: zoom,
         container: document.querySelector("#viewDiv"),
+        constraints: {
+          snapToZoom: false,
+          geometry: stLouisExtent,
+        },
       });
 
       mapLayersToAdd.forEach((mapLayer) => {
@@ -543,9 +574,9 @@ const initializeMap = () => {
           layer: layer,
           searchFields: searchFields, // Use the extracted search fields as an array
           displayField: displayField, // Use the first field name as the display field
-          exactMatch: true,
+          exactMatch: false,
           outFields: ["*"],
-          name: layer.layerProperties.layerName,
+          name: `${layer.layerProperties.layerName} Layer`,
           placeholder: `Search ${layer.layerProperties.layerName}`,
           searchTemplate: searchTemplate,
           suggestionTemplate: searchTemplate,
@@ -554,6 +585,20 @@ const initializeMap = () => {
         });
       });
 
+      // Add a LocatorSearchSource for default search suggestions
+      const locatorSearchSource = new LocatorSearchSource({
+        url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
+        filter: {
+          geometry: stLouisExtent,
+        },
+        outFields: ["*"],
+        singleLineFieldName: "SingleLine",
+        name: "ArcGIS World Geocoding Service",
+        placeholder: "Search for places or addresses",
+        maxSuggestions: 6,
+        suggestionsEnabled: true,
+      });
+      searchSources.push(locatorSearchSource);
       console.log("searchSources", searchSources);
 
       const searchWidget = new Search({
@@ -561,16 +606,13 @@ const initializeMap = () => {
         sources: searchSources,
         includeDefaultSources: false,
         allPlaceholder: "Search for assets",
+        popupEnabled: false,
+        autoNavigate: true,
       });
 
       // Listen to the search-complete event
       searchWidget.on("search-complete", (event) => {
         clearSearchInput();
-        // Trigger a click on the button with class "esri-icon-close"
-        // const closeButton = document.querySelector(".esri-icon-close");
-        // if (closeButton) {
-        //   closeButton.click();
-        // }
         console.log("search-complete", event);
         let highlightedSelection;
         if (event.results.length) {

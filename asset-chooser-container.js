@@ -109,6 +109,11 @@ class AssetChooserContainerComponent extends HTMLElement {
     };
 
     const handleAccomodationButtonClick = () => {
+      isValid = false;
+      const customEvent = new CustomEvent("isValidFalse", {
+        detail: { chosenAssets: [], chosenAssetFormData },
+        bubbles: true,
+      });
       if (chosenAssets.length > 0) {
         // remove assets from chosenAssets array
         chosenAssets.splice(0, chosenAssets.length);
@@ -117,6 +122,7 @@ class AssetChooserContainerComponent extends HTMLElement {
         // remove assets from chosenAssetFormData array
         chosenAssetFormData.splice(0, chosenAssetFormData.length);
       }
+      document.dispatchEvent(customEvent);
       openModal();
     };
 
@@ -125,9 +131,8 @@ class AssetChooserContainerComponent extends HTMLElement {
       clearStoredModalFormAssetData();
       const existingModal = document.getElementById("asset-modal");
       if (existingModal) {
-        existingModal.remove();
+        existingModal.close();
       }
-      // this.isOriginalState = true; // Set the flag to true
       // empty the store featureLayers array
       featureLayers.splice(0, featureLayers.length);
       this.connectedCallback(); // Re-render the component
@@ -152,7 +157,6 @@ class AssetChooserContainerComponent extends HTMLElement {
 
     const handleModalAssetFormSubmit = (event) => {
       event.preventDefault();
-      // const scrollPosition = window.scrollY;
       const formData = new FormData(event.target);
       if (chosenAssetFormData.length > 0) {
         chosenAssetFormData.splice(0, chosenAssetFormData.length);
