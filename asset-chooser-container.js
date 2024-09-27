@@ -72,9 +72,6 @@ class AssetChooserContainerComponent extends HTMLElement {
       document.body.insertAdjacentHTML("beforeend", modalHTML);
       const modal = document.getElementById("asset-modal");
       modal.showModal();
-      // modal.style.display = "block";
-      modal.setAttribute("aria-hidden", "false");
-      // modal.querySelector(".modal-content").focus();
       document.body.classList.add("no-scroll");
       // Add event listener for the modal form submission
       const modalForm = document.getElementById("modal-asset-form");
@@ -91,7 +88,6 @@ class AssetChooserContainerComponent extends HTMLElement {
     const closeModal = () => {
       const modal = document.getElementById("asset-modal");
       if (modal) {
-        modal.setAttribute("aria-hidden", "true");
         modal.close();
         document.body.classList.remove("no-scroll");
       }
@@ -126,11 +122,12 @@ class AssetChooserContainerComponent extends HTMLElement {
       clearStoredModalFormAssetData();
       const existingModal = document.getElementById("asset-modal");
       if (existingModal) {
-        existingModal.remove();
+        existingModal.close();
       }
-      // this.isOriginalState = true; // Set the flag to true
       // empty the store featureLayers array
       featureLayers.splice(0, featureLayers.length);
+      allMapLayerIds.splice(0, allMapLayerIds.length);
+      
       this.connectedCallback(); // Re-render the component
       initializeMap();
     };
@@ -153,7 +150,6 @@ class AssetChooserContainerComponent extends HTMLElement {
 
     const handleModalAssetFormSubmit = (event) => {
       event.preventDefault();
-      // const scrollPosition = window.scrollY;
       const formData = new FormData(event.target);
       if (chosenAssetFormData.length > 0) {
         chosenAssetFormData.splice(0, chosenAssetFormData.length);
@@ -171,18 +167,20 @@ class AssetChooserContainerComponent extends HTMLElement {
         document.dispatchEvent(customEvent);
       }
       // Clear the form
-      event.target.reset();
+      // event.target.reset();
       document.getElementById("asset-chooser-interface").innerHTML = `
         <h2 id="asset-chooser-title">${this.title}</h2>
         <h3>The asset information has been added to your case.</h3>
         <p>You entered:</p>
         <ul>
           ${chosenAssetFormData
-            .map(
-              (asset) =>
-                `<li><strong>${asset.key}</strong>: ${asset.value}</li>`
-            )
-            .join("")}
+        .map(
+          (asset) =>
+            `<li><strong>${asset.key}</strong>: ${
+          asset.value ? asset.value : `Nothing entered for ${asset.key} layer`
+            }</li>`
+        )
+        .join("")}
         </ul>
         <button
           id="edit-asset-selection-button"
@@ -199,7 +197,6 @@ class AssetChooserContainerComponent extends HTMLElement {
         <p>Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please cancel your entry and return to the map to make your selections.</p>
       `;
       closeModal();
-      // window.scrollTo(0, scrollPosition);
       document.getElementById("asset-chooser-interface").scrollIntoView({ behavior: "smooth", block: "start" });
       // Add event listener for the dynamically created cancel button
       const cancelSelectionsButton = this.querySelector(

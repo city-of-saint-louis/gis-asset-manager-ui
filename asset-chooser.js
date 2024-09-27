@@ -194,6 +194,7 @@ const validateNumberofAssetsSelected = () => {
 };
 
 const validateAssetSelection = () => {
+  console.log('validatAssetSelection');
   if (validLayers.length !== allMapLayerIds.length) {
     isValid = false;
   }
@@ -201,16 +202,22 @@ const validateAssetSelection = () => {
   const sortedAllMapLayerIds = [...allMapLayerIds].sort();
   const stringifyValidLayers = JSON.stringify(sortedValidLayers);
   const stringifyAllMapLayerIds = JSON.stringify(sortedAllMapLayerIds);
+
+  console.log("stringifyValidLayers", stringifyValidLayers);
+  console.log("stringifyAllMapLayerIds", stringifyAllMapLayerIds);
+
   if (stringifyValidLayers === stringifyAllMapLayerIds) {
     isValid = true;
     // Dispatch the chosenAssets to the parent application when isValid is true
     dispatchChosenAssets(chosenAssets);
+    
   } else {
     isValid = false;
     // Secure the chosenAssets from parent application when isValid is false
     secureChosenAssets();
   }
-  console.log("chosenAssets", chosenAssets);
+  console.log("validateAssetSelection - chosenAssets", chosenAssets);
+  console.log("validateAssetSelection - isValid", isValid);
 };
 
 const renderValidityMessage = () => {
@@ -300,6 +307,10 @@ captureMapLayers();
 
 // initilize the map using the map layers provided
 const initializeMap = () => {
+  // if (allMapLayerIds.length > 0) {
+  //   allMapLayerIds.length = 0;
+  // }
+  
   try {
     const zoom =
       document.querySelector("asset-chooser-container").getAttribute("zoom") ||
