@@ -97,12 +97,7 @@ class AssetChooserContainerComponent extends HTMLElement {
       console.log("clearing - chosenAssetFormData", chosenAssetFormData);
       chosenAssetFormData.splice(0, chosenAssetFormData.length);
       isValid = false;
-      const customEvent = new CustomEvent("isValidFalse", {
-        detail: { chosenAssets: [], chosenAssetFormData },
-        bubbles: true,
-      });
-      document.dispatchEvent(customEvent);
-      console.log("cleared - chosenAssetFormData", chosenAssetFormData);
+      secureChosenAssets();
     };
 
     const handleAccomodationButtonClick = () => {
@@ -118,8 +113,6 @@ class AssetChooserContainerComponent extends HTMLElement {
     };
 
     const handleCancelSelectionsClick = () => {
-      // Clear stored data
-      clearStoredModalFormAssetData();
       const existingModal = document.getElementById("asset-modal");
       if (existingModal) {
         existingModal.close();
@@ -133,12 +126,8 @@ class AssetChooserContainerComponent extends HTMLElement {
       initializeMap();
       console.log("chosenAssets after cancel", chosenAssets);
       console.log("chosenAssetFormData after cancel", chosenAssetFormData);
-      document
-        .getElementById("submit-chosen-assets-button")
-        .setAttribute("disabled", true);
-      document
-        .getElementById("submit-chosen-assets-button")
-        .classList.add("disabled-button");
+      // Clear stored data
+      clearStoredModalFormAssetData();
     };
 
     const handleAssetEditButtonClick = () => {

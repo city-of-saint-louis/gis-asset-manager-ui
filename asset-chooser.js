@@ -264,13 +264,13 @@ const renderValidityMessage = () => {
       makeMinimunRequireMessage = makeMinimunRequireMessage.slice(0, -2);
     }
 
-    // Replace the last comma with ' and '
+    // Replace the last comma with ', and '
     const lastCommaIndex = makeMinimunRequireMessage.lastIndexOf(", ");
     if (lastCommaIndex !== -1) {
       makeMinimunRequireMessage = `${makeMinimunRequireMessage.substring(
         0,
         lastCommaIndex
-      )} and ${makeMinimunRequireMessage.substring(lastCommaIndex + 2)}`;
+      )}, and ${makeMinimunRequireMessage.substring(lastCommaIndex + 2)}`;
     }
 
     makeMinimunRequireMessage = makeMinimunRequireMessage.replace(
@@ -280,6 +280,8 @@ const renderValidityMessage = () => {
 
     validityMessage.innerHTML = `${makeMinimunRequireMessage}`;
   }
+  console.log("renderValidityMessage - isValid", isValid);
+  console.log("renderValidityMessage - chosenAssets", chosenAssets);
 };
 
 // Dispatch the chosenAssets to the parent application
@@ -307,8 +309,6 @@ captureMapLayers();
 
 // initilize the map using the map layers provided
 const initializeMap = () => {
-  document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
-  document.getElementById("submit-chosen-assets-button").classList.add("disabled-button");
   try {
     const zoom =
       document.querySelector("asset-chooser-container").getAttribute("zoom") ||
