@@ -264,7 +264,7 @@ const renderValidityMessage = () => {
       makeMinimunRequireMessage = makeMinimunRequireMessage.slice(0, -2);
     }
 
-    // Replace the last comma with ', and '
+    // Replace the last comma with ' and '
     const lastCommaIndex = makeMinimunRequireMessage.lastIndexOf(", ");
     if (lastCommaIndex !== -1) {
       makeMinimunRequireMessage = `${makeMinimunRequireMessage.substring(
