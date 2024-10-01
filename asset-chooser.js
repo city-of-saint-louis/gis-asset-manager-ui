@@ -202,8 +202,10 @@ const validateAssetSelection = () => {
   const sortedAllMapLayerIds = [...allMapLayerIds].sort();
   const stringifyValidLayers = JSON.stringify(sortedValidLayers);
   const stringifyAllMapLayerIds = JSON.stringify(sortedAllMapLayerIds);
-
+  
+  console.log("validLayers", validLayers);
   console.log("stringifyValidLayers", stringifyValidLayers);
+  console.log("allMapLayerIds", allMapLayerIds);
   console.log("stringifyAllMapLayerIds", stringifyAllMapLayerIds);
 
   if (stringifyValidLayers === stringifyAllMapLayerIds) {
@@ -597,16 +599,19 @@ const initializeMap = () => {
                   assetAttributes: graphic.attributes,
                   internalAssetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
                   assetId: `${graphic.attributes[layerAssetIDFieldName]}`,
+                  objectId: graphic.attributes.OBJECTID, 
                   assetIdType: layerAssetIDFieldName,
                   assetLabel: labelMaskValue,
+                  assetType: graphic.layer.layerProperties.layerName,
                   layerData: graphic.layer,
                   layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
-                  layerName: graphic.layer.title,
+                  layerName: graphic.layer.layerProperties.layerName,
+                  layerTitle: graphic.layer.title,
                   layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
-                  layerAssetMax:
-                    graphic.layer.layerProperties.maximumAssetsRequired,
+                  layerAssetMax: graphic.layer.layerProperties.maximumAssetsRequired,
                   highlightSelect: highlightedSelection,
                 };
+                console.log("chosenAsset", chosenAsset);
                 chosenAssets.push(chosenAsset);
                 renderSelectedAssetLabels();
                 validateNumberofAssetsSelected();

@@ -117,6 +117,8 @@ class AssetChooserContainerComponent extends HTMLElement {
       if (existingModal) {
         existingModal.close();
       }
+      // empty the stored validLayers array
+      validLayers.splice(0, validLayers.length);
       // empty the stored featureLayers array
       featureLayers.splice(0, featureLayers.length);
       // empty the stored allMapLayerIds array
