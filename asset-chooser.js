@@ -244,20 +244,23 @@ const renderValidityMessage = () => {
           `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
       ).length;
 
+      // Replace underscores with spaces in layerName
+      const layerName = mapLayer.layerProperties.layerName.replace(/[_-]/g, " ");
+
       if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
-        makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName} Layer</strong></span>, `;
+        makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
       }
 
       if (layerAssetMin > 1 && totalLayerAssetsSelected < layerAssetMin) {
-        makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName} Layer</strong></span>, `;
+        makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
       }
 
       if (layerAssetMin === 1 && totalLayerAssetsSelected === layerAssetMin) {
-        makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName} Layer</strong></span>, `;
+        makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
       }
 
       if (layerAssetMin > 1 && totalLayerAssetsSelected >= layerAssetMin) {
-        makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName} Layer</strong></span>, `;
+        makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from $layerName} Layer</strong></span>, `;
       }
     });
 
@@ -266,7 +269,7 @@ const renderValidityMessage = () => {
       makeMinimunRequireMessage = makeMinimunRequireMessage.slice(0, -2);
     }
 
-    // Replace the last comma with ' and '
+    // Replace the last comma with ', and '
     const lastCommaIndex = makeMinimunRequireMessage.lastIndexOf(", ");
     if (lastCommaIndex !== -1) {
       makeMinimunRequireMessage = `${makeMinimunRequireMessage.substring(
@@ -397,7 +400,7 @@ const initializeMap = () => {
           secureChosenAssets();
         }
         renderValidityMessage();
-        const layerName = mapDataLayer.layerProperties.layerName;
+        const layerName = mapDataLayer.layerProperties.layerName.replace(/[_-]/g, " ");
         const layerDataDiv = document.getElementById("layer-data-div");
         const layerMinScale = mapDataLayer.minScale;
         const layerMaxScale = mapDataLayer.maxScale;
