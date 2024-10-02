@@ -244,7 +244,7 @@ const renderValidityMessage = () => {
           `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
       ).length;
 
-      // Replace underscores with spaces in layerName
+      // Replace underscores and dashes with spaces in layerName
       const layerName = mapLayer.layerProperties.layerName.replace(/[_-]/g, " ");
 
       if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
