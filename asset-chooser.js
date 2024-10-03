@@ -400,7 +400,8 @@ const initializeMap = () => {
           secureChosenAssets();
         }
         renderValidityMessage();
-        const layerName = mapDataLayer.layerProperties.layerName.replace(/[_-]/g, " ");
+        const layerName = mapDataLayer.layerProperties.layerName;
+        const layerNameToDisplay = mapDataLayer.layerProperties.layerName.replace(/[_-]/g, " ");
         const layerDataDiv = document.getElementById("layer-data-div");
         const layerMinScale = mapDataLayer.minScale;
         const layerMaxScale = mapDataLayer.maxScale;
@@ -453,7 +454,7 @@ const initializeMap = () => {
           >
             <div class="stat-title" id="${layerName}-layer-selected-asset-container">
              <div>
-               <span> <strong>${layerName} Layer</strong></span>
+               <span> <strong>${layerNameToDisplay} Layer</strong></span>
                <br>
                <span class="zoom-alert-span" id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
                 ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
