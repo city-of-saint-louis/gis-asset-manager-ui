@@ -202,24 +202,15 @@ const validateAssetSelection = () => {
   const sortedAllMapLayerIds = [...allMapLayerIds].sort();
   const stringifyValidLayers = JSON.stringify(sortedValidLayers);
   const stringifyAllMapLayerIds = JSON.stringify(sortedAllMapLayerIds);
-  
-  console.log("validLayers", validLayers);
-  console.log("stringifyValidLayers", stringifyValidLayers);
-  console.log("allMapLayerIds", allMapLayerIds);
-  console.log("stringifyAllMapLayerIds", stringifyAllMapLayerIds);
-
   if (stringifyValidLayers === stringifyAllMapLayerIds) {
     isValid = true;
     // Dispatch the chosenAssets to the parent application when isValid is true
     dispatchChosenAssets(chosenAssets);
-    
   } else {
     isValid = false;
     // Secure the chosenAssets from parent application when isValid is false
     secureChosenAssets();
   }
-  console.log("validateAssetSelection - chosenAssets", chosenAssets);
-  console.log("validateAssetSelection - isValid", isValid);
 };
 
 const renderValidityMessage = () => {
@@ -285,8 +276,6 @@ const renderValidityMessage = () => {
 
     validityMessage.innerHTML = `${makeMinimunRequireMessage}`;
   }
-  console.log("renderValidityMessage - isValid", isValid);
-  console.log("renderValidityMessage - chosenAssets", chosenAssets);
 };
 
 // Dispatch the chosenAssets to the parent application
@@ -339,18 +328,47 @@ const initializeMap = () => {
       "esri/views/MapView",
       "esri/layers/FeatureLayer",
       "esri/widgets/Search",
-    ], (Map, MapView, FeatureLayer, Search) => {
+      "esri/widgets/Search/LocatorSearchSource",
+      "esri/geometry/Extent",
+    ], (Map, MapView, FeatureLayer, Search, LocatorSearchSource, Extent) => {
       const map = new Map({ basemap: baseMap });
+
+      const stLouisExtent = new Extent({
+        xmin: -90.3103,
+        ymin: 38.5244,
+        xmax: -90.14,
+        ymax: 38.7744,
+        spatialReference: { wkid: 4326 },
+      });
 
       const view = new MapView({
         map: map,
         center: [centerX, centerY],
         zoom: zoom,
         container: document.querySelector("#viewDiv"),
+        constraints: {
+          geometry: stLouisExtent,
+        },
       });
 
-      const searchWidget = new Search({ 
+       // Add a LocatorSearchSource for default search suggestions
+       const locatorSearchSource = new LocatorSearchSource({
+        url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
+        filter: {
+          geometry: stLouisExtent,
+        },
+        outFields: ["*"],
+        singleLineFieldName: "SingleLine",
+        name: "ArcGIS World Geocoding Service",
+        placeholder: "Search for places or addresses",
+        maxSuggestions: 6,
+        suggestionsEnabled: true,
+      });
+
+      const searchWidget = new Search({
         view: view,
+        sources: [locatorSearchSource],
+        includeDefaultSources: false,
         popupEnabled: false,
       });
 
