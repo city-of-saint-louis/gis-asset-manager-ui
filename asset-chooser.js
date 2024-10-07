@@ -357,8 +357,9 @@ const initializeMap = () => {
       "esri/layers/FeatureLayer",
       "esri/widgets/Search",
       "esri/widgets/Search/LocatorSearchSource",
+      "esri/widgets/Search/LayerSearchSource",
       "esri/geometry/Extent",
-    ], (Map, MapView, FeatureLayer, Search, LocatorSearchSource, Extent) => {
+    ], (Map, MapView, FeatureLayer, Search, LocatorSearchSource, LayerSearchSource, Extent) => {
       const map = new Map({ basemap: baseMap });
 
       const stLouisExtent = new Extent({
