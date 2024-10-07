@@ -1,7 +1,6 @@
 class AssetChooserContainerComponent extends HTMLElement {
   constructor() {
     super(); // always call super() first in the constructor for a custom web component
-    this.isOriginalState = true; // flag to track the state of the interface
     this.title = this.getAttribute("title") || "";
     this.hint = this.getAttribute("hint") || "";
   }
@@ -13,11 +12,12 @@ class AssetChooserContainerComponent extends HTMLElement {
             layer.layerProperties.minimumAssetsRequired >= 1 ? "required" : "";
           const prefillValue =
             prefillData[layer.layerProperties.layerName] || "";
+          const layerNameToDisplay = layer.layerProperties.layerName.replace(/[_-]/g," ");
           return `
            <div>
             <label
               for="${layer.layerProperties.layerName}"
-            >Enter any ${layer.layerProperties.layerName}s required for your request.</label>
+            >Enter any ${layerNameToDisplay}s required for your request.</label>
             <p>
             <input
               size="60"
@@ -66,7 +66,6 @@ class AssetChooserContainerComponent extends HTMLElement {
       if (existingModal) {
         existingModal.remove();
       }
-
       const inputsContent = generateInputsContent(prefillData);
       const modalHTML = generateModalHTML(inputsContent);
       document.body.insertAdjacentHTML("beforeend", modalHTML);
@@ -126,8 +125,6 @@ class AssetChooserContainerComponent extends HTMLElement {
       // re-render the component
       this.connectedCallback(); // Re-render the component
       initializeMap();
-      console.log("chosenAssets after cancel", chosenAssets);
-      console.log("chosenAssetFormData after cancel", chosenAssetFormData);
       // Clear stored data
       clearStoredModalFormAssetData();
     };
@@ -167,7 +164,7 @@ class AssetChooserContainerComponent extends HTMLElement {
         document.dispatchEvent(customEvent);
       }
       // Clear the form
-      // event.target.reset();
+      event.target.reset();
       document.getElementById("asset-chooser-interface").innerHTML = `
         <h2 id="asset-chooser-title">${this.title}</h2>
         <h3>The asset information has been added to your case.</h3>
@@ -185,12 +182,14 @@ class AssetChooserContainerComponent extends HTMLElement {
             .join("")}
         </ul>
         <button
+          type="button"
           id="edit-asset-selection-button"
           class="link-button"
         >
           Edit Entry
         </button>
         <button
+          type="button"
           id="cancel-asset-selection-button"
           class="link-button"
         >
@@ -224,8 +223,6 @@ class AssetChooserContainerComponent extends HTMLElement {
     };
 
     try {
-      // const title = this.getAttribute("title") || "";
-      // const hint = this.getAttribute("hint") || "";
       this.innerHTML = `
       <section id="asset-chooser-section">
         <div id="asset-chooser-interface">
@@ -234,6 +231,7 @@ class AssetChooserContainerComponent extends HTMLElement {
            <div id="accomodation-button-container">
           <p id="button-hint">Please click below if you are using assistive technology and are unable to select assets on the map.</p>
           <button
+            type="button"
             id="accomodation-button"
             class="link-button inverse-button"
             aria-label="Click here to enter assets if you are using assistive technology and are unable to select assets on the map."

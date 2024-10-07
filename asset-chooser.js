@@ -14,6 +14,8 @@ const validLayers = [];
 let isValid = false;
 
 // functions to provide functionality for the GIS Asset Chooser
+
+// Hide or show layers on the map
 const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
     const layerName = outerLayer.layerProperties.layerName;
@@ -55,7 +57,14 @@ const renderSelectedAssetLabels = () => {
   chosenAssets.forEach((asset) => {
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
       if (asset.layerId === selectedLayerAssetList.id) {
-        const assetLabel = asset.assetLabel;
+        let assetLabel = asset.assetLabel;
+        if (asset.assetAttributes.Road_Type && asset.assetAttributes.Road_Type === "Alley") {
+          assetLabel = `Alley`;
+        }
+        if (assetLabel.includes("null")) {
+          assetLabel = "Asset data unavailable";
+        }
+        // const assetLabel = asset.assetLabel;
         const assetLabelListItem = document.createElement("li");
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
@@ -89,7 +98,7 @@ const renderSelectedAssetLabels = () => {
                 (a) => a.internalAssetId === asset.internalAssetId
               );
               chosenAssets.splice(hightlightToRemove, 1);
-              validateNumberofAssetsSelected();
+              validateLayerSelections();
               selectedLayerAssetListArray.forEach((list) => {
                 if (list.innerHTML === "") {
                   list.innerHTML = `<li>None selected</li>`;
@@ -108,7 +117,7 @@ const renderSelectedAssetLabels = () => {
   });
 };
 
-const validateNumberofAssetsSelected = () => {
+const validateLayerSelections = () => {
   featureLayers.forEach((mapLayer) => {
     let isLayerValid = false;
     const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
@@ -211,6 +220,7 @@ const validateAssetSelection = () => {
     // Secure the chosenAssets from parent application when isValid is false
     secureChosenAssets();
   }
+  console.log('chosenAssets', chosenAssets);
 };
 
 const renderValidityMessage = () => {
@@ -334,13 +344,13 @@ const initializeMap = () => {
       const map = new Map({ basemap: baseMap });
 
       const stLouisExtent = new Extent({
-        xmin: -90.3103,
-        ymin: 38.5244,
-        xmax: -90.14,
-        ymax: 38.7744,
-        spatialReference: { wkid: 4326 },
+        xmin: -1.0054448855908303E7,
+        ymin: 4654966.477336443,
+        xmax: -1.003824032627997E7,
+        ymax: 4689440.938430255,
+        spatialReference: { wkid: 102100 }, // or 3857
       });
-
+  
       const view = new MapView({
         map: map,
         center: [centerX, centerY],
@@ -478,13 +488,13 @@ const initializeMap = () => {
                 ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
                </span>
              </div>
-              <button 
+              <button
+                type="button" 
                 id="${layerName}-show-hide-layer-btn" 
                 class="selectLayers" 
                 att-layer-id="${layerName}-${mapDataLayer.id}"
-                aria-label="hide ${layerName} layer" ${
-          layerMinScale > 0 ? "disabled" : ""
-        } style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}"
+                aria-label="hide ${layerName} layer" ${layerMinScale > 0 ? "disabled" : ""} 
+                style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}"
               >
                 <span class="${
                   layerMinScale > 0
@@ -633,10 +643,9 @@ const initializeMap = () => {
                   layerAssetMax: graphic.layer.layerProperties.maximumAssetsRequired,
                   highlightSelect: highlightedSelection,
                 };
-                console.log("chosenAsset", chosenAsset);
                 chosenAssets.push(chosenAsset);
                 renderSelectedAssetLabels();
-                validateNumberofAssetsSelected();
+                validateLayerSelections();
               });
             } else {
               chosenAssets.forEach((asset) => {
@@ -654,7 +663,7 @@ const initializeMap = () => {
               );
               chosenAssets.splice(hightlightToRemove, 1);
               renderSelectedAssetLabels();
-              validateNumberofAssetsSelected();
+              validateLayerSelections();
             }
           }
         });
