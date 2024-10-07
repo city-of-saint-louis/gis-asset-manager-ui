@@ -2,7 +2,8 @@
 
 // array for storing case assets for use within parent application
 const caseAssets = [];
-
+const submitChosenAssetsButton = document.getElementById("submit-chosen-assets-button");
+const chosenAssetsDisplayContainer = document.getElementById("chosen-assets-display-div");
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
 // recommended for integration with gis aset chooser - customize as needed
 document.addEventListener("isValidTrue", (event) => {
@@ -15,29 +16,20 @@ document.addEventListener("isValidTrue", (event) => {
     JSON.stringify(chosenAssetFormData)
   );
   // possible integration strategy with a submit button
-  document
-    .getElementById("submit-chosen-assets-button")
-    .removeAttribute("disabled");
-  document
-    .getElementById("submit-chosen-assets-button")
-    .classList.remove("disabled-button");
-  document.getElementById("submit-chosen-assets-button").textContent =
-    "Submit assets";
+  submitChosenAssetsButton.removeAttribute("disabled");
+  submitChosenAssetsButton.classList.remove("disabled-button");
+  submitChosenAssetsButton.textContent = "Submit assets";
 });
 
 // Custom event listener for when isValid is false
 // recommended for integration with gis aset chooser - customize as needed
 // example of possible integration strategy with a submit button
 document.addEventListener("isValidFalse", (event) => {
-  document.getElementById("submit-chosen-assets-button").textContent =
-    "Submit Selected Assets";
-  document
-    .getElementById("submit-chosen-assets-button")
-    .setAttribute("disabled", true);
-  document
-    .getElementById("submit-chosen-assets-button")
-    .classList.add("disabled-button");
+  submitChosenAssetsButton.textContent = "Submit Selected Assets";
+  submitChosenAssetsButton.setAttribute("disabled", true);
+  submitChosenAssetsButton.classList.add("disabled-button");
   localStorage.removeItem("chosenAssets");
+  localStorage.removeItem("chosenAssetFormData");
 });
 
 // below is an example of how the chosenAssets could be submitted to the parent application using the custom events and custom event listeners
@@ -64,18 +56,14 @@ const displayChosenAssets = () => {
         chosenAssetData.textContent = `${data.key}: ${
           data.value ? data.value : "No asset data provided"
         }`;
-        document
-          .getElementById("chosen-assets-display-div")
-          .appendChild(chosenAssetData);
+        chosenAssetsDisplayContainer.appendChild(chosenAssetData);
       });
     }
   }
   chosenAssets.map((asset) => {
     const chosenAssetLabel = document.createElement("p");
     chosenAssetLabel.textContent = asset.assetLabel;
-    document
-      .getElementById("chosen-assets-display-div")
-      .appendChild(chosenAssetLabel);
+    chosenAssetsDisplayContainer.appendChild(chosenAssetLabel);
   });
 };
 

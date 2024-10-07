@@ -68,7 +68,14 @@ const renderSelectedAssetLabels = () => {
   chosenAssets.forEach((asset) => {
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
       if (asset.layerId === selectedLayerAssetList.id) {
-        const assetLabel = asset.assetLabel;
+        let assetLabel = asset.assetLabel;
+        if (asset.assetAttributes.Road_Type && asset.assetAttributes.Road_Type === "Alley") {
+          assetLabel = `Alley`;
+        }
+        if (assetLabel.includes("null")) {
+          assetLabel = "Asset data unavailable";
+        }
+        // const assetLabel = asset.assetLabel;
         const assetLabelListItem = document.createElement("li");
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
@@ -107,7 +114,7 @@ const renderSelectedAssetLabels = () => {
                 (a) => a.internalAssetId === asset.internalAssetId
               );
               chosenAssets.splice(hightlightToRemove, 1);
-              validateNumberofAssetsSelected();
+              validateLayerSelections();
               selectedLayerAssetListArray.forEach((list) => {
                 if (list.innerHTML === "") {
                   list.innerHTML = `<li>None selected</li>`;
@@ -128,7 +135,7 @@ const renderSelectedAssetLabels = () => {
   });
 };
 
-const validateNumberofAssetsSelected = () => {
+const validateLayerSelections = () => {
   featureLayers.forEach((mapLayer) => {
     let isLayerValid = false;
     const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
@@ -214,6 +221,7 @@ const validateNumberofAssetsSelected = () => {
 };
 
 const validateAssetSelection = () => {
+  console.log('validatAssetSelection');
   if (validLayers.length !== allMapLayerIds.length) {
     isValid = false;
   }
@@ -230,6 +238,7 @@ const validateAssetSelection = () => {
     // Secure the chosenAssets from parent application when isValid is false
     secureChosenAssets();
   }
+  console.log('chosenAssets', chosenAssets);
 };
 
 const renderValidityMessage = () => {
@@ -254,20 +263,23 @@ const renderValidityMessage = () => {
           `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
       ).length;
 
+      // Replace underscores and dashes with spaces in layerName
+      const layerName = mapLayer.layerProperties.layerName.replace(/[_-]/g, " ");
+
       if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
-        makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName} Layer</strong></span>, `;
+        makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
       }
 
       if (layerAssetMin > 1 && totalLayerAssetsSelected < layerAssetMin) {
-        makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName} Layer</strong></span>, `;
+        makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
       }
 
       if (layerAssetMin === 1 && totalLayerAssetsSelected === layerAssetMin) {
-        makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName} Layer</strong></span>, `;
+        makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
       }
 
       if (layerAssetMin > 1 && totalLayerAssetsSelected >= layerAssetMin) {
-        makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from ${mapLayer.layerProperties.layerName} Layer</strong></span>, `;
+        makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from $layerName} Layer</strong></span>, `;
       }
     });
 
@@ -276,7 +288,7 @@ const renderValidityMessage = () => {
       makeMinimunRequireMessage = makeMinimunRequireMessage.slice(0, -2);
     }
 
-    // Replace the last comma with ' and '
+    // Replace the last comma with ', and '
     const lastCommaIndex = makeMinimunRequireMessage.lastIndexOf(", ");
     if (lastCommaIndex !== -1) {
       makeMinimunRequireMessage = `${makeMinimunRequireMessage.substring(
@@ -344,36 +356,25 @@ const initializeMap = () => {
       "esri/views/MapView",
       "esri/layers/FeatureLayer",
       "esri/widgets/Search",
-      "esri/widgets/Search/LayerSearchSource",
       "esri/widgets/Search/LocatorSearchSource",
       "esri/geometry/Extent",
-    ], (
-      Map,
-      MapView,
-      FeatureLayer,
-      Search,
-      LayerSearchSource,
-      LocatorSearchSource,
-      Extent
-    ) => {
+    ], (Map, MapView, FeatureLayer, Search, LocatorSearchSource, Extent) => {
       const map = new Map({ basemap: baseMap });
 
-      // Define the extent for the city limits of St. Louis
       const stLouisExtent = new Extent({
-        xmin: -90.3103,
-        ymin: 38.5244,
-        xmax: -90.14,
-        ymax: 38.7744,
-        spatialReference: { wkid: 4326 },
+        xmin: -1.0054448855908303E7,
+        ymin: 4654966.477336443,
+        xmax: -1.003824032627997E7,
+        ymax: 4689440.938430255,
+        spatialReference: { wkid: 102100 }, // or 3857
       });
-
+  
       const view = new MapView({
         map: map,
         center: [centerX, centerY],
         zoom: zoom,
         container: document.querySelector("#viewDiv"),
         constraints: {
-          snapToZoom: false,
           geometry: stLouisExtent,
         },
       });
@@ -422,6 +423,7 @@ const initializeMap = () => {
         }
         renderValidityMessage();
         const layerName = mapDataLayer.layerProperties.layerName;
+        const layerNameToDisplay = mapDataLayer.layerProperties.layerName.replace(/[_-]/g, " ");
         const layerDataDiv = document.getElementById("layer-data-div");
         const layerMinScale = mapDataLayer.minScale;
         const layerMaxScale = mapDataLayer.maxScale;
@@ -474,19 +476,19 @@ const initializeMap = () => {
           >
             <div class="stat-title" id="${layerName}-layer-selected-asset-container">
              <div>
-               <span> <strong>${layerName} Layer</strong></span>
+               <span> <strong>${layerNameToDisplay} Layer</strong></span>
                <br>
                <span class="zoom-alert-span" id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
                 ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
                </span>
              </div>
-              <button 
+              <button
+                type="button" 
                 id="${layerName}-show-hide-layer-btn" 
                 class="selectLayers" 
                 att-layer-id="${layerName}-${mapDataLayer.id}"
-                aria-label="hide ${layerName} layer" ${
-          layerMinScale > 0 ? "disabled" : ""
-        } style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}"
+                aria-label="hide ${layerName} layer" ${layerMinScale > 0 ? "disabled" : ""} 
+                style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}"
               >
                 <span class="${
                   layerMinScale > 0
@@ -792,19 +794,21 @@ const initializeMap = () => {
                   assetAttributes: graphic.attributes,
                   internalAssetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
                   assetId: `${graphic.attributes[layerAssetIDFieldName]}`,
+                  objectId: graphic.attributes.OBJECTID, 
                   assetIdType: layerAssetIDFieldName,
                   assetLabel: labelMaskValue,
+                  assetType: graphic.layer.layerProperties.layerName,
                   layerData: graphic.layer,
                   layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
-                  layerName: graphic.layer.title,
+                  layerName: graphic.layer.layerProperties.layerName,
+                  layerTitle: graphic.layer.title,
                   layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
-                  layerAssetMax:
-                    graphic.layer.layerProperties.maximumAssetsRequired,
+                  layerAssetMax: graphic.layer.layerProperties.maximumAssetsRequired,
                   highlightSelect: highlightedSelection,
                 };
                 chosenAssets.push(chosenAsset);
                 renderSelectedAssetLabels();
-                validateNumberofAssetsSelected();
+                validateLayerSelections();
               });
             } else {
               chosenAssets.forEach((asset) => {
@@ -822,7 +826,7 @@ const initializeMap = () => {
               );
               chosenAssets.splice(hightlightToRemove, 1);
               renderSelectedAssetLabels();
-              validateNumberofAssetsSelected();
+              validateLayerSelections();
             }
           }
         });
