@@ -116,14 +116,9 @@ class AssetChooserContainerComponent extends HTMLElement {
       if (existingModal) {
         existingModal.close();
       }
-      // empty the stored validLayers array
-      validLayers.splice(0, validLayers.length);
-      // empty the stored featureLayers array
-      featureLayers.splice(0, featureLayers.length);
-      // empty the stored allMapLayerIds array
-      allMapLayerIds.splice(0, allMapLayerIds.length);
+      clearMapData();
       // re-render the component
-      this.connectedCallback(); // Re-render the component
+      this.connectedCallback(); 
       initializeMap();
       // Clear stored data
       clearStoredModalFormAssetData();
@@ -152,6 +147,7 @@ class AssetChooserContainerComponent extends HTMLElement {
         chosenAssetFormData.splice(0, chosenAssetFormData.length);
       }
       formData.forEach((value, key) => {
+        key = key.replace(/[_-]/g," ");
         chosenAssetFormData.push({ key, value });
       });
       isValid = true;
@@ -165,6 +161,7 @@ class AssetChooserContainerComponent extends HTMLElement {
       }
       // Clear the form
       event.target.reset();
+      console.log("chosenAssetFormData", chosenAssetFormData);
       document.getElementById("asset-chooser-interface").innerHTML = `
         <h2 id="asset-chooser-title">${this.title}</h2>
         <h3>The asset information has been added to your case.</h3>

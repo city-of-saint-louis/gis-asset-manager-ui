@@ -15,6 +15,16 @@ let isValid = false;
 
 // functions to provide functionality for the GIS Asset Chooser
 
+const clearMapData = () => {
+  // empty the stored validLayers array
+  validLayers.splice(0, validLayers.length);
+  // empty the stored featureLayers array
+  featureLayers.splice(0, featureLayers.length);
+  // empty the stored allMapLayerIds array
+  allMapLayerIds.splice(0, allMapLayerIds.length);
+  // re-render the component
+};
+
 // Hide or show layers on the map
 const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
