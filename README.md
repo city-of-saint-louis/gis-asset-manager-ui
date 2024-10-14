@@ -72,6 +72,12 @@ The Asset Chooser can be configured as needed by passing values for the followin
 </asset-chooser-container>
 ```
 
+The asset chooser container also houses the **accesibility accomodation**. Users navigating by keyboard are unable to tab into the map and select assets with the keyboard. Even if they could a map layer may contain thousands of assets. It is not reasonable to ask someone to tab through thousands of assets to find the one they need.In order to account for this we have provided an accomodation for folks using assistive technology such as a screen reader and navigating by keyboard. We have placed a button above the map for users who need to access this accomodation. When the button is clicked a modal opens with a text input allowing users to enter information on their required assets.
+
+No additional configuration is required to implement this solution. A text input is generated for each map layer that has been applied. If asset selection is required for any particular layer, then a user will be required to provide asset information for that layer through the alternate text input.
+
+This feature can be further built out to accomodate a specific use case, allowing users to provide more detailed information if needed.
+
 ### **asset-chooser-map-layer.js**
 
 A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. A child to **assest-chooser-container.js**. An instance of the map layer element is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of **asset-chooser-map-layer.js** (one for each layer) and pass each instance the necessary properties.
