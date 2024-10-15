@@ -25,7 +25,7 @@ The parent application can then receive the 'chosenAssets' array through the use
 
 ### **assest-chooser-container.js**
 
- A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Chooser, including the map, is rendered. It is a parent to **asset-chooser-map-layer.js**.
+ A reusable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Chooser, including the map, is rendered. It is a parent to **asset-chooser-map-layer.js**.
 
 The Asset Chooser can be configured as needed by passing values for the following properties to the container element.
 
@@ -72,7 +72,7 @@ The Asset Chooser can be configured as needed by passing values for the followin
 </asset-chooser-container>
 ```
 
-The asset chooser container also houses the **accesibility accomodation**. Users navigating by keyboard are unable to tab into the map and select assets with the keyboard. Even if they could a map layer may contain thousands of assets. It is not reasonable to ask someone to tab through thousands of assets to find the one they need.In order to account for this we have provided an accomodation for folks using assistive technology such as a screen reader and navigating by keyboard. We have placed a button above the map for users who need to access this accomodation. When the button is clicked a modal opens with a text input allowing users to enter information on their required assets.
+The asset chooser container also houses the **accessibility accommodation**. Users navigating by keyboard are unable to tab into the map and select assets with the keyboard. Even if they could, a map layer may contain thousands of assets. It is not reasonable to ask someone to tab through thousands of assets to find the one they need. In order to account for this we have provided an accommodation for folks navigating by keyboard and using assistive technology such as a screen reader. We have placed a button above the map for users who need to access this accommodation. When the button is clicked a modal opens with a text input allowing users to enter information on their required assets.
 
 No additional configuration is required to implement this solution. A text input is generated for each map layer that has been applied. If asset selection is required for any particular layer, then a user will be required to provide asset information for that layer through the alternate text input.
 
@@ -80,7 +80,7 @@ This feature can be further built out to accomodate a specific use case, allowin
 
 ### **asset-chooser-map-layer.js**
 
-A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. A child to **assest-chooser-container.js**. An instance of the map layer element is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of **asset-chooser-map-layer.js** (one for each layer) and pass each instance the necessary properties.
+A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. A child to **assest-chooser-container.js**. An instance of the map layer element is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of **asset-chooser-map-layer.js** (one for each layer) and pass each instance the necessary properties.
 
 A map layer can be configured as needed by passing values for the following properties to the map layer element.
 
@@ -138,7 +138,7 @@ A map layer can be configured as needed by passing values for the following prop
 
 ### **asset-chooser.js**
 
-This file holds the logic to make the GIS Asset Chooser Module work. This is where the magic happens.
+This file holds the logic that makes the GIS Asset Chooser Module work. This is where the magic happens.
 
 ## **How To Use the GIS Asset Chooser Module**
 
@@ -165,7 +165,7 @@ To utilize the CDN there are two tags, one for CSS and one for JavaScript. ArcGI
 
 To use the GIS Asset Chooser Module you will need to pull in the module's 3 JavaScript files. Place the script tags in your HTML just before the closing body tag.
 
-asset-chooser-map-layer-js **MUST** load before asset-chooser-container.js or the map will render without any layers in place. We recommed placing the script tags in the order seen below.
+asset-chooser-map-layer-js **MUST** load before asset-chooser-container.js or the map will render without any layers in place. We recommend placing the script tags in the order seen below.
 
 ```html
     <script src="asset-chooser.js"></script>
@@ -195,7 +195,7 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
   <body>
     <header>
     </header>
-    <main style="padding: 1rem">
+    <main>
       <!-- Insert the container element into html. Pass in property values as needed. -->
       <!-- Title and hint are the only properties with no default value.  -->
       <asset-chooser-container
@@ -218,7 +218,7 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
         <!-- Instance of the map layer custom element used to add "Parcels" layer. -->
         <asset-chooser-map-layer
           name="Parcels"
-          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
+          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/4"
           layer-asset-id-field-name="FID"
           minimum=1
           maximum=0
