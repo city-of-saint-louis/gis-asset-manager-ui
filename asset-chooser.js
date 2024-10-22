@@ -675,3 +675,25 @@ const initializeMap = () => {
 };
 
 initializeMap();
+
+  // Add a point if coordinates are provided
+      // if (addressMarkerX !== undefined && addressMarkerY !== undefined) {
+      //   const point = new Point({
+      //     longitude: addressMarkerX,
+      //     latitude: addressMarkerY
+      //   });
+      //   console.log('point', point);
+      //   const markerSymbol = new SimpleMarkerSymbol({
+      //     size: 14,
+      //     color: [255, 255, 0, 200], // yellow
+      //     outline: {
+      //       color: [255, 165, 0, 200], // orange
+      //       width: 4
+      //     }
+      //   });
+      //   const pointGraphic = new Graphic({
+      //     geometry: point,
+      //     symbol: markerSymbol
+      //   });
+      //   view.graphics.add(pointGraphic);
+      // }
