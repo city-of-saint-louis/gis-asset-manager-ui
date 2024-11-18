@@ -82,15 +82,19 @@ class AssetChooserContainerComponent extends HTMLElement {
       if (modalCloseButton) {
         modalCloseButton.addEventListener("click", closeModal);
       }
+      modal.addEventListener("close", () => {
+        document.body.classList.remove("no-scroll");
+      });
     };
 
     const closeModal = () => {
       const modal = document.getElementById("asset-modal");
       if (modal) {
         modal.close();
-        document.body.classList.remove("no-scroll");
+        // document.body.classList.remove("no-scroll");
       }
     };
+    
 
     const clearStoredModalFormAssetData = () => {
       console.log("clearing - chosenAssetFormData", chosenAssetFormData);
