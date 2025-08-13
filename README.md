@@ -84,35 +84,39 @@ A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/We
 
 A map layer can be configured as needed by passing values for the following properties to the map layer element.
 
-1. **layer-class-url**
+1. **name**
+   - type: string
+   - description: The name of the layer
+   - default value: none
+2. **layer-class-url**
    - type: string
    - description: The url for the ArcGIS map layer that you want to use.
    - default value: none
-2. **minimum**
+3. **minimum**
    - type: number
    - description: The minimum number of assets that must be selected from this layer by a user.
    - default value: 0
-3. **maximum**
+4. **maximum**
    - type: number
    - description: The maximum number of assets that can be selected from this layer by a user.
    - default value: 0
-4. **label-mask**
+5. **label-mask**
    - type: string
    - description: Template for how the asset will be labeled on the screen when selected by the user. Parts of the string that
      change dynamically based on asset selection must be surrounded by curly braces in your string. You do not need to use backticks. See examples below.
    - default value: none
    - **Example:** The label mask for the streets layer is "**{FULLNAME} from {From_Stree} to {To_Street}**". The parts in brackets
      are filled in dynamically based on the asset selected. When a street segement is selected, it renders on the screen as follows: "**N GRAND BLVD from MONTGOMERY ST to ST. LOUIS AVE**"
-5. **layer-asset-id-field-name**
+6. **layer-asset-id-field-name**
    - type: string
    - description: The type of unique asset ID for this layer. Each graphic layer has a unique ID for identifying the assets
      connected to that layer. These are not always uniform from layer to layer. Some possible ID types that may be used are "OBJECTID", "FID", or "GUID". Pass in thte appropriate ID type for the layer you are using.
    - default value: "GUID"
-6. **min-scale**
+7. **min-scale**
    - type: number
    - description: Use "min-scale" and "max-scale" if you want a map layer to only appear at certain zoom levels.
    - default value: none
-7. **max-scale**
+8. **max-scale**
    - type: number
    - description: Use "min-scale" and "max-scale" if you want a map layer to only appear at certain zoom levels.
    - default value: none
