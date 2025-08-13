@@ -31,7 +31,7 @@ The Asset Chooser can be configured as needed by passing values for the followin
 
 1. **title**
    - type: string
-   - description: An appropriate title based on the specific implementation of the ArcGIS Asset Chooser
+   - description: An appropriate title based on the specific implementation of the GIS Asset Chooser
    - default value: **none**
 2. **hint**
    - type: string
