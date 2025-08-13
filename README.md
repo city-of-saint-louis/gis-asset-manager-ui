@@ -35,7 +35,7 @@ The Asset Chooser can be configured as needed by passing values for the followin
    - default value: **none**
 2. **hint**
    - type: string
-   - description: A simple statement to let the user know what to do with the ArcGIS Asset Chooser for the specific implementation
+   - description: A simple statement to let the user know what to do with the GIS Asset Chooser for the specific implementation
    - default value: **none**
 3. **zoom**
    - type: number
