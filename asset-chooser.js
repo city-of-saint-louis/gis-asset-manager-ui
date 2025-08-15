@@ -1,4 +1,6 @@
-// This file holds the logic that provides functionality for the GIS Asset Chooser.
+// This file holds the logic that provides functionality for the GIS Asset Chooser
+
+// set variables to hold default values and arrays to hold data for the GIS Asset Chooser
 const defaultZoom = 12;
 const defaultCenterX = -90.25;
 const defaultCenterY = 38.64;
@@ -11,24 +13,52 @@ const chosenAssetFormData = [];
 const allMapLayerIds = [];
 const layersWithNoSelectionRequired = [];
 const validLayers = [];
+let addressMarkerX;
+let addressMarkerY;
 let isValid = false;
 
 // functions to provide functionality for the GIS Asset Chooser
 
+// function to clear the map data
 const clearMapData = () => {
-  // empty the stored validLayers array
-  validLayers.splice(0, validLayers.length);
   // empty the stored featureLayers array
   featureLayers.splice(0, featureLayers.length);
-  // empty the stored allMapLayerIds array
-  allMapLayerIds.splice(0, allMapLayerIds.length);
-  // re-render the component
+  // empty the stored chosenAssets array
+  chosenAssets.splice(0, chosenAssets.length);
+  // empty the stored chosenAssetFormData array
+  chosenAssetFormData.splice(0, chosenAssetFormData.length);
+  // empty the stored validLayers array
+  validLayers.splice(0, validLayers.length);
+  // empty the stored layersWithNoSelectionRequired array
+  layersWithNoSelectionRequired.splice(0, layersWithNoSelectionRequired.length);
+  // empty the stored validLayers array
+  validLayers.splice(0, validLayers.length);
 };
 
-// Hide or show layers on the map
+// event listener to caputre x,y coordinates from address validation
+document.addEventListener("coordinatesAvailable", (event) => {
+  addressMarkerX = event.detail.centerX;
+  addressMarkerY = event.detail.centerY;
+  const assetChooserContainer = document.querySelector(
+    "asset-chooser-container"
+  );
+  // reset zoom level, reset x,y based on address entered, and reinitialize the map
+  assetChooserContainer.removeAttribute("zoom");
+  assetChooserContainer.setAttribute("zoom", 18);
+  assetChooserContainer.removeAttribute("center-x");
+  assetChooserContainer.setAttribute("center-x", addressMarkerX);
+  assetChooserContainer.removeAttribute("center-y");
+  assetChooserContainer.setAttribute("center-y", addressMarkerY);
+  const layerDataDiv = document.getElementById("layer-data-div");
+  layerDataDiv.innerHTML = "";
+  initializeMap();
+});
+
+// function to hide or show layers on the map
 const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
     const layerName = outerLayer.layerProperties.layerName;
+    const layerNameToDisplay = layerName.replace(/[_-]/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
     const selectLayersElements = document.querySelectorAll(".selectLayers");
     selectLayersElements.forEach((selectLayer) => {
       selectLayer.addEventListener("click", () => {
@@ -39,16 +69,22 @@ const hideOrShowLayer = () => {
         ) {
           if (outerLayer.visible) {
             outerLayer.visible = false;
-            spanElement.classList.remove("glyphicons-eye-close");
-            spanElement.classList.add("glyphicons-eye-open");
-            spanElement.innerHTML = `<span class="sr-only">show ${layerName} layer</span>`;
-            selectLayer.setAttribute("aria-label", `show ${layerName} layer`);
+            // spanElement.classList.remove("glyphicons-eye-close");
+            // spanElement.classList.add("glyphicons-eye-open");
+            spanElement.innerHTML = `<span class="">Show ${layerNameToDisplay} Layer</span>`;
+            selectLayer.setAttribute(
+              "aria-label",
+              `Show ${layerNameToDisplay} Layer`
+            );
           } else {
             outerLayer.visible = true;
-            spanElement.classList.remove("glyphicons-eye-open");
-            spanElement.classList.add("glyphicons-eye-close");
-            spanElement.innerHTML = `<span class="sr-only">hide ${layerName} layer</span>`;
-            selectLayer.setAttribute("aria-label", `hide ${layerName} layer`);
+            // spanElement.classList.remove("glyphicons-eye-open");
+            // spanElement.classList.add("glyphicons-eye-close");
+            spanElement.innerHTML = `<span class="">Hide ${layerNameToDisplay} Layer</span>`;
+            selectLayer.setAttribute(
+              "aria-label",
+              `Hide ${layerNameToDisplay} Layer`
+            );
           }
         }
       });
@@ -56,6 +92,7 @@ const hideOrShowLayer = () => {
   });
 };
 
+// function render information about the assets that have been selected
 const renderSelectedAssetLabels = () => {
   const selectedLayerAssetListArray = document.querySelectorAll(
     ".highlighted-asset-data-list"
@@ -68,13 +105,15 @@ const renderSelectedAssetLabels = () => {
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
       if (asset.layerId === selectedLayerAssetList.id) {
         let assetLabel = asset.assetLabel;
-        if (asset.assetAttributes.Road_Type && asset.assetAttributes.Road_Type === "Alley") {
+        if (
+          asset.assetAttributes.Road_Type &&
+          asset.assetAttributes.Road_Type === "Alley"
+        ) {
           assetLabel = `Alley`;
         }
         if (assetLabel.includes("null")) {
           assetLabel = "Asset data unavailable";
         }
-        // const assetLabel = asset.assetLabel;
         const assetLabelListItem = document.createElement("li");
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
@@ -82,6 +121,7 @@ const renderSelectedAssetLabels = () => {
             ${assetLabel}
           </span>
           <button
+            type="button"
             id="remove-${asset.internalAssetId}-btn"
             class="pull-right link-button small-button red-button transparent-button remove-asset-btn"
           >
@@ -127,7 +167,9 @@ const renderSelectedAssetLabels = () => {
   });
 };
 
+// function to validate asset selection for each layer
 const validateLayerSelections = () => {
+  console.log("validating layer selections");
   featureLayers.forEach((mapLayer) => {
     let isLayerValid = false;
     const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
@@ -209,11 +251,10 @@ const validateLayerSelections = () => {
   });
 
   validateAssetSelection();
-  renderValidityMessage();
 };
 
+// function to validate asset selection for all layers
 const validateAssetSelection = () => {
-  console.log('validatAssetSelection');
   if (validLayers.length !== allMapLayerIds.length) {
     isValid = false;
   }
@@ -230,9 +271,10 @@ const validateAssetSelection = () => {
     // Secure the chosenAssets from parent application when isValid is false
     secureChosenAssets();
   }
-  console.log('chosenAssets', chosenAssets);
+  renderValidityMessage();
 };
 
+// function to render the validity message for asset selection based on assets selected
 const renderValidityMessage = () => {
   const validityMessage = document.getElementById("validity-message");
   let makeMinimunRequireMessage = `Select `;
@@ -256,7 +298,10 @@ const renderValidityMessage = () => {
       ).length;
 
       // Replace underscores and dashes with spaces in layerName
-      const layerName = mapLayer.layerProperties.layerName.replace(/[_-]/g, " ");
+      const layerName = mapLayer.layerProperties.layerName.replace(
+        /[_-]/g,
+        " "
+      );
 
       if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
         makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
@@ -323,6 +368,7 @@ captureMapLayers();
 
 // initilize the map using the map layers provided
 const initializeMap = () => {
+  clearMapData();
   try {
     const zoom =
       document.querySelector("asset-chooser-container").getAttribute("zoom") ||
@@ -354,13 +400,13 @@ const initializeMap = () => {
       const map = new Map({ basemap: baseMap });
 
       const stLouisExtent = new Extent({
-        xmin: -1.0054448855908303E7,
+        xmin: -10054448.855908303,
         ymin: 4654966.477336443,
-        xmax: -1.003824032627997E7,
+        xmax: -10038240.32627997,
         ymax: 4689440.938430255,
         spatialReference: { wkid: 102100 }, // or 3857
       });
-  
+
       const view = new MapView({
         map: map,
         center: [centerX, centerY],
@@ -371,8 +417,8 @@ const initializeMap = () => {
         },
       });
 
-       // Add a LocatorSearchSource for default search suggestions
-       const locatorSearchSource = new LocatorSearchSource({
+      // Add a LocatorSearchSource for default search suggestions
+      const locatorSearchSource = new LocatorSearchSource({
         url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
         filter: {
           geometry: stLouisExtent,
@@ -430,16 +476,12 @@ const initializeMap = () => {
         if (minAssetsRequired === 0) {
           layersWithNoSelectionRequired.push(mapDataLayerId);
         }
-        if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
-          isValid = true;
-          dispatchChosenAssets(chosenAssets);
-        } else {
-          isValid = false;
-          secureChosenAssets();
-        }
-        renderValidityMessage();
+
         const layerName = mapDataLayer.layerProperties.layerName;
-        const layerNameToDisplay = mapDataLayer.layerProperties.layerName.replace(/[_-]/g, " ");
+        const layerNameToDisplay =
+          mapDataLayer.layerProperties.layerName
+            .replace(/[_-]/g, " ")
+            .replace(/\b\w/g, (char) => char.toUpperCase());
         const layerDataDiv = document.getElementById("layer-data-div");
         const layerMinScale = mapDataLayer.minScale;
         const layerMaxScale = mapDataLayer.maxScale;
@@ -454,8 +496,11 @@ const initializeMap = () => {
                 const showHideLayerBtn = document.getElementById(
                   `${layerName}-show-hide-layer-btn`
                 );
-                const layerEyeBtnSpan = document.getElementById(
-                  `${layerName}-eye-btn-span`
+                // const layerEyeBtnSpan = document.getElementById(
+                //   `${layerName}-eye-btn-span`
+                // );
+                const toggleVisibilityBtnTextSpan = document.getElementById(
+                  `${layerName}-toggle-visibility-btn-text-span`
                 );
                 const zoomAlertSpan = document.getElementById(
                   `${layerName}-zoom-alert-span`
@@ -464,10 +509,17 @@ const initializeMap = () => {
                   if (visibleAtCurrentScale) {
                     // if layer is visible at current scale
                     zoomAlertSpan.textContent = ``;
-                    showHideLayerBtn.style.backgroundColor = "#f8f8f8";
-                    layerEyeBtnSpan.classList.add("glyphicons-eye-close");
-                    layerEyeBtnSpan.classList.remove("glyphicons-eye-open");
+                    // showHideLayerBtn.style.backgroundColor = "#f8f8f8";
+                    // layerEyeBtnSpan.classList.add("glyphicons-eye-close");
+                    // layerEyeBtnSpan.classList.remove("glyphicons-eye-open");
                     showHideLayerBtn.removeAttribute("disabled");
+                    showHideLayerBtn.removeAttribute("hidden");
+                    // toggleVisibilityBtnTextSpan.textContent = `Hide ${layerNameToDisplay} layer`;
+                    if (mapDataLayer.visible) {
+                      toggleVisibilityBtnTextSpan.textContent = `Hide ${layerNameToDisplay} Layer`;
+                    } else {
+                      toggleVisibilityBtnTextSpan.textContent = `Show ${layerNameToDisplay} Layer`;
+                    }
                   } else {
                     // if layer is not visible at current scale
                     zoomAlertSpan.textContent = `${
@@ -475,10 +527,11 @@ const initializeMap = () => {
                     } ${
                       layerMaxScale > 0 ? `Zoom out to see this layer.` : ""
                     }`;
-                    showHideLayerBtn.style.backgroundColor = "#dfdfdf";
-                    layerEyeBtnSpan.classList.add("glyphicons-eye-open");
-                    layerEyeBtnSpan.classList.remove("glyphicons-eye-close");
+                    // showHideLayerBtn.style.backgroundColor = "#dfdfdf";
+                    // layerEyeBtnSpan.classList.add("glyphicons-eye-open");
+                    // layerEyeBtnSpan.classList.remove("glyphicons-eye-close");
                     showHideLayerBtn.setAttribute("disabled", true);
+                    showHideLayerBtn.setAttribute("hidden", true);
                   }
                 }
               }
@@ -487,7 +540,7 @@ const initializeMap = () => {
         });
 
         layerDataDiv.innerHTML += `
-          <div 
+          <div
             class="map-layer-data-container stat-container stat-medium"
           >
             <div class="stat-title" id="${layerName}-layer-selected-asset-container">
@@ -499,18 +552,20 @@ const initializeMap = () => {
                </span>
              </div>
               <button
-                type="button" 
-                id="${layerName}-show-hide-layer-btn" 
-                class="selectLayers" 
+                type="button"
+                id="${layerName}-show-hide-layer-btn"
+                class="selectLayers toggleLayerVisibilityButton"
                 att-layer-id="${layerName}-${mapDataLayer.id}"
-                aria-label="hide ${layerName} layer" ${layerMinScale > 0 ? "disabled" : ""} 
-                style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}"
+                aria-label="Hide ${layerName} Layer" ${
+          layerMinScale > 0 ? "disabled hidden" : ""
+        } 
               >
-                <span class="${
+                <span id="${layerName}-toggle-visibility-btn-text-span">
+                ${
                   layerMinScale > 0
-                    ? "glyphicons glyphicons-eye-open"
-                    : "glyphicons glyphicons-eye-close"
-                }" id="${layerName}-eye-btn-span">
+                    ? `Show ${layerNameToDisplay} Layer`
+                    : `Hide ${layerNameToDisplay} Layer`
+                }
                 </span>
               </button>
             </div>
@@ -526,7 +581,7 @@ const initializeMap = () => {
                     <span class="label label-success">
                       No selection required
                     </span>
-                  </span>   
+                  </span>
                   `
                   : minAssetsRequired === 1
                   ? `
@@ -554,9 +609,9 @@ const initializeMap = () => {
                   : ``
               }
             </div>
-            <ul 
-              data-layer-name=${layerName} 
-              class="list-group highlighted-asset-data-list" 
+            <ul
+              data-layer-name=${layerName}
+              class="list-group highlighted-asset-data-list"
               id="${layerName}-${mapDataLayer.id}"
               aria-live="polite"
               aria-atomic="true"
@@ -568,6 +623,16 @@ const initializeMap = () => {
           </div>
         `;
       });
+
+      if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
+        isValid = true;
+        dispatchChosenAssets(chosenAssets);
+      } else {
+        isValid = false;
+        secureChosenAssets();
+      }
+
+      renderValidityMessage();
 
       hideOrShowLayer();
       view.on("click", (event) => {
@@ -641,7 +706,7 @@ const initializeMap = () => {
                   assetAttributes: graphic.attributes,
                   internalAssetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
                   assetId: `${graphic.attributes[layerAssetIDFieldName]}`,
-                  objectId: graphic.attributes.OBJECTID, 
+                  objectId: graphic.attributes.OBJECTID,
                   assetIdType: layerAssetIDFieldName,
                   assetLabel: labelMaskValue,
                   assetType: graphic.layer.layerProperties.layerName,
@@ -650,7 +715,8 @@ const initializeMap = () => {
                   layerName: graphic.layer.layerProperties.layerName,
                   layerTitle: graphic.layer.title,
                   layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
-                  layerAssetMax: graphic.layer.layerProperties.maximumAssetsRequired,
+                  layerAssetMax:
+                    graphic.layer.layerProperties.maximumAssetsRequired,
                   highlightSelect: highlightedSelection,
                 };
                 chosenAssets.push(chosenAsset);
@@ -686,24 +752,27 @@ const initializeMap = () => {
 
 initializeMap();
 
-  // Add a point if coordinates are provided
-      // if (addressMarkerX !== undefined && addressMarkerY !== undefined) {
-      //   const point = new Point({
-      //     longitude: addressMarkerX,
-      //     latitude: addressMarkerY
-      //   });
-      //   console.log('point', point);
-      //   const markerSymbol = new SimpleMarkerSymbol({
-      //     size: 14,
-      //     color: [255, 255, 0, 200], // yellow
-      //     outline: {
-      //       color: [255, 165, 0, 200], // orange
-      //       width: 4
-      //     }
-      //   });
-      //   const pointGraphic = new Graphic({
-      //     geometry: point,
-      //     symbol: markerSymbol
-      //   });
-      //   view.graphics.add(pointGraphic);
-      // }
+// Add a point if coordinates are provided
+// if (addressMarkerX !== undefined && addressMarkerY !== undefined) {
+//   const point = new Point({
+//     longitude: addressMarkerX,
+//     latitude: addressMarkerY
+//   });
+//   console.log('point', point);
+//   const markerSymbol = new SimpleMarkerSymbol({
+//     size: 14,
+//     color: [255, 255, 0, 200], // yellow
+//     outline: {
+//       color: [255, 165, 0, 200], // orange
+//       width: 4
+//     }
+//   });
+//   const pointGraphic = new Graphic({
+//     geometry: point,
+//     symbol: markerSymbol
+//   });
+//   view.graphics.add(pointGraphic);
+// }
+
+// removed from ln 546:
+// style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}"

@@ -10,19 +10,21 @@ class AssetChooserContainerComponent extends HTMLElement {
         .map((layer) => {
           const isRequired =
             layer.layerProperties.minimumAssetsRequired >= 1 ? "required" : "";
+          const layerNameToDisplay = layer.layerProperties.layerName
+            .replace(/[_-]/g, " ")
+            .toLowerCase();
           const prefillValue =
-            prefillData[layer.layerProperties.layerName] || "";
-          const layerNameToDisplay = layer.layerProperties.layerName.replace(/[_-]/g," ");
+            prefillData[layerNameToDisplay] || "";
+            
           return `
            <div>
-            <label
-              for="${layer.layerProperties.layerName}"
-            >Enter any ${layerNameToDisplay}s required for your request.</label>
+            <label for="${layer.layerProperties.layerName}">
+              Enter any ${layerNameToDisplay} required for your request.</label>
             <p>
             <input
               size="60"
               type="text"
-              name="${layer.layerProperties.layerName}"
+              name="${layerNameToDisplay}"
               id="${layer.layerProperties.layerName}"
               value="${prefillValue}"
               ${isRequired}
@@ -47,14 +49,14 @@ class AssetChooserContainerComponent extends HTMLElement {
               <form id="modal-asset-form">
                 ${inputsContent}
                 <button
-                  id="accomodation-asset-submission-button" 
-                  type="submit" 
+                  id="accomodation-asset-submission-button"
+                  type="submit"
                   class="link-button"
                 >
                   Confirm Asset Information
                 </button>
               </form>
-            </div>  
+            </div>
              <p>Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please close this window and return to the map to make your selections.</p>
           </div>
         </dialog>
@@ -91,23 +93,16 @@ class AssetChooserContainerComponent extends HTMLElement {
       const modal = document.getElementById("asset-modal");
       if (modal) {
         modal.close();
-        // document.body.classList.remove("no-scroll");
       }
     };
-    
 
     const clearStoredModalFormAssetData = () => {
-      console.log("clearing - chosenAssetFormData", chosenAssetFormData);
       chosenAssetFormData.splice(0, chosenAssetFormData.length);
       isValid = false;
       secureChosenAssets();
     };
 
     const handleAccomodationButtonClick = () => {
-      if (chosenAssets.length > 0) {
-        // remove assets from chosenAssets array
-        chosenAssets.splice(0, chosenAssets.length);
-      }
       if (chosenAssetFormData.length > 0) {
         // remove assets from chosenAssetFormData array
         chosenAssetFormData.splice(0, chosenAssetFormData.length);
@@ -120,9 +115,7 @@ class AssetChooserContainerComponent extends HTMLElement {
       if (existingModal) {
         existingModal.close();
       }
-      clearMapData();
-      // re-render the component
-      this.connectedCallback(); 
+      this.connectedCallback(); // Re-render the component
       initializeMap();
       // Clear stored data
       clearStoredModalFormAssetData();
@@ -147,14 +140,19 @@ class AssetChooserContainerComponent extends HTMLElement {
     const handleModalAssetFormSubmit = (event) => {
       event.preventDefault();
       const formData = new FormData(event.target);
+      if (chosenAssets.length > 0) {
+        // remove assets from chosenAssets array
+        chosenAssets.splice(0, chosenAssets.length);
+      }
       if (chosenAssetFormData.length > 0) {
         chosenAssetFormData.splice(0, chosenAssetFormData.length);
       }
       formData.forEach((value, key) => {
-        key = key.replace(/[_-]/g," ");
+        key = key.replace(/[_-]/g, " ");
         chosenAssetFormData.push({ key, value });
       });
       isValid = true;
+
       // Dispatch custom event when isValid becomes true
       if (isValid) {
         const customEvent = new CustomEvent("isValidTrue", {
@@ -165,7 +163,6 @@ class AssetChooserContainerComponent extends HTMLElement {
       }
       // Clear the form
       event.target.reset();
-      console.log("chosenAssetFormData", chosenAssetFormData);
       document.getElementById("asset-chooser-interface").innerHTML = `
         <h2 id="asset-chooser-title">${this.title}</h2>
         <h3>The asset information has been added to your case.</h3>

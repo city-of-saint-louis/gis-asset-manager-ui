@@ -37,13 +37,13 @@
         hint="Click on the map to select required assets. Click again to unselect."
       >
         <asset-chooser-map-layer
-          name="Street"
+          name="street_segment"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
           layer-asset-id-field-name="OBJECTID"
           minimum=1
           maximum=6
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
-          min-scale=10000
+          min-scale=0000
         >
         </asset-chooser-map-layer>
         <asset-chooser-map-layer
@@ -72,7 +72,7 @@
           minimum=1
           maximum=1
           label-mask="{SITEADDR}"
-          min-scale=20000
+          min-scale=30000
         >
         </asset-chooser-map-layer>
         <!-- <asset-chooser-map-layer
@@ -85,7 +85,7 @@
           max-scale=30000
         > 
         </asset-chooser-map-layer> -->
-        <asset-chooser-map-layer
+        <!-- <asset-chooser-map-layer
           name="Neighborhood"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/BOUNDARIES_II/MapServer/2"
           layer-asset-id-field-name="OBJECTID"
@@ -93,7 +93,7 @@
           maximum=0
           label-mask="{NHD_NAME}"
           max-scale=30000
-        >
+        > -->
         </asset-chooser-map-layer>
       </asset-chooser-container>
     </main>
