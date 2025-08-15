@@ -10,19 +10,20 @@ class AssetChooserContainerComponent extends HTMLElement {
         .map((layer) => {
           const isRequired =
             layer.layerProperties.minimumAssetsRequired >= 1 ? "required" : "";
-          const prefillValue =
-            prefillData[layer.layerProperties.layerName] || "";
-          const layerNameToDisplay = layer.layerProperties.layerName.replace(/[_-]/g," ");
+          const layerNameToDisplay = layer.layerProperties.layerName
+            .replace(/[_-]/g, " ")
+            .toLowerCase();
+          const prefillValue = prefillData[layerNameToDisplay] || "";
           return `
            <div>
-            <label
-              for="${layer.layerProperties.layerName}"
-            >Enter any ${layerNameToDisplay}s required for your request.</label>
+            <label for="${layer.layerProperties.layerName}">
+              Enter information on any ${layerNameToDisplay} related to your request.
+            </label>
             <p>
             <input
               size="60"
               type="text"
-              name="${layer.layerProperties.layerName}"
+              name="${layerNameToDisplay}"
               id="${layer.layerProperties.layerName}"
               value="${prefillValue}"
               ${isRequired}
@@ -40,22 +41,31 @@ class AssetChooserContainerComponent extends HTMLElement {
           <div class="modal-content">
             <div class="modal-header">
               <button class="close" type="button" aria-label="Close">&times;</button>
-              <h2 id="accomodation-title">Enter the assets required for your request.</h2>
-              <p id="accomodation-subtitle">Please provide as much information as you can such as name, address, ID, description, etc.</p>
+              <h2 id="accomodation-title">
+                Enter the assets required for your request.
+              </h2>
+              <p>
+                <em>
+                  Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please close this window and return to the map to make your selections.
+                </em>
+              </p>
+              <p id="accomodation-subtitle">
+                Please be as detailed as possible.
+              </p>
             </div>
             <div class="modal-body">
               <form id="modal-asset-form">
                 ${inputsContent}
                 <button
-                  id="accomodation-asset-submission-button" 
-                  type="submit" 
+                  id="accomodation-asset-submission-button"
+                  type="submit"
                   class="link-button"
+                  aria-label="Click this button to submit the asset information you entered."
                 >
                   Confirm Asset Information
                 </button>
               </form>
-            </div>  
-             <p>Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please close this window and return to the map to make your selections.</p>
+            </div>
           </div>
         </dialog>
       `;
@@ -82,28 +92,25 @@ class AssetChooserContainerComponent extends HTMLElement {
       if (modalCloseButton) {
         modalCloseButton.addEventListener("click", closeModal);
       }
+      modal.addEventListener("close", () => {
+        document.body.classList.remove("no-scroll");
+      });
     };
 
     const closeModal = () => {
       const modal = document.getElementById("asset-modal");
       if (modal) {
         modal.close();
-        document.body.classList.remove("no-scroll");
       }
     };
 
     const clearStoredModalFormAssetData = () => {
-      console.log("clearing - chosenAssetFormData", chosenAssetFormData);
       chosenAssetFormData.splice(0, chosenAssetFormData.length);
       isValid = false;
       secureChosenAssets();
     };
 
     const handleAccomodationButtonClick = () => {
-      if (chosenAssets.length > 0) {
-        // remove assets from chosenAssets array
-        chosenAssets.splice(0, chosenAssets.length);
-      }
       if (chosenAssetFormData.length > 0) {
         // remove assets from chosenAssetFormData array
         chosenAssetFormData.splice(0, chosenAssetFormData.length);
@@ -116,9 +123,7 @@ class AssetChooserContainerComponent extends HTMLElement {
       if (existingModal) {
         existingModal.close();
       }
-      clearMapData();
-      // re-render the component
-      this.connectedCallback(); 
+      this.connectedCallback(); // Re-render the component
       initializeMap();
       // Clear stored data
       clearStoredModalFormAssetData();
@@ -143,14 +148,19 @@ class AssetChooserContainerComponent extends HTMLElement {
     const handleModalAssetFormSubmit = (event) => {
       event.preventDefault();
       const formData = new FormData(event.target);
+      if (chosenAssets.length > 0) {
+        // remove assets from chosenAssets array
+        chosenAssets.splice(0, chosenAssets.length);
+      }
       if (chosenAssetFormData.length > 0) {
         chosenAssetFormData.splice(0, chosenAssetFormData.length);
       }
       formData.forEach((value, key) => {
-        key = key.replace(/[_-]/g," ");
+        key = key.replace(/[_-]/g, " ");
         chosenAssetFormData.push({ key, value });
       });
       isValid = true;
+
       // Dispatch custom event when isValid becomes true
       if (isValid) {
         const customEvent = new CustomEvent("isValidTrue", {
@@ -161,7 +171,6 @@ class AssetChooserContainerComponent extends HTMLElement {
       }
       // Clear the form
       event.target.reset();
-      console.log("chosenAssetFormData", chosenAssetFormData);
       document.getElementById("asset-chooser-interface").innerHTML = `
         <h2 id="asset-chooser-title">${this.title}</h2>
         <h3>The asset information has been added to your case.</h3>
@@ -192,7 +201,11 @@ class AssetChooserContainerComponent extends HTMLElement {
         >
           Cancel Entry and Return to Map
         </button>
-        <p>Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please cancel your entry and return to the map to make your selections.</p>
+        <em>
+          <p>
+            Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please cancel your entry and return to the map to make your selections.
+          </p>
+        </em>
       `;
       closeModal();
       document
@@ -225,18 +238,18 @@ class AssetChooserContainerComponent extends HTMLElement {
         <div id="asset-chooser-interface">
           <h2>${this.title}</h2>
           <h3>${this.hint}</h3>
-           <div id="accomodation-button-container">
-          <p id="button-hint">Please click below if you are using assistive technology and are unable to select assets on the map.</p>
-          <button
-            type="button"
-            id="accomodation-button"
-            class="link-button inverse-button"
-            aria-label="Click here to enter assets if you are using assistive technology and are unable to select assets on the map."
-          >
-            <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched"></span>
-            Click for Accessible Accommodation
-          </button>
-        </div>
+          <div id="accomodation-button-container">
+            <button
+              type="button"
+              id="accomodation-button"
+              class="link-button inverse-button"
+              aria-label="Click this button to enter assets if you are using assistive technology and are unable to select assets on the map."
+            >
+              <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched">
+              </span>
+              Accessible Accommodation
+            </button>
+          </div>
           <p id="validity-message"></p>
           <div class="row">
             <div class="col-md-7">
