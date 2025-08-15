@@ -58,7 +58,9 @@ document.addEventListener("coordinatesAvailable", (event) => {
 const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
     const layerName = outerLayer.layerProperties.layerName;
-    const layerNameToDisplay = layerName.replace(/[_-]/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+    const layerNameToDisplay = layerName
+      .replace(/[_-]/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
     const selectLayersElements = document.querySelectorAll(".selectLayers");
     selectLayersElements.forEach((selectLayer) => {
       selectLayer.addEventListener("click", () => {
@@ -71,19 +73,19 @@ const hideOrShowLayer = () => {
             outerLayer.visible = false;
             // spanElement.classList.remove("glyphicons-eye-close");
             // spanElement.classList.add("glyphicons-eye-open");
-            spanElement.innerHTML = `<span class="">Show ${layerNameToDisplay} Layer</span>`;
+            spanElement.innerHTML = `<span class="">Show</span>`;
             selectLayer.setAttribute(
               "aria-label",
-              `Show ${layerNameToDisplay} Layer`
+              `Show ${layerNameToDisplay} layer`
             );
           } else {
             outerLayer.visible = true;
             // spanElement.classList.remove("glyphicons-eye-open");
             // spanElement.classList.add("glyphicons-eye-close");
-            spanElement.innerHTML = `<span class="">Hide ${layerNameToDisplay} Layer</span>`;
+            spanElement.innerHTML = `<span class="">Hide</span>`;
             selectLayer.setAttribute(
               "aria-label",
-              `Hide ${layerNameToDisplay} Layer`
+              `Hide ${layerNameToDisplay} layer`
             );
           }
         }
@@ -478,10 +480,9 @@ const initializeMap = () => {
         }
 
         const layerName = mapDataLayer.layerProperties.layerName;
-        const layerNameToDisplay =
-          mapDataLayer.layerProperties.layerName
-            .replace(/[_-]/g, " ")
-            .replace(/\b\w/g, (char) => char.toUpperCase());
+        const layerNameToDisplay = mapDataLayer.layerProperties.layerName
+          .replace(/[_-]/g, " ")
+          .replace(/\b\w/g, (char) => char.toUpperCase());
         const layerDataDiv = document.getElementById("layer-data-div");
         const layerMinScale = mapDataLayer.minScale;
         const layerMaxScale = mapDataLayer.maxScale;
@@ -516,9 +517,9 @@ const initializeMap = () => {
                     showHideLayerBtn.removeAttribute("hidden");
                     // toggleVisibilityBtnTextSpan.textContent = `Hide ${layerNameToDisplay} layer`;
                     if (mapDataLayer.visible) {
-                      toggleVisibilityBtnTextSpan.textContent = `Hide ${layerNameToDisplay} Layer`;
+                      toggleVisibilityBtnTextSpan.textContent = `Hide`;
                     } else {
-                      toggleVisibilityBtnTextSpan.textContent = `Show ${layerNameToDisplay} Layer`;
+                      toggleVisibilityBtnTextSpan.textContent = `Show`;
                     }
                   } else {
                     // if layer is not visible at current scale
@@ -556,16 +557,12 @@ const initializeMap = () => {
                 id="${layerName}-show-hide-layer-btn"
                 class="selectLayers toggleLayerVisibilityButton"
                 att-layer-id="${layerName}-${mapDataLayer.id}"
-                aria-label="Hide ${layerName} Layer" ${
+                aria-label="Hide ${layerNameToDisplay} Layer" ${
           layerMinScale > 0 ? "disabled hidden" : ""
         } 
               >
                 <span id="${layerName}-toggle-visibility-btn-text-span">
-                ${
-                  layerMinScale > 0
-                    ? `Show ${layerNameToDisplay} Layer`
-                    : `Hide ${layerNameToDisplay} Layer`
-                }
+                ${layerMinScale > 0 ? `Show` : `Hide`}
                 </span>
               </button>
             </div>
