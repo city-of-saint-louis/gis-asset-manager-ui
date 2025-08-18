@@ -78,6 +78,7 @@ const hideOrShowLayer = () => {
               "aria-label",
               `Show ${layerNameToDisplay} layer`
             );
+            selectLayer.setAttribute("title", `Show ${layerNameToDisplay} layer`);
           } else {
             outerLayer.visible = true;
             // spanElement.classList.remove("glyphicons-eye-open");
@@ -85,6 +86,10 @@ const hideOrShowLayer = () => {
             spanElement.innerHTML = `<span class="">Hide</span>`;
             selectLayer.setAttribute(
               "aria-label",
+              `Hide ${layerNameToDisplay} layer`
+            );
+            selectLayer.setAttribute(
+              "title",
               `Hide ${layerNameToDisplay} layer`
             );
           }
@@ -119,13 +124,16 @@ const renderSelectedAssetLabels = () => {
         const assetLabelListItem = document.createElement("li");
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
-          <span>
+          <span
+            title="You have selected ${assetLabel}"
+          >
             ${assetLabel}
           </span>
           <button
             type="button"
             id="remove-${asset.internalAssetId}-btn"
             class="pull-right link-button small-button red-button transparent-button remove-asset-btn"
+            title="Remove ${assetLabel}"
           >
             <span class="glyphicons glyphicons-remove"></span>
             Remove
@@ -518,8 +526,10 @@ const initializeMap = () => {
                     // toggleVisibilityBtnTextSpan.textContent = `Hide ${layerNameToDisplay} layer`;
                     if (mapDataLayer.visible) {
                       toggleVisibilityBtnTextSpan.textContent = `Hide`;
+                      showHideLayerBtn.setAttribute("title", `Hide ${layerNameToDisplay} layer`);
                     } else {
                       toggleVisibilityBtnTextSpan.textContent = `Show`;
+                      showHideLayerBtn.setAttribute("title", `Show ${layerNameToDisplay} layer`);
                     }
                   } else {
                     // if layer is not visible at current scale
@@ -544,7 +554,12 @@ const initializeMap = () => {
           <div
             class="map-layer-data-container stat-container stat-medium"
           >
-            <div class="stat-title" id="${layerName}-layer-selected-asset-container">
+            <div 
+              class="stat-title" 
+              id="${layerName}-layer-selected-asset-container"
+              aria-label="${layerNameToDisplay} Layer"
+              title="${layerNameToDisplay} Layer"
+            >
              <div>
                <span> <strong>${layerNameToDisplay} Layer</strong></span>
                <br>
@@ -557,18 +572,20 @@ const initializeMap = () => {
                 id="${layerName}-show-hide-layer-btn"
                 class="selectLayers toggleLayerVisibilityButton"
                 att-layer-id="${layerName}-${mapDataLayer.id}"
-                aria-label="Hide ${layerNameToDisplay} Layer" ${
-          layerMinScale > 0 ? "disabled hidden" : ""
-        } 
+                aria-label="Hide ${layerNameToDisplay} Layer" ${layerMinScale > 0 ? "disabled hidden" : ""} 
+                title="Hide ${layerNameToDisplay} Layer"
               >
-                <span id="${layerName}-toggle-visibility-btn-text-span">
-                ${layerMinScale > 0 ? `Show` : `Hide`}
+                <span 
+                  id="${layerName}-toggle-visibility-btn-text-span"
+                >
+                  ${layerMinScale > 0 ? `Show` : `Hide`}
                 </span>
               </button>
             </div>
-            <div
-            aria-live="polite"
+            <div 
+              aria-live="polite"
               aria-atomic="true"
+              class="asset-selection-requirements"
             >
               <span class="sr-only">Asset selection requirements and status for ${layerName} layer</span>
               ${

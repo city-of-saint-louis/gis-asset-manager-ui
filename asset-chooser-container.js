@@ -244,6 +244,7 @@ class AssetChooserContainerComponent extends HTMLElement {
               id="accomodation-button"
               class="link-button inverse-button"
               aria-label="Click this button to enter assets if you are using assistive technology and are unable to select assets on the map."
+              title="Click this button to enter assets only if you are using assistive technology and are unable to select assets on the map."
             >
               <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched">
               </span>
