@@ -282,11 +282,11 @@ const renderValidityMessage = () => {
   let makeMinimunRequireMessage = `Select `;
 
   if (isValid) {
-    validityMessage.innerHTML = "Asset selection is valid for submission";
-    validityMessage.classList.add("label", "label-success");
+    validityMessage.innerHTML = `Asset selection is <span class="label label-success">valid for submission</span>`;
+    // validityMessage.classList.add("label", "label-success");
     validityMessage.setAttribute("aria-live", "assertive");
   } else {
-    validityMessage.classList.remove("label", "label-success");
+    // validityMessage.classList.remove("label", "label-success");
     validityMessage.removeAttribute("aria-live");
 
     featureLayers.forEach((mapLayer) => {

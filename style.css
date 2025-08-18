@@ -1,6 +1,14 @@
 /* asset-chooser */
+#validity-message {
+  /* margin-top: 32px; */
+  /* margin-bottom: 32px; */
+  /* min-height: 32px; */
+}
 .zoom-alert-span {
   margin-top: 5px;
+  display: inline-block;
+  min-height: 14px;
+  vertical-align: middle;
 }
 
 #accessibility-icon {
@@ -16,26 +24,26 @@
 
 /* Modal styles */
 .modal::backdrop {
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.8); /* Black w/ opacity */ 
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
 }
 
 .modal {
   background-color: rgba(255, 255, 255, 1);
   border: 1px solid #888;
   width: 60%;
-  border-radius:5px;
+  border-radius: 5px;
 }
 
 .modal-header {
   margin: -16px -16px 0 -16px;
-  background-color: #efefef; 
+  background-color: #efefef;
   padding: 14px;
 }
 
 .modal-body {
   padding: 10px 0 10px 0;
-  margin-top: 20px; 
+  margin-top: 20px;
 }
 
 .close {
@@ -82,7 +90,6 @@
 }
 
 .toggleLayerVisibilityButton {
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
   font-size: 12px;
   background-color: #eeeeee;
   transition: transform 0.1s;
@@ -91,12 +98,20 @@
   min-width: 60px;
 }
 
+.toggleLayerVisibilityButton:hover {
+  transform: scale(1.05);
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 6px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
 .toggleLayerVisibilityButton:active {
   transform: scale(0.95);
 }
 
-.zoom-alert-span {
-  display: inline-block;
-  min-height: 14px; /* or whatever height fits your font/message */
-  vertical-align: middle;
+.remove-asset-btn {
+  transition: transform 0.1s;
+}
+
+.remove-asset-btn:active {
+  transform: scale(0.95);
 }
