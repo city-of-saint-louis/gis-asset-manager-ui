@@ -7,6 +7,33 @@
   vertical-align: middle;
 }
 
+.toggleLayerVisibilityButton {
+  font-size: 12px;
+  background-color: #eeeeee;
+  transition: transform 0.1s;
+  padding-left: 8px;
+  padding-right: 8px;
+  min-width: 60px;
+}
+
+.toggleLayerVisibilityButton:hover {
+  transform: scale(1.05);
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 6px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.toggleLayerVisibilityButton:active {
+  transform: scale(0.95);
+}
+
+.remove-asset-btn {
+  transition: transform 0.1s;
+}
+
+.remove-asset-btn:active {
+  transform: scale(0.95);
+}
+
 #accessibility-icon {
   margin-right: 5px;
 }
@@ -83,31 +110,4 @@
   .modal {
     width: 90%;
   }
-}
-
-.toggleLayerVisibilityButton {
-  font-size: 12px;
-  background-color: #eeeeee;
-  transition: transform 0.1s;
-  padding-left: 8px;
-  padding-right: 8px;
-  min-width: 60px;
-}
-
-.toggleLayerVisibilityButton:hover {
-  transform: scale(1.05);
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 6px 10px 0 rgba(0, 0, 0, 0.1);
-}
-
-.toggleLayerVisibilityButton:active {
-  transform: scale(0.95);
-}
-
-.remove-asset-btn {
-  transition: transform 0.1s;
-}
-
-.remove-asset-btn:active {
-  transform: scale(0.95);
 }

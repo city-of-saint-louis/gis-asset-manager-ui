@@ -27,8 +27,8 @@ const clearMapData = () => {
   chosenAssets.splice(0, chosenAssets.length);
   // empty the stored chosenAssetFormData array
   chosenAssetFormData.splice(0, chosenAssetFormData.length);
-  // empty the stored validLayers array
-  validLayers.splice(0, validLayers.length);
+  // empty the stored allMapLayerIds array
+  allMapLayerIds.splice(0, allMapLayerIds.length);
   // empty the stored layersWithNoSelectionRequired array
   layersWithNoSelectionRequired.splice(0, layersWithNoSelectionRequired.length);
   // empty the stored validLayers array
@@ -42,7 +42,7 @@ document.addEventListener("coordinatesAvailable", (event) => {
   const assetChooserContainer = document.querySelector(
     "asset-chooser-container"
   );
-  // reset zoom level, reset x,y based on address entered, and reinitialize the map
+   // reset zoom level, reset x,y based on address entered, and reinitialize the map
   assetChooserContainer.removeAttribute("zoom");
   assetChooserContainer.setAttribute("zoom", 18);
   assetChooserContainer.removeAttribute("center-x");
@@ -127,9 +127,7 @@ const renderSelectedAssetLabels = () => {
         const assetLabelListItem = document.createElement("li");
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
-          <span
-            title="You have selected ${assetLabel}"
-          >
+          <span>
             ${assetLabel}
           </span>
           <button
@@ -182,6 +180,7 @@ const renderSelectedAssetLabels = () => {
 
 // function to validate asset selection for each layer
 const validateLayerSelections = () => {
+  console.log("validating layer selections");
   featureLayers.forEach((mapLayer) => {
     // let isLayerValid = false;
     const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
@@ -262,14 +261,13 @@ const validateLayerSelections = () => {
       maxAssetMessageElement.innerHTML = `Select a maximum of ${layerAssetMax}.`;
     }
   });
+
   validateAssetSelection();
+  // renderValidityMessage();
 };
 
 // function to validate asset selection for all layers
 const validateAssetSelection = () => {
-  console.log("validLayers:", validLayers);
-  console.log("allMapLayerIds:", allMapLayerIds);
-  console.log("isValid:", isValid);
   if (validLayers.length !== allMapLayerIds.length) {
     isValid = false;
   }
@@ -279,7 +277,6 @@ const validateAssetSelection = () => {
   const stringifyAllMapLayerIds = JSON.stringify(sortedAllMapLayerIds);
   if (stringifyValidLayers === stringifyAllMapLayerIds) {
     isValid = true;
-    console.log("isValid:", isValid);
     // Dispatch the chosenAssets to the parent application when isValid is true
     dispatchChosenAssets(chosenAssets);
   } else {
@@ -296,11 +293,11 @@ const renderValidityMessage = () => {
   let makeMinimunRequireMessage = `Select `;
 
   if (isValid) {
-    validityMessage.innerHTML = `Asset selection is <span class="label label-success">valid for submission</span>`;
+    validityMessage.innerHTML = "Selection is <span class='label label-success'>valid for submission</span>";
     // validityMessage.classList.add("label", "label-success");
     validityMessage.setAttribute("aria-live", "assertive");
   } else {
-    // validityMessage.classList.remove("label", "label-success");
+    validityMessage.classList.remove("label", "label-success");
     validityMessage.removeAttribute("aria-live");
 
     featureLayers.forEach((mapLayer) => {
@@ -529,7 +526,6 @@ const initializeMap = () => {
                     // layerEyeBtnSpan.classList.remove("glyphicons-eye-open");
                     showHideLayerBtn.removeAttribute("disabled");
                     showHideLayerBtn.removeAttribute("hidden");
-                    // toggleVisibilityBtnTextSpan.textContent = `Hide ${layerNameToDisplay} layer`;
                     if (mapDataLayer.visible) {
                       toggleVisibilityBtnTextSpan.textContent = `Hide`;
                       showHideLayerBtn.setAttribute(
@@ -563,7 +559,7 @@ const initializeMap = () => {
         });
 
         layerDataDiv.innerHTML += `
-          <div
+          <div 
             class="map-layer-data-container stat-container stat-medium"
           >
             <div 
@@ -596,10 +592,9 @@ const initializeMap = () => {
                 </span>
               </button>
             </div>
-            <div 
-              aria-live="polite"
+            <div
+            aria-live="polite"
               aria-atomic="true"
-              class="asset-selection-requirements"
             >
               <span class="sr-only">Asset selection requirements and status for ${layerName} layer</span>
               ${
@@ -609,7 +604,7 @@ const initializeMap = () => {
                     <span class="label label-success">
                       No selection required
                     </span>
-                  </span>
+                  </span>   
                   `
                   : minAssetsRequired === 1
                   ? `
@@ -637,9 +632,9 @@ const initializeMap = () => {
                   : ``
               }
             </div>
-            <ul
-              data-layer-name=${layerName}
-              class="list-group highlighted-asset-data-list"
+            <ul 
+              data-layer-name=${layerName} 
+              class="list-group highlighted-asset-data-list" 
               id="${layerName}-${mapDataLayer.id}"
               aria-live="polite"
               aria-atomic="true"
@@ -716,7 +711,7 @@ const initializeMap = () => {
                     .classList.add("label-error");
                   setTimeout(() => {
                     alert(
-                      `You have already selected the maximum of ${layerAssetMax} asset(s) from the ${layerNameToDisplay} layer.`
+                      `You have already selected the maximum of ${layerAssetMax} assets from the ${layerNameToDisplay} layer.`
                     );
                     document
                       .getElementById(
@@ -781,28 +776,3 @@ const initializeMap = () => {
 };
 
 initializeMap();
-
-// Add a point if coordinates are provided
-// if (addressMarkerX !== undefined && addressMarkerY !== undefined) {
-//   const point = new Point({
-//     longitude: addressMarkerX,
-//     latitude: addressMarkerY
-//   });
-//   console.log('point', point);
-//   const markerSymbol = new SimpleMarkerSymbol({
-//     size: 14,
-//     color: [255, 255, 0, 200], // yellow
-//     outline: {
-//       color: [255, 165, 0, 200], // orange
-//       width: 4
-//     }
-//   });
-//   const pointGraphic = new Graphic({
-//     geometry: point,
-//     symbol: markerSymbol
-//   });
-//   view.graphics.add(pointGraphic);
-// }
-
-// removed from ln 546:
-// style="background-color: ${layerMinScale > 0 ? "#dfdfdf" : ""}"

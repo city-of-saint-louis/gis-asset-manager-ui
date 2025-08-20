@@ -36,7 +36,7 @@
         title="Select Assets Required For Your Use Case"
         hint="Click on the map to select required assets. Click again to unselect."
       >
-         <asset-chooser-map-layer
+         <!-- <asset-chooser-map-layer
           name="Parcel"
           layer-class-url=" https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/4"
           layer-asset-id-field-name="OBJECTID"
@@ -45,13 +45,13 @@
           label-mask="{SITEADDR}"
           min-scale=30000
         >
-        </asset-chooser-map-layer>
+        </asset-chooser-map-layer> -->
         <asset-chooser-map-layer
           name="street_segment"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
           layer-asset-id-field-name="OBJECTID"
           minimum=1
-          maximum=6
+          maximum=1
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
           min-scale=0000
         >
