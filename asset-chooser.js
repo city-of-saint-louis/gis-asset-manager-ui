@@ -27,8 +27,8 @@ const clearMapData = () => {
   chosenAssets.splice(0, chosenAssets.length);
   // empty the stored chosenAssetFormData array
   chosenAssetFormData.splice(0, chosenAssetFormData.length);
-  // empty the stored validLayers array
-  validLayers.splice(0, validLayers.length);
+  // empty the stored allMapLayerIds array
+  allMapLayerIds.splice(0, allMapLayerIds.length);
   // empty the stored layersWithNoSelectionRequired array
   layersWithNoSelectionRequired.splice(0, layersWithNoSelectionRequired.length);
   // empty the stored validLayers array
@@ -61,37 +61,36 @@ const hideOrShowLayer = () => {
     const layerNameToDisplay = layerName
       .replace(/[_-]/g, " ")
       .replace(/\b\w/g, (char) => char.toUpperCase());
-    const selectLayersElements = document.querySelectorAll(".selectLayers");
-    selectLayersElements.forEach((selectLayer) => {
-      selectLayer.addEventListener("click", () => {
-        const layerId = selectLayer.getAttribute("att-layer-id");
-        const spanElement = selectLayer.querySelector("span");
+    const toggleLayerVisibilityButtons = document.querySelectorAll(
+      ".toggleLayerVisibilityButton"
+    );
+    toggleLayerVisibilityButtons.forEach((toggleLayerVisibilityButton) => {
+      toggleLayerVisibilityButton.addEventListener("click", () => {
+        const layerId =
+          toggleLayerVisibilityButton.getAttribute("att-layer-id");
+        const spanElement = toggleLayerVisibilityButton.querySelector("span");
         if (
           `${outerLayer.layerProperties.layerName}-${outerLayer.id}` === layerId
         ) {
           if (outerLayer.visible) {
             outerLayer.visible = false;
-            // spanElement.classList.remove("glyphicons-eye-close");
-            // spanElement.classList.add("glyphicons-eye-open");
-            spanElement.innerHTML = `<span class="">Show</span>`;
-            selectLayer.setAttribute(
+            spanElement.innerHTML = `<span>Show</span>`;
+            toggleLayerVisibilityButton.setAttribute(
               "aria-label",
               `Show ${layerNameToDisplay} layer`
             );
-            selectLayer.setAttribute(
+            toggleLayerVisibilityButton.setAttribute(
               "title",
               `Show ${layerNameToDisplay} layer`
             );
           } else {
             outerLayer.visible = true;
-            // spanElement.classList.remove("glyphicons-eye-open");
-            // spanElement.classList.add("glyphicons-eye-close");
-            spanElement.innerHTML = `<span class="">Hide</span>`;
-            selectLayer.setAttribute(
+            spanElement.innerHTML = `<span>Hide</span>`;
+            toggleLayerVisibilityButton.setAttribute(
               "aria-label",
               `Hide ${layerNameToDisplay} layer`
             );
-            selectLayer.setAttribute(
+            toggleLayerVisibilityButton.setAttribute(
               "title",
               `Hide ${layerNameToDisplay} layer`
             );
@@ -183,7 +182,6 @@ const renderSelectedAssetLabels = () => {
 // function to validate asset selection for each layer
 const validateLayerSelections = () => {
   featureLayers.forEach((mapLayer) => {
-    // let isLayerValid = false;
     const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
     const layerAssetMin = parseInt(
       mapLayer.layerProperties.minimumAssetsRequired
@@ -191,72 +189,56 @@ const validateLayerSelections = () => {
     const layerAssetMax = parseInt(
       mapLayer.layerProperties.maximumAssetsRequired
     );
-
     const totalLayerAssetsSelected = chosenAssets.filter(
       (asset) =>
         asset.layerId === `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
     ).length;
-
     const minAssetMessageElement = document.getElementById(
       `${layerId}-min-asset-required-message`
     );
     const maxAssetMessageElement = document.getElementById(
       `${layerId}-max-asset-required-message`
     );
-
     if (layerAssetMin === 0 && totalLayerAssetsSelected === 0) {
       minAssetMessageElement.innerHTML = `No selection required.`;
       minAssetMessageElement.classList.add("label", "label-success");
-      // isLayerValid = true;
       if (!validLayers.includes(layerId)) validLayers.push(layerId);
     }
-
     if (layerAssetMin === 0 && totalLayerAssetsSelected > 0) {
       minAssetMessageElement.innerHTML = `${totalLayerAssetsSelected} selected. None required`;
       minAssetMessageElement.classList.add("label", "label-success");
-      // isLayerValid = true;
       if (!validLayers.includes(layerId)) validLayers.push(layerId);
     }
-
     if (layerAssetMin > 0 && totalLayerAssetsSelected >= layerAssetMin) {
       minAssetMessageElement.innerHTML = `${totalLayerAssetsSelected} selected. At least ${layerAssetMin} required.`;
       minAssetMessageElement.classList.add("label", "label-success");
       minAssetMessageElement.classList.remove("label-error");
-      // isLayerValid = true;
       if (!validLayers.includes(layerId)) validLayers.push(layerId);
     }
-
     if (layerAssetMin === 1 && totalLayerAssetsSelected === layerAssetMin) {
       minAssetMessageElement.innerHTML = `${totalLayerAssetsSelected} selected. ${layerAssetMin} required.`;
       minAssetMessageElement.classList.add("label", "label-success");
       minAssetMessageElement.classList.remove("label-error");
-      // isLayerValid = true;
       if (!validLayers.includes(layerId)) validLayers.push(layerId);
     }
-
     if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
       minAssetMessageElement.innerHTML = `${layerAssetMin} required.`;
       minAssetMessageElement.classList.remove("label", "label-success");
       minAssetMessageElement.classList.add("label", "label-error");
-      // isLayerValid = false;
       const layerToRemove = validLayers.findIndex((l) => l === layerId);
       if (layerToRemove !== -1) validLayers.splice(layerToRemove, 1);
     }
-
     if (layerAssetMin > 1 && totalLayerAssetsSelected < layerAssetMin) {
       minAssetMessageElement.innerHTML = `At least ${layerAssetMin} required.`;
       minAssetMessageElement.classList.remove("label", "label-success");
       minAssetMessageElement.classList.add("label", "label-error");
-      // isLayerValid = false;
       const layerToRemove = validLayers.findIndex((l) => l === layerId);
       if (layerToRemove !== -1) validLayers.splice(layerToRemove, 1);
     }
-
     if (layerAssetMax > 0 && totalLayerAssetsSelected === layerAssetMax) {
       maxAssetMessageElement.innerHTML = `Maximum of ${layerAssetMax} reached.`;
       maxAssetMessageElement.classList.add("label", "label-default");
     }
-
     if (layerAssetMax > 0 && totalLayerAssetsSelected < layerAssetMax) {
       maxAssetMessageElement.classList.add("label", "label-default");
       maxAssetMessageElement.innerHTML = `Select a maximum of ${layerAssetMax}.`;
@@ -267,9 +249,6 @@ const validateLayerSelections = () => {
 
 // function to validate asset selection for all layers
 const validateAssetSelection = () => {
-  console.log("validLayers:", validLayers);
-  console.log("allMapLayerIds:", allMapLayerIds);
-  console.log("isValid:", isValid);
   if (validLayers.length !== allMapLayerIds.length) {
     isValid = false;
   }
@@ -279,7 +258,6 @@ const validateAssetSelection = () => {
   const stringifyAllMapLayerIds = JSON.stringify(sortedAllMapLayerIds);
   if (stringifyValidLayers === stringifyAllMapLayerIds) {
     isValid = true;
-    console.log("isValid:", isValid);
     // Dispatch the chosenAssets to the parent application when isValid is true
     dispatchChosenAssets(chosenAssets);
   } else {
@@ -294,15 +272,12 @@ const validateAssetSelection = () => {
 const renderValidityMessage = () => {
   const validityMessage = document.getElementById("validity-message");
   let makeMinimunRequireMessage = `Select `;
-
   if (isValid) {
     validityMessage.innerHTML = `Asset selection is <span class="label label-success">valid for submission</span>`;
-    // validityMessage.classList.add("label", "label-success");
     validityMessage.setAttribute("aria-live", "assertive");
   } else {
     // validityMessage.classList.remove("label", "label-success");
     validityMessage.removeAttribute("aria-live");
-
     featureLayers.forEach((mapLayer) => {
       const layerAssetMin = parseInt(
         mapLayer.layerProperties.minimumAssetsRequired
@@ -312,25 +287,20 @@ const renderValidityMessage = () => {
           asset.layerId ===
           `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
       ).length;
-
       // Replace underscores and dashes with spaces in layerName
       const layerName = mapLayer.layerProperties.layerName.replace(
         /[_-]/g,
         " "
       );
-
       if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
         makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
       }
-
       if (layerAssetMin > 1 && totalLayerAssetsSelected < layerAssetMin) {
         makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
       }
-
       if (layerAssetMin === 1 && totalLayerAssetsSelected === layerAssetMin) {
         makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
       }
-
       if (layerAssetMin > 1 && totalLayerAssetsSelected >= layerAssetMin) {
         makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from $layerName} Layer</strong></span>, `;
       }
@@ -340,7 +310,6 @@ const renderValidityMessage = () => {
     if (makeMinimunRequireMessage.endsWith(", ")) {
       makeMinimunRequireMessage = makeMinimunRequireMessage.slice(0, -2);
     }
-
     // Replace the last comma with ', and '
     const lastCommaIndex = makeMinimunRequireMessage.lastIndexOf(", ");
     if (lastCommaIndex !== -1) {
@@ -349,12 +318,10 @@ const renderValidityMessage = () => {
         lastCommaIndex
       )}, and ${makeMinimunRequireMessage.substring(lastCommaIndex + 2)}`;
     }
-
     makeMinimunRequireMessage = makeMinimunRequireMessage.replace(
       /at least (\d+ \w+)/g,
       "at least <strong>$1</strong>"
     );
-
     validityMessage.innerHTML = `${makeMinimunRequireMessage}`;
   }
 };
@@ -508,12 +475,9 @@ const initializeMap = () => {
             event.layerView.watch(
               "visibleAtCurrentScale",
               function (visibleAtCurrentScale) {
-                const showHideLayerBtn = document.getElementById(
+                const toggleLayerVisibilityButton = document.getElementById(
                   `${layerName}-show-hide-layer-btn`
                 );
-                // const layerEyeBtnSpan = document.getElementById(
-                //   `${layerName}-eye-btn-span`
-                // );
                 const toggleVisibilityBtnTextSpan = document.getElementById(
                   `${layerName}-toggle-visibility-btn-text-span`
                 );
@@ -524,21 +488,17 @@ const initializeMap = () => {
                   if (visibleAtCurrentScale) {
                     // if layer is visible at current scale
                     zoomAlertSpan.textContent = ``;
-                    // showHideLayerBtn.style.backgroundColor = "#f8f8f8";
-                    // layerEyeBtnSpan.classList.add("glyphicons-eye-close");
-                    // layerEyeBtnSpan.classList.remove("glyphicons-eye-open");
-                    showHideLayerBtn.removeAttribute("disabled");
-                    showHideLayerBtn.removeAttribute("hidden");
-                    // toggleVisibilityBtnTextSpan.textContent = `Hide ${layerNameToDisplay} layer`;
+                    toggleLayerVisibilityButton.removeAttribute("disabled");
+                    toggleLayerVisibilityButton.removeAttribute("hidden");
                     if (mapDataLayer.visible) {
                       toggleVisibilityBtnTextSpan.textContent = `Hide`;
-                      showHideLayerBtn.setAttribute(
+                      toggleLayerVisibilityButton.setAttribute(
                         "title",
                         `Hide ${layerNameToDisplay} layer`
                       );
                     } else {
                       toggleVisibilityBtnTextSpan.textContent = `Show`;
-                      showHideLayerBtn.setAttribute(
+                      toggleLayerVisibilityButton.setAttribute(
                         "title",
                         `Show ${layerNameToDisplay} layer`
                       );
@@ -550,11 +510,8 @@ const initializeMap = () => {
                     } ${
                       layerMaxScale > 0 ? `Zoom out to see this layer.` : ""
                     }`;
-                    // showHideLayerBtn.style.backgroundColor = "#dfdfdf";
-                    // layerEyeBtnSpan.classList.add("glyphicons-eye-open");
-                    // layerEyeBtnSpan.classList.remove("glyphicons-eye-close");
-                    showHideLayerBtn.setAttribute("disabled", true);
-                    showHideLayerBtn.setAttribute("hidden", true);
+                    toggleLayerVisibilityButton.setAttribute("disabled", true);
+                    toggleLayerVisibilityButton.setAttribute("hidden", true);
                   }
                 }
               }
@@ -582,7 +539,7 @@ const initializeMap = () => {
               <button
                 type="button"
                 id="${layerName}-show-hide-layer-btn"
-                class="selectLayers toggleLayerVisibilityButton"
+                class="toggleLayerVisibilityButton"
                 att-layer-id="${layerName}-${mapDataLayer.id}"
                 aria-label="Hide ${layerNameToDisplay} Layer" ${
           layerMinScale > 0 ? "disabled hidden" : ""

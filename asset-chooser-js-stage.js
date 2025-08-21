@@ -73,7 +73,7 @@ const hideOrShowLayer = () => {
             outerLayer.visible = false;
             // spanElement.classList.remove("glyphicons-eye-close");
             // spanElement.classList.add("glyphicons-eye-open");
-            spanElement.innerHTML = `<span class="">Show</span>`;
+            spanElement.innerHTML = `<span>Show</span>`;
             selectLayer.setAttribute(
               "aria-label",
               `Show ${layerNameToDisplay} layer`
@@ -86,7 +86,7 @@ const hideOrShowLayer = () => {
             outerLayer.visible = true;
             // spanElement.classList.remove("glyphicons-eye-open");
             // spanElement.classList.add("glyphicons-eye-close");
-            spanElement.innerHTML = `<span class="">Hide</span>`;
+            spanElement.innerHTML = `<span>Hide</span>`;
             selectLayer.setAttribute(
               "aria-label",
               `Hide ${layerNameToDisplay} layer`
