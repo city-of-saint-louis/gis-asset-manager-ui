@@ -1,6 +1,7 @@
 // This file holds the logic that provides functionality for the GIS Asset Chooser
 
 // set variables to hold default values and arrays to hold data for the GIS Asset Chooser
+let currentView = null;
 const defaultZoom = 12;
 const defaultCenterX = -90.25;
 const defaultCenterY = 38.64;
@@ -18,6 +19,17 @@ let addressMarkerY;
 let isValid = false;
 
 // functions to provide functionality for the GIS Asset Chooser
+
+const destroyPreviousMapView = () => {
+  console.log("Destroying previous map view");
+  if (currentView) {
+    currentView.destroy();
+    currentView = null;
+    // Optionally clear the container
+    const viewDiv = document.querySelector("#viewDiv");
+    if (viewDiv) viewDiv.innerHTML = "";
+  };
+};
 
 // function to clear the map data
 const clearMapData = () => {
@@ -351,6 +363,7 @@ captureMapLayers();
 
 // initilize the map using the map layers provided
 const initializeMap = () => {
+  destroyPreviousMapView();
   clearMapData();
   try {
     const zoom =
@@ -399,6 +412,8 @@ const initializeMap = () => {
           geometry: stLouisExtent,
         },
       });
+
+      currentView = view;
 
       // Add a LocatorSearchSource for default search suggestions
       const locatorSearchSource = new LocatorSearchSource({
