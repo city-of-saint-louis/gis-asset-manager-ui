@@ -27,8 +27,8 @@ const clearMapData = () => {
   chosenAssets.splice(0, chosenAssets.length);
   // empty the stored chosenAssetFormData array
   chosenAssetFormData.splice(0, chosenAssetFormData.length);
-  // empty the stored validLayers array
-  validLayers.splice(0, validLayers.length);
+  // empty the stored allMapLayerIds array
+  allMapLayerIds.splice(0, allMapLayerIds.length);
   // empty the stored layersWithNoSelectionRequired array
   layersWithNoSelectionRequired.splice(0, layersWithNoSelectionRequired.length);
   // empty the stored validLayers array
@@ -61,30 +61,37 @@ const hideOrShowLayer = () => {
     const layerNameToDisplay = layerName
       .replace(/[_-]/g, " ")
       .replace(/\b\w/g, (char) => char.toUpperCase());
-    const selectLayersElements = document.querySelectorAll(".selectLayers");
-    selectLayersElements.forEach((selectLayer) => {
-      selectLayer.addEventListener("click", () => {
-        const layerId = selectLayer.getAttribute("att-layer-id");
-        const spanElement = selectLayer.querySelector("span");
+    const toggleLayerVisibilityButtons = document.querySelectorAll(
+      ".toggleLayerVisibilityButton"
+    );
+    toggleLayerVisibilityButtons.forEach((toggleLayerVisibilityButton) => {
+      toggleLayerVisibilityButton.addEventListener("click", () => {
+        const layerId =
+          toggleLayerVisibilityButton.getAttribute("att-layer-id");
+        const spanElement = toggleLayerVisibilityButton.querySelector("span");
         if (
           `${outerLayer.layerProperties.layerName}-${outerLayer.id}` === layerId
         ) {
           if (outerLayer.visible) {
             outerLayer.visible = false;
-            // spanElement.classList.remove("glyphicons-eye-close");
-            // spanElement.classList.add("glyphicons-eye-open");
-            spanElement.innerHTML = `<span class="">Show</span>`;
-            selectLayer.setAttribute(
+            spanElement.innerHTML = `<span>Show</span>`;
+            toggleLayerVisibilityButton.setAttribute(
               "aria-label",
+              `Show ${layerNameToDisplay} layer`
+            );
+            toggleLayerVisibilityButton.setAttribute(
+              "title",
               `Show ${layerNameToDisplay} layer`
             );
           } else {
             outerLayer.visible = true;
-            // spanElement.classList.remove("glyphicons-eye-open");
-            // spanElement.classList.add("glyphicons-eye-close");
-            spanElement.innerHTML = `<span class="">Hide</span>`;
-            selectLayer.setAttribute(
+            spanElement.innerHTML = `<span>Hide</span>`;
+            toggleLayerVisibilityButton.setAttribute(
               "aria-label",
+              `Hide ${layerNameToDisplay} layer`
+            );
+            toggleLayerVisibilityButton.setAttribute(
+              "title",
               `Hide ${layerNameToDisplay} layer`
             );
           }
@@ -119,13 +126,16 @@ const renderSelectedAssetLabels = () => {
         const assetLabelListItem = document.createElement("li");
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
-          <span>
+          <span
+            title="You have selected ${assetLabel}"
+          >
             ${assetLabel}
           </span>
           <button
             type="button"
             id="remove-${asset.internalAssetId}-btn"
             class="pull-right link-button small-button red-button transparent-button remove-asset-btn"
+            title="Remove ${assetLabel}"
           >
             <span class="glyphicons glyphicons-remove"></span>
             Remove
@@ -171,9 +181,7 @@ const renderSelectedAssetLabels = () => {
 
 // function to validate asset selection for each layer
 const validateLayerSelections = () => {
-  console.log("validating layer selections");
   featureLayers.forEach((mapLayer) => {
-    let isLayerValid = false;
     const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
     const layerAssetMin = parseInt(
       mapLayer.layerProperties.minimumAssetsRequired
@@ -181,77 +189,61 @@ const validateLayerSelections = () => {
     const layerAssetMax = parseInt(
       mapLayer.layerProperties.maximumAssetsRequired
     );
-
     const totalLayerAssetsSelected = chosenAssets.filter(
       (asset) =>
         asset.layerId === `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
     ).length;
-
     const minAssetMessageElement = document.getElementById(
       `${layerId}-min-asset-required-message`
     );
     const maxAssetMessageElement = document.getElementById(
       `${layerId}-max-asset-required-message`
     );
-
     if (layerAssetMin === 0 && totalLayerAssetsSelected === 0) {
       minAssetMessageElement.innerHTML = `No selection required.`;
       minAssetMessageElement.classList.add("label", "label-success");
-      isLayerValid = true;
       if (!validLayers.includes(layerId)) validLayers.push(layerId);
     }
-
     if (layerAssetMin === 0 && totalLayerAssetsSelected > 0) {
       minAssetMessageElement.innerHTML = `${totalLayerAssetsSelected} selected. None required`;
       minAssetMessageElement.classList.add("label", "label-success");
-      isLayerValid = true;
       if (!validLayers.includes(layerId)) validLayers.push(layerId);
     }
-
     if (layerAssetMin > 0 && totalLayerAssetsSelected >= layerAssetMin) {
       minAssetMessageElement.innerHTML = `${totalLayerAssetsSelected} selected. At least ${layerAssetMin} required.`;
       minAssetMessageElement.classList.add("label", "label-success");
       minAssetMessageElement.classList.remove("label-error");
-      isLayerValid = true;
       if (!validLayers.includes(layerId)) validLayers.push(layerId);
     }
-
     if (layerAssetMin === 1 && totalLayerAssetsSelected === layerAssetMin) {
       minAssetMessageElement.innerHTML = `${totalLayerAssetsSelected} selected. ${layerAssetMin} required.`;
       minAssetMessageElement.classList.add("label", "label-success");
       minAssetMessageElement.classList.remove("label-error");
-      isLayerValid = true;
       if (!validLayers.includes(layerId)) validLayers.push(layerId);
     }
-
     if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
       minAssetMessageElement.innerHTML = `${layerAssetMin} required.`;
       minAssetMessageElement.classList.remove("label", "label-success");
       minAssetMessageElement.classList.add("label", "label-error");
-      isLayerValid = false;
       const layerToRemove = validLayers.findIndex((l) => l === layerId);
       if (layerToRemove !== -1) validLayers.splice(layerToRemove, 1);
     }
-
     if (layerAssetMin > 1 && totalLayerAssetsSelected < layerAssetMin) {
       minAssetMessageElement.innerHTML = `At least ${layerAssetMin} required.`;
       minAssetMessageElement.classList.remove("label", "label-success");
       minAssetMessageElement.classList.add("label", "label-error");
-      isLayerValid = false;
       const layerToRemove = validLayers.findIndex((l) => l === layerId);
       if (layerToRemove !== -1) validLayers.splice(layerToRemove, 1);
     }
-
     if (layerAssetMax > 0 && totalLayerAssetsSelected === layerAssetMax) {
       maxAssetMessageElement.innerHTML = `Maximum of ${layerAssetMax} reached.`;
+      maxAssetMessageElement.classList.add("label", "label-default");
     }
-
     if (layerAssetMax > 0 && totalLayerAssetsSelected < layerAssetMax) {
       maxAssetMessageElement.classList.add("label", "label-default");
       maxAssetMessageElement.innerHTML = `Select a maximum of ${layerAssetMax}.`;
     }
   });
-
   validateAssetSelection();
 };
 
@@ -280,15 +272,12 @@ const validateAssetSelection = () => {
 const renderValidityMessage = () => {
   const validityMessage = document.getElementById("validity-message");
   let makeMinimunRequireMessage = `Select `;
-
   if (isValid) {
-    validityMessage.innerHTML = "Asset selection is valid for submission";
-    validityMessage.classList.add("label", "label-success");
+    validityMessage.innerHTML = `Asset selection is <span class="label label-success">valid for submission</span>`;
     validityMessage.setAttribute("aria-live", "assertive");
   } else {
-    validityMessage.classList.remove("label", "label-success");
+    // validityMessage.classList.remove("label", "label-success");
     validityMessage.removeAttribute("aria-live");
-
     featureLayers.forEach((mapLayer) => {
       const layerAssetMin = parseInt(
         mapLayer.layerProperties.minimumAssetsRequired
@@ -298,25 +287,20 @@ const renderValidityMessage = () => {
           asset.layerId ===
           `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
       ).length;
-
       // Replace underscores and dashes with spaces in layerName
       const layerName = mapLayer.layerProperties.layerName.replace(
         /[_-]/g,
         " "
       );
-
       if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
         makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
       }
-
       if (layerAssetMin > 1 && totalLayerAssetsSelected < layerAssetMin) {
         makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
       }
-
       if (layerAssetMin === 1 && totalLayerAssetsSelected === layerAssetMin) {
         makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
       }
-
       if (layerAssetMin > 1 && totalLayerAssetsSelected >= layerAssetMin) {
         makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from $layerName} Layer</strong></span>, `;
       }
@@ -326,7 +310,6 @@ const renderValidityMessage = () => {
     if (makeMinimunRequireMessage.endsWith(", ")) {
       makeMinimunRequireMessage = makeMinimunRequireMessage.slice(0, -2);
     }
-
     // Replace the last comma with ', and '
     const lastCommaIndex = makeMinimunRequireMessage.lastIndexOf(", ");
     if (lastCommaIndex !== -1) {
@@ -335,12 +318,10 @@ const renderValidityMessage = () => {
         lastCommaIndex
       )}, and ${makeMinimunRequireMessage.substring(lastCommaIndex + 2)}`;
     }
-
     makeMinimunRequireMessage = makeMinimunRequireMessage.replace(
       /at least (\d+ \w+)/g,
       "at least <strong>$1</strong>"
     );
-
     validityMessage.innerHTML = `${makeMinimunRequireMessage}`;
   }
 };
@@ -494,12 +475,9 @@ const initializeMap = () => {
             event.layerView.watch(
               "visibleAtCurrentScale",
               function (visibleAtCurrentScale) {
-                const showHideLayerBtn = document.getElementById(
+                const toggleLayerVisibilityButton = document.getElementById(
                   `${layerName}-show-hide-layer-btn`
                 );
-                // const layerEyeBtnSpan = document.getElementById(
-                //   `${layerName}-eye-btn-span`
-                // );
                 const toggleVisibilityBtnTextSpan = document.getElementById(
                   `${layerName}-toggle-visibility-btn-text-span`
                 );
@@ -510,16 +488,20 @@ const initializeMap = () => {
                   if (visibleAtCurrentScale) {
                     // if layer is visible at current scale
                     zoomAlertSpan.textContent = ``;
-                    // showHideLayerBtn.style.backgroundColor = "#f8f8f8";
-                    // layerEyeBtnSpan.classList.add("glyphicons-eye-close");
-                    // layerEyeBtnSpan.classList.remove("glyphicons-eye-open");
-                    showHideLayerBtn.removeAttribute("disabled");
-                    showHideLayerBtn.removeAttribute("hidden");
-                    // toggleVisibilityBtnTextSpan.textContent = `Hide ${layerNameToDisplay} layer`;
+                    toggleLayerVisibilityButton.removeAttribute("disabled");
+                    toggleLayerVisibilityButton.removeAttribute("hidden");
                     if (mapDataLayer.visible) {
                       toggleVisibilityBtnTextSpan.textContent = `Hide`;
+                      toggleLayerVisibilityButton.setAttribute(
+                        "title",
+                        `Hide ${layerNameToDisplay} layer`
+                      );
                     } else {
                       toggleVisibilityBtnTextSpan.textContent = `Show`;
+                      toggleLayerVisibilityButton.setAttribute(
+                        "title",
+                        `Show ${layerNameToDisplay} layer`
+                      );
                     }
                   } else {
                     // if layer is not visible at current scale
@@ -528,11 +510,8 @@ const initializeMap = () => {
                     } ${
                       layerMaxScale > 0 ? `Zoom out to see this layer.` : ""
                     }`;
-                    // showHideLayerBtn.style.backgroundColor = "#dfdfdf";
-                    // layerEyeBtnSpan.classList.add("glyphicons-eye-open");
-                    // layerEyeBtnSpan.classList.remove("glyphicons-eye-close");
-                    showHideLayerBtn.setAttribute("disabled", true);
-                    showHideLayerBtn.setAttribute("hidden", true);
+                    toggleLayerVisibilityButton.setAttribute("disabled", true);
+                    toggleLayerVisibilityButton.setAttribute("hidden", true);
                   }
                 }
               }
@@ -544,7 +523,12 @@ const initializeMap = () => {
           <div
             class="map-layer-data-container stat-container stat-medium"
           >
-            <div class="stat-title" id="${layerName}-layer-selected-asset-container">
+            <div 
+              class="stat-title" 
+              id="${layerName}-layer-selected-asset-container"
+              aria-label="${layerNameToDisplay} Layer"
+              title="${layerNameToDisplay} Layer"
+            >
              <div>
                <span> <strong>${layerNameToDisplay} Layer</strong></span>
                <br>
@@ -555,20 +539,24 @@ const initializeMap = () => {
               <button
                 type="button"
                 id="${layerName}-show-hide-layer-btn"
-                class="selectLayers toggleLayerVisibilityButton"
+                class="toggleLayerVisibilityButton"
                 att-layer-id="${layerName}-${mapDataLayer.id}"
                 aria-label="Hide ${layerNameToDisplay} Layer" ${
           layerMinScale > 0 ? "disabled hidden" : ""
         } 
+                title="Hide ${layerNameToDisplay} Layer"
               >
-                <span id="${layerName}-toggle-visibility-btn-text-span">
-                ${layerMinScale > 0 ? `Show` : `Hide`}
+                <span 
+                  id="${layerName}-toggle-visibility-btn-text-span"
+                >
+                  ${layerMinScale > 0 ? `Show` : `Hide`}
                 </span>
               </button>
             </div>
-            <div
-            aria-live="polite"
+            <div 
+              aria-live="polite"
               aria-atomic="true"
+              class="asset-selection-requirements"
             >
               <span class="sr-only">Asset selection requirements and status for ${layerName} layer</span>
               ${
@@ -645,6 +633,8 @@ const initializeMap = () => {
             const graphic = response.results[0].graphic;
             const layerProperties = response.results[0].layer.layerProperties;
             const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
+            const layerName = graphic.layer.layerProperties.layerName;
+            const layerNameToDisplay = layerName.replace(/_/g, " ");
             const labelMaskValue = eval(
               `"${graphic.layer.layerProperties.labelMask.replace(
                 /\{([^}]+)\}/g,
@@ -683,7 +673,7 @@ const initializeMap = () => {
                     .classList.add("label-error");
                   setTimeout(() => {
                     alert(
-                      `You have already selected the maximum of ${layerAssetMax} assets from the ${graphic.layer.layerProperties.layerName} layer.`
+                      `You have already selected the maximum of ${layerAssetMax} asset(s) from the ${layerNameToDisplay} layer.`
                     );
                     document
                       .getElementById(
