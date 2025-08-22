@@ -6,9 +6,6 @@ class MapLayer extends HTMLElement {
     try {
       const name = (this.getAttribute("name") || "").replace(/\s/g, "-");
       const layerClassUrl = this.getAttribute("layer-class-url") || ""; 
-      // save below for future use
-      // const layerId = this.getAttribute("layer-id") || "";
-      // const serverUrl = this.getAttribute("server-url") || "";
       const minimumSelections = this.getAttribute("minimum") || 0;
       const maximumSelections = this.getAttribute("maximum") || 0;
       const labelMask = this.getAttribute("label-mask") || "";
@@ -19,9 +16,6 @@ class MapLayer extends HTMLElement {
       const layerDetails = {
         name,
         layerClassUrl,
-        // save below for future use
-        // serverUrl,
-        // layerId,
         minimumSelections,
         maximumSelections,
         labelMask,

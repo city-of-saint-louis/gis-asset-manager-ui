@@ -25,17 +25,17 @@ The parent application can then receive the 'chosenAssets' array through the use
 
 ### **assest-chooser-container.js**
 
- A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Chooser, including the map, is rendered. It is a parent to **asset-chooser-map-layer.js**.
+ A reusable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Chooser, including the map, is rendered. It is a parent to **asset-chooser-map-layer.js**.
 
 The Asset Chooser can be configured as needed by passing values for the following properties to the container element.
 
 1. **title**
    - type: string
-   - description: An appropriate title based on the specific implementation of the ArcGIS Asset Chooser
+   - description: An appropriate title based on the specific implementation of the GIS Asset Chooser
    - default value: **none**
 2. **hint**
    - type: string
-   - description: A simple statement to let the user know what to do with the ArcGIS Asset Chooser for the specific implementation
+   - description: A simple statement to let the user know what to do with the GIS Asset Chooser for the specific implementation
    - default value: **none**
 3. **zoom**
    - type: number
@@ -72,41 +72,51 @@ The Asset Chooser can be configured as needed by passing values for the followin
 </asset-chooser-container>
 ```
 
+The asset chooser container also houses the **accessibility accommodation**. Users navigating by keyboard are unable to tab into the map and select assets with the keyboard. Even if they could, a map layer may contain thousands of assets. It is not reasonable to ask someone to tab through thousands of assets to find the one they need. In order to account for this we have provided an accommodation for folks navigating by keyboard and using assistive technology such as a screen reader. We have placed a button above the map for users who need to access this accommodation. When the button is clicked a modal opens with a text input allowing users to enter information on their required assets.
+
+No additional configuration is required to implement this solution. A text input is generated for each map layer that has been applied. If asset selection is required for any particular layer, then a user will be required to provide asset information for that layer through the alternate text input.
+
+This feature can be further built out to accomodate a specific use case, allowing users to provide more detailed information if needed.
+
 ### **asset-chooser-map-layer.js**
 
-A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. A child to **assest-chooser-container.js**. An instance of the map layer element is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of **asset-chooser-map-layer.js** (one for each layer) and pass each instance the necessary properties.
+A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. A child to **assest-chooser-container.js**. An instance of the map layer element is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of **asset-chooser-map-layer.js** (one for each layer) and pass each instance the necessary properties.
 
 A map layer can be configured as needed by passing values for the following properties to the map layer element.
 
-1. **layer-class-url**
+1. **name**
+   - type: string
+   - description: The name of the layer
+   - default value: none
+2. **layer-class-url**
    - type: string
    - description: The url for the ArcGIS map layer that you want to use.
    - default value: none
-2. **minimum**
+3. **minimum**
    - type: number
    - description: The minimum number of assets that must be selected from this layer by a user.
    - default value: 0
-3. **maximum**
+4. **maximum**
    - type: number
    - description: The maximum number of assets that can be selected from this layer by a user.
    - default value: 0
-4. **label-mask**
+5. **label-mask**
    - type: string
    - description: Template for how the asset will be labeled on the screen when selected by the user. Parts of the string that
      change dynamically based on asset selection must be surrounded by curly braces in your string. You do not need to use backticks. See examples below.
    - default value: none
    - **Example:** The label mask for the streets layer is "**{FULLNAME} from {From_Stree} to {To_Street}**". The parts in brackets
      are filled in dynamically based on the asset selected. When a street segement is selected, it renders on the screen as follows: "**N GRAND BLVD from MONTGOMERY ST to ST. LOUIS AVE**"
-5. **layer-asset-id-field-name**
+6. **layer-asset-id-field-name**
    - type: string
    - description: The type of unique asset ID for this layer. Each graphic layer has a unique ID for identifying the assets
      connected to that layer. These are not always uniform from layer to layer. Some possible ID types that may be used are "OBJECTID", "FID", or "GUID". Pass in thte appropriate ID type for the layer you are using.
    - default value: "GUID"
-6. **min-scale**
+7. **min-scale**
    - type: number
    - description: Use "min-scale" and "max-scale" if you want a map layer to only appear at certain zoom levels.
    - default value: none
-7. **max-scale**
+8. **max-scale**
    - type: number
    - description: Use "min-scale" and "max-scale" if you want a map layer to only appear at certain zoom levels.
    - default value: none
@@ -132,7 +142,7 @@ A map layer can be configured as needed by passing values for the following prop
 
 ### **asset-chooser.js**
 
-This file holds the logic to make the GIS Asset Chooser Module work. This is where the magic happens.
+This file holds the logic that makes the GIS Asset Chooser Module work. This is where the magic happens.
 
 ## **How To Use the GIS Asset Chooser Module**
 
@@ -159,7 +169,7 @@ To utilize the CDN there are two tags, one for CSS and one for JavaScript. ArcGI
 
 To use the GIS Asset Chooser Module you will need to pull in the module's 3 JavaScript files. Place the script tags in your HTML just before the closing body tag.
 
-asset-chooser-map-layer-js **MUST** load before asset-chooser-container.js or the map will render without any layers in place. We recommed placing the script tags in the order seen below.
+asset-chooser-map-layer-js **MUST** load before asset-chooser-container.js or the map will render without any layers in place. We recommend placing the script tags in the order seen below.
 
 ```html
     <script src="asset-chooser.js"></script>
@@ -189,7 +199,7 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
   <body>
     <header>
     </header>
-    <main style="padding: 1rem">
+    <main>
       <!-- Insert the container element into html. Pass in property values as needed. -->
       <!-- Title and hint are the only properties with no default value.  -->
       <asset-chooser-container
@@ -212,7 +222,7 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
         <!-- Instance of the map layer custom element used to add "Parcels" layer. -->
         <asset-chooser-map-layer
           name="Parcels"
-          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/ArcGIS/rest/services/Parcels/FeatureServer/0"
+          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/4"
           layer-asset-id-field-name="FID"
           minimum=1
           maximum=0
