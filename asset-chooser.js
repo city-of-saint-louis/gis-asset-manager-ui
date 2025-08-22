@@ -21,7 +21,6 @@ let isValid = false;
 // functions to provide functionality for the GIS Asset Chooser
 
 const destroyPreviousMapView = () => {
-  console.log("Destroying previous map view");
   if (currentView) {
     currentView.destroy();
     currentView = null;
