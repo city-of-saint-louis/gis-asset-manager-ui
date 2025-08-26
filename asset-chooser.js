@@ -361,7 +361,7 @@ const captureMapLayers = () => {
 captureMapLayers();
 
 // initilize the map using the map layers provided
-const initializeMap = () => {
+const initializeMap = async () => {
   destroyPreviousMapView();
   clearMapData();
   try {
@@ -384,160 +384,167 @@ const initializeMap = () => {
       document
         .querySelector("asset-chooser-container")
         .getAttribute("show-search") || defaultShowSearch;
-    require([
-      // "esri/Map",
-      // "esri/views/MapView",
-      "esri/layers/FeatureLayer",
-      // "esri/widgets/Search",
-      "esri/widgets/Search/LocatorSearchSource",
-      "esri/geometry/Extent",
-      "esri/core/reactiveUtils",
-    ], (FeatureLayer, LocatorSearchSource, Extent, reactiveUtils) => {
-      // const map = new Map({ basemap: baseMap });
+    const Extent = await $arcgis.import("@arcgis/core/geometry/Extent.js");
+    const FeatureLayer = await $arcgis.import(
+      "@arcgis/core/layers/FeatureLayer.js"
+    );
+    const LocatorSearchSource = await $arcgis.import(
+      "@arcgis/core/widgets/Search/LocatorSearchSource.js"
+    );
+    const reactiveUtils = await $arcgis.import(
+      "@arcgis/core/core/reactiveUtils.js"
+    );
 
-      const stLouisExtent = new Extent({
-        xmin: -10054448.855908303,
-        ymin: 4654966.477336443,
-        xmax: -10038240.32627997,
-        ymax: 4689440.938430255,
-        spatialReference: { wkid: 102100 }, // or 3857
-      });
+    const stLouisExtent = new Extent({
+      xmin: -10054448.855908303,
+      ymin: 4654966.477336443,
+      xmax: -10038240.32627997,
+      ymax: 4689440.938430255,
+      spatialReference: { wkid: 102100 }, // or 3857
+    });
 
-      // Dynamically create the <arcgis-map> component
-      const mapContainer = document.querySelector("#viewDiv");
-      const arcgisMap = document.createElement("arcgis-map");
-      arcgisMap.setAttribute("basemap", baseMap);
-      arcgisMap.setAttribute("zoom", zoom);
-      arcgisMap.setAttribute("center", `${centerX},${centerY}`);
-      arcgisMap.setAttribute("extent", JSON.stringify(stLouisExtent));
-      mapContainer.appendChild(arcgisMap);
+    console.log("stLouisExtent:", stLouisExtent);
 
-      // Add a LocatorSearchSource for default search suggestions
-      const locatorSearchSource = new LocatorSearchSource({
-        url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
-        filter: {
-          geometry: stLouisExtent,
-        },
-        outFields: ["*"],
-        singleLineFieldName: "SingleLine",
-        name: "ArcGIS World Geocoding Service",
-        placeholder: "Search for places or addresses",
-        maxSuggestions: 6,
-        suggestionsEnabled: true,
-      });
+    // Dynamically create the <arcgis-map> component
+    const mapContainer = document.querySelector("#viewDiv");
+    const arcgisMap = document.createElement("arcgis-map");
+    arcgisMap.setAttribute("basemap", baseMap);
+    arcgisMap.setAttribute("zoom", zoom);
+    arcgisMap.setAttribute("center", `${centerX},${centerY}`);
+    arcgisMap.setAttribute("extent", JSON.stringify(stLouisExtent.toJSON()));
+    mapContainer.appendChild(arcgisMap);
 
-      if (showSearch === "true" || showSearch === true) {
-        console.log("showSearch", showSearch);
-        const searchComponent = document.createElement("arcgis-search");
-        searchComponent.setAttribute("position", "top-right");
-        arcgisMap.appendChild(searchComponent);
-      } else {
-        arcgisMap.removeChild(searchComponent);
-      }
+    // Add a LocatorSearchSource for local search suggestions
+    const locatorSearchSource = new LocatorSearchSource({
+      url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
+      filter: {
+        geometry: stLouisExtent,
+      },
+      outFields: ["*"],
+      singleLineFieldName: "SingleLine",
+      name: "ArcGIS World Geocoding Service",
+      placeholder: "Search for places or addresses",
+      maxSuggestions: 6,
+      suggestionsEnabled: true,
+    });
 
-      mapLayersToAdd.forEach((mapLayer) => {
-        const mapDataLayer = new FeatureLayer({
-          url: mapLayer.layerClassUrl,
+    if (showSearch === "true" || showSearch === true) {
+      console.log("showSearch", showSearch);
+      const searchComponent = document.createElement("arcgis-search");
+      searchComponent.setAttribute("position", "top-right");
+      searchComponent.setAttribute("popup-disabled", "true");
+      searchComponent.setAttribute("include-default-sources-disabled", "true");
+      searchComponent.sources = [locatorSearchSource];
+      arcgisMap.appendChild(searchComponent);
+    } else {
+      arcgisMap.removeChild(searchComponent);
+    }
+
+    mapLayersToAdd.forEach((mapLayer) => {
+      const mapDataLayer = new FeatureLayer({
+        url: mapLayer.layerClassUrl,
+        minScale: mapLayer.minScale,
+        maxScale: mapLayer.maxScale,
+        layerProperties: {
+          layerName: mapLayer.name,
+          layerClassUrl: mapLayer.layerClassUrl,
+          layerAssetIDFieldName: mapLayer.layerAssetIDFieldName,
+          labelMask: mapLayer.labelMask,
+          minimumAssetsRequired: mapLayer.minimumSelections,
+          maximumAssetsRequired: mapLayer.maximumSelections,
           minScale: mapLayer.minScale,
           maxScale: mapLayer.maxScale,
-          layerProperties: {
-            layerName: mapLayer.name,
-            layerClassUrl: mapLayer.layerClassUrl,
-            layerAssetIDFieldName: mapLayer.layerAssetIDFieldName,
-            labelMask: mapLayer.labelMask,
-            minimumAssetsRequired: mapLayer.minimumSelections,
-            maximumAssetsRequired: mapLayer.maximumSelections,
-            minScale: mapLayer.minScale,
-            maxScale: mapLayer.maxScale,
-          },
-        });
-        mapDataLayer.outFields = ["*"];
-        mapDataLayer.popupEnabled = false;
-        const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
-        allMapLayerIds.push(mapDataLayerId);
-        featureLayers.push(mapDataLayer);
-        arcgisMap.addEventListener("arcgisViewReadyChange", () => {
-          const map = arcgisMap.map; // Access the underlying Map object
-          map.add(mapDataLayer); // Add the FeatureLayer to the map
-        });
-        const minAssetsRequired = parseInt(
-          mapDataLayer.layerProperties.minimumAssetsRequired
-        );
-        const maxAssetsRequired = parseInt(
-          mapDataLayer.layerProperties.maximumAssetsRequired
-        );
+        },
+      });
+      mapDataLayer.outFields = ["*"];
+      mapDataLayer.popupEnabled = false;
+      const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
+      allMapLayerIds.push(mapDataLayerId);
+      featureLayers.push(mapDataLayer);
+      arcgisMap.addEventListener("arcgisViewReadyChange", () => {
+        const map = arcgisMap.map; // Access the underlying Map object
+        map.add(mapDataLayer); // Add the FeatureLayer to the map
+      });
+      const minAssetsRequired = parseInt(
+        mapDataLayer.layerProperties.minimumAssetsRequired
+      );
+      const maxAssetsRequired = parseInt(
+        mapDataLayer.layerProperties.maximumAssetsRequired
+      );
 
-        if (minAssetsRequired === 0) {
-          layersWithNoSelectionRequired.push(mapDataLayerId);
-        }
+      if (minAssetsRequired === 0) {
+        layersWithNoSelectionRequired.push(mapDataLayerId);
+      }
 
-        const layerName = mapDataLayer.layerProperties.layerName;
-        const layerNameToDisplay = mapDataLayer.layerProperties.layerName
-          .replace(/[_-]/g, " ")
-          .replace(/\b\w/g, (char) => char.toUpperCase());
-        const layerDataDiv = document.getElementById("layer-data-div");
-        const layerMinScale = mapDataLayer.minScale;
-        const layerMaxScale = mapDataLayer.maxScale;
+      const layerName = mapDataLayer.layerProperties.layerName;
+      const layerNameToDisplay = mapDataLayer.layerProperties.layerName
+        .replace(/[_-]/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+      const layerDataDiv = document.getElementById("layer-data-div");
+      const layerMinScale = mapDataLayer.minScale;
+      const layerMaxScale = mapDataLayer.maxScale;
 
-        // Listen for the layerview-create event
-        arcgisMap.addEventListener("arcgisViewReadyChange", () => {
-          const view = arcgisMap.view; // Access the view object
-          console.log("View is ready:", view);
-          view.on("layerview-create", function (event) {
-            if (event.layer === mapDataLayer) {
-              // Use reactiveUtils.watch to monitor visibleAtCurrentScale
-              reactiveUtils.watch(
-                () => event.layerView.visibleAtCurrentScale, // Reactive property
-                (visibleAtCurrentScale) => {
-                  const toggleLayerVisibilityButton = document.getElementById(
-                    `${layerName}-show-hide-layer-btn`
-                  );
-                  const toggleVisibilityBtnTextSpan = document.getElementById(
-                    `${layerName}-toggle-visibility-btn-text-span`
-                  );
-                  const zoomAlertSpan = document.getElementById(
-                    `${layerName}-zoom-alert-span`
-                  );
+      // Listen for the layerview-create event
+      arcgisMap.addEventListener("arcgisViewReadyChange", () => {
+        const view = arcgisMap.view; // Access the view object
+        console.log("View is ready:", view);
+        // view.extent = stLouisExtent;
+        view.constraints = {
+          geometry: stLouisExtent, // Restrict navigation to this extent
+          // minZoom: view.zoom, 
+        };
+        view.on("layerview-create", function (event) {
+          if (event.layer === mapDataLayer) {
+            // Use reactiveUtils.watch to monitor visibleAtCurrentScale
+            reactiveUtils.watch(
+              () => event.layerView.visibleAtCurrentScale,
+              (visibleAtCurrentScale) => {
+                const toggleLayerVisibilityButton = document.getElementById(
+                  `${layerName}-show-hide-layer-btn`
+                );
+                const toggleVisibilityBtnTextSpan = document.getElementById(
+                  `${layerName}-toggle-visibility-btn-text-span`
+                );
+                const zoomAlertSpan = document.getElementById(
+                  `${layerName}-zoom-alert-span`
+                );
 
-                  if (zoomAlertSpan) {
-                    if (visibleAtCurrentScale) {
-                      // If layer is visible at current scale
-                      zoomAlertSpan.textContent = ``;
-                      toggleLayerVisibilityButton.removeAttribute("disabled");
-                      toggleLayerVisibilityButton.removeAttribute("hidden");
-                      if (mapDataLayer.visible) {
-                        toggleVisibilityBtnTextSpan.textContent = `Hide`;
-                        toggleLayerVisibilityButton.setAttribute(
-                          "title",
-                          `Hide ${layerNameToDisplay} layer`
-                        );
-                      } else {
-                        toggleVisibilityBtnTextSpan.textContent = `Show`;
-                        toggleLayerVisibilityButton.setAttribute(
-                          "title",
-                          `Show ${layerNameToDisplay} layer`
-                        );
-                      }
-                    } else {
-                      // If layer is not visible at current scale
-                      zoomAlertSpan.textContent = `${
-                        layerMinScale > 0 ? `Zoom in to see this layer.` : ""
-                      } ${
-                        layerMaxScale > 0 ? `Zoom out to see this layer.` : ""
-                      }`;
+                if (zoomAlertSpan) {
+                  if (visibleAtCurrentScale) {
+                    // If layer is visible at current scale
+                    zoomAlertSpan.textContent = ``;
+                    toggleLayerVisibilityButton.removeAttribute("disabled");
+                    toggleLayerVisibilityButton.removeAttribute("hidden");
+                    if (mapDataLayer.visible) {
+                      toggleVisibilityBtnTextSpan.textContent = `Hide`;
                       toggleLayerVisibilityButton.setAttribute(
-                        "disabled",
-                        true
+                        "title",
+                        `Hide ${layerNameToDisplay} layer`
                       );
-                      toggleLayerVisibilityButton.setAttribute("hidden", true);
+                    } else {
+                      toggleVisibilityBtnTextSpan.textContent = `Show`;
+                      toggleLayerVisibilityButton.setAttribute(
+                        "title",
+                        `Show ${layerNameToDisplay} layer`
+                      );
                     }
+                  } else {
+                    // If layer is not visible at current scale
+                    zoomAlertSpan.textContent = `${
+                      layerMinScale > 0 ? `Zoom in to see this layer.` : ""
+                    } ${
+                      layerMaxScale > 0 ? `Zoom out to see this layer.` : ""
+                    }`;
+                    toggleLayerVisibilityButton.setAttribute("disabled", true);
+                    toggleLayerVisibilityButton.setAttribute("hidden", true);
                   }
                 }
-              );
-            }
-          });
+              }
+            );
+          }
         });
-        layerDataDiv.innerHTML += `
+      });
+      layerDataDiv.innerHTML += `
           <div
             class="map-layer-data-container stat-container stat-medium"
           >
@@ -560,8 +567,8 @@ const initializeMap = () => {
                 class="toggleLayerVisibilityButton"
                 att-layer-id="${layerName}-${mapDataLayer.id}"
                 aria-label="Hide ${layerNameToDisplay} Layer" ${
-          layerMinScale > 0 ? "disabled hidden" : ""
-        } 
+        layerMinScale > 0 ? "disabled hidden" : ""
+      } 
                 title="Hide ${layerNameToDisplay} Layer"
               >
                 <span 
@@ -625,134 +632,130 @@ const initializeMap = () => {
             </ul>
           </div>
         `;
-      });
+    });
 
-      if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
-        isValid = true;
-        dispatchChosenAssets(chosenAssets);
-      } else {
-        isValid = false;
-        secureChosenAssets();
-      }
+    if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
+      isValid = true;
+      dispatchChosenAssets(chosenAssets);
+    } else {
+      isValid = false;
+      secureChosenAssets();
+    }
+    renderValidityMessage();
+    hideOrShowLayer();
 
-      renderValidityMessage();
-
-      hideOrShowLayer();
-
-      arcgisMap.addEventListener("arcgisViewReadyChange", () => {
-        const view = arcgisMap.view; // Access the view object
-        console.log("View is ready:", view);
-        view.on("click", (event) => {
-          view.hitTest(event).then((response) => {
-            if (!response.results[0].layer.layerProperties) {
-              alert(
-                "Please try again. There are no assets to select at that location."
-              );
-              return;
-            }
-            let highlightedSelection;
-            if (response.results.length) {
-              const graphic = response.results[0].graphic;
-              const layerProperties = response.results[0].layer.layerProperties;
-              const layerAssetIDFieldName =
-                layerProperties.layerAssetIDFieldName;
-              const layerName = graphic.layer.layerProperties.layerName;
-              const layerNameToDisplay = layerName.replace(/_/g, " ");
-              const labelMaskValue = eval(
-                `"${graphic.layer.layerProperties.labelMask.replace(
-                  /\{([^}]+)\}/g,
-                  (match, p1) => `" + graphic.attributes.${p1} + "`
-                )}"`
-              );
-              const layerId = graphic.layer.id;
-              if (
-                !chosenAssets.find(
-                  (a) =>
-                    a.internalAssetId ===
-                    `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
-                )
-              ) {
-                view.whenLayerView(graphic.layer).then((layerView) => {
-                  const mapDataLayerId = `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`;
-                  const layerAssetMax = layerProperties.maximumAssetsRequired;
-                  const totalLayerAssetsSelected = chosenAssets.filter(
-                    (h) =>
-                      h.layerId ===
-                      `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
-                  ).length;
-                  if (
-                    layerAssetMax > 0 &&
-                    totalLayerAssetsSelected >= layerAssetMax
-                  ) {
+    arcgisMap.addEventListener("arcgisViewReadyChange", () => {
+      const view = arcgisMap.view; // Access the mapView object
+      console.log("View is ready:", view);
+      view.on("click", (event) => {
+        view.hitTest(event).then((response) => {
+          if (!response.results[0].layer.layerProperties) {
+            alert(
+              "Please try again. There are no assets to select at that location."
+            );
+            return;
+          }
+          let highlightedSelection;
+          if (response.results.length) {
+            const graphic = response.results[0].graphic;
+            const layerProperties = response.results[0].layer.layerProperties;
+            const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
+            const layerName = graphic.layer.layerProperties.layerName;
+            const layerNameToDisplay = layerName.replace(/_/g, " ");
+            const labelMaskValue = eval(
+              `"${graphic.layer.layerProperties.labelMask.replace(
+                /\{([^}]+)\}/g,
+                (match, p1) => `" + graphic.attributes.${p1} + "`
+              )}"`
+            );
+            const layerId = graphic.layer.id;
+            if (
+              !chosenAssets.find(
+                (a) =>
+                  a.internalAssetId ===
+                  `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
+              )
+            ) {
+              view.whenLayerView(graphic.layer).then((layerView) => {
+                const mapDataLayerId = `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`;
+                const layerAssetMax = layerProperties.maximumAssetsRequired;
+                const totalLayerAssetsSelected = chosenAssets.filter(
+                  (h) =>
+                    h.layerId ===
+                    `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
+                ).length;
+                if (
+                  layerAssetMax > 0 &&
+                  totalLayerAssetsSelected >= layerAssetMax
+                ) {
+                  document
+                    .getElementById(
+                      `${mapDataLayerId}-max-asset-required-message`
+                    )
+                    .classList.remove("label-default");
+                  document
+                    .getElementById(
+                      `${mapDataLayerId}-max-asset-required-message`
+                    )
+                    .classList.add("label-error");
+                  setTimeout(() => {
+                    alert(
+                      `You have already selected the maximum of ${layerAssetMax} asset(s) from the ${layerNameToDisplay} layer.`
+                    );
                     document
                       .getElementById(
                         `${mapDataLayerId}-max-asset-required-message`
                       )
-                      .classList.remove("label-default");
+                      .classList.remove("label-error");
                     document
                       .getElementById(
                         `${mapDataLayerId}-max-asset-required-message`
                       )
-                      .classList.add("label-error");
-                    setTimeout(() => {
-                      alert(
-                        `You have already selected the maximum of ${layerAssetMax} asset(s) from the ${layerNameToDisplay} layer.`
-                      );
-                      document
-                        .getElementById(
-                          `${mapDataLayerId}-max-asset-required-message`
-                        )
-                        .classList.remove("label-error");
-                      document
-                        .getElementById(
-                          `${mapDataLayerId}-max-asset-required-message`
-                        )
-                        .classList.add("label-default");
-                    }, 500);
-                    return;
-                  }
-                  highlightedSelection = layerView.highlight(graphic);
-                  const chosenAsset = {
-                    assetAttributes: graphic.attributes,
-                    internalAssetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
-                    assetId: `${graphic.attributes[layerAssetIDFieldName]}`,
-                    objectId: graphic.attributes.OBJECTID,
-                    assetIdType: layerAssetIDFieldName,
-                    assetLabel: labelMaskValue,
-                    assetType: graphic.layer.layerProperties.layerName,
-                    layerData: graphic.layer,
-                    layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
-                    layerName: graphic.layer.layerProperties.layerName,
-                    layerTitle: graphic.layer.title,
-                    layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
-                    layerAssetMax:
-                      graphic.layer.layerProperties.maximumAssetsRequired,
-                    highlightSelect: highlightedSelection,
-                  };
-                  chosenAssets.push(chosenAsset);
-                  renderSelectedAssetLabels();
-                  validateLayerSelections();
-                });
-              } else {
-                chosenAssets.forEach((asset) => {
-                  if (
-                    asset.internalAssetId ===
-                    `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
-                  ) {
-                    asset.highlightSelect.remove();
-                  }
-                });
-                const hightlightToRemove = chosenAssets.findIndex(
-                  (a) =>
-                    a.internalAssetId ===
-                    `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
-                );
-                chosenAssets.splice(hightlightToRemove, 1);
+                      .classList.add("label-default");
+                  }, 500);
+                  return;
+                }
+                highlightedSelection = layerView.highlight(graphic);
+                const chosenAsset = {
+                  assetAttributes: graphic.attributes,
+                  internalAssetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
+                  assetId: `${graphic.attributes[layerAssetIDFieldName]}`,
+                  objectId: graphic.attributes.OBJECTID,
+                  assetIdType: layerAssetIDFieldName,
+                  assetLabel: labelMaskValue,
+                  assetType: graphic.layer.layerProperties.layerName,
+                  layerData: graphic.layer,
+                  layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
+                  layerName: graphic.layer.layerProperties.layerName,
+                  layerTitle: graphic.layer.title,
+                  layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
+                  layerAssetMax:
+                    graphic.layer.layerProperties.maximumAssetsRequired,
+                  highlightSelect: highlightedSelection,
+                };
+                chosenAssets.push(chosenAsset);
                 renderSelectedAssetLabels();
                 validateLayerSelections();
-              }
+              });
+            } else {
+              chosenAssets.forEach((asset) => {
+                if (
+                  asset.internalAssetId ===
+                  `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
+                ) {
+                  asset.highlightSelect.remove();
+                }
+              });
+              const hightlightToRemove = chosenAssets.findIndex(
+                (a) =>
+                  a.internalAssetId ===
+                  `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
+              );
+              chosenAssets.splice(hightlightToRemove, 1);
+              renderSelectedAssetLabels();
+              validateLayerSelections();
             }
-          });
+          }
         });
       });
     });
@@ -760,7 +763,6 @@ const initializeMap = () => {
     console.error(e);
   }
 };
-
 initializeMap();
 
 // Add a point if coordinates are provided
