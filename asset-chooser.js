@@ -414,6 +414,10 @@ const initializeMap = async () => {
     arcgisMap.setAttribute("extent", JSON.stringify(stLouisExtent.toJSON()));
     mapContainer.appendChild(arcgisMap);
 
+    const zoomControl = document.createElement("arcgis-zoom");
+    zoomControl.setAttribute("position", "top-left");
+    arcgisMap.appendChild(zoomControl);
+
     // Add a LocatorSearchSource for local search suggestions
     const locatorSearchSource = new LocatorSearchSource({
       url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
@@ -566,14 +570,10 @@ const initializeMap = async () => {
                 id="${layerName}-show-hide-layer-btn"
                 class="toggleLayerVisibilityButton"
                 att-layer-id="${layerName}-${mapDataLayer.id}"
-                aria-label="Hide ${layerNameToDisplay} Layer" ${
-        layerMinScale > 0 ? "disabled hidden" : ""
-      } 
+                aria-label="Hide ${layerNameToDisplay} Layer" ${layerMinScale > 0 ? "disabled hidden" : ""} 
                 title="Hide ${layerNameToDisplay} Layer"
               >
-                <span 
-                  id="${layerName}-toggle-visibility-btn-text-span"
-                >
+                <span id="${layerName}-toggle-visibility-btn-text-span">
                   ${layerMinScale > 0 ? `Show` : `Hide`}
                 </span>
               </button>
