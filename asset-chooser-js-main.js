@@ -19,18 +19,6 @@ let addressMarkerY;
 let isValid = false;
 
 // functions to provide functionality for the GIS Asset Chooser
-const clearSearchInput = () => {
-  const searchInput = document.querySelector(".esri-search__input");
-  searchInput.value = "";
-};
-
-// Trigger a click on the button with class "esri-icon-close"
-const triggerCloseSearchEntry = () => {
-  const closeButton = document.querySelector(".esri-icon-close");
-  if (closeButton) {
-    closeButton.click();
-  }
-};
 
 const destroyPreviousMapView = () => {
   if (currentView) {
@@ -39,7 +27,7 @@ const destroyPreviousMapView = () => {
     // Optionally clear the container
     const viewDiv = document.querySelector("#viewDiv");
     if (viewDiv) viewDiv.innerHTML = "";
-  }
+  };
 };
 
 // function to clear the map data
@@ -172,12 +160,7 @@ const renderSelectedAssetLabels = () => {
         );
 
         removeAssetBtn.addEventListener("click", () => {
-          const closeButton = document.querySelector(".esri-icon-close");
-          if (closeButton) {
-            closeButton.click();
-          }
           chosenAssets.forEach((asset) => {
-            console.log("asset", asset);
             if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
               const listItemToRemove = document.getElementById(
@@ -188,15 +171,12 @@ const renderSelectedAssetLabels = () => {
                 (a) => a.internalAssetId === asset.internalAssetId
               );
               chosenAssets.splice(hightlightToRemove, 1);
-              // validateNumberofAssetsSelected();
               validateLayerSelections();
               selectedLayerAssetListArray.forEach((list) => {
                 if (list.innerHTML === "") {
                   list.innerHTML = `<li>None selected</li>`;
                 }
               });
-              // clearSearchInput();
-              console.log("chosenAssets", chosenAssets);
             }
           });
         });
@@ -296,7 +276,7 @@ const validateAssetSelection = () => {
     // Secure the chosenAssets from parent application when isValid is false
     secureChosenAssets();
   }
-  console.log("chosenAssets", chosenAssets);
+  renderValidityMessage();
 };
 
 // function to render the validity message for asset selection based on assets selected
@@ -318,7 +298,6 @@ const renderValidityMessage = () => {
           asset.layerId ===
           `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
       ).length;
-
       // Replace underscores and dashes with spaces in layerName
       const layerName = mapLayer.layerProperties.layerName.replace(
         /[_-]/g,
@@ -334,7 +313,7 @@ const renderValidityMessage = () => {
         makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
       }
       if (layerAssetMin > 1 && totalLayerAssetsSelected >= layerAssetMin) {
-        makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
+        makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from $layerName} Layer</strong></span>, `;
       }
     });
 
@@ -411,20 +390,10 @@ const initializeMap = () => {
       "esri/layers/FeatureLayer",
       "esri/widgets/Search",
       "esri/widgets/Search/LocatorSearchSource",
-      "esri/widgets/Search/LayerSearchSource",
       "esri/geometry/Extent",
-    ], (
-      Map,
-      MapView,
-      FeatureLayer,
-      Search,
-      LocatorSearchSource,
-      LayerSearchSource,
-      Extent
-    ) => {
+    ], (Map, MapView, FeatureLayer, Search, LocatorSearchSource, Extent) => {
       const map = new Map({ basemap: baseMap });
 
-      // Define the extent for the city limits of St. Louis
       const stLouisExtent = new Extent({
         xmin: -10054448.855908303,
         ymin: 4654966.477336443,
@@ -439,15 +408,40 @@ const initializeMap = () => {
         zoom: zoom,
         container: document.querySelector("#viewDiv"),
         constraints: {
-          snapToZoom: false,
           geometry: stLouisExtent,
         },
       });
 
       currentView = view;
 
+      // Add a LocatorSearchSource for default search suggestions
+      const locatorSearchSource = new LocatorSearchSource({
+        url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
+        filter: {
+          geometry: stLouisExtent,
+        },
+        outFields: ["*"],
+        singleLineFieldName: "SingleLine",
+        name: "ArcGIS World Geocoding Service",
+        placeholder: "Search for places or addresses",
+        maxSuggestions: 6,
+        suggestionsEnabled: true,
+      });
+
+      const searchWidget = new Search({
+        view: view,
+        sources: [locatorSearchSource],
+        includeDefaultSources: false,
+        popupEnabled: false,
+      });
+
+      if (showSearch === "true" || showSearch === true) {
+        view.ui.add(searchWidget, { position: "top-right" });
+      } else {
+        view.ui.remove(searchWidget);
+      }
+
       mapLayersToAdd.forEach((mapLayer) => {
-        // console.log("mapLayer", mapLayer);
         const mapDataLayer = new FeatureLayer({
           url: mapLayer.layerClassUrl,
           minScale: mapLayer.minScale,
@@ -461,34 +455,8 @@ const initializeMap = () => {
             maximumAssetsRequired: mapLayer.maximumSelections,
             minScale: mapLayer.minScale,
             maxScale: mapLayer.maxScale,
-            searchFields: [mapLayer.labelMask],
-            displayField: mapLayer.labelMask,
-            assetLabel: mapLayer.assetLabel,
           },
-           // --- Add this block to override the label font ---
-          labelingInfo: [
-            {
-              labelExpressionInfo: {
-               expression: `$feature.${mapLayer.assetLabel}`,
-              },
-              symbol: {
-                type: "text",
-                color: "black",
-                font: {
-                  family: "Arial",
-                  size: 12,
-                  weight: "normal",
-                },
-              },
-              labelPlacement:
-                mapLayer.geometryType === "polyline"
-                  ? "center-along"
-                  : "center-center",
-            },
-          ],
-          // --- End block ---
         });
-        // console.log("mapDataLayer", mapDataLayer);
         mapDataLayer.outFields = ["*"];
         mapDataLayer.popupEnabled = false;
         const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
@@ -576,17 +544,9 @@ const initializeMap = () => {
               title="${layerNameToDisplay} Layer"
             >
              <div>
-               <span>
-                 <strong>
-                   ${layerNameToDisplay} Layer
-                 </strong>
-               </span>
+               <span> <strong>${layerNameToDisplay} Layer</strong></span>
                <br>
-               <span 
-                 class="zoom-alert-span" 
-                 id="${layerName}-zoom-alert-span" 
-                 style="height: 14px; display: inline-block"
-               >
+               <span class="zoom-alert-span" id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
                 ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
                </span>
              </div>
@@ -663,186 +623,19 @@ const initializeMap = () => {
         `;
       });
 
-      // Create an array of sources based on the feature layers
-      const searchSources = featureLayers.map((layer) => {
-        // console.log("layer", layer);
-        // Extract field names from the search fields
-        const searchFields = layer.layerProperties.labelMask
-          .match(/\{([^}]+)\}/g)
-          .map((field) => field.replace(/\{|\}/g, ""));
-        // console.log("searchFields", searchFields);
-        // Extract the display field name
-        const displayField = layer.layerProperties.displayField
-          .match(/\{(.*?)\}/)[1] // Match text within curly braces and get the first match
-          .replace(/\{|\}/g, ""); // Remove curly braces
-        // console.log("displayField", displayField);
-        // Create searchTemplate with curly braces around each item
-        const searchTemplate = searchFields
-          .map((field) => `{${field}}`)
-          .join(", ");
-        // console.log("searchTemplate", searchTemplate);
-
-        return new LayerSearchSource({
-          layer: layer,
-          searchFields: searchFields, // Use the extracted search fields as an array
-          displayField: displayField, // Use the first field name as the display field
-          exactMatch: false,
-          outFields: ["*"],
-          name: `${layer.layerProperties.layerName} Layer`,
-          placeholder: `Search ${layer.layerProperties.layerName}`,
-          searchTemplate: searchTemplate,
-          suggestionTemplate: searchTemplate,
-          suggestionsEnabled: true,
-          maxSuggestions: 50000,
-        });
-      });
-
-      // Add a LocatorSearchSource for default search suggestions
-      const locatorSearchSource = new LocatorSearchSource({
-        url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
-        filter: {
-          geometry: stLouisExtent,
-        },
-        outFields: ["*"],
-        singleLineFieldName: "SingleLine",
-        name: "ArcGIS World Geocoding Service",
-        placeholder: "Search for places or addresses",
-        maxSuggestions: 6,
-        suggestionsEnabled: true,
-      });
-      searchSources.push(locatorSearchSource);
-      // console.log("searchSources", searchSources);
-
-      const searchWidget = new Search({
-        view: view,
-        sources: searchSources,
-        includeDefaultSources: false,
-        allPlaceholder: "Search for assets",
-        popupEnabled: false,
-        autoSelect: false
-      });
-
-      if (showSearch === "true" || showSearch === true) {
-        view.ui.add(searchWidget, { position: "top-right" });
+      if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
+        isValid = true;
+        dispatchChosenAssets(chosenAssets);
       } else {
-        view.ui.remove(searchWidget);
+        isValid = false;
+        secureChosenAssets();
       }
 
-      // Listen to the search-complete event
-      searchWidget.on("search-complete", (event) => {
-        clearSearchInput();
-        console.log("search-complete", event);
-        let highlightedSelection;
-        if (event.results.length) {
-          const graphic = event.results[0].results[0].feature;
-          console.log("graphic", graphic);
-          const layerProperties = graphic.layer.layerProperties;
-          const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
-          const layerName = graphic.layer.layerProperties.layerName;
-          const layerNameToDisplay = layerName.replace(/_/g, " ");
-          const labelMaskValue = eval(
-            `"${graphic.layer.layerProperties.labelMask.replace(
-              /\{([^}]+)\}/g,
-              (match, p1) => `" + graphic.attributes.${p1} + "`
-            )}"`
-          );
-          const layerId = graphic.layer.id;
-          if (
-            !chosenAssets.find(
-              (a) =>
-                a.internalAssetId ===
-                `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
-            )
-          ) {
-            view.whenLayerView(graphic.layer).then((layerView) => {
-              const mapDataLayerId = `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`;
-              console.log("mapDataLayerId", mapDataLayerId);
-              const layerAssetMax = layerProperties.maximumAssetsRequired;
-              console.log("layerAssetMax", layerAssetMax);
-              const totalLayerAssetsSelected = chosenAssets.filter(
-                (h) =>
-                  h.layerId ===
-                  `${graphic.layer.layerProperties.layerName}-${graphic.layer.id}`
-              ).length;
-              console.log("totalLayerAssetsSelected", totalLayerAssetsSelected);
-              if (
-                layerAssetMax > 0 &&
-                totalLayerAssetsSelected >= layerAssetMax
-              ) {
-                document
-                  .getElementById(
-                    `${mapDataLayerId}-max-asset-required-message`
-                  )
-                  .classList.remove("label-default");
-                document
-                  .getElementById(
-                    `${mapDataLayerId}-max-asset-required-message`
-                  )
-                  .classList.add("label-error");
-                setTimeout(() => {
-                  alert(
-                    `You have already selected the maximum of ${layerAssetMax} assets from the ${layerNameToDisplay} layer.`
-                  );
-                  document
-                    .getElementById(
-                      `${mapDataLayerId}-max-asset-required-message`
-                    )
-                    .classList.remove("label-error");
-                  document
-                    .getElementById(
-                      `${mapDataLayerId}-max-asset-required-message`
-                    )
-                    .classList.add("label-default");
-                }, 500);
-                return;
-              }
-              highlightedSelection = layerView.highlight(graphic);
-              const chosenAsset = {
-                assetAttributes: graphic.attributes,
-                internalAssetId: `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
-                assetId: `${graphic.attributes[layerAssetIDFieldName]}`,
-                assetIdType: layerAssetIDFieldName,
-                assetLabel: labelMaskValue,
-                layerData: graphic.layer,
-                layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
-                layerName: graphic.layer.title,
-                layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
-                layerAssetMax:
-                  graphic.layer.layerProperties.maximumAssetsRequired,
-                highlightSelect: highlightedSelection,
-              };
-              console.log("!!!!!!!chosenAsset", chosenAsset);
-              chosenAssets.push(chosenAsset);
-              renderSelectedAssetLabels();
-              //validateNumberofAssetsSelected();
-              validateLayerSelections();
-            });
-          } else {
-            chosenAssets.forEach((asset) => {
-              if (
-                asset.internalAssetId ===
-                `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
-              ) {
-                asset.highlightSelect.remove();
-              }
-            });
-            const hightlightToRemove = chosenAssets.findIndex(
-              (a) =>
-                a.internalAssetId ===
-                `${graphic.layer.layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`
-            );
-            chosenAssets.splice(hightlightToRemove, 1);
-            renderSelectedAssetLabels();
-            // validateNumberofAssetsSelected();
-            validateLayerSelections();
-          }
-        }
-      });
+      renderValidityMessage();
 
       hideOrShowLayer();
       view.on("click", (event) => {
         view.hitTest(event).then((response) => {
-          console.log("response", response);
           if (!response.results[0].layer.layerProperties) {
             alert(
               "Please try again. There are no assets to select at that location."
@@ -863,7 +656,6 @@ const initializeMap = () => {
               )}"`
             );
             const layerId = graphic.layer.id;
-            console.log("layerId", layerId);
             if (
               !chosenAssets.find(
                 (a) =>
@@ -918,15 +710,16 @@ const initializeMap = () => {
                   objectId: graphic.attributes.OBJECTID,
                   assetIdType: layerAssetIDFieldName,
                   assetLabel: labelMaskValue,
+                  assetType: graphic.layer.layerProperties.layerName,
                   layerData: graphic.layer,
                   layerId: `${graphic.layer.layerProperties.layerName}-${layerId}`,
-                  layerName: graphic.layer.title,
+                  layerName: graphic.layer.layerProperties.layerName,
+                  layerTitle: graphic.layer.title,
                   layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
                   layerAssetMax:
                     graphic.layer.layerProperties.maximumAssetsRequired,
                   highlightSelect: highlightedSelection,
                 };
-                console.log("chosenAsset", chosenAsset);
                 chosenAssets.push(chosenAsset);
                 renderSelectedAssetLabels();
                 validateLayerSelections();
