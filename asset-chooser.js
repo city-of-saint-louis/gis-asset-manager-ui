@@ -1,7 +1,6 @@
 // This file holds the logic that provides functionality for the GIS Asset Chooser
 
 // set variables to hold default values and arrays to hold data for the GIS Asset Chooser
-let currentView = null;
 const defaultZoom = 12;
 const defaultCenterX = -90.25;
 const defaultCenterY = 38.64;
@@ -17,9 +16,9 @@ const validLayers = [];
 let addressMarkerX;
 let addressMarkerY;
 let isValid = false;
+let currentView = null;
 
 // functions to provide functionality for the GIS Asset Chooser
-
 const destroyPreviousMapView = () => {
   if (currentView) {
     currentView.destroy();
@@ -394,7 +393,6 @@ const initializeMap = async () => {
     const reactiveUtils = await $arcgis.import(
       "@arcgis/core/core/reactiveUtils.js"
     );
-
     const stLouisExtent = new Extent({
       xmin: -10054448.855908303,
       ymin: 4654966.477336443,
@@ -402,9 +400,6 @@ const initializeMap = async () => {
       ymax: 4689440.938430255,
       spatialReference: { wkid: 102100 }, // or 3857
     });
-
-    console.log("stLouisExtent:", stLouisExtent);
-
     // Dynamically create the <arcgis-map> component
     const mapContainer = document.querySelector("#viewDiv");
     const arcgisMap = document.createElement("arcgis-map");
@@ -413,11 +408,9 @@ const initializeMap = async () => {
     arcgisMap.setAttribute("center", `${centerX},${centerY}`);
     arcgisMap.setAttribute("extent", JSON.stringify(stLouisExtent.toJSON()));
     mapContainer.appendChild(arcgisMap);
-
     const zoomControl = document.createElement("arcgis-zoom");
     zoomControl.setAttribute("position", "top-left");
     arcgisMap.appendChild(zoomControl);
-
     // Add a LocatorSearchSource for local search suggestions
     const locatorSearchSource = new LocatorSearchSource({
       url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
@@ -441,7 +434,11 @@ const initializeMap = async () => {
       searchComponent.sources = [locatorSearchSource];
       arcgisMap.appendChild(searchComponent);
     } else {
-      arcgisMap.removeChild(searchComponent);
+      // Check if the search component exists and remove it
+      const existingSearchComponent = arcgisMap.querySelector("arcgis-search");
+      if (existingSearchComponent) {
+        arcgisMap.removeChild(existingSearchComponent);
+      }
     }
 
     mapLayersToAdd.forEach((mapLayer) => {
@@ -495,7 +492,7 @@ const initializeMap = async () => {
         // view.extent = stLouisExtent;
         view.constraints = {
           geometry: stLouisExtent, // Restrict navigation to this extent
-          // minZoom: view.zoom, 
+          // minZoom: view.zoom,
         };
         view.on("layerview-create", function (event) {
           if (event.layer === mapDataLayer) {
@@ -570,7 +567,9 @@ const initializeMap = async () => {
                 id="${layerName}-show-hide-layer-btn"
                 class="toggleLayerVisibilityButton"
                 att-layer-id="${layerName}-${mapDataLayer.id}"
-                aria-label="Hide ${layerNameToDisplay} Layer" ${layerMinScale > 0 ? "disabled hidden" : ""} 
+                aria-label="Hide ${layerNameToDisplay} Layer" ${
+        layerMinScale > 0 ? "disabled hidden" : ""
+      } 
                 title="Hide ${layerNameToDisplay} Layer"
               >
                 <span id="${layerName}-toggle-visibility-btn-text-span">

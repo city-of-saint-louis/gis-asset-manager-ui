@@ -111,3 +111,7 @@
     width: 90%;
   }
 }
+
+.esri-attribution {
+  display: none !important;
+}
