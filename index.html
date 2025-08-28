@@ -40,7 +40,31 @@
         title="Select Assets Required For Your Use Case"
         hint="Click on the map to select required assets. Click again to unselect."
       >
-         <!-- <asset-chooser-map-layer
+       <asset-chooser-map-layer
+          name="street_segment"
+          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
+          layer-asset-id-field-name="OBJECTID"
+          minimum=1
+          maximum=1
+          label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
+          min-scale=20000
+          asset-label="FULLNAME"
+        >
+        </asset-chooser-map-layer>
+        <asset-chooser-map-layer
+          name="neighborhood"
+          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/Neighborhoods_Official/FeatureServer"
+          layer-asset-id-field-name="FID"
+          minimum="1"
+          maximum="3"
+          label-mask="{NHD_NAME}"
+          max-scale="30000"
+          asset-label="NHD_NAME"
+        >
+        </asset-chooser-map-layer>
+     
+       
+            <!-- <asset-chooser-map-layer
           name="Parcel"
           layer-class-url=" https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/4"
           layer-asset-id-field-name="OBJECTID"
@@ -50,16 +74,6 @@
           min-scale=30000
         >
         </asset-chooser-map-layer> -->
-        <asset-chooser-map-layer
-          name="street_segment"
-          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
-          layer-asset-id-field-name="OBJECTID"
-          minimum=1
-          maximum=1
-          label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
-          min-scale=0000
-        >
-        </asset-chooser-map-layer>
         <!-- <asset-chooser-map-layer
           name="Street_Light"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_TRAFFIC/MapServer/0"
@@ -104,9 +118,10 @@
     </main>
     <footer></footer>
     <script src="parent-application.js"></script>
+    <script src="asset-chooser-asset-helpers.js"></script>
+    <script src="asset-chooser-map-helpers.js"></script>
     <script src="asset-chooser.js"></script>
     <script src="asset-chooser-map-layer.js"></script>
     <script src="asset-chooser-container.js"></script>
-    <!-- <script src="extent-example.js"></script> -->
   </body>
 </html>
