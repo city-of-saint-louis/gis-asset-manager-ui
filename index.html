@@ -16,9 +16,9 @@
       media="all"
     />
     <!-- <script src="https://js.arcgis.com/4.30/"></script> -->
-     <script type="module" src="https://js.arcgis.com/calcite-components/3.2.1/calcite.esm.js"></script>
-      <script src="https://js.arcgis.com/4.33/"></script>
-      <script type="module" src="https://js.arcgis.com/4.33/map-components/"></script>
+    <script type="module" src="https://js.arcgis.com/calcite-components/3.2.1/calcite.esm.js"></script>
+    <script src="https://js.arcgis.com/4.33/"></script>
+    <script type="module" src="https://js.arcgis.com/4.33/map-components/"></script>
   </head>
   <body>
     <header class=""></header>
@@ -29,7 +29,6 @@
           aria-live="polite"
           disabled
           id="submit-chosen-assets-button"
-          onclick="submitChosenAssets(chosenAssets)"
           style="margin: 0 auto"
         >
           Submit Selected Assets
@@ -40,7 +39,7 @@
         title="Select Assets Required For Your Use Case"
         hint="Click on the map to select required assets. Click again to unselect."
       >
-       <asset-chooser-map-layer
+       <!-- <asset-chooser-map-layer
           name="street_segment"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
           layer-asset-id-field-name="OBJECTID"
@@ -49,6 +48,17 @@
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
           min-scale=20000
           asset-label="FULLNAME"
+        >
+        </asset-chooser-map-layer> -->
+          <asset-chooser-map-layer
+          name="street_segment"
+          layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/0/"
+          layer-asset-id-field-name="OBJECTID"
+          minimum=1
+          maximum=1
+          label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
+          min-scale=20000
+          asset-label="StreetName"
         >
         </asset-chooser-map-layer>
         <asset-chooser-map-layer
@@ -62,7 +72,17 @@
           asset-label="NHD_NAME"
         >
         </asset-chooser-map-layer>
-     
+        <asset-chooser-map-layer
+          name="Parcel"
+          layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/4/"
+          layer-asset-id-field-name="OBJECTID"
+          minimum=1
+          maximum=1
+          label-mask="{SITEADDR}"
+          min-scale=30000
+          asset-label="SITEADDR"
+        >
+        </asset-chooser-map-layer>
        
             <!-- <asset-chooser-map-layer
           name="Parcel"
@@ -117,12 +137,13 @@
       </asset-chooser-container>
     </main>
     <footer></footer>
+    
+    <script type="module" src="asset-chooser-state.js"></script>
+    <script type="module" src="asset-chooser-asset-helpers.js"></script>
+    <script type="module" src="asset-chooser-map-helpers.js"></script>
+    <script type="module" src="asset-chooser.js"></script>
+    <script type="module" src="asset-chooser-map-layer.js"></script>
+    <script type="module" src="asset-chooser-container.js"></script>
     <script src="parent-application.js"></script>
-    <script src="asset-chooser-state.js"></script>
-    <script src="asset-chooser-asset-helpers.js"></script>
-    <script src="asset-chooser-map-helpers.js"></script>
-    <script src="asset-chooser.js"></script>
-    <script src="asset-chooser-map-layer.js"></script>
-    <script src="asset-chooser-container.js"></script>
   </body>
 </html>

@@ -1,5 +1,17 @@
 // This file is simulating the parent application that will receive the chosenAssets from the child application
+// import { chosenAssets } from "./asset-chooser-state.js"; 
+let chosenAssets;
 
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("submit-chosen-assets-button");
+  if (btn) {
+    btn.addEventListener("click", () => {
+      // Always get the latest chosenAssets from localStorage
+      // const chosenAssets = JSON.parse(localStorage.getItem("chosenAssets") || "[]");
+      submitChosenAssets(chosenAssets);
+    });
+  }
+});
 // array for storing case assets for use within parent application
 const caseAssets = [];
 const submitChosenAssetsButton = document.getElementById("submit-chosen-assets-button");
@@ -7,7 +19,7 @@ const chosenAssetsDisplayContainer = document.getElementById("chosen-assets-disp
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
 // recommended for integration with gis aset chooser - customize as needed
 document.addEventListener("isValidTrue", (event) => {
-  const chosenAssets = event.detail.chosenAssets;
+  chosenAssets = event.detail.chosenAssets;
   const chosenAssetFormData = event.detail.chosenAssetFormData;
   // possible integration strategy using local storage
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));

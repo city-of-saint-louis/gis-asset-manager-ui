@@ -1,5 +1,44 @@
-// import { addMapLayer } from "./asset-chooser-helpers";
-// This file holds the logic that provides functionality for the GIS Asset Chooser
+// import state variables
+import {
+  defaultZoom,
+  defaultCenterX,
+  defaultCenterY,
+  defaultBaseMap,
+  defaultShowSearch,
+  mapLayersToAdd,
+  featureLayers,
+  chosenAssets,
+  // chosenAssetFormData,
+  allMapLayerIds,
+  layersWithNoSelectionRequired,
+  // validLayers,
+  addressMarkerX,
+  addressMarkerY,
+  isValid,
+  setIsValid,
+  currentView,
+  setCurrentView
+} from "./asset-chooser-state.js"
+
+// import map helper functions
+import {
+  destroyPreviousMapView,
+  clearMapData,
+  captureMapLayers,
+  hideOrShowLayer,
+  // monitorLayerVisibility,
+  addMapLayer,
+} from "./asset-chooser-map-helpers.js"
+// import asset helper functions
+import {
+  // renderSelectedAssetLabels,
+  renderValidityMessage,
+  // validateLayerSelections,
+  // validateAssetSelection,
+  dispatchChosenAssets,
+  secureChosenAssets,
+  highlightSelectedAsset,
+} from "./asset-chooser-asset-helpers.js"
 
 // event listener to caputre x,y coordinates from address validation
 document.addEventListener("coordinatesAvailable", (event) => {
@@ -102,7 +141,7 @@ const initializeMap = async () => {
     arcgisMap.addEventListener("arcgisViewReadyChange", () => {
       const map = arcgisMap.map; // access the map object
       const view = arcgisMap.view; // Access the mapView object
-      currentView = view;
+      setCurrentView(view);
       view.constraints = {
         geometry: stLouisExtent,
       };
@@ -121,10 +160,10 @@ const initializeMap = async () => {
       });
 
       if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
-        isValid = true;
+        setIsValid(true);
         dispatchChosenAssets(chosenAssets);
       } else {
-        isValid = false;
+        setIsValid(false);
         secureChosenAssets();
       }
       renderValidityMessage();
@@ -149,4 +188,13 @@ const initializeMap = async () => {
     console.error(e);
   }
 };
-initializeMap();
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Wait for the custom element to be defined and rendered
+  customElements.whenDefined('asset-chooser-container').then(() => {
+    // Optionally, wait a tick for rendering
+    setTimeout(() => {
+      initializeMap();
+    }, 0);
+  });
+});

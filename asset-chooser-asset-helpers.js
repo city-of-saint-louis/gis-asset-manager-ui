@@ -1,4 +1,13 @@
 // UI related functions
+// import needed state variables
+import { 
+  validLayers, 
+  isValid,
+  setIsValid,
+  featureLayers, 
+  chosenAssets,
+  allMapLayerIds 
+} from "./asset-chooser-state.js";
 // function to render information about the assets that have been selected
 const renderSelectedAssetLabels = () => {
   const selectedLayerAssetListArray = document.querySelectorAll(
@@ -78,7 +87,7 @@ const renderSelectedAssetLabels = () => {
 };
 
 // function to render the validity message for asset selection based on assets selected
-const renderValidityMessage = () => {
+export const renderValidityMessage = () => {
   const validityMessage = document.getElementById("validity-message");
   let makeMinimunRequireMessage = `Select `;
   if (isValid) {
@@ -207,18 +216,20 @@ const validateLayerSelections = () => {
 // function to validate asset selection for all layers
 const validateAssetSelection = () => {
   if (validLayers.length !== allMapLayerIds.length) {
-    isValid = false;
+    // isValid = false;
+    setIsValid(false);
   }
   const sortedValidLayers = [...validLayers].sort();
   const sortedAllMapLayerIds = [...allMapLayerIds].sort();
   const stringifyValidLayers = JSON.stringify(sortedValidLayers);
   const stringifyAllMapLayerIds = JSON.stringify(sortedAllMapLayerIds);
   if (stringifyValidLayers === stringifyAllMapLayerIds) {
-    isValid = true;
+    // isValid = true;
+    setIsValid(true);
     // Dispatch the chosenAssets to the parent application when isValid is true
     dispatchChosenAssets(chosenAssets);
   } else {
-    isValid = false;
+    setIsValid(false);
     // Secure the chosenAssets from parent application when isValid is false
     secureChosenAssets();
   }
@@ -227,7 +238,7 @@ const validateAssetSelection = () => {
 
 
 // Dispatch the chosenAssets to the parent application
-const dispatchChosenAssets = (chosenAssets) => {
+export const dispatchChosenAssets = (chosenAssets) => {
   const event = new CustomEvent("isValidTrue", {
     detail: { chosenAssets, chosenAssetFormData: [] },
   });
@@ -235,13 +246,13 @@ const dispatchChosenAssets = (chosenAssets) => {
 };
 
 // custom event listener to signal when chosenAssets are not valid
-const secureChosenAssets = () => {
+export const secureChosenAssets = () => {
   const event = new CustomEvent("isValidFalse", { detail: { isValid } });
   document.dispatchEvent(event);
 };
 
 // Function to highlight and handle a selected asset
-const highlightSelectedAsset = (response, view, highlightedSelection) => {
+export const highlightSelectedAsset = (response, view, highlightedSelection) => {
   const graphic = response.results[0].graphic;
   const layerProperties = response.results[0].layer.layerProperties;
   const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;

@@ -1,5 +1,16 @@
+import { 
+  chosenAssets,
+  allMapLayerIds,
+  mapLayersToAdd,
+  featureLayers,
+  chosenAssetFormData,
+  layersWithNoSelectionRequired,
+  validLayers,
+  currentView
+} from "./asset-chooser-state.js"
+
 // function to destroy the previous map view
-const destroyPreviousMapView = () => {
+export const destroyPreviousMapView = () => {
   if (currentView) {
     console.log("Destroying previous view:", currentView);
     currentView.destroy();
@@ -11,7 +22,7 @@ const destroyPreviousMapView = () => {
 };
 
 // function to clear the map data
-const clearMapData = () => {
+export const clearMapData = () => {
   // empty the stored featureLayers array
   featureLayers.splice(0, featureLayers.length);
   // empty the stored chosenAssets array
@@ -27,7 +38,7 @@ const clearMapData = () => {
 };
 
 // event listener to capture layer data from map-layer.js
-const captureMapLayers = () => {
+export const captureMapLayers = () => {
   document.addEventListener("layerDetailsProvided", (event) => {
     const mapLayer = event.detail;
     mapLayersToAdd.push(mapLayer);
@@ -35,7 +46,7 @@ const captureMapLayers = () => {
 };
 
 // function to hide or show layers on the map
-const hideOrShowLayer = () => {
+export const hideOrShowLayer = () => {
   featureLayers.forEach((outerLayer) => {
     const layerName = outerLayer.layerProperties.layerName;
     const layerNameToDisplay = layerName
@@ -135,7 +146,7 @@ const monitorLayerVisibility = (
 };
 
 // function to add map layers to the map
-const addMapLayer = ({
+export const addMapLayer = ({
   mapLayer,
   FeatureLayer,
   reactiveUtils,

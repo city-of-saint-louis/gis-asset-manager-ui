@@ -1,3 +1,5 @@
+import { chosenAssetFormData, isValid } from "./asset-chooser-state.js"
+
 class AssetChooserContainerComponent extends HTMLElement {
   constructor() {
     super(); // always call super() first in the constructor for a custom web component
