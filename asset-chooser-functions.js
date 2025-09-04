@@ -1,3 +1,4 @@
+// import state variables from asset-chooser-state.js
 import {
   chosenAssets,
   allMapLayerIds,
@@ -117,32 +118,32 @@ export const addMapLayer = ({
       minScale: mapLayer.minScale,
       maxScale: mapLayer.maxScale,
     },
-    labelingInfo: [
-      {
-        labelExpressionInfo: {
-          expression: `$feature.${mapLayer.assetLabel}`,
-        },
-        symbol: {
-          type: "text",
-          color: "#1e526b",
-          haloColor: "white",
-          haloSize: "1px",
-          font: {
-            family: "Arial Unicode MS",
-            size: 12,
-            weight: "bold",
-          },
-        },
-        placement:
-          mapLayer.geometryType === "polyline"
-            ? "center-along"
-            : mapLayer.geometryType === "polygon"
-            ? "always-horizontal"
-            : mapLayer.geometryType === "point"
-            ? "center-center"
-            : "always-horizontal", // Fallback
-      },
-    ],
+    // labelingInfo: [
+    //   {
+    //     labelExpressionInfo: {
+    //       expression: `$feature.${mapLayer.assetLabel}`,
+    //     },
+    //     symbol: {
+    //       type: "text",
+    //       color: "#1e526b",
+    //       haloColor: "white",
+    //       haloSize: "1px",
+    //       font: {
+    //         family: "Arial Unicode MS",
+    //         size: 12,
+    //         weight: "bold",
+    //       },
+    //     },
+    //     placement:
+    //       mapLayer.geometryType === "polyline"
+    //         ? "center-along"
+    //         : mapLayer.geometryType === "polygon"
+    //         ? "always-horizontal"
+    //         : mapLayer.geometryType === "point"
+    //         ? "center-center"
+    //         : "always-horizontal", // Fallback
+    //   },
+    // ],
   });
   mapDataLayer.outFields = ["*"];
   mapDataLayer.popupEnabled = false;

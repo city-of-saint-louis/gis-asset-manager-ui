@@ -1,4 +1,4 @@
-// import state variables
+// import state variables from asset-chooser-state.js
 import {
   defaultZoom,
   defaultCenterX,
@@ -8,15 +8,11 @@ import {
   mapLayersToAdd,
   featureLayers,
   chosenAssets,
-  // chosenAssetFormData,
   allMapLayerIds,
   layersWithNoSelectionRequired,
-  // validLayers,
   addressMarkerX,
   addressMarkerY,
-  // isValid,
   setIsValid,
-  // currentView,
   setCurrentView
 } from "./asset-chooser-state.js"
 
@@ -28,8 +24,6 @@ import {
   hideOrShowLayer,
   addMapLayer,
   renderValidityMessage,
-  // validateLayerSelections,
-  // validateAssetSelection,
   dispatchChosenAssets,
   secureChosenAssets,
   highlightSelectedAsset,
@@ -54,10 +48,10 @@ document.addEventListener("coordinatesAvailable", (event) => {
   initializeMap();
 });
 
-// function to capture the map layers added to the asset-chooser-container component
+// capture the map layers added to the asset-chooser-container component
 captureMapLayers();
 
-// function to initialize the map using the map layers provided
+// initialize the map using the map layers provided
 const initializeMap = async () => {
   destroyPreviousMapView();
   clearMapData();
@@ -132,7 +126,6 @@ const initializeMap = async () => {
         arcgisMap.removeChild(existingSearchComponent);
       }
     }
-
     arcgisMap.addEventListener("arcgisViewReadyChange", () => {
       const map = arcgisMap.map; // access the map object
       const view = arcgisMap.view; // Access the mapView object
@@ -140,7 +133,6 @@ const initializeMap = async () => {
       view.constraints = {
         geometry: stLouisExtent,
       };
-
       mapLayersToAdd.forEach((mapLayer) => {
         addMapLayer({
           mapLayer,

@@ -13,7 +13,7 @@ class MapLayer extends HTMLElement {
       const layerAssetIDFieldName = this.getAttribute("layer-asset-id-field-name") || "GUID";
       const minScale = this.getAttribute("min-scale") || "";
       const maxScale = this.getAttribute("max-scale") || "";
-      const assetLabel = this.getAttribute("asset-label") || "";
+      // const assetLabel = this.getAttribute("asset-label") || "";
 
       const layerDetails = {
         name,
@@ -25,7 +25,7 @@ class MapLayer extends HTMLElement {
         layerAssetIDFieldName,
         minScale,
         maxScale,
-        assetLabel
+        // assetLabel
       };
       
       this.dispatchEvent(new CustomEvent("layerDetailsProvided", { 
