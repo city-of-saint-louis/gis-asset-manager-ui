@@ -5,6 +5,7 @@ class MapLayer extends HTMLElement {
   connectedCallback() {
     try {
       const name = (this.getAttribute("name") || "").replace(/\s/g, "-");
+      const displayName = this.getAttribute("display-name") || "";
       const layerClassUrl = this.getAttribute("layer-class-url") || ""; 
       const minimumSelections = this.getAttribute("minimum") || 0;
       const maximumSelections = this.getAttribute("maximum") || 0;
@@ -16,6 +17,7 @@ class MapLayer extends HTMLElement {
 
       const layerDetails = {
         name,
+        displayName,
         layerClassUrl,
         minimumSelections,
         maximumSelections,

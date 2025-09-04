@@ -1,4 +1,4 @@
-import { 
+import {
   chosenAssets,
   allMapLayerIds,
   mapLayersToAdd,
@@ -6,8 +6,8 @@ import {
   chosenAssetFormData,
   layersWithNoSelectionRequired,
   validLayers,
-  currentView
-} from "./asset-chooser-state.js"
+  currentView,
+} from "./asset-chooser-state.js";
 
 // function to destroy the previous map view
 export const destroyPreviousMapView = () => {
@@ -51,6 +51,7 @@ export const hideOrShowLayer = () => {
     const layerName = outerLayer.layerProperties.layerName;
     const layerNameToDisplay = layerName
       .replace(/[_-]/g, " ")
+      .toLowerCase()
       .replace(/\b\w/g, (char) => char.toUpperCase());
     const toggleLayerVisibilityButtons = document.querySelectorAll(
       ".toggleLayerVisibilityButton"
@@ -176,7 +177,7 @@ export const addMapLayer = ({
           expression: `$feature.${mapLayer.assetLabel}`,
         },
         symbol: {
-          type: "text", // autocasts as new TextSymbol()
+          type: "text",
           color: "#1e526b",
           haloColor: "white",
           haloSize: "1px",
@@ -210,8 +211,9 @@ export const addMapLayer = ({
     mapDataLayer.layerProperties.maximumAssetsRequired
   );
   const layerName = mapDataLayer.layerProperties.layerName;
-  const layerNameToDisplay = mapDataLayer.layerProperties.layerName
+  const layerNameToDisplay = layerName
     .replace(/[_-]/g, " ")
+    .toLowerCase()
     .replace(/\b\w/g, (char) => char.toUpperCase());
   const layerDataDiv = document.getElementById("layer-data-div");
   const layerMinScale = mapDataLayer.minScale;
@@ -263,7 +265,7 @@ export const addMapLayer = ({
           aria-label="Hide ${layerNameToDisplay} Layer" ${
     layerMinScale > 0 ? "disabled hidden" : ""
   } 
-          title="Hide ${layerNameToDisplay} Layer"
+          title="Hide ${layerNameToDisplay} layer"
         >
           <span id="${layerName}-toggle-visibility-btn-text-span">
             ${layerMinScale > 0 ? `Show` : `Hide`}

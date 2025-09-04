@@ -1,4 +1,4 @@
-import { chosenAssetFormData, isValid } from "./asset-chooser-state.js"
+import { featureLayers, chosenAssetFormData, isValid } from "./asset-chooser-state.js"
 
 class AssetChooserContainerComponent extends HTMLElement {
   constructor() {

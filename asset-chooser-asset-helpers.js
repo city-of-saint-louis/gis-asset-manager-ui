@@ -1,12 +1,12 @@
 // UI related functions
 // import needed state variables
-import { 
-  validLayers, 
+import {
+  validLayers,
   isValid,
   setIsValid,
-  featureLayers, 
+  featureLayers,
   chosenAssets,
-  allMapLayerIds 
+  allMapLayerIds,
 } from "./asset-chooser-state.js";
 // function to render information about the assets that have been selected
 const renderSelectedAssetLabels = () => {
@@ -106,12 +106,12 @@ export const renderValidityMessage = () => {
           `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
       ).length;
       // Replace underscores and dashes with spaces in layerName
-      const layerName = mapLayer.layerProperties.layerName.replace(
-        /[_-]/g,
-        " "
-      );
+      const layerName = mapLayer.layerProperties.layerName;
+      // const layerNameToDisplay = layerName
+        // .toLowerCase()
+        // .replace(/\b\w/g, (char) => char.toUpperCase());
       if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
-        makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
+        makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${layerName} layer</strong></span>, `;
       }
       if (layerAssetMin > 1 && totalLayerAssetsSelected < layerAssetMin) {
         makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${layerName} Layer</strong></span>, `;
@@ -236,7 +236,6 @@ const validateAssetSelection = () => {
   renderValidityMessage();
 };
 
-
 // Dispatch the chosenAssets to the parent application
 export const dispatchChosenAssets = (chosenAssets) => {
   const event = new CustomEvent("isValidTrue", {
@@ -252,7 +251,11 @@ export const secureChosenAssets = () => {
 };
 
 // Function to highlight and handle a selected asset
-export const highlightSelectedAsset = (response, view, highlightedSelection) => {
+export const highlightSelectedAsset = (
+  response,
+  view,
+  highlightedSelection
+) => {
   const graphic = response.results[0].graphic;
   const layerProperties = response.results[0].layer.layerProperties;
   const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;

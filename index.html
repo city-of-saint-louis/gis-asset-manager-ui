@@ -73,7 +73,7 @@
         >
         </asset-chooser-map-layer>
         <asset-chooser-map-layer
-          name="Parcel"
+          name="PARCEL"
           layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/4/"
           layer-asset-id-field-name="OBJECTID"
           minimum=1
@@ -81,6 +81,19 @@
           label-mask="{SITEADDR}"
           min-scale=30000
           asset-label="SITEADDR"
+        >
+        </asset-chooser-map-layer>
+
+        <asset-chooser-map-layer
+          name="Parking meter"
+          display-name="Parking meter"
+          layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/ParkingServices/MapServer/1"
+          layer-asset-id-field-name="OBJECTID"
+          minimum=1
+          maximum=1
+          label-mask="{OBJECTID}"
+          min-scale=30000
+          asset-label="OBJECTID"
         >
         </asset-chooser-map-layer>
        

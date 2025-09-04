@@ -14,9 +14,9 @@ import {
   // validLayers,
   addressMarkerX,
   addressMarkerY,
-  isValid,
+  // isValid,
   setIsValid,
-  currentView,
+  // currentView,
   setCurrentView
 } from "./asset-chooser-state.js"
 
