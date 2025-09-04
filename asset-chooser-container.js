@@ -12,21 +12,20 @@ class AssetChooserContainerComponent extends HTMLElement {
         .map((layer) => {
           const isRequired =
             layer.layerProperties.minimumAssetsRequired >= 1 ? "required" : "";
-          const layerNameToDisplay = layer.layerProperties.layerName
-            .replace(/[_-]/g, " ")
-            .toLowerCase();
-          const prefillValue = prefillData[layerNameToDisplay] || "";
+          const layerName = layer.layerProperties.layerName;
+          const formattedLayerName = layer.layerProperties.formattedLayerName;
+          const prefillValue = prefillData[formattedLayerName] || "";
           return `
            <div>
             <label for="${layer.layerProperties.layerName}">
-              Enter information on any ${layerNameToDisplay} related to your request.
+              Enter information on any ${formattedLayerName} related to your request.
             </label>
             <p>
             <input
               size="60"
               type="text"
-              name="${layerNameToDisplay}"
-              id="${layer.layerProperties.layerName}"
+              name="${formattedLayerName}"
+              id="${layerName}"
               value="${prefillValue}"
               ${isRequired}
             >
@@ -253,7 +252,7 @@ class AssetChooserContainerComponent extends HTMLElement {
               Accessible Accommodation
             </button>
           </div>
-          <p id="validity-message"></p>
+          <p id="validity-message" title="Selection requirements"></p>
           <div class="row">
             <div class="col-md-7">
               <div id="viewDiv" style="width: 100%; height: 500px;" aria-label="interactive map for selecting assets" >

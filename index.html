@@ -55,8 +55,8 @@
           layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/0/"
           layer-asset-id-field-name="OBJECTID"
           minimum=1
-          maximum=1
-          label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
+          maximum=3
+          label-mask="{LeftFromAddress} to {RightToAddress} {StreetName}"
           min-scale=20000
           asset-label="StreetName"
         >
@@ -89,8 +89,8 @@
           display-name="Parking meter"
           layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/ParkingServices/MapServer/1"
           layer-asset-id-field-name="OBJECTID"
-          minimum=1
-          maximum=1
+          minimum=2
+          maximum=12
           label-mask="{OBJECTID}"
           min-scale=30000
           asset-label="OBJECTID"
@@ -152,8 +152,7 @@
     <footer></footer>
     
     <script type="module" src="asset-chooser-state.js"></script>
-    <script type="module" src="asset-chooser-asset-helpers.js"></script>
-    <script type="module" src="asset-chooser-map-helpers.js"></script>
+    <script type="module" src="asset-chooser-functions.js"></script>
     <script type="module" src="asset-chooser.js"></script>
     <script type="module" src="asset-chooser-map-layer.js"></script>
     <script type="module" src="asset-chooser-container.js"></script>

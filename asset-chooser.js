@@ -20,25 +20,20 @@ import {
   setCurrentView
 } from "./asset-chooser-state.js"
 
-// import map helper functions
+// import helper functions
 import {
   destroyPreviousMapView,
   clearMapData,
   captureMapLayers,
   hideOrShowLayer,
-  // monitorLayerVisibility,
   addMapLayer,
-} from "./asset-chooser-map-helpers.js"
-// import asset helper functions
-import {
-  // renderSelectedAssetLabels,
   renderValidityMessage,
   // validateLayerSelections,
   // validateAssetSelection,
   dispatchChosenAssets,
   secureChosenAssets,
   highlightSelectedAsset,
-} from "./asset-chooser-asset-helpers.js"
+} from "./asset-chooser-functions.js"
 
 // event listener to caputre x,y coordinates from address validation
 document.addEventListener("coordinatesAvailable", (event) => {
@@ -188,6 +183,12 @@ const initializeMap = async () => {
     console.error(e);
   }
 };
+
+const testDiv = document.createElement("div");
+testDiv.id="testDiv";
+testDiv.textContent="This is a test div to confirm JS loading";
+testDiv.setAttribute("name","this is a testDiv");
+document.body.appendChild(testDiv);
 
 document.addEventListener("DOMContentLoaded", () => {
   // Wait for the custom element to be defined and rendered
