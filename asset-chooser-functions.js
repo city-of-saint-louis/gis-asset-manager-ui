@@ -8,6 +8,7 @@ import {
   layersWithNoSelectionRequired,
   validLayers,
   currentView,
+  setCurrentView,
   isValid,
   setIsValid,
 } from "./asset-chooser-state.js";
@@ -17,7 +18,7 @@ import {
 export const destroyPreviousMapView = () => {
   if (currentView) {
     currentView.destroy();
-    currentView = null;
+    setCurrentView(null);
     // Clear the container
     const viewDiv = document.querySelector("#viewDiv");
     if (viewDiv) viewDiv.innerHTML = "";
