@@ -176,12 +176,6 @@ const initializeMap = async () => {
   }
 };
 
-const testDiv = document.createElement("div");
-testDiv.id="testDiv";
-testDiv.textContent="This is a test div to confirm JS loading";
-testDiv.setAttribute("name","this is a testDiv");
-document.body.appendChild(testDiv);
-
 document.addEventListener("DOMContentLoaded", () => {
   // Wait for the custom element to be defined and rendered
   customElements.whenDefined('asset-chooser-container').then(() => {

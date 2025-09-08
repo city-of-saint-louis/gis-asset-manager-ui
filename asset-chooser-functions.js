@@ -150,7 +150,6 @@ export const addMapLayer = ({
   const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
   allMapLayerIds.push(mapDataLayerId);
   featureLayers.push(mapDataLayer);
-  console.log("Adding layer:", mapDataLayer);
   map.add(mapDataLayer);
   const minAssetsRequired = parseInt(
     mapDataLayer.layerProperties.minimumAssetsRequired
@@ -341,7 +340,6 @@ export const renderValidityMessage = () => {
   } else {
     validityMessage.removeAttribute("aria-live");
     featureLayers.forEach((mapLayer) => {
-      console.log("mapLayer for validity message:", mapLayer);
       const layerAssetMin = parseInt(
         mapLayer.layerProperties.minimumAssetsRequired
       );
@@ -503,7 +501,6 @@ const renderSelectedAssetLabels = () => {
   );
   // Clear existing list items before appending new ones
   selectedLayerAssetListArray.forEach((list) => {
-    console.log("list:", list);
     list.innerHTML = "";
   });
   chosenAssets.forEach((asset) => {
@@ -546,7 +543,6 @@ const renderSelectedAssetLabels = () => {
 
         removeAssetBtn.addEventListener("click", () => {
           chosenAssets.forEach((asset) => {
-            console.log("asset to potentially remove:", asset);
             const formattedLayerName = asset.layerData.layerProperties.formattedLayerName;
             if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
@@ -571,7 +567,6 @@ const renderSelectedAssetLabels = () => {
     });
   });
   selectedLayerAssetListArray.forEach((list) => {
-    console.log("list after rendering:", list);
     if (list.innerHTML === "") {
       list.innerHTML = `<li title="No assets selected from ${list.dataset.layerName.replace(/-/g, " ")} layer">None selected</li>`;
     }
