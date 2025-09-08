@@ -1,4 +1,8 @@
-// set variables to hold default values and arrays to hold data for the GIS Asset Chooser
+// declare variables for the GIS Asset Chooser
+// set default values for map view
+// set empty arrays for dynamic data storage
+// provide setter functions for mutable variables
+// export all variables and functions for external access
 export const defaultZoom = 12;
 export const defaultCenterX = -90.25;
 export const defaultCenterY = 38.64;
