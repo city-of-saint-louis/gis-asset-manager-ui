@@ -14,7 +14,6 @@ class MapLayer extends HTMLElement {
       const minScale = this.getAttribute("min-scale") || "";
       const maxScale = this.getAttribute("max-scale") || "";
       // const assetLabel = this.getAttribute("asset-label") || "";
-
       const layerDetails = {
         name,
         displayName,

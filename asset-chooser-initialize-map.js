@@ -10,8 +10,6 @@ import {
   chosenAssets,
   allMapLayerIds,
   layersWithNoSelectionRequired,
-  // addressMarkerX,
-  // addressMarkerY,
   setIsValid,
   setCurrentView
 } from "./asset-chooser-state.js"
@@ -20,7 +18,6 @@ import {
 import {
   destroyPreviousMapView,
   clearMapData,
-  // captureMapLayers,
   hideOrShowLayer,
   addMapLayer,
   renderValidityMessage,

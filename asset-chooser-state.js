@@ -16,7 +16,13 @@ export const allMapLayerIds = [];
 export const layersWithNoSelectionRequired = [];
 export const validLayers = [];
 export let addressMarkerX;
+export function setAddressMarkerX(value) {
+  addressMarkerX = value;
+}
 export let addressMarkerY;
+export function setAddressMarkerY(value) {
+  addressMarkerY = value;
+}
 export let isValid = false;
 export function setIsValid(value) {
   isValid = value;
