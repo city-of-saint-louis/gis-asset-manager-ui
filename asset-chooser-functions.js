@@ -19,9 +19,15 @@ export const destroyPreviousMapView = () => {
   if (currentView) {
     currentView.destroy();
     setCurrentView(null);
-    // Clear the container
-    const viewDiv = document.querySelector("#viewDiv");
-    if (viewDiv) viewDiv.innerHTML = "";
+  }
+  // Remove any existing <arcgis-map> from #viewDiv
+  const viewDiv = document.querySelector("#viewDiv");
+  if (viewDiv) {
+    const oldArcgisMap = viewDiv.querySelector("arcgis-map");
+    if (oldArcgisMap) {
+      viewDiv.removeChild(oldArcgisMap);
+    }
+    viewDiv.innerHTML = ""; 
   }
 };
 
