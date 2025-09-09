@@ -10,11 +10,8 @@ document.addEventListener("coordinatesAvailable", (event) => {
   setAddressMarkerY(event.detail.centerY);
   const assetChooserContainer = document.querySelector("asset-chooser-container");
   // reset zoom level, reset x,y based on address entered, and reinitialize the map
-  assetChooserContainer.removeAttribute("zoom");
   assetChooserContainer.setAttribute("zoom", 18);
-  assetChooserContainer.removeAttribute("center-x");
   assetChooserContainer.setAttribute("center-x", addressMarkerX);
-  assetChooserContainer.removeAttribute("center-y");
   assetChooserContainer.setAttribute("center-y", addressMarkerY);
   const layerDataDiv = document.getElementById("layer-data-div");
   layerDataDiv.innerHTML = "";

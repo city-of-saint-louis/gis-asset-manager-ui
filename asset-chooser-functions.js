@@ -344,8 +344,10 @@ export const renderValidityMessage = () => {
   if (isValid) {
     validityMessage.innerHTML = `Asset selection is <span class="label label-success">valid for submission</span>`;
     validityMessage.setAttribute("aria-live", "assertive");
+    validityMessage.setAttribute("title", "Asset selection is valid for submission");
   } else {
     validityMessage.removeAttribute("aria-live");
+    validityMessage.setAttribute("title", "Selection requirements");
     featureLayers.forEach((mapLayer) => {
       const layerAssetMin = parseInt(
         mapLayer.layerProperties.minimumAssetsRequired

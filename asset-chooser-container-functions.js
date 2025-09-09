@@ -6,7 +6,6 @@ import {
   isValid,
   setIsValid,
 } from "./asset-chooser-state.js";
-
 // import required functions from asset-chooser-functions.js
 import { secureChosenAssets } from "./asset-chooser-functions.js";
 // import initializeMap function from map-initialization.js
@@ -20,11 +19,11 @@ const generateInputsContent = (prefillData = {}) => {
       const formattedLayerName = layer.layerProperties.formattedLayerName;
       const prefillValue = prefillData[formattedLayerName] || "";
       return `
-           <div>
-            <label for="${layer.layerProperties.layerName}">
-              Enter information on any ${formattedLayerName} related to your request.
-            </label>
-            <p>
+        <div>
+          <label for="${layer.layerProperties.layerName}">
+            Enter information on any ${formattedLayerName} related to your request.
+          </label>
+          <p>
             <input
               size="60"
               type="text"
@@ -33,47 +32,47 @@ const generateInputsContent = (prefillData = {}) => {
               value="${prefillValue}"
               ${isRequired}
             >
-            <p/>
-           </div>
-          `;
+          </p>
+        </div>
+      `;
     })
     .join("");
 };
 
 const generateModalHTML = (inputsContent) => {
   return `
-        <dialog id="asset-modal" class="modal">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button class="close" type="button" aria-label="Close">&times;</button>
-              <h2 id="accomodation-title">
-                Enter the assets required for your request.
-              </h2>
-              <p>
-                <em>
-                  Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please close this window and return to the map to make your selections.
-                </em>
-              </p>
-              <p id="accomodation-subtitle">
-                Please be as detailed as possible.
-              </p>
-            </div>
-            <div class="modal-body">
-              <form id="modal-asset-form">
-                ${inputsContent}
-                <button
-                  id="accomodation-asset-submission-button"
-                  type="submit"
-                  class="link-button"
-                  aria-label="Click this button to submit the asset information you entered."
-                >
-                  Confirm Asset Information
-                </button>
-              </form>
-            </div>
-          </div>
-        </dialog>
-      `;
+    <dialog id="asset-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" type="button" aria-label="Close">&times;</button>
+          <h2 id="accomodation-title">
+            Enter the assets required for your request.
+          </h2>
+          <p>
+            <em>
+              Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please close this window and return to the map to make your selections.
+            </em>
+          </p>
+          <p id="accomodation-subtitle">
+            Please be as detailed as possible.
+          </p>
+        </div>
+        <div class="modal-body">
+          <form id="modal-asset-form">
+            ${inputsContent}
+            <button
+              id="accomodation-asset-submission-button"
+              type="submit"
+              class="link-button"
+              aria-label="Click this button to submit the asset information you entered."
+            >
+              Confirm Asset Information
+            </button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+  `;
 };
 
 const openModal = (prefillData = {}) => {
@@ -120,7 +119,7 @@ const handleCancelSelectionsClick = () => {
   if (existingModal) {
     existingModal.close();
   }
- const container = document.querySelector("asset-chooser-container");
+  const container = document.querySelector("asset-chooser-container");
   if (container && typeof container.connectedCallback === "function") {
     container.connectedCallback(); // Re-render the component
   }
@@ -135,6 +134,7 @@ const handleAssetEditButtonClick = () => {
     acc[key] = value;
     return acc;
   }, {});
+  console.log("Prefill Data:", prefillData);
   // Remove the existing modal if it exists
   const existingModal = document.getElementById("asset-modal");
   if (existingModal) {
@@ -142,7 +142,6 @@ const handleAssetEditButtonClick = () => {
   }
   // Call openModal with prefilled data
   openModal(prefillData);
-  // clearStoredModalFormAssetData();
 };
 
 const handleModalAssetFormSubmit = (event) => {
@@ -156,11 +155,9 @@ const handleModalAssetFormSubmit = (event) => {
     chosenAssetFormData.splice(0, chosenAssetFormData.length);
   }
   formData.forEach((value, key) => {
-    key = key.replace(/[_-]/g, " ");
     chosenAssetFormData.push({ key, value });
   });
   setIsValid(true);
-
   // Dispatch custom event when isValid becomes true
   if (isValid) {
     const customEvent = new CustomEvent("isValidTrue", {
@@ -173,48 +170,48 @@ const handleModalAssetFormSubmit = (event) => {
   event.target.reset();
   const container = document.querySelector("asset-chooser-container");
   const title = container?.getAttribute("title") || "";
-  document.getElementById("asset-chooser-interface").innerHTML = `
-  <h2 id="asset-chooser-title">${title}</h2>
-        <h3>The asset information has been added to your case.</h3>
-        <p>You entered:</p>
-        <ul>
-          ${chosenAssetFormData
-            .map(
-              (asset) =>
-                `<li><strong>${asset.key}</strong>: ${
-                  asset.value
-                    ? asset.value
-                    : `Nothing entered for ${asset.key} layer`
-                }</li>`
-            )
-            .join("")}
-        </ul>
-        <button
-          type="button"
-          id="edit-asset-selection-button"
-          class="link-button"
-        >
-          Edit Entry
-        </button>
-        <button
-          type="button"
-          id="cancel-asset-selection-button"
-          class="link-button"
-        >
-          Cancel Entry and Return to Map
-        </button>
-        <em>
-          <p>
-            Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please cancel your entry and return to the map to make your selections.
-          </p>
-        </em>
-      `;
+  const assetChooserInterface = document.getElementById("asset-chooser-interface")
+  assetChooserInterface.innerHTML = `
+    <h2 id="asset-chooser-title">${title}</h2>
+    <h3>The asset information has been added to your case.</h3>
+    <p>You entered:</p>
+    <ul>
+      ${chosenAssetFormData
+        .map(
+          (asset) =>
+            `<li><strong>${asset.key}</strong>: ${
+              asset.value
+                ? asset.value
+                : `Nothing entered for ${asset.key} layer`}
+              </li>`
+          )
+        .join("")}
+     </ul>
+     <button
+       type="button"
+       id="edit-asset-selection-button"
+       class="link-button"
+     >
+       Edit Entry
+     </button>
+     <button
+       type="button"
+       id="cancel-asset-selection-button"
+       class="link-button"
+     >
+       Cancel Entry and Return to Map
+     </button>
+     <em>
+       <p>
+         Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please cancel your entry and return to the map to make your selections.
+       </p>
+     </em>
+  `;
   closeModal();
   document
     .getElementById("asset-chooser-interface")
     .scrollIntoView({ behavior: "smooth", block: "start" });
   // Add event listener for the dynamically created cancel button
-  
   const cancelSelectionsButton = document.querySelector(
     "#cancel-asset-selection-button"
   );
