@@ -19,11 +19,19 @@ The parent application can then receive the 'chosenAssets' array through the use
 
 ## Parts of the GIS Asset Chooser Module
 
-1. [assest-chooser-container.js](#assest-chooser-containerjs)
-2. [asset-chooser-map-layer.js](#asset-chooser-map-layerjs)
-3. [asset-chooser.js](#asset-chooserjs)
+1. [assest-chooser-container-functions.js](#asset-chooser-container-functionsjs)
+2. [asset-chooser-container.js](#asset-chooser-containerjs)
+3. [asset-chooser-functions.js](#asset-chooser-functionsjs)
+4. [asset-chooser-initialize-map.js](#asset-chooser-initialize-mapjs)
+5. [asset-chooser-map-layer.js](#asset-chooser-map-layerjs)
+6. [asset-chooser-state.js](#asset-chooser-statejs)
+7. [asset-chooser.js](#asset-chooserjs)
 
-### **assest-chooser-container.js**
+### **asset-chooser-container-functions.js**
+
+This file contains all of the functions that the asset chooser container needs. Functions are exported from this file and imported into asset-chooser-container.js
+
+### **asset-chooser-container.js**
 
  A reusable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Chooser, including the map, is rendered. It is a parent to **asset-chooser-map-layer.js**.
 
@@ -77,6 +85,12 @@ The asset chooser container also houses the **accessibility accommodation**. Use
 No additional configuration is required to implement this solution. A text input is generated for each map layer that has been applied. If asset selection is required for any particular layer, then a user will be required to provide asset information for that layer through the alternate text input.
 
 This feature can be further built out to accomodate a specific use case, allowing users to provide more detailed information if needed.
+
+### **asset-chooser-functions.js**
+
+This file 
+
+### **asset-chooser-initialize-map.js**
 
 ### **asset-chooser-map-layer.js**
 
@@ -140,6 +154,8 @@ A map layer can be configured as needed by passing values for the following prop
 </asset-chooser-map-layer>
 ```
 
+### **asset-chooser-state.js**
+
 ### **asset-chooser.js**
 
 This file holds the logic that makes the GIS Asset Chooser Module work. This is where the magic happens.
@@ -167,14 +183,16 @@ To utilize the CDN there are two tags, one for CSS and one for JavaScript. ArcGI
 
 ### **Bring in GIS Asset Chooser Module JavaScript**
 
-To use the GIS Asset Chooser Module you will need to pull in the module's 3 JavaScript files. Place the script tags in your HTML just before the closing body tag.
-
-asset-chooser-map-layer-js **MUST** load before asset-chooser-container.js or the map will render without any layers in place. We recommend placing the script tags in the order seen below.
+To use the GIS Asset Chooser Module you will need to pull in the module's 3 JavaScript files. Place the script tags in your HTML just before the closing body tag. Make sure you set type to equal "module" for each JavaScript file.
 
 ```html
-    <script src="asset-chooser.js"></script>
-    <script src="asset-chooser-map-layer.js"></script>
-    <script src="asset-chooser-container.js"></script>
+    <script type="module" src="asset-chooser-container-functions.js"></script>
+    <script type="module" src="asset-chooser-container.js"></script>
+    <script type="module" src="asset-chooser-functions.js"></script>
+    <script type="module" src="asset-chooser-initialize-map.js"></script>
+    <script type="module" src="asset-chooser-map-layer.js"></script>
+    <script type="module" src="asset-chooser-state.js"></script>
+    <script type="module" src="asset-chooser.js"></script>
   </body>
 ```
 
@@ -197,8 +215,7 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
     <script src="https://js.arcgis.com/4.30/"></script>
   </head>
   <body>
-    <header>
-    </header>
+    <header></header>
     <main>
       <!-- Insert the container element into html. Pass in property values as needed. -->
       <!-- Title and hint are the only properties with no default value.  -->
@@ -232,12 +249,14 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
         </asset-chooser-map-layer>
       </asset-chooser-container>
     </main>
-    <footer>
-    </footer>
-    <!-- Include GIS Asset Chooser script tags in this order. Place them below the footer and before the closing body tag </body> -->
-    <script src="asset-chooser.js"></script>
-    <script src="asset-chooser-map-layer.js"></script>
-    <script src="asset-chooser-container.js"></script>
+    <footer></footer>
+    <script type="module" src="asset-chooser-container-functions.js"></script>
+    <script type="module" src="asset-chooser-container.js"></script>
+    <script type="module" src="asset-chooser-functions.js"></script>
+    <script type="module" src="asset-chooser-initialize-map.js"></script>
+    <script type="module" src="asset-chooser-map-layer.js"></script>
+    <script type="module" src="asset-chooser-state.js"></script>
+    <script type="module" src="asset-chooser.js"></script>
   </body>
 </html>
 ```
