@@ -1,3 +1,7 @@
+// import AssetChooserContainerComponent from asset-chooser-container.js
+import { AssetChooserContainerComponent } from "./asset-chooser-container.js";
+// import MapLayer from asset-chooser-map-layer.js
+import { MapLayer } from "./asset-chooser-map-layer.js";
 // import state variables from asset-chooser-state.js
 import { addressMarkerX, setAddressMarkerX, addressMarkerY, setAddressMarkerY } from "./asset-chooser-state.js"
 // import from asset-chooser-functions.js
@@ -19,9 +23,11 @@ document.addEventListener("coordinatesAvailable", (event) => {
 });
 // capture the map layers added to the asset-chooser-container component
 captureMapLayers();
-// initialize the map after the DOM content has loaded and the asset-chooser-container component is defined
+// initialize the map after the DOM content has loaded and the MapLayer and AssetChooserContainerComponent components are defined
 document.addEventListener("DOMContentLoaded", () => {
-  // Wait for the custom element to be defined and rendered
+  customElements.define("asset-chooser-map-layer", MapLayer);
+  customElements.define("asset-chooser-container", AssetChooserContainerComponent);
+  // Wait for the AssetChooserContainerComponent to be defined and rendered before initializing the map
   customElements.whenDefined('asset-chooser-container').then(() => {
     // Wait a tick for rendering
     setTimeout(() => {

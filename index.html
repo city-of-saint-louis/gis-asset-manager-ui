@@ -60,7 +60,7 @@
           asset-label="StreetName"
         >
         </asset-chooser-map-layer>
-        <asset-chooser-map-layer
+        <!-- <asset-chooser-map-layer
           name="neighborhood"
           layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/Neighborhoods_Official/FeatureServer"
           layer-asset-id-field-name="FID"
@@ -69,7 +69,7 @@
           label-mask="{NHD_NAME}"
           max-scale="30000"
           asset-label="NHD_NAME"
-        >
+        > -->
         </asset-chooser-map-layer>
         <asset-chooser-map-layer
           name="PARCEL"
@@ -147,12 +147,6 @@
       </asset-chooser-container>
     </main>
     <footer></footer>
-    <script type="module" src="asset-chooser-container-functions.js"></script>
-    <script type="module" src="asset-chooser-container.js"></script>
-    <script type="module" src="asset-chooser-functions.js"></script>
-    <script type="module" src="asset-chooser-initialize-map.js"></script>
-    <script type="module" src="asset-chooser-map-layer.js"></script>
-    <script type="module" src="asset-chooser-state.js"></script>
     <script type="module" src="asset-chooser.js"></script>
     <script src="parent-application.js"></script>
   </body>

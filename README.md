@@ -88,9 +88,11 @@ This feature can be further built out to accomodate a specific use case, allowin
 
 ### **asset-chooser-functions.js**
 
-This file 
+This file contains most of the functions used by the asset chooser. Functions are exported from this file and imported where they are needed.
 
 ### **asset-chooser-initialize-map.js**
+
+This file holds the initializeMap function. This function uses the map layers and other data to generate the map. It is exported from here and imported into asset-chooser.js and asset-chooser-container-functions.js
 
 ### **asset-chooser-map-layer.js**
 
@@ -156,9 +158,11 @@ A map layer can be configured as needed by passing values for the following prop
 
 ### **asset-chooser-state.js**
 
+This file holds all of the state variables that are required for the asset chooser to function. Variables are declared and exported from this file and imported into the other files as needed.
+
 ### **asset-chooser.js**
 
-This file holds the logic that makes the GIS Asset Chooser Module work. This is where the magic happens.
+This file captures the x,y coordinates from address validation and the map layer data from the map-layer components and uses the data to initialize the map.
 
 ## **How To Use the GIS Asset Chooser Module**
 

@@ -13,7 +13,7 @@ class AssetChooserContainerComponent extends HTMLElement {
       <section id="asset-chooser-section">
         <div id="asset-chooser-interface">
           <h2>${this.title}</h2>
-          <h3>${this.hint}</h3>
+          <p>${this.hint}</p>
           <div id="accomodation-button-container">
             <button
               type="button"
@@ -57,10 +57,4 @@ class AssetChooserContainerComponent extends HTMLElement {
   }
 }
 
-// define the custom element after the page has loaded
-document.addEventListener("DOMContentLoaded", () => {
-  customElements.define(
-    "asset-chooser-container",
-    AssetChooserContainerComponent
-  );
-});
+export { AssetChooserContainerComponent };
