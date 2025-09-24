@@ -26,10 +26,11 @@ The parent application can then receive the 'chosenAssets' array through the use
 5. [asset-chooser-map-layer.js](#asset-chooser-map-layerjs)
 6. [asset-chooser-state.js](#asset-chooser-statejs)
 7. [asset-chooser.js](#asset-chooserjs)
+8. [asset-chooser-styles.css](#asset-chooser-styles.css)
 
 ### **asset-chooser-container-functions.js**
 
-This file contains all of the functions that the asset chooser container needs. Functions are exported from this file and imported into asset-chooser-container.js
+This file contains the functions that are only used in the asset chooser container. Functions are exported from this file and imported into asset-chooser-container.js
 
 ### **asset-chooser-container.js**
 
@@ -164,6 +165,10 @@ This file holds all of the state variables that are required for the asset choos
 
 This file captures the x,y coordinates from address validation and the map layer data from the map-layer components and uses the data to initialize the map.
 
+### **asset-chooser-styles.css**
+
+CSS stylesheet for the asset chooser module  
+
 ## **How To Use the GIS Asset Chooser Module**
 
 1. [Bring in ArcGIS Maps SDK for JavaScript](#bring-in-arcgis-maps-sdk-for-javascript)
@@ -187,15 +192,9 @@ To utilize the CDN there are two tags, one for CSS and one for JavaScript. ArcGI
 
 ### **Bring in GIS Asset Chooser Module JavaScript**
 
-To use the GIS Asset Chooser Module you will need to pull in the module's 3 JavaScript files. Place the script tags in your HTML just before the closing body tag. Make sure you set type to equal "module" for each JavaScript file.
+To use the GIS Asset Chooser Module you will need to pull in the asset-chooser.js file. Place the script tag in your HTML just before the closing body tag. Make sure you set type to equal "module".
 
 ```html
-    <script type="module" src="asset-chooser-container-functions.js"></script>
-    <script type="module" src="asset-chooser-container.js"></script>
-    <script type="module" src="asset-chooser-functions.js"></script>
-    <script type="module" src="asset-chooser-initialize-map.js"></script>
-    <script type="module" src="asset-chooser-map-layer.js"></script>
-    <script type="module" src="asset-chooser-state.js"></script>
     <script type="module" src="asset-chooser.js"></script>
   </body>
 ```
@@ -254,12 +253,6 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
       </asset-chooser-container>
     </main>
     <footer></footer>
-    <script type="module" src="asset-chooser-container-functions.js"></script>
-    <script type="module" src="asset-chooser-container.js"></script>
-    <script type="module" src="asset-chooser-functions.js"></script>
-    <script type="module" src="asset-chooser-initialize-map.js"></script>
-    <script type="module" src="asset-chooser-map-layer.js"></script>
-    <script type="module" src="asset-chooser-state.js"></script>
     <script type="module" src="asset-chooser.js"></script>
   </body>
 </html>
