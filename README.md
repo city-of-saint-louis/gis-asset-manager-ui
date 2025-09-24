@@ -26,7 +26,7 @@ The parent application can then receive the 'chosenAssets' array through the use
 5. [asset-chooser-map-layer.js](#asset-chooser-map-layerjs)
 6. [asset-chooser-state.js](#asset-chooser-statejs)
 7. [asset-chooser.js](#asset-chooserjs)
-8. [asset-chooser-styles.css](#asset-chooser-styles.css)
+8. [asset-chooser-styles.css](#asset-chooser-stylescss)
 
 ### **asset-chooser-container-functions.js**
 
