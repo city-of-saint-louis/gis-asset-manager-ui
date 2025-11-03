@@ -27,7 +27,7 @@ export const destroyPreviousMapView = () => {
     if (oldArcgisMap) {
       viewDiv.removeChild(oldArcgisMap);
     }
-    viewDiv.innerHTML = ""; 
+    viewDiv.innerHTML = "";
   }
 };
 
@@ -51,6 +51,7 @@ export const clearMapData = () => {
 export const captureMapLayers = () => {
   document.addEventListener("layerDetailsProvided", (event) => {
     const mapLayer = event.detail;
+    console.log("Map layer details received:", mapLayer);
     mapLayersToAdd.push(mapLayer);
   });
 };
@@ -124,6 +125,7 @@ export const addMapLayer = ({
       maximumAssetsRequired: mapLayer.maximumSelections,
       minScale: mapLayer.minScale,
       maxScale: mapLayer.maxScale,
+      isWritable: mapLayer.isWritable,
     },
     // labelingInfo: [
     //   {
@@ -154,6 +156,7 @@ export const addMapLayer = ({
   });
   mapDataLayer.outFields = ["*"];
   mapDataLayer.popupEnabled = false;
+  console.log("Adding map layer:", mapDataLayer);
   const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
   allMapLayerIds.push(mapDataLayerId);
   featureLayers.push(mapDataLayer);
@@ -171,6 +174,20 @@ export const addMapLayer = ({
   const layerMaxScale = mapDataLayer.maxScale;
   if (minAssetsRequired === 0) {
     layersWithNoSelectionRequired.push(mapDataLayerId);
+  }
+
+  const isWritable = mapDataLayer.layerProperties.isWritable;
+  if (isWritable === "true" || isWritable === true) {
+    mapDataLayer.editingEnabled = true;
+    const sketch = document.createElement("arcgis-sketch");
+    sketch.setAttribute("layer", mapDataLayerId);
+    sketch.setAttribute("position", "bottom-right");
+
+    // sketch.setAttribute("creation-mode", "continuous");
+    sketch.availableCreateTools = ["point", "polyline", "polygon"];
+    const arcGisMap = document.querySelector("arcgis-map");
+    arcGisMap.appendChild(sketch);
+    console.log(sketch);
   }
 
   view.on("layerview-create", function (event) {
@@ -344,7 +361,10 @@ export const renderValidityMessage = () => {
   if (isValid) {
     validityMessage.innerHTML = `Asset selection is <span class="label label-success">valid for submission</span>`;
     validityMessage.setAttribute("aria-live", "assertive");
-    validityMessage.setAttribute("title", "Asset selection is valid for submission");
+    validityMessage.setAttribute(
+      "title",
+      "Asset selection is valid for submission"
+    );
   } else {
     validityMessage.removeAttribute("aria-live");
     validityMessage.setAttribute("title", "Selection requirements");
@@ -552,7 +572,8 @@ const renderSelectedAssetLabels = () => {
 
         removeAssetBtn.addEventListener("click", () => {
           chosenAssets.forEach((asset) => {
-            const formattedLayerName = asset.layerData.layerProperties.formattedLayerName;
+            const formattedLayerName =
+              asset.layerData.layerProperties.formattedLayerName;
             if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
               const listItemToRemove = document.getElementById(
@@ -577,7 +598,10 @@ const renderSelectedAssetLabels = () => {
   });
   selectedLayerAssetListArray.forEach((list) => {
     if (list.innerHTML === "") {
-      list.innerHTML = `<li title="No assets selected from ${list.dataset.layerName.replace(/-/g, " ")} layer">None selected</li>`;
+      list.innerHTML = `<li title="No assets selected from ${list.dataset.layerName.replace(
+        /-/g,
+        " "
+      )} layer">None selected</li>`;
     }
   });
 };

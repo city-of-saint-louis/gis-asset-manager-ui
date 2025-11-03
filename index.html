@@ -38,18 +38,16 @@
         title="Select Assets Required For Your Use Case"
         hint="Click on the map to select required assets. Click again to unselect."
       >
-       <!-- <asset-chooser-map-layer
-          name="street_segment"
-          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
-          layer-asset-id-field-name="OBJECTID"
-          minimum=1
-          maximum=1
-          label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
-          min-scale=20000
-          asset-label="FULLNAME"
+        <asset-chooser-map-layer
+          name="sketch-layer"
+          layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STLOUIS/SKETCH/FeatureServer"
+          is-writable=true
+          
         >
-        </asset-chooser-map-layer> -->
-          <asset-chooser-map-layer
+        </asset-chooser-map-layer>
+
+        <!-- street_segment layer -->
+        <!-- <asset-chooser-map-layer
           name="street_segment"
           layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/0/"
           layer-asset-id-field-name="OBJECTID"
@@ -59,19 +57,10 @@
           min-scale=20000
           asset-label="StreetName"
         >
-        </asset-chooser-map-layer>
+        </asset-chooser-map-layer> -->
+        
+        <!-- parcel layer -->
         <!-- <asset-chooser-map-layer
-          name="neighborhood"
-          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/Neighborhoods_Official/FeatureServer"
-          layer-asset-id-field-name="FID"
-          minimum=1
-          maximum=3
-          label-mask="{NHD_NAME}"
-          max-scale="30000"
-          asset-label="NHD_NAME"
-        > -->
-        </asset-chooser-map-layer>
-        <asset-chooser-map-layer
           name="PARCEL"
           layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/4/"
           layer-asset-id-field-name="OBJECTID"
@@ -81,8 +70,10 @@
           min-scale=30000
           asset-label="SITEADDR"
         >
-        </asset-chooser-map-layer>
-        <asset-chooser-map-layer
+        </asset-chooser-map-layer> -->
+
+        <!-- parking meter layer -->
+        <!-- <asset-chooser-map-layer
           name="Parking meter"
           display-name="Parking meter"
           layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/ParkingServices/MapServer/1"
@@ -93,8 +84,33 @@
           min-scale=30000
           asset-label="OBJECTID"
         >
-        </asset-chooser-map-layer>
-            <!-- <asset-chooser-map-layer
+        </asset-chooser-map-layer> -->
+
+
+
+        <!-- <asset-chooser-map-layer
+          name="neighborhood"
+          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/Neighborhoods_Official/FeatureServer"
+          layer-asset-id-field-name="FID"
+          minimum=1
+          maximum=3
+          label-mask="{NHD_NAME}"
+          max-scale="30000"
+          asset-label="NHD_NAME"
+        > 
+        </asset-chooser-map-layer> -->
+        <!-- <asset-chooser-map-layer
+          name="street_segment"
+          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
+          layer-asset-id-field-name="OBJECTID"
+          minimum=1
+          maximum=1
+          label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
+          min-scale=20000
+          asset-label="FULLNAME"
+        >
+        </asset-chooser-map-layer> -->
+        <!-- <asset-chooser-map-layer
           name="Parcel"
           layer-class-url=" https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/4"
           layer-asset-id-field-name="OBJECTID"
