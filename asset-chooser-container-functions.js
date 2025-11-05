@@ -8,7 +8,6 @@ import {
 } from "./asset-chooser-state.js";
 // import required functions from asset-chooser-functions.js
 import { secureChosenAssets } from "./asset-chooser-functions.js";
-// import initializeMap function from map-initialization.js
 import { initializeMap } from "./asset-chooser-initialize-map.js";
 const generateInputsContent = (prefillData = {}) => {
   return featureLayers

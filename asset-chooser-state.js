@@ -11,6 +11,8 @@ export const defaultShowSearch = true;
 export const mapLayersToAdd = [];
 export const featureLayers = [];
 export const chosenAssets = [];
+// collect sketched assets in createdAssets array
+export const createdAssets = [];
 export const chosenAssetFormData = [];
 export const allMapLayerIds = [];
 export const layersWithNoSelectionRequired = [];
@@ -31,3 +33,8 @@ export let currentView = null;
 export function setCurrentView(view) {
   currentView = view;
 }
+// state vars for sketch component
+// export const isSketchEnabled = false;
+// export function setIsSketchEnabled(value) {
+//   isSketchEnabled = value;
+// }

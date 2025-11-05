@@ -8,6 +8,7 @@ import {
   mapLayersToAdd,
   featureLayers,
   chosenAssets,
+  createdAssets,
   allMapLayerIds,
   layersWithNoSelectionRequired,
   setIsValid,
@@ -27,6 +28,7 @@ import {
 } from "./asset-chooser-functions.js"
 
 export const initializeMap = async () => {
+  console.log("Initializing map - created assets:", createdAssets);
   destroyPreviousMapView();
   clearMapData();
   try {
@@ -71,7 +73,7 @@ export const initializeMap = async () => {
     arcgisMap.setAttribute("extent", JSON.stringify(stLouisExtent.toJSON()));
     mapContainer.appendChild(arcgisMap);
     const zoomControl = document.createElement("arcgis-zoom");
-    zoomControl.setAttribute("position", "top-left");
+    zoomControl.setAttribute("slot", "top-left");
     arcgisMap.appendChild(zoomControl);
     // Add a LocatorSearchSource for local search suggestions
     const locatorSearchSource = new LocatorSearchSource({
@@ -88,7 +90,7 @@ export const initializeMap = async () => {
     });
     if (showSearch === "true" || showSearch === true) {
       const searchComponent = document.createElement("arcgis-search");
-      searchComponent.setAttribute("position", "top-right");
+      searchComponent.setAttribute("slot", "top-right");
       searchComponent.setAttribute("popup-disabled", "true");
       searchComponent.setAttribute("include-default-sources-disabled", "true");
       searchComponent.sources = [locatorSearchSource];

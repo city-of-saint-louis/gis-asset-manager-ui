@@ -14,6 +14,7 @@ class MapLayer extends HTMLElement {
       const minScale = this.getAttribute("min-scale") || "";
       const maxScale = this.getAttribute("max-scale") || "";
       const isWritable = this.getAttribute("is-writable") || "false";
+      const availableCreateTools = this.getAttribute("available-create-tools") || "";
       // const assetLabel = this.getAttribute("asset-label") || "";
       const layerDetails = {
         name,
@@ -25,7 +26,8 @@ class MapLayer extends HTMLElement {
         layerAssetIDFieldName,
         minScale,
         maxScale,
-        isWritable
+        isWritable,
+        availableCreateTools,
         // assetLabel
       };
       

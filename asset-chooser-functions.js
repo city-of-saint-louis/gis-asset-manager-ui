@@ -1,6 +1,7 @@
 // import state variables from asset-chooser-state.js
 import {
   chosenAssets,
+  createdAssets,
   allMapLayerIds,
   mapLayersToAdd,
   featureLayers,
@@ -126,6 +127,7 @@ export const addMapLayer = ({
       minScale: mapLayer.minScale,
       maxScale: mapLayer.maxScale,
       isWritable: mapLayer.isWritable,
+      availableCreateTools: mapLayer.availableCreateTools,
     },
     // labelingInfo: [
     //   {
@@ -178,16 +180,48 @@ export const addMapLayer = ({
 
   const isWritable = mapDataLayer.layerProperties.isWritable;
   if (isWritable === "true" || isWritable === true) {
-    mapDataLayer.editingEnabled = true;
+    // mapDataLayer.editingEnabled = true;
     const sketch = document.createElement("arcgis-sketch");
-    sketch.setAttribute("layer", mapDataLayerId);
-    sketch.setAttribute("position", "bottom-right");
+    // sketch.setAttribute("layer", "370c43d7188f4de884a779fcb4c30bfe");
+    sketch.setAttribute("slot", "bottom-right");
+    sketch.setAttribute("hide-selection-tools-lasso-selection", "true");
+    sketch.setAttribute("hide-selection-tools-rectangle-selection", "true");
 
-    // sketch.setAttribute("creation-mode", "continuous");
-    sketch.availableCreateTools = ["point", "polyline", "polygon"];
+    // sketch.setAttribute("creation-mode", "update"); //default is "continuous"
+
     const arcGisMap = document.querySelector("arcgis-map");
     arcGisMap.appendChild(sketch);
-    console.log(sketch);
+    sketch.componentOnReady().then(() => {
+      sketch.availableCreateTools = [
+        ...mapDataLayer.layerProperties.availableCreateTools
+          .split(",")
+          .map((tool) => tool.trim()),
+      ];
+    });
+    let createEventCount = 0;
+    sketch.addEventListener("arcgisCreate", (event) => {
+      createEventCount++;
+      console.log("arcgisCreate event fired:", createEventCount);
+      const graphic = event.detail.graphic;
+      // Attach custom data
+      graphic.attributes.customKey = "customValue";
+      graphic.attributes.layer = mapDataLayer.layerProperties;
+
+      // Prevent duplicates by checking for a unique property (e.g., OBJECTID or geometry)
+      const alreadyExists = createdAssets.some(
+        (g) =>
+          g.attributes.OBJECTID === graphic.attributes.OBJECTID &&
+          JSON.stringify(g.geometry) === JSON.stringify(graphic.geometry)
+      );
+
+      if (!alreadyExists) {
+        createdAssets.push(graphic);
+        console.log("Added graphic to createdAssets:", graphic);
+      } else {
+        console.log("Duplicate graphic skipped:", graphic);
+      }
+      console.log("Created assets array:", createdAssets);
+    });
   }
 
   view.on("layerview-create", function (event) {
