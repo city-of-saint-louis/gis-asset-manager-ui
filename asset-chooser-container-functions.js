@@ -1,10 +1,12 @@
-// import required state variables from asset-chooser-state.js
+ // import required state variables from asset-chooser-state.js
 import {
   featureLayers,
   chosenAssets,
   chosenAssetFormData,
   isValid,
   setIsValid,
+  isSketchEnabled,
+  setIsSketchEnabled
 } from "./asset-chooser-state.js";
 // import required functions from asset-chooser-functions.js
 import { secureChosenAssets } from "./asset-chooser-functions.js";
@@ -236,3 +238,13 @@ export const handleAccomodationButtonClick = () => {
   }
   openModal();
 };
+
+export const enableSketchMode = (isSketchEnabled) => {
+  if (isSketchEnabled) {
+  setIsSketchEnabled(true);
+  console.log("Sketch mode enabled");
+  } else {
+    setIsSketchEnabled(false);
+    console.log("Sketch mode disabled");
+  }
+}

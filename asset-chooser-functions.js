@@ -3,6 +3,7 @@ import {
   chosenAssets,
   allMapLayerIds,
   mapLayersToAdd,
+  sketchableMapLayersToAdd,
   featureLayers,
   chosenAssetFormData,
   layersWithNoSelectionRequired,
@@ -11,6 +12,8 @@ import {
   setCurrentView,
   isValid,
   setIsValid,
+  isSketchEnabled,
+  setIsSketchEnabled
 } from "./asset-chooser-state.js";
 
 // *** begin map related functions *** //
@@ -52,6 +55,16 @@ export const captureMapLayers = () => {
   document.addEventListener("layerDetailsProvided", (event) => {
     const mapLayer = event.detail;
     mapLayersToAdd.push(mapLayer);
+  });
+};
+
+// event listener to capture sketchable layer data from sketchable-map-layer.js
+export const captureSketachableMapLayers = () => {
+  document.addEventListener("sketchableLayerDetailsProvided", (event) => {
+    const sketchableLayer = event.detail;
+    sketchableMapLayersToAdd.push(sketchableLayer);
+    console.log("Sketchable layer added:", sketchableLayer);
+    console.log("Current sketchableMapLayersToAdd array:", sketchableMapLayersToAdd);
   });
 };
 

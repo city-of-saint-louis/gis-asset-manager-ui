@@ -1,13 +1,20 @@
 // import from asset-chooser-container-functions.js
 import { handleAccomodationButtonClick } from "./asset-chooser-container-functions.js";
+import { enableSketchMode } from "./asset-chooser-container-functions.js";
+// import { isSketchEnabled, setIsSketchEnabled } from "./asset-chooser-state.js";
 
 class AssetChooserContainerComponent extends HTMLElement {
   constructor() {
     super(); // always call super() first in the constructor for a custom web component
     this.title = this.getAttribute("title") || "";
     this.hint = this.getAttribute("hint") || "";
+    this.isSketchEnabled = this.getAttribute("is-sketch-enabled") === "true";
   }
   connectedCallback() {
+    // console.log("sketch enabled",this.isSketchEnabled);
+    enableSketchMode(this.isSketchEnabled);
+    const accomodationButtonMessage =
+      "Click this button to enter assets if you are using assistive technology and are unable to select assets on the map.";
     try {
       this.innerHTML = `
       <section id="asset-chooser-section">
@@ -19,8 +26,8 @@ class AssetChooserContainerComponent extends HTMLElement {
               type="button"
               id="accomodation-button"
               class="link-button inverse-button"
-              aria-label="Click this button to enter assets if you are using assistive technology and are unable to select assets on the map."
-              title="Click this button to enter assets only if you are using assistive technology and are unable to select assets on the map."
+              aria-label="${accomodationButtonMessage}"
+              title="${accomodationButtonMessage}"
             >
               <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched">
               </span>
@@ -33,7 +40,7 @@ class AssetChooserContainerComponent extends HTMLElement {
               <div id="viewDiv" style="width: 100%; height: 500px;" aria-label="interactive map for selecting assets" >
             </div>
           </div>
-            <div class="col-md-5">
+            <div class="col-md-5" id="layer-data-container">
               <div id="layer-data-div" class="stat-group"></div>
             </div>
           </div>

@@ -9,8 +9,10 @@ export const defaultCenterY = 38.64;
 export const defaultBaseMap = "topo-vector";
 export const defaultShowSearch = true;
 export const mapLayersToAdd = [];
+export const sketchableMapLayersToAdd = [];
 export const featureLayers = [];
 export const chosenAssets = [];
+export const createdAssets = [];
 export const chosenAssetFormData = [];
 export const allMapLayerIds = [];
 export const layersWithNoSelectionRequired = [];
@@ -30,4 +32,9 @@ export function setIsValid(value) {
 export let currentView = null;
 export function setCurrentView(view) {
   currentView = view;
+}
+// state vars for sketch component
+export let isSketchEnabled = false;
+export function setIsSketchEnabled(value) {
+  isSketchEnabled = value;
 }
