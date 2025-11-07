@@ -17,8 +17,7 @@ class AssetChooserContainerComponent extends HTMLElement {
       "Click this button to enter assets if you are using assistive technology and are unable to select assets on the map.";
     try {
       this.innerHTML = `
-      <section id="asset-chooser-section">
-        <div id="asset-chooser-interface">
+        <section id="asset-chooser-interface">
           <h2>${this.title}</h2>
           <p>${this.hint}</p>
           <div id="accomodation-button-container">
@@ -44,8 +43,7 @@ class AssetChooserContainerComponent extends HTMLElement {
               <div id="layer-data-div" class="stat-group"></div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
       `;
       // Add event listener for the accomodation button click
       const accomodationButton = this.querySelector("#accomodation-button");

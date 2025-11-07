@@ -8,7 +8,8 @@ import { SketchableMapLayer } from "./asset-chooser-sketchable-map-layer.js";
 import { addressMarkerX, setAddressMarkerX, addressMarkerY, setAddressMarkerY } from "./asset-chooser-state.js"
 // import from asset-chooser-functions.js
 import { captureMapLayers } from "./asset-chooser-functions.js"
-import { captureSketachableMapLayers } from "./asset-chooser-functions.js"
+// import from asset-chooser-sketchable-map-layer-functions.js
+import { captureSketachableMapLayers } from "./asset-chooser-sketchable-map-layer-functions.js"
 // import initializeMap function from map-initialization.js
 import { initializeMap } from "./asset-chooser-initialize-map.js";
 // event listener to caputre x,y coordinates from address validation

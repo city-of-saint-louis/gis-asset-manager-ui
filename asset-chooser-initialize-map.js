@@ -28,6 +28,8 @@ import {
   highlightSelectedAsset,
 } from "./asset-chooser-functions.js"
 
+import { addSketchableMapLayer } from "./asset-chooser-sketchable-map-layer-functions.js"
+
 export const initializeMap = async () => {
   destroyPreviousMapView();
   clearMapData();
@@ -145,6 +147,14 @@ export const initializeMap = async () => {
             highlightSelectedAsset(response, view, highlightedSelection);
           }
         });
+      });
+    });
+    // Add sketchable map layers
+    sketchableMapLayersToAdd.forEach((sketchableMapLayer) => {
+      addSketchableMapLayer({
+        sketchableMapLayer,
+       
+        sketchableLayersWithNoSketchRequired: layersWithNoSelectionRequired
       });
     });
   } catch (e) {
