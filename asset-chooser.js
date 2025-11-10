@@ -4,6 +4,8 @@ import { AssetChooserContainerComponent } from "./asset-chooser-container.js";
 import { MapLayer } from "./asset-chooser-map-layer.js";
 // import SketchableMapLayer from asset-chooser-sketchable-map-layer.js
 import { SketchableMapLayer } from "./asset-chooser-sketchable-map-layer.js";
+// import AssetChooserMapLayerDataDisplay from asset-chooser-map-layer-data-display.js
+import { AssetChooserMapLayerDataDisplay } from "./asset-chooser-map-layer-data-display.js";
 // import state variables from asset-chooser-state.js
 import { addressMarkerX, setAddressMarkerX, addressMarkerY, setAddressMarkerY } from "./asset-chooser-state.js"
 // import from asset-chooser-functions.js
@@ -33,6 +35,7 @@ captureSketachableMapLayers();
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("asset-chooser-map-layer", MapLayer);
   customElements.define("asset-chooser-sketchable-map-layer", SketchableMapLayer);
+  customElements.define("asset-chooser-map-layer-data-display", AssetChooserMapLayerDataDisplay);
   customElements.define("asset-chooser-container", AssetChooserContainerComponent);
   // Wait for the AssetChooserContainerComponent to be defined and rendered before initializing the map
   customElements.whenDefined('asset-chooser-container').then(() => {

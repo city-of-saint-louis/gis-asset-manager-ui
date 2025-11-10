@@ -41,6 +41,7 @@ class AssetChooserContainerComponent extends HTMLElement {
           </div>
             <div class="col-md-5" id="layer-data-container">
               <div id="layer-data-div" class="stat-group"></div>
+               <div id="sketchable-layer-data-div" class="stat-group"></div>
             </div>
           </div>
         </section>

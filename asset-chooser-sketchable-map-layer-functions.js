@@ -1,9 +1,12 @@
 // import state variables from asset-chooser-state.js
 import {
   sketchableMapLayersToAdd,
-  createdAssets,
-  isSketchEnabled,
+  // createdAssets,
+  // isSketchEnabled,
 } from "./asset-chooser-state.js";
+// import asset-chooser-map-layer-data-display component
+import "./asset-chooser-map-layer-data-display.js";
+import { hideOrShowLayer } from "./asset-chooser-functions.js";
 
 // event listener to capture sketchable layer data from sketchable-map-layer.js
 export const captureSketachableMapLayers = () => {
@@ -18,6 +21,17 @@ export const captureSketachableMapLayers = () => {
   });
 };
 
+const enableSketchForLayer = (layerName) => {
+  console.log("Enabling sketch for layer:", layerName);
+  // Logic to enable sketching for the specified layer
+  // This could involve activating a sketch widget or similar functionality
+}
+
+const hideLayerHandler = (layerName) => {
+  console.log("Hiding layer:", layerName);
+  hideOrShowLayer(layerName, false);
+}
+
 export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
   console.log("Adding sketchable map layer:", sketchableMapLayer);
   // const arcGisMap = document.querySelector("arcgis-map");
@@ -29,6 +43,133 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
     title: sketchableMapLayer.name,
   });
   map.add(sketchableGraphicLayer);
+  const sketchableLayerDataDiv = document.getElementById("sketchable-layer-data-div");
+  const sketchableLayerName = sketchableMapLayer.name;
+  console.log("Sketchable Layer Name:", sketchableLayerName);
+  const minAssetsRequired = parseInt(sketchableMapLayer.minimum);
+  const maxAssetsAllowed = parseInt(sketchableMapLayer.maximum);
+
+  const mapLayerDataDisplay = document.createElement("asset-chooser-map-layer-data-display");
+  mapLayerDataDisplay.data = {
+    name: sketchableLayerName,
+    minAssetsRequired,
+    maxAssetsAllowed,
+    enableSketchHandler: enableSketchForLayer,
+    hideLayerHandler: hideLayerHandler,
+  };
+  sketchableLayerDataDiv.appendChild(mapLayerDataDisplay);
+  
+
+//   const sketchableLayerDataDivElement = document.createElement("div");
+
+//   sketchableLayerDataDiv.innerHTML += `
+//     <div class="sketchable-map-layer-data-container stat-container stat-medium">
+//       <div 
+//         class="stat-title" 
+//         id="${sketchableLayerName}-layer-selected-asset-container"
+//         aria-label="${sketchableLayerName} Layer"
+//         title="${sketchableLayerName} Layer"
+//       >
+//         <div>
+//           <span>
+//             <strong>
+//               ${sketchableLayerName} Layer
+//             </strong>
+//           </span>
+//         </div>
+//         <div>
+//         <button
+//           type="button"
+//           id="${sketchableLayerName}-enable-sketch-btn"
+//           class="toggleLayerVisibilityButton"
+//           att-layer-id="${sketchableLayerName}"
+//           aria-label="" 
+//           title="Enable sketch for ${sketchableLayerName} layer"
+//         >
+//           <span id="${sketchableLayerName}-toggle-visibility-btn-text-span">
+//             Add Assets
+//           </span>
+//         </button>
+//         <button
+//           type="button"
+//           id="${sketchableLayerName}-show-hide-layer-btn"
+//           class="toggleLayerVisibilityButton"
+//           att-layer-id="${sketchableLayerName}"
+//           aria-label="" 
+//           title="Hide ${sketchableLayerName} layer"
+//         >
+//           <span id="${sketchableLayerName}-toggle-visibility-btn-text-span">
+//             Hide
+//           </span>
+//         </button>
+//         </div>
+//       </div>
+//       <div 
+//         aria-live="polite"
+//         aria-atomic="true"
+//         class="asset-selection-requirements"
+//       >
+//         <span class="sr-only">Asset addition requirements and status for ${sketchableLayerName} layer</span>
+
+//         ${
+//           minAssetsRequired === 0
+//             ? `
+//             <span id="${sketchableLayerName}-min-asset-required-message" title="No additions required">
+//               <span class="label label-success">
+//                 No additions required
+//               </span>
+//             </span>
+//             `
+//             : minAssetsRequired === 1
+//             ? `
+//             <span id="${sketchableLayerName}-min-asset-required-message" title="${minAssetsRequired} additions required from ${sketchableLayerName} layer">
+//               <span class="label label-error">
+//                ${minAssetsRequired} required
+//               </span>
+//             </span>
+//             `
+//             : `
+//             <span id="${sketchableLayerName}-min-asset-required-message" title="At least ${minAssetsRequired} additions required from ${sketchableLayerName} layer">
+//               <span class="label label-error">
+//                 At least ${minAssetsRequired} required
+//               </span>
+//             </span>
+//             `
+//         }
+//         ${
+//           maxAssetsAllowed > 0
+//             ? `
+//             <span id="${sketchableLayerName}-max-asset-required-message" title="Add a maximum of ${maxAssetsAllowed} for ${sketchableLayerName} layer">
+//               <span class="label label-default">Add a maximum of ${maxAssetsAllowed}
+//               </span>
+//             </span>`
+//             : ``
+//         }
+//       </div>
+//       <ul
+//         data-layer-name=${sketchableLayerName}
+//         class="list-group highlighted-asset-data-list"
+//         id="${sketchableLayerName}"
+//         aria-live="polite"
+//         aria-atomic="true"
+//       >
+//         <li 
+//           title="No assets added for ${sketchableLayerName} layer"
+//         >
+//           None added
+//         </li>
+//       </ul>
+//     </div>
+//   `;
+// // After you add the HTML to the DOM:
+// const btn = document.getElementById(`${sketchableLayerName}-enable-sketch-btn`);
+// if (btn) {
+//   btn.addEventListener("click", () => enableSketchForLayer(sketchableLayerName));
+// }
+
+
+
+
 
   // const sketch = document.createElement("arcgis-sketch");
   // sketch.setAttribute("position", "bottom-right");

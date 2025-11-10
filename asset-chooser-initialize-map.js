@@ -128,7 +128,14 @@ export const initializeMap = async () => {
       if (isSketchEnabled === "true" || isSketchEnabled === true) {
         const sketch = document.createElement("arcgis-sketch");
         sketch.setAttribute("slot", "bottom-right");
+        sketch.setAttribute("hide-selection-tools-lasso-selection", "true");
+        sketch.setAttribute("hide-selection-tools-rectangle-selection", "true");
+        sketch.setAttribute("available-create-tools", "point,polyline,polygon");
         arcGisMap.appendChild(sketch);
+        sketch.componentOnReady().then(() => {
+          console.log("Sketch component is ready:", sketch);
+          sketch.availableCreateTools = ["point", "polyline", "polygon"];
+        });
         
         // Add sketchable map layers
         sketchableMapLayersToAdd.forEach((sketchableMapLayer) => {
