@@ -161,11 +161,13 @@ export const addMapLayer = ({
   const minAssetsRequired = parseInt(
     mapDataLayer.layerProperties.minimumAssetsRequired
   );
-  const maxAssetsRequired = parseInt(
+  const maxAssetsAllowed = parseInt(
     mapDataLayer.layerProperties.maximumAssetsRequired
   );
   const layerName = mapDataLayer.layerProperties.layerName;
+  console.log("Layer Name:", layerName);
   const formattedLayerName = mapDataLayer.layerProperties.formattedLayerName;
+  console.log("Formatted Layer Name:", formattedLayerName);
   const layerDataDiv = document.getElementById("layer-data-div");
   const layerMinScale = mapDataLayer.minScale;
   const layerMaxScale = mapDataLayer.maxScale;
@@ -186,6 +188,19 @@ export const addMapLayer = ({
       );
     }
   });
+
+  const mapLayerDataDisplay = document.createElement("asset-chooser-map-layer-data-display");
+  mapLayerDataDisplay.data = {
+    layerName,
+    formattedLayerName,
+    minAssetsRequired,
+    maxAssetsAllowed,
+    layerMinScale,
+    layerMaxScale,
+    showHideHandler: hideOrShowLayer,
+    isSketchable: false,
+  };
+  layerDataDiv.appendChild(mapLayerDataDisplay);
 
   layerDataDiv.innerHTML += `
     <div
@@ -255,10 +270,10 @@ export const addMapLayer = ({
             `
         }
         ${
-          maxAssetsRequired > 0
+          maxAssetsAllowed > 0
             ? `
-            <span id="${mapDataLayerId}-max-asset-required-message" title="Select a maximum of ${maxAssetsRequired} from ${formattedLayerName} layer">
-              <span class="label label-default">Select a maximum of ${maxAssetsRequired}
+            <span id="${mapDataLayerId}-max-asset-required-message" title="Select a maximum of ${maxAssetsAllowed} from ${formattedLayerName} layer">
+              <span class="label label-default">Select a maximum of ${maxAssetsAllowed}
               </span>
             </span>`
             : ``

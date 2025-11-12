@@ -41,16 +41,17 @@
       >
 
         <asset-chooser-sketchable-map-layer
-          name="Entrances and Exits"
+          name="Entrance Point"
           minimum="2"
           maximum="10"
           sketch-type="point"
+          min-scale=20000
         >
         </asset-chooser-sketchable-map-layer>
 
          <asset-chooser-sketchable-map-layer
           name="First Aid"
-          minimum="0"
+          minimum="2"
           maximum="0"
           sketch-type="polygon"
         >
@@ -63,7 +64,7 @@
           minimum="0"
           maximum="3"
           label-mask="{LeftFromAddress} to {RightToAddress} {StreetName}"
-          min-scale=20000
+          min-scale="20000"
           asset-label="StreetName"
         >
         </asset-chooser-map-layer>
@@ -76,7 +77,7 @@
           minimum=1
           maximum=1
           label-mask="{SITEADDR}"
-          min-scale=30000
+          min-scale="30000"
           asset-label="SITEADDR"
         >
         </asset-chooser-map-layer>

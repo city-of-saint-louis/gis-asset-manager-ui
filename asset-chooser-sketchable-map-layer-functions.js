@@ -46,16 +46,22 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
   const sketchableLayerDataDiv = document.getElementById("sketchable-layer-data-div");
   const sketchableLayerName = sketchableMapLayer.name;
   console.log("Sketchable Layer Name:", sketchableLayerName);
+  const layerName = sketchableLayerName;
+  const formattedLayerName = layerName.replace(/[-]/g, " ");
+  console.log("Formatted Layer Name:", formattedLayerName);
   const minAssetsRequired = parseInt(sketchableMapLayer.minimum);
   const maxAssetsAllowed = parseInt(sketchableMapLayer.maximum);
 
   const mapLayerDataDisplay = document.createElement("asset-chooser-map-layer-data-display");
   mapLayerDataDisplay.data = {
-    name: sketchableLayerName,
+    layerName: sketchableLayerName,
+    formattedLayerName: formattedLayerName,
     minAssetsRequired,
     maxAssetsAllowed,
     enableSketchHandler: enableSketchForLayer,
     hideLayerHandler: hideLayerHandler,
+    isSketchable: true,
+    layerMinScale: 0,
   };
   sketchableLayerDataDiv.appendChild(mapLayerDataDisplay);
   
