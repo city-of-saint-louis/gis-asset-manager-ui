@@ -42,10 +42,9 @@
 
         <asset-chooser-sketchable-map-layer
           name="Entrance Point"
-          minimum="2"
+          minimum="1"
           maximum="10"
           sketch-type="point"
-          min-scale=20000
         >
         </asset-chooser-sketchable-map-layer>
 
@@ -54,6 +53,7 @@
           minimum="2"
           maximum="0"
           sketch-type="polygon"
+          min-scale="20000"
         >
         </asset-chooser-sketchable-map-layer>
        
@@ -74,8 +74,8 @@
           name="PARCEL"
           layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/4/"
           layer-asset-id-field-name="OBJECTID"
-          minimum=1
-          maximum=1
+          minimum="1"
+          maximum="1"
           label-mask="{SITEADDR}"
           min-scale="30000"
           asset-label="SITEADDR"

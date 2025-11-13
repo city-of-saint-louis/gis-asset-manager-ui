@@ -155,6 +155,7 @@ export const addMapLayer = ({
   mapDataLayer.outFields = ["*"];
   mapDataLayer.popupEnabled = false;
   const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
+  console.log("Adding layer with ID:", mapDataLayerId);
   allMapLayerIds.push(mapDataLayerId);
   featureLayers.push(mapDataLayer);
   map.add(mapDataLayer);
@@ -193,6 +194,7 @@ export const addMapLayer = ({
   mapLayerDataDisplay.data = {
     layerName,
     formattedLayerName,
+    mapDataLayerId,
     minAssetsRequired,
     maxAssetsAllowed,
     layerMinScale,
@@ -202,101 +204,99 @@ export const addMapLayer = ({
   };
   layerDataDiv.appendChild(mapLayerDataDisplay);
 
-  layerDataDiv.innerHTML += `
-    <div
-      class="map-layer-data-container stat-container stat-medium"
-    >
-      <div 
-        class="stat-title" 
-        id="${layerName}-layer-selected-asset-container"
-        aria-label="${formattedLayerName} Layer"
-        title="${formattedLayerName} Layer"
-      >
-       <div>
-         <span>
-           <strong>
-             ${formattedLayerName} Layer
-           </strong>
-         </span>
-         <br>
-         <span class="zoom-alert-span" id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
-          ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
-         </span>
-       </div>
-        <button
-          type="button"
-          id="${layerName}-show-hide-layer-btn"
-          class="toggleLayerVisibilityButton"
-          att-layer-id="${layerName}-${mapDataLayer.id}"
-          aria-label="Hide ${formattedLayerName} Layer" ${
-    layerMinScale > 0 ? "disabled hidden" : ""
-  } 
-          title="Hide ${formattedLayerName} layer"
-        >
-          <span id="${layerName}-toggle-visibility-btn-text-span">
-            ${layerMinScale > 0 ? `Show` : `Hide`}
-          </span>
-        </button>
-      </div>
-      <div 
-        aria-live="polite"
-        aria-atomic="true"
-        class="asset-selection-requirements"
-      >
-        <span class="sr-only">Asset selection requirements and status for ${layerName} layer</span>
-        ${
-          minAssetsRequired === 0
-            ? `
-            <span id="${mapDataLayerId}-min-asset-required-message" title="No selection required">
-              <span class="label label-success">
-                No selection required
-              </span>
-            </span>
-            `
-            : minAssetsRequired === 1
-            ? `
-            <span id="${mapDataLayerId}-min-asset-required-message" title="${minAssetsRequired} selection required from ${formattedLayerName} layer">
-              <span class="label label-error">
-               ${minAssetsRequired} required
-              </span>
-            </span>
-            `
-            : `
-            <span id="${mapDataLayerId}-min-asset-required-message" title="At least ${minAssetsRequired} selections required from ${formattedLayerName} layer">
-              <span class="label label-error">
-                At least ${minAssetsRequired} required
-              </span>
-            </span>
-            `
-        }
-        ${
-          maxAssetsAllowed > 0
-            ? `
-            <span id="${mapDataLayerId}-max-asset-required-message" title="Select a maximum of ${maxAssetsAllowed} from ${formattedLayerName} layer">
-              <span class="label label-default">Select a maximum of ${maxAssetsAllowed}
-              </span>
-            </span>`
-            : ``
-        }
-      </div>
-      <ul
-        data-layer-name=${layerName}
-        class="list-group highlighted-asset-data-list"
-        id="${layerName}-${mapDataLayer.id}"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        <li 
-          title="No assets selected from ${formattedLayerName} layer"
-        >
-          None selected
-        </li>
-      </ul>
-    </div>
-  `;
+  // layerDataDiv.innerHTML += `
+  //   <div
+  //     class="map-layer-data-container stat-container stat-medium"
+  //   >
+  //     <div 
+  //       class="stat-title" 
+  //       id="${layerName}-layer-selected-asset-container"
+  //       aria-label="${formattedLayerName} Layer"
+  //       title="${formattedLayerName} Layer"
+  //     >
+  //      <div>
+  //        <span>
+  //          <strong>
+  //            ${formattedLayerName} Layer
+  //          </strong>
+  //        </span>
+  //        <br>
+  //        <span class="zoom-alert-span" id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
+  //         ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
+  //        </span>
+  //      </div>
+  //       <button
+  //         type="button"
+  //         id="${layerName}-show-hide-layer-btn"
+  //         class="toggleLayerVisibilityButton"
+  //         att-layer-id="${mapDataLayerId}"
+  //         aria-label="Hide ${formattedLayerName} Layer" ${
+  //   layerMinScale > 0 ? "disabled hidden" : ""
+  // } 
+  //         title="Hide ${formattedLayerName} layer"
+  //       >
+  //         <span id="${layerName}-toggle-visibility-btn-text-span">
+  //           ${layerMinScale > 0 ? `Show` : `Hide`}
+  //         </span>
+  //       </button>
+  //     </div>
+  //     <div 
+  //       aria-live="polite"
+  //       aria-atomic="true"
+  //       class="asset-selection-requirements"
+  //     >
+  //       <span class="sr-only">Asset selection requirements and status for ${layerName} layer</span>
+  //       ${
+  //         minAssetsRequired === 0
+  //           ? `
+  //           <span id="${mapDataLayerId}-min-asset-required-message" title="No selection required">
+  //             <span class="label label-success">
+  //               No selection required
+  //             </span>
+  //           </span>
+  //           `
+  //           : minAssetsRequired === 1
+  //           ? `
+  //           <span id="${mapDataLayerId}-min-asset-required-message" title="${minAssetsRequired} selection required from ${formattedLayerName} layer">
+  //             <span class="label label-error">
+  //              ${minAssetsRequired} required
+  //             </span>
+  //           </span>
+  //           `
+  //           : `
+  //           <span id="${mapDataLayerId}-min-asset-required-message" title="At least ${minAssetsRequired} selections required from ${formattedLayerName} layer">
+  //             <span class="label label-error">
+  //               At least ${minAssetsRequired} required
+  //             </span>
+  //           </span>
+  //           `
+  //       }
+  //       ${
+  //         maxAssetsAllowed > 0
+  //           ? `
+  //           <span id="${mapDataLayerId}-max-asset-required-message" title="Select a maximum of ${maxAssetsAllowed} from ${formattedLayerName} layer">
+  //             <span class="label label-default">Select a maximum of ${maxAssetsAllowed}
+  //             </span>
+  //           </span>`
+  //           : ``
+  //       }
+  //     </div>
+  //     <ul
+  //       data-layer-name=${layerName}
+  //       class="list-group highlighted-asset-data-list"
+  //       id="${layerName}-${mapDataLayerId}"
+  //       aria-live="polite"
+  //       aria-atomic="true"
+  //     >
+  //       <li 
+  //         title="No assets selected from ${formattedLayerName} layer"
+  //       >
+  //         None selected
+  //       </li>
+  //     </ul>
+  //   </div>
+  // `;
 };
-
-// monitor layer visibility based on scale and adjust ui accordingly, used in addMapLayer function no need to export
 const monitorLayerVisibility = (
   reactiveUtils,
   layerView,
@@ -309,45 +309,86 @@ const monitorLayerVisibility = (
   reactiveUtils.watch(
     () => layerView.visibleAtCurrentScale,
     (visibleAtCurrentScale) => {
-      const toggleLayerVisibilityButton = document.getElementById(
-        `${layerName}-show-hide-layer-btn`
-      );
-      const toggleVisibilityBtnTextSpan = document.getElementById(
-        `${layerName}-toggle-visibility-btn-text-span`
-      );
-      const zoomAlertSpan = document.getElementById(
-        `${layerName}-zoom-alert-span`
-      );
-
-      if (zoomAlertSpan) {
-        if (visibleAtCurrentScale) {
-          zoomAlertSpan.textContent = ``;
-          toggleLayerVisibilityButton.removeAttribute("disabled");
-          toggleLayerVisibilityButton.removeAttribute("hidden");
-          if (mapDataLayer.visible) {
-            toggleVisibilityBtnTextSpan.textContent = `Hide`;
-            toggleLayerVisibilityButton.setAttribute(
-              "title",
-              `Hide ${formattedLayerName} layer`
-            );
-          } else {
-            toggleVisibilityBtnTextSpan.textContent = `Show`;
-            toggleLayerVisibilityButton.setAttribute(
-              "title",
-              `Show ${formattedLayerName} layer`
-            );
-          }
-        } else {
-          zoomAlertSpan.textContent = `${
-            layerMinScale > 0 ? `Zoom in to see this layer.` : ""
-          } ${layerMaxScale > 0 ? `Zoom out to see this layer.` : ""}`;
-          toggleLayerVisibilityButton.setAttribute("disabled", true);
-          toggleLayerVisibilityButton.setAttribute("hidden", true);
+      // Find the correct AssetChooserMapLayerDataDisplay for this layer
+      // Try to match by layerName (for regular) or formattedLayerName (for sketchable)
+      const allDisplays = document.querySelectorAll("asset-chooser-map-layer-data-display");
+      let mapLayerDataDisplay = null;
+      allDisplays.forEach(display => {
+        // Compare both layerName and formattedLayerName for robustness
+        if (
+          display.data &&
+          (display.data.layerName === layerName ||
+           display.data.formattedLayerName === formattedLayerName)
+        ) {
+          mapLayerDataDisplay = display;
         }
+      });
+
+      if (mapLayerDataDisplay && typeof mapLayerDataDisplay.updateVisibility === "function") {
+        mapLayerDataDisplay.updateVisibility({
+          visibleAtCurrentScale,
+          visible: mapDataLayer.visible,
+          formattedLayerName,
+          layerMinScale,
+          layerMaxScale,
+        });
       }
     }
   );
 };
+// monitor layer visibility based on scale and adjust ui accordingly, used in addMapLayer function no need to export
+// const monitorLayerVisibility = (
+//   reactiveUtils,
+//   layerView,
+//   mapDataLayer,
+//   layerName,
+//   formattedLayerName,
+//   layerMinScale,
+//   layerMaxScale
+// ) => {
+//   reactiveUtils.watch(
+//     () => layerView.visibleAtCurrentScale,
+//     (visibleAtCurrentScale) => {
+//       const toggleLayerVisibilityButton = document.getElementById(
+//         `${layerName}-show-hide-layer-btn`
+//       );
+//       const toggleVisibilityBtnTextSpan = document.getElementById(
+//         `${layerName}-toggle-visibility-btn-text-span`
+//       );
+//       const zoomAlertSpan = document.getElementById(
+//         `${layerName}-zoom-alert-span`
+//       );
+
+//       if (zoomAlertSpan) {
+//         if (visibleAtCurrentScale) {
+//           zoomAlertSpan.textContent = ``;
+//           toggleLayerVisibilityButton.removeAttribute("disabled");
+//           toggleLayerVisibilityButton.removeAttribute("hidden");
+//           if (mapDataLayer.visible) {
+//             toggleVisibilityBtnTextSpan.textContent = `Hide`;
+//             toggleLayerVisibilityButton.setAttribute(
+//               "title",
+//               `Hide ${formattedLayerName} layer`
+//             );
+//           } else {
+//             toggleVisibilityBtnTextSpan.textContent = `Show`;
+//             toggleLayerVisibilityButton.setAttribute(
+//               "title",
+//               `Show ${formattedLayerName} layer`
+//             );
+//           }
+//         } else {
+//           zoomAlertSpan.textContent = `${
+//             layerMinScale > 0 ? `Zoom in to see this layer.` : ""
+//           } ${layerMaxScale > 0 ? `Zoom out to see this layer.` : ""}`;
+//           toggleLayerVisibilityButton.setAttribute("disabled", true);
+//           toggleLayerVisibilityButton.setAttribute("hidden", true);
+//         }
+//       }
+//     }
+//   );
+// };
+
 // *** end map related functions *** //
 
 // *** begin asset related functions *** //
