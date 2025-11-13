@@ -27,6 +27,7 @@ const enableSketchForLayer = (layer) => {
   // This could involve activating a sketch widget or similar functionality
   const sketch = document.getElementById("asset-chooser-sketch");
   sketch.availableCreateTools = layer.sketchType;
+  // sketch.layer = layer;????
 }
 
 const hideLayerHandler = (layerName) => {
