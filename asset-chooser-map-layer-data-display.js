@@ -190,35 +190,47 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
         title="${displayName} Layer"
       >
         <div>
-        <span>
-          <strong>
-          ${displayName} Layer
-          </strong>
-        </span>
-        <br>
-       <span class="zoom-alert-span" id="${sanitizedLayerName}-zoom-alert-span" style="height: 14px; display: inline-block">
-        ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
-       </span>
+          <span>
+            <strong>
+              ${displayName} Layer
+            </strong>
+          </span>
+         <br>
+         <span class="zoom-alert-span" id="${sanitizedLayerName}-zoom-alert-span" style="height: 14px; display: inline-block">
+           ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
+         </span>
         </div>
         <div>
-        ${
-          isSketchable
-          ? `
-          <button type="button" id="enable-sketch-btn-${sanitizedLayerName}" class="toggleLayerVisibilityButton"
-          aria-label="" title="Enable sketch for ${displayName} layer">
-          <span>Add Assets</span>
+        ${isSketchable? `
+          <button 
+            type="button" 
+            id="enable-sketch-btn-${sanitizedLayerName}" class="toggleLayerVisibilityButton"
+            aria-label="" 
+            title="Enable sketch for ${displayName} layer"
+          >
+            <span>
+              Add Assets
+            </span>
           </button>
         `
           : ""
         }
-        <button type="button" id="${sanitizedLayerName}-show-hide-layer-btn" class="toggleLayerVisibilityButton"
-          aria-label="" title="Hide ${displayName} layer">
-          <span>Hide</span>
+        <button 
+          type="button" 
+          id="${sanitizedLayerName}-show-hide-layer-btn" class="toggleLayerVisibilityButton"
+          aria-label="" title="Hide ${displayName} layer"${
+    layerMinScale > 0 ? "disabled hidden" : ""
+  } 
+          title="Hide ${displayName} layer"
+        >
+          <span id="${layerName}-toggle-visibility-btn-text-span">
+            ${layerMinScale > 0 ? `Show` : `Hide`}
+          </span>
         </button>
         </div>
       </div>
       <div aria-live="polite" aria-atomic="true" class="asset-selection-requirements">
-        <span class="sr-only">Asset addition requirements and status for ${displayName} layer</span>
+        <span class="sr-only">Asset requirements and status for ${displayName} layer</span>
         ${
         minAssetsRequired === 0
           ? `<span class="label label-success">No ${
@@ -254,19 +266,19 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
         `#enable-sketch-btn-${sanitizedLayerName}`
       ).addEventListener(
         "click",
-        () => enableSketchHandler && enableSketchHandler(name)
+        () => enableSketchHandler && enableSketchHandler(displayName)
       );
     }
     // Use hideLayerHandler for sketchable, showHideHandler for regular
     const hideBtn = this.querySelector(
-      `#show-hide-layer-btn-${sanitizedLayerName}`
+      `#${sanitizedLayerName}-show-hide-layer-btn`
     );
     if (hideBtn) {
       hideBtn.addEventListener("click", () => {
         if (isSketchable && hideLayerHandler) {
-          hideLayerHandler(name);
+          hideLayerHandler(displayName);
         } else if (showHideHandler) {
-          showHideHandler(name);
+          showHideHandler(displayName);
         }
       });
     }
