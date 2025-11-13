@@ -21,10 +21,12 @@ export const captureSketachableMapLayers = () => {
   });
 };
 
-const enableSketchForLayer = (layerName) => {
-  console.log("Enabling sketch for layer:", layerName);
+const enableSketchForLayer = (layer) => {
+  console.log("Enabling sketch for layer:", layer);
   // Logic to enable sketching for the specified layer
   // This could involve activating a sketch widget or similar functionality
+  const sketch = document.getElementById("asset-chooser-sketch");
+  sketch.availableCreateTools = layer.sketchType;
 }
 
 const hideLayerHandler = (layerName) => {
@@ -62,9 +64,11 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
     hideLayerHandler: hideLayerHandler,
     isSketchable: true,
     layerMinScale: 0,
+    availableCreateTools: sketchableMapLayer.sketchType,
+    layer: sketchableMapLayer
   };
   sketchableLayerDataDiv.appendChild(mapLayerDataDisplay);
-  
+  console.log("Appended mapLayerDataDisplay for sketchable layer:", sketchableLayerName, mapLayerDataDisplay.data);
 
 //   const sketchableLayerDataDivElement = document.createElement("div");
 

@@ -230,6 +230,8 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       // formattedLayerName, // for regular layers
       showHideHandler, // for regular layers
       layerMinScale = 0, // for zoom alert
+      // layerMaxScale = 0, // for zoom alert
+      availableCreateTools, // for sketchable layers
     } = layerData;
     console.log("layerData", layerData);
     // Use formattedLayerName if provided, else fallback to name
@@ -360,7 +362,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
         `#enable-sketch-btn-${sanitizedLayerName}`
       ).addEventListener(
         "click",
-        () => enableSketchHandler && enableSketchHandler(displayName)
+        () => enableSketchHandler && enableSketchHandler(layerData.layer)
       );
     }
     // Use hideLayerHandler for sketchable, showHideHandler for regular
