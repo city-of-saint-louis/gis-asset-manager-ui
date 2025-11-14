@@ -309,6 +309,45 @@ export const addMapLayer = ({
   //   </div>
   // `;
 };
+// const monitorLayerVisibility = (
+//   reactiveUtils,
+//   layerView,
+//   mapDataLayer,
+//   layerName,
+//   formattedLayerName,
+//   layerMinScale,
+//   layerMaxScale
+// ) => {
+//   reactiveUtils.watch(
+//     () => layerView.visibleAtCurrentScale,
+//     (visibleAtCurrentScale) => {
+//       // Find the correct AssetChooserMapLayerDataDisplay for this layer
+//       // Try to match by layerName (for regular) or formattedLayerName (for sketchable)
+//       const allDisplays = document.querySelectorAll("asset-chooser-map-layer-data-display");
+//       let mapLayerDataDisplay = null;
+//       allDisplays.forEach(display => {
+//         // Compare both layerName and formattedLayerName for robustness
+//         if (
+//           display.data &&
+//           (display.data.layerName === layerName ||
+//            display.data.formattedLayerName === formattedLayerName)
+//         ) {
+//           mapLayerDataDisplay = display;
+//         }
+//       });
+
+//       if (mapLayerDataDisplay && typeof mapLayerDataDisplay.updateVisibility === "function") {
+//         mapLayerDataDisplay.updateVisibility({
+//           visibleAtCurrentScale,
+//           visible: mapDataLayer.visible,
+//           formattedLayerName,
+//           layerMinScale,
+//           layerMaxScale,
+//         });
+//       }
+//     }
+//   );
+// };
 const monitorLayerVisibility = (
   reactiveUtils,
   layerView,
@@ -318,35 +357,44 @@ const monitorLayerVisibility = (
   layerMinScale,
   layerMaxScale
 ) => {
+  // Watch visibleAtCurrentScale (zoom/scale)
   reactiveUtils.watch(
     () => layerView.visibleAtCurrentScale,
     (visibleAtCurrentScale) => {
-      // Find the correct AssetChooserMapLayerDataDisplay for this layer
-      // Try to match by layerName (for regular) or formattedLayerName (for sketchable)
-      const allDisplays = document.querySelectorAll("asset-chooser-map-layer-data-display");
-      let mapLayerDataDisplay = null;
-      allDisplays.forEach(display => {
-        // Compare both layerName and formattedLayerName for robustness
-        if (
-          display.data &&
-          (display.data.layerName === layerName ||
-           display.data.formattedLayerName === formattedLayerName)
-        ) {
-          mapLayerDataDisplay = display;
-        }
-      });
-
-      if (mapLayerDataDisplay && typeof mapLayerDataDisplay.updateVisibility === "function") {
-        mapLayerDataDisplay.updateVisibility({
-          visibleAtCurrentScale,
-          visible: mapDataLayer.visible,
-          formattedLayerName,
-          layerMinScale,
-          layerMaxScale,
-        });
-      }
+      updateLayerDisplay();
     }
   );
+  // Watch visible property (show/hide)
+  reactiveUtils.watch(
+    () => mapDataLayer.visible,
+    (visible) => {
+      updateLayerDisplay();
+    }
+  );
+
+  function updateLayerDisplay() {
+    const allDisplays = document.querySelectorAll("asset-chooser-map-layer-data-display");
+    let mapLayerDataDisplay = null;
+    allDisplays.forEach(display => {
+      if (
+        display.data &&
+        (display.data.layerName === layerName ||
+         display.data.formattedLayerName === formattedLayerName)
+      ) {
+        mapLayerDataDisplay = display;
+      }
+    });
+
+    if (mapLayerDataDisplay && typeof mapLayerDataDisplay.updateVisibility === "function") {
+      mapLayerDataDisplay.updateVisibility({
+        visibleAtCurrentScale: layerView.visibleAtCurrentScale,
+        visible: mapDataLayer.visible,
+        formattedLayerName,
+        layerMinScale,
+        layerMaxScale,
+      });
+    }
+  }
 };
 // monitor layer visibility based on scale and adjust ui accordingly, used in addMapLayer function no need to export
 // const monitorLayerVisibility = (
