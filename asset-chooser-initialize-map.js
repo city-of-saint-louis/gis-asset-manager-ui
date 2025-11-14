@@ -129,6 +129,12 @@ export const initializeMap = async () => {
             layersWithNoSelectionRequired,
           });
         });
+        const selectableLayerDataDivHeading = document.createElement("h3");
+        selectableLayerDataDivHeading.textContent = "Selectable Layers";
+        const layerDataDiv = document.getElementById(
+          "layer-data-div"
+        );
+        layerDataDiv.insertBefore(selectableLayerDataDivHeading, layerDataDiv.firstChild);
       }
 
       if (isSketchEnabled === "true" || isSketchEnabled === true) {
