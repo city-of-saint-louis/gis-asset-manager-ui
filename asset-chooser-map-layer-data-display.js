@@ -169,7 +169,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     }
   }
 
-  // --- ADDED: updateVisibility method ---
+  // --- new updateVisibility method ---
   updateVisibility({ visibleAtCurrentScale, visible, formattedLayerName, layerMinScale, layerMaxScale }) {
     // Use the same logic as before, but scoped to this component's DOM
     const displayNameRaw = this._data.formattedLayerName || this._data.layerName;
@@ -216,7 +216,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       }
     }
   }
-  // --- END updateVisibility method ---
+  // --- END new updateVisibility method ---
 
   render(layerData) {
     const {
@@ -231,7 +231,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       showHideHandler, // for regular layers
       layerMinScale = 0, // for zoom alert
       // layerMaxScale = 0, // for zoom alert
-      availableCreateTools, // for sketchable layers
+      // availableCreateTools, // for sketchable layers
     } = layerData;
     console.log("layerData", layerData);
     // Use formattedLayerName if provided, else fallback to name
@@ -370,13 +370,20 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       `#${sanitizedLayerName}-show-hide-layer-btn`
     );
     if (hideBtn) {
-      hideBtn.addEventListener("click", () => {
+      // hideBtn.addEventListener("click", () => {
+      //   if (isSketchable && hideLayerHandler) {
+      //     hideLayerHandler(displayName);
+      //   } else if (showHideHandler) {
+      //     showHideHandler(displayName);
+      //   }
+      // });
+      hideBtn.onclick = () => {
         if (isSketchable && hideLayerHandler) {
           hideLayerHandler(displayName);
         } else if (showHideHandler) {
-          showHideHandler(displayName);
+          showHideHandler(layerName);
         }
-      });
+      };
     }
   }
 }

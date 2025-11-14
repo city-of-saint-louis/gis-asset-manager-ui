@@ -56,47 +56,59 @@ export const captureMapLayers = () => {
 };
 
 // hide or show layers on the map
-export const hideOrShowLayer = () => {
-  featureLayers.forEach((outerLayer) => {
-    const formattedLayerName = outerLayer.layerProperties.formattedLayerName;
-    const toggleLayerVisibilityButtons = document.querySelectorAll(
-      ".toggleLayerVisibilityButton"
-    );
-    toggleLayerVisibilityButtons.forEach((toggleLayerVisibilityButton) => {
-      toggleLayerVisibilityButton.addEventListener("click", () => {
-        const layerId =
-          toggleLayerVisibilityButton.getAttribute("att-layer-id");
-        const spanElement = toggleLayerVisibilityButton.querySelector("span");
-        if (
-          `${outerLayer.layerProperties.layerName}-${outerLayer.id}` === layerId
-        ) {
-          if (outerLayer.visible) {
-            outerLayer.visible = false;
-            spanElement.innerHTML = `<span>Show</span>`;
-            toggleLayerVisibilityButton.setAttribute(
-              "aria-label",
-              `Show ${formattedLayerName} layer`
-            );
-            toggleLayerVisibilityButton.setAttribute(
-              "title",
-              `Show ${formattedLayerName} layer`
-            );
-          } else {
-            outerLayer.visible = true;
-            spanElement.innerHTML = `<span>Hide</span>`;
-            toggleLayerVisibilityButton.setAttribute(
-              "aria-label",
-              `Hide ${formattedLayerName} layer`
-            );
-            toggleLayerVisibilityButton.setAttribute(
-              "title",
-              `Hide ${formattedLayerName} layer`
-            );
-          }
-        }
-      });
-    });
-  });
+// export const hideOrShowLayer = () => {
+//   featureLayers.forEach((outerLayer) => {
+//     const formattedLayerName = outerLayer.layerProperties.formattedLayerName;
+//     const toggleLayerVisibilityButtons = document.querySelectorAll(
+//       ".toggleLayerVisibilityButton"
+//     );
+//     toggleLayerVisibilityButtons.forEach((toggleLayerVisibilityButton) => {
+//       toggleLayerVisibilityButton.addEventListener("click", () => {
+//         const layerId =
+//           toggleLayerVisibilityButton.getAttribute("att-layer-id");
+//         const spanElement = toggleLayerVisibilityButton.querySelector("span");
+//         if (
+//           `${outerLayer.layerProperties.layerName}-${outerLayer.id}` === layerId
+//         ) {
+//           if (outerLayer.visible) {
+//             outerLayer.visible = false;
+//             spanElement.innerHTML = `<span>Show</span>`;
+//             toggleLayerVisibilityButton.setAttribute(
+//               "aria-label",
+//               `Show ${formattedLayerName} layer`
+//             );
+//             toggleLayerVisibilityButton.setAttribute(
+//               "title",
+//               `Show ${formattedLayerName} layer`
+//             );
+//           } else {
+//             outerLayer.visible = true;
+//             spanElement.innerHTML = `<span>Hide</span>`;
+//             toggleLayerVisibilityButton.setAttribute(
+//               "aria-label",
+//               `Hide ${formattedLayerName} layer`
+//             );
+//             toggleLayerVisibilityButton.setAttribute(
+//               "title",
+//               `Hide ${formattedLayerName} layer`
+//             );
+//           }
+//         }
+//       });
+//     });
+//   });
+// };
+
+// --- UPDATED: hideOrShowLayer only toggles visibility ---
+export const hideOrShowLayer = (layerName) => {
+  // Find the correct layer by name
+  const layer = featureLayers.find(
+    (l) => l.layerProperties.layerName === layerName
+  );
+  if (layer) {
+    layer.visible = !layer.visible;
+    // UI will be updated by monitorLayerVisibility calling updateVisibility
+  }
 };
 
 // add map layers to the map
