@@ -133,6 +133,7 @@ export const initializeMap = async () => {
         sketch.setAttribute("hide-selection-tools-lasso-selection", "true");
         sketch.setAttribute("hide-selection-tools-rectangle-selection", "true");
         sketch.setAttribute("available-create-tools", "point,polyline,polygon");
+        sketch.setAttribute("hidden", "true");
         arcGisMap.appendChild(sketch);
         sketch.componentOnReady().then(() => {
           console.log("Sketch component is ready:", sketch.view);

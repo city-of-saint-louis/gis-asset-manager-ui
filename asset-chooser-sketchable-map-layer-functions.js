@@ -27,7 +27,15 @@ const enableSketchForLayer = (layer) => {
   // This could involve activating a sketch widget or similar functionality
   const sketch = document.getElementById("asset-chooser-sketch");
   sketch.availableCreateTools = layer.sketchType;
+  sketch.removeAttribute("hidden");
   // sketch.layer = layer;????
+  // how do i set the layer?
+ // Set the sketch widget's layer to the correct GraphicsLayer
+  if (layer.graphicsLayer) {
+    sketch.layer = layer.graphicsLayer;
+  } else {
+    console.warn("No graphicsLayer found on layer object!");
+  }
 }
 
 const hideLayerHandler = (layerName) => {
@@ -46,6 +54,8 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
     title: sketchableMapLayer.name,
   });
   map.add(sketchableGraphicLayer);
+  // Attach the GraphicsLayer instance to the layer object
+  sketchableMapLayer.graphicsLayer = sketchableGraphicLayer;
   const sketchableLayerDataDiv = document.getElementById("sketchable-layer-data-div");
   const sketchableLayerName = sketchableMapLayer.name;
   console.log("Sketchable Layer Name:", sketchableLayerName);
