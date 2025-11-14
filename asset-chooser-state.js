@@ -34,8 +34,13 @@ export let currentView = null;
 export function setCurrentView(view) {
   currentView = view;
 }
-// state vars for sketch component
+// state vars for sketch capability
 export let isSketchEnabled = false;
 export function setIsSketchEnabled(value) {
   isSketchEnabled = value;
+}
+// state vars for select capability
+export let isSelectEnabled = false;
+export function setIsSelectEnabled(value) {
+  isSelectEnabled = value;
 }

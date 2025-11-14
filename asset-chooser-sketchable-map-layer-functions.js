@@ -81,6 +81,10 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
   sketchableLayerDataDiv.appendChild(mapLayerDataDisplay);
   console.log("Appended mapLayerDataDisplay for sketchable layer:", sketchableLayerName, mapLayerDataDisplay.data);
 
+};
+
+
+
 //   const sketchableLayerDataDivElement = document.createElement("div");
 
 //   sketchableLayerDataDiv.innerHTML += `
@@ -239,4 +243,4 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
   //     console.log("Created assets array:", createdAssets);
   //   });
   
-};
+

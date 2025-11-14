@@ -15,6 +15,9 @@ import {
   setIsValid,
   setCurrentView,
   isSketchEnabled,
+  setIsSketchEnabled,
+  isSelectEnabled,
+  setIsSelectEnabled,
 } from "./asset-chooser-state.js";
 
 // import from asset-chooser-functions.js
@@ -112,18 +115,21 @@ export const initializeMap = async () => {
       view.constraints = {
         geometry: stLouisExtent,
       };
-      mapLayersToAdd.forEach((mapLayer) => {
-        addMapLayer({
-          mapLayer,
-          FeatureLayer,
-          reactiveUtils,
-          map,
-          view,
-          allMapLayerIds,
-          featureLayers,
-          layersWithNoSelectionRequired,
+
+      if (isSelectEnabled === "true" || isSelectEnabled === true) {
+        mapLayersToAdd.forEach((mapLayer) => {
+          addMapLayer({
+            mapLayer,
+            FeatureLayer,
+            reactiveUtils,
+            map,
+            view,
+            allMapLayerIds,
+            featureLayers,
+            layersWithNoSelectionRequired,
+          });
         });
-      });
+      }
 
       if (isSketchEnabled === "true" || isSketchEnabled === true) {
         const sketch = document.createElement("arcgis-sketch");
@@ -139,7 +145,7 @@ export const initializeMap = async () => {
           console.log("Sketch component is ready:", sketch.view);
           sketch.availableCreateTools = ["point", "polyline", "polygon"];
         });
-        
+
         // Add sketchable map layers
         sketchableMapLayersToAdd.forEach((sketchableMapLayer) => {
           addSketchableMapLayer({
@@ -147,7 +153,18 @@ export const initializeMap = async () => {
             map,
           });
         });
+        const sketchableLayerDataDivHeading = document.createElement("h3");
+        sketchableLayerDataDivHeading.textContent = "Sketchable Layers";
+        const sketchableLayerDataDiv = document.getElementById(
+          "sketchable-layer-data-div"
+        );
+        sketchableLayerDataDiv.appendChild(sketchableLayerDataDivHeading);
+      }
 
+      if (!isSelectEnabled && !isSketchEnabled) {
+        alert(
+          "Please enable either Select Mode or Sketch Mode to choose assets on the map."
+        );
       }
 
       if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {

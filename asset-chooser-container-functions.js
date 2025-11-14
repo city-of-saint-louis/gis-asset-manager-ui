@@ -6,7 +6,9 @@ import {
   isValid,
   setIsValid,
   isSketchEnabled,
-  setIsSketchEnabled
+  setIsSketchEnabled,
+  isSelectEnabled,
+  setIsSelectEnabled,
 } from "./asset-chooser-state.js";
 // import required functions from asset-chooser-functions.js
 import { secureChosenAssets } from "./asset-chooser-functions.js";
@@ -246,5 +248,15 @@ export const enableSketchMode = (isSketchEnabled) => {
   } else {
     setIsSketchEnabled(false);
     console.log("Sketch mode disabled");
+  }
+}
+
+export const enableSelectMode = (isSelectEnabled) => {
+  if (isSelectEnabled) {
+    setIsSelectEnabled(true);
+    console.log("Select mode enabled");
+  } else {
+    setIsSelectEnabled(false);
+    console.log("Select mode disabled");
   }
 }

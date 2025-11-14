@@ -1,6 +1,6 @@
 // import from asset-chooser-container-functions.js
 import { handleAccomodationButtonClick } from "./asset-chooser-container-functions.js";
-import { enableSketchMode } from "./asset-chooser-container-functions.js";
+import { enableSketchMode, enableSelectMode } from "./asset-chooser-container-functions.js";
 // import { isSketchEnabled, setIsSketchEnabled } from "./asset-chooser-state.js";
 
 class AssetChooserContainerComponent extends HTMLElement {
@@ -8,11 +8,13 @@ class AssetChooserContainerComponent extends HTMLElement {
     super(); // always call super() first in the constructor for a custom web component
     this.title = this.getAttribute("title") || "";
     this.hint = this.getAttribute("hint") || "";
+    this.isSelectEnabled = this.getAttribute("is-select-enabled") === "true";
     this.isSketchEnabled = this.getAttribute("is-sketch-enabled") === "true";
   }
   connectedCallback() {
     // console.log("sketch enabled",this.isSketchEnabled);
     enableSketchMode(this.isSketchEnabled);
+    enableSelectMode(this.isSelectEnabled);
     const accomodationButtonMessage =
       "Click this button to enter assets if you are using assistive technology and are unable to select assets on the map.";
     try {
