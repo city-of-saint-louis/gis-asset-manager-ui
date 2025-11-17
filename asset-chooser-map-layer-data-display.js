@@ -243,7 +243,9 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     const sanitizedLayerName = displayName
       .replace(/\s+/g, "-")
       .replace(/[^a-zA-Z0-9-_]/g, "");
-
+console.log("sanitizedLayerName", sanitizedLayerName);
+console.log('layerName', layerName);
+console.log('mapDataLayerId', mapDataLayerId); 
     this.innerHTML = `
       <div 
       class="map-layer-data-container stat-container stat-medium"
@@ -337,19 +339,19 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
             : ``
         }
       </div>
-      <ul 
-        data-layer-name="${sanitizedLayerName}" 
-        class="list-group highlighted-asset-data-list"
-        id="asset-list" 
-        aria-live="polite" 
-        aria-atomic="true"
-      >
-        <li title="No assets ${
-          isSketchable ? "added" : "selected"
-        } for ${displayName} layer">None ${
-      isSketchable ? "added" : "selected"
-    }</li>
-      </ul>
+        <ul 
+          data-layer-name="${sanitizedLayerName}" 
+          class="list-group highlighted-asset-data-list"
+          id="${mapDataLayerId}" 
+          aria-live="polite" 
+          aria-atomic="true"
+        >
+          <li 
+            title="No assets ${isSketchable ? "added" : "selected" } for ${displayName} layer"
+          >
+            None ${isSketchable ? "added" : "selected"}
+          </li>
+        </ul>
       </div>
     `;
 
