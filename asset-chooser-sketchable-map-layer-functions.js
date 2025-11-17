@@ -1,6 +1,8 @@
 // import state variables from asset-chooser-state.js
 import {
   sketchableMapLayersToAdd,
+  allSketchableLayerIds,
+  sketchableLayersWithNoAdditionRequired,
   // createdAssets,
   // isSketchEnabled,
 } from "./asset-chooser-state.js";
@@ -52,8 +54,27 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
   );
   const sketchableGraphicLayer = new GraphicsLayer({
     title: sketchableMapLayer.name,
+    maxAssetsAllowed: parseInt(sketchableMapLayer.maximum),
+    minAssetsRequired: parseInt(sketchableMapLayer.minimum),
+    visible: true,
+    minScale: sketchableMapLayer.minScale,
+    maxScale: sketchableMapLayer.maxScale,
+    sketchType: sketchableMapLayer.sketchType,
+    layerProperties: {
+      layerName: sketchableMapLayer.name,
+      formatLayerName: sketchableMapLayer.name.replace(/[-]/g, " "),
+      minAssetsRequired: parseInt(sketchableMapLayer.minimum),
+      maxAssetsAllowed: parseInt(sketchableMapLayer.maximum),
+      isSketchable: true,
+      minScale: sketchableMapLayer.minScale,
+      maxScale: sketchableMapLayer.maxScale,
+      sketchType: sketchableMapLayer.sketchType
+    }
   });
   map.add(sketchableGraphicLayer);
+  const sketchableGraphicLayerId = `${sketchableGraphicLayer.layerProperties.layerName}-${sketchableGraphicLayer.id}`;
+  allSketchableLayerIds.push(sketchableGraphicLayerId);
+  console.log("Updated allSketchableLayerIds array:", allSketchableLayerIds);
   // Attach the GraphicsLayer instance to the layer object
   sketchableMapLayer.graphicsLayer = sketchableGraphicLayer;
   const sketchableLayerDataDiv = document.getElementById("sketchable-layer-data-div");
@@ -64,6 +85,12 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
   console.log("Formatted Layer Name:", formattedLayerName);
   const minAssetsRequired = parseInt(sketchableMapLayer.minimum);
   const maxAssetsAllowed = parseInt(sketchableMapLayer.maximum);
+  const layerMinScale = parseInt(sketchableMapLayer.minScale);
+  const layerMaxScale = parseInt(sketchableMapLayer.maxScale);
+  if (minAssetsRequired === 0) {
+    sketchableLayersWithNoAdditionRequired.push(sketchableLayerName);
+  }
+
 
   const mapLayerDataDisplay = document.createElement("asset-chooser-map-layer-data-display");
   mapLayerDataDisplay.data = {
@@ -74,13 +101,13 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
     enableSketchHandler: enableSketchForLayer,
     hideLayerHandler: hideLayerHandler,
     isSketchable: true,
-    layerMinScale: 0,
+    layerMinScale: layerMinScale,
+    layerMaxScale: layerMaxScale,
     availableCreateTools: sketchableMapLayer.sketchType,
     layer: sketchableMapLayer
   };
   sketchableLayerDataDiv.appendChild(mapLayerDataDisplay);
   console.log("Appended mapLayerDataDisplay for sketchable layer:", sketchableLayerName, mapLayerDataDisplay.data);
-
 };
 
 

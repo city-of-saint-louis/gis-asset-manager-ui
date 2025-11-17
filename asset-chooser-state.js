@@ -17,6 +17,7 @@ export const chosenAssetFormData = [];
 export const allMapLayerIds = [];
 export const allSketchableLayerIds = [];
 export const layersWithNoSelectionRequired = [];
+export const sketchableLayersWithNoAdditionRequired = [];
 export const validLayers = [];
 export let addressMarkerX;
 export function setAddressMarkerX(value) {

@@ -243,9 +243,6 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     const sanitizedLayerName = displayName
       .replace(/\s+/g, "-")
       .replace(/[^a-zA-Z0-9-_]/g, "");
-console.log("sanitizedLayerName", sanitizedLayerName);
-console.log('layerName', layerName);
-console.log('mapDataLayerId', mapDataLayerId); 
     this.innerHTML = `
       <div 
       class="map-layer-data-container stat-container stat-medium"
