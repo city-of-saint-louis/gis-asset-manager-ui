@@ -9,12 +9,10 @@ import {
 } from "./asset-chooser-state.js";
 // import from asset-chooser-functions.js
 import { 
-  hideOrShowLayer,
   monitorLayerVisibility,
  } from "./asset-chooser-functions.js";
 // import asset-chooser-map-layer-data-display component
 import "./asset-chooser-map-layer-data-display.js";
-
 
 // event listener to capture sketchable layer data from sketchable-map-layer.js
 export const captureSketachableMapLayers = () => {
@@ -46,10 +44,23 @@ const enableSketchForLayer = (layer) => {
   }
 };
 
-const hideLayerHandler = (layerName) => {
-  console.log("Hiding layer:", layerName);
-  hideOrShowLayer(layerName, false);
+const hideOrShowSketchableLayer = (layerName) => {
+  console.log('graphicLayers:', graphicLayers);
+  const layer = graphicLayers.find(
+    (lyr) => lyr.layerProperties.layerName === layerName
+  );
+  if (layer) {
+    layer.visible = !layer.visible;
+    console.log(`Layer ${layerName} visibility toggled to:`, layer.visible);
+  } else {
+    console.warn(`Layer ${layerName} not found in graphicLayers array!`);
+  }
 };
+
+// const hideLayerHandler = (layerName) => {
+//   console.log("Hiding layer:", layerName);
+//   hideOrShowSketchableLayer(layerName);
+// };
 
 export const addSketchableMapLayer = async ({ 
   sketchableMapLayer, 
@@ -142,7 +153,7 @@ export const addSketchableMapLayer = async ({
     minAssetsRequired: minAssetsRequired,
     maxAssetsAllowed: maxAssetsAllowed,
     enableSketchHandler: enableSketchForLayer,
-    hideLayerHandler: hideLayerHandler,
+    showHideHandler: hideOrShowSketchableLayer,
     isSketchable: true,
     layerMinScale: layerMinScale,
     layerMaxScale: layerMaxScale,

@@ -225,10 +225,9 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       minAssetsRequired,
       maxAssetsAllowed,
       enableSketchHandler,
-      hideLayerHandler,
       isSketchable = false, // <-- flag to distinguish layer type
       // formattedLayerName, // for regular layers
-      showHideHandler, // for regular layers
+      showHideHandler, 
       layerMinScale = 0, // for zoom alert
       // layerMaxScale = 0, // for zoom alert
       // availableCreateTools, // for sketchable layers
@@ -369,19 +368,12 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       `#${sanitizedLayerName}-show-hide-layer-btn`
     );
     if (hideBtn) {
-      // hideBtn.addEventListener("click", () => {
-      //   if (isSketchable && hideLayerHandler) {
-      //     hideLayerHandler(displayName);
-      //   } else if (showHideHandler) {
-      //     showHideHandler(displayName);
-      //   }
-      // });
       hideBtn.onclick = () => {
-        if (isSketchable && hideLayerHandler) {
-          hideLayerHandler(displayName);
-        } else if (showHideHandler) {
+        // if (isSketchable && hideLayerHandler) {
+        //   hideLayerHandler(layerName);
+        // } else if (showHideHandler) {
           showHideHandler(layerName);
-        }
+        // }
       };
     }
   }
