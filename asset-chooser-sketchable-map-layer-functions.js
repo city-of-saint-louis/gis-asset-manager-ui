@@ -4,13 +4,11 @@ import {
   allSketchableLayerIds,
   sketchableLayersWithNoAdditionRequired,
   graphicLayers,
-  // createdAssets,
+  createdAssets,
   // isSketchEnabled,
 } from "./asset-chooser-state.js";
 // import from asset-chooser-functions.js
-import { 
-  monitorLayerVisibility,
- } from "./asset-chooser-functions.js";
+import { monitorLayerVisibility } from "./asset-chooser-functions.js";
 // import asset-chooser-map-layer-data-display component
 import "./asset-chooser-map-layer-data-display.js";
 
@@ -45,7 +43,7 @@ const enableSketchForLayer = (layer) => {
 };
 
 const hideOrShowSketchableLayer = (layerName) => {
-  console.log('graphicLayers:', graphicLayers);
+  console.log("graphicLayers:", graphicLayers);
   const layer = graphicLayers.find(
     (lyr) => lyr.layerProperties.layerName === layerName
   );
@@ -62,9 +60,9 @@ const hideOrShowSketchableLayer = (layerName) => {
 //   hideOrShowSketchableLayer(layerName);
 // };
 
-export const addSketchableMapLayer = async ({ 
-  sketchableMapLayer, 
-  map, 
+export const addSketchableMapLayer = async ({
+  sketchableMapLayer,
+  map,
   view,
   reactiveUtils,
 }) => {
@@ -110,7 +108,7 @@ export const addSketchableMapLayer = async ({
     sketchableGraphicLayer.layerProperties.minAssetsRequired
   );
   console.log("minAssetsRequired", minAssetsRequired);
-    if (minAssetsRequired === 0) {
+  if (minAssetsRequired === 0) {
     sketchableLayersWithNoAdditionRequired.push(layerName);
   }
   const maxAssetsAllowed = parseInt(
@@ -126,23 +124,19 @@ export const addSketchableMapLayer = async ({
     "sketchable-layer-data-div"
   );
 
-
-
   view.on("layerview-create", function (event) {
-  if (event.layer === sketchableGraphicLayer) {
-    monitorLayerVisibility(
-      reactiveUtils,
-      event.layerView,
-      sketchableGraphicLayer,
-      layerName,
-      formattedLayerName,
-      layerMinScale,
-      layerMaxScale
-    );
-  }
-});
-
-
+    if (event.layer === sketchableGraphicLayer) {
+      monitorLayerVisibility(
+        reactiveUtils,
+        event.layerView,
+        sketchableGraphicLayer,
+        layerName,
+        formattedLayerName,
+        layerMinScale,
+        layerMaxScale
+      );
+    }
+  });
 
   const mapLayerDataDisplay = document.createElement(
     "asset-chooser-map-layer-data-display"
@@ -162,6 +156,37 @@ export const addSketchableMapLayer = async ({
   };
   sketchableLayerDataDiv.appendChild(mapLayerDataDisplay);
   // console.log("Appended mapLayerDataDisplay for sketchable layer:", sketchableLayerName, mapLayerDataDisplay.data);
+};
+
+export const sketchAsset = (sketchComponent) => {
+  console.log("sketchComponent:", sketchComponent);
+  if (sketchComponent._arcgisCreateListenerAttached) return; // Prevent duplicate listeners
+  sketchComponent.addEventListener("arcgisCreate", (event) => {
+    if (event.detail.state !== "complete") return; // Only handle completed graphics
+    const graphic = event.detail.graphic;
+    graphic.attributes = {
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+      status: "proposed",
+      layerName: sketchComponent.layer.title,
+      layerId: sketchComponent.layer.id,
+      // point, line, or polygon
+      geometryType: graphic.geometry.type,
+    };
+    console.log("New graphic created via sketch widget:", graphic);
+    // Additional logic here
+    if (!sketchComponent.availableCreateTools.includes(graphic.geometry.type)) {
+      console.warn(
+        `Created graphic type ${graphic.geometry.type} is not allowed in this layer!`
+      );
+      if (sketchComponent.layer && sketchComponent.layer.graphics) {
+        sketchComponent.layer.graphics.remove(graphic);
+      }
+      return;
+    }
+    createdAssets.push(graphic);
+    console.log("Updated createdAssets array:", createdAssets);
+  });
 };
 
 //   const sketchableLayerDataDivElement = document.createElement("div");

@@ -32,7 +32,7 @@ import {
   highlightSelectedAsset,
 } from "./asset-chooser-functions.js";
 
-import { addSketchableMapLayer } from "./asset-chooser-sketchable-map-layer-functions.js";
+import { addSketchableMapLayer, sketchAsset } from "./asset-chooser-sketchable-map-layer-functions.js";
 
 export const initializeMap = async () => {
   destroyPreviousMapView();
@@ -149,7 +149,8 @@ export const initializeMap = async () => {
         arcGisMap.appendChild(sketch);
         sketch.componentOnReady().then(() => {
           // console.log("Sketch component is ready:", sketch.view);
-          sketch.availableCreateTools = ["point", "polyline", "polygon"];
+          console.log(document.querySelectorAll("arcgis-sketch").length);
+          sketchAsset(sketch);
         });
 
         // Add sketchable map layers
