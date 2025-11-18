@@ -27,7 +27,7 @@ export const destroyPreviousMapView = () => {
     if (oldArcgisMap) {
       viewDiv.removeChild(oldArcgisMap);
     }
-    viewDiv.innerHTML = ""; 
+    viewDiv.innerHTML = "";
   }
 };
 
@@ -166,27 +166,27 @@ export const addMapLayer = ({
   });
   mapDataLayer.outFields = ["*"];
   mapDataLayer.popupEnabled = false;
+
   const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
-  console.log("Adding layer with ID:", mapDataLayerId);
+  mapDataLayer.id = mapDataLayerId;
   allMapLayerIds.push(mapDataLayerId);
   featureLayers.push(mapDataLayer);
+
   map.add(mapDataLayer);
+  const layerName = mapDataLayer.layerProperties.layerName;
+  const formattedLayerName = mapDataLayer.layerProperties.formattedLayerName;
   const minAssetsRequired = parseInt(
     mapDataLayer.layerProperties.minimumAssetsRequired
   );
   const maxAssetsAllowed = parseInt(
     mapDataLayer.layerProperties.maximumAssetsRequired
   );
-  const layerName = mapDataLayer.layerProperties.layerName;
-  console.log("Layer Name:", layerName);
-  const formattedLayerName = mapDataLayer.layerProperties.formattedLayerName;
-  console.log("Formatted Layer Name:", formattedLayerName);
-  const layerDataDiv = document.getElementById("layer-data-div");
   const layerMinScale = mapDataLayer.minScale;
-  const layerMaxScale = mapDataLayer.maxScale;
   if (minAssetsRequired === 0) {
     layersWithNoSelectionRequired.push(mapDataLayerId);
   }
+  const layerMaxScale = mapDataLayer.maxScale;
+  const layerDataDiv = document.getElementById("layer-data-div");
 
   view.on("layerview-create", function (event) {
     if (event.layer === mapDataLayer) {
@@ -202,7 +202,9 @@ export const addMapLayer = ({
     }
   });
 
-  const mapLayerDataDisplay = document.createElement("asset-chooser-map-layer-data-display");
+  const mapLayerDataDisplay = document.createElement(
+    "asset-chooser-map-layer-data-display"
+  );
   mapLayerDataDisplay.data = {
     layerName,
     formattedLayerName,
@@ -220,8 +222,8 @@ export const addMapLayer = ({
   //   <div
   //     class="map-layer-data-container stat-container stat-medium"
   //   >
-  //     <div 
-  //       class="stat-title" 
+  //     <div
+  //       class="stat-title"
   //       id="${layerName}-layer-selected-asset-container"
   //       aria-label="${formattedLayerName} Layer"
   //       title="${formattedLayerName} Layer"
@@ -244,7 +246,7 @@ export const addMapLayer = ({
   //         att-layer-id="${mapDataLayerId}"
   //         aria-label="Hide ${formattedLayerName} Layer" ${
   //   layerMinScale > 0 ? "disabled hidden" : ""
-  // } 
+  // }
   //         title="Hide ${formattedLayerName} layer"
   //       >
   //         <span id="${layerName}-toggle-visibility-btn-text-span">
@@ -252,7 +254,7 @@ export const addMapLayer = ({
   //         </span>
   //       </button>
   //     </div>
-  //     <div 
+  //     <div
   //       aria-live="polite"
   //       aria-atomic="true"
   //       class="asset-selection-requirements"
@@ -300,7 +302,7 @@ export const addMapLayer = ({
   //       aria-live="polite"
   //       aria-atomic="true"
   //     >
-  //       <li 
+  //       <li
   //         title="No assets selected from ${formattedLayerName} layer"
   //       >
   //         None selected
@@ -348,7 +350,7 @@ export const addMapLayer = ({
 //     }
 //   );
 // };
-const monitorLayerVisibility = (
+export const monitorLayerVisibility = (
   reactiveUtils,
   layerView,
   mapDataLayer,
@@ -375,19 +377,24 @@ const monitorLayerVisibility = (
   );
 
   function updateLayerDisplay() {
-    const allDisplays = document.querySelectorAll("asset-chooser-map-layer-data-display");
+    const allDisplays = document.querySelectorAll(
+      "asset-chooser-map-layer-data-display"
+    );
     let mapLayerDataDisplay = null;
-    allDisplays.forEach(display => {
+    allDisplays.forEach((display) => {
       if (
         display.data &&
         (display.data.layerName === layerName ||
-         display.data.formattedLayerName === formattedLayerName)
+          display.data.formattedLayerName === formattedLayerName)
       ) {
         mapLayerDataDisplay = display;
       }
     });
 
-    if (mapLayerDataDisplay && typeof mapLayerDataDisplay.updateVisibility === "function") {
+    if (
+      mapLayerDataDisplay &&
+      typeof mapLayerDataDisplay.updateVisibility === "function"
+    ) {
       mapLayerDataDisplay.updateVisibility({
         visibleAtCurrentScale: layerView.visibleAtCurrentScale,
         visible: mapDataLayer.visible,
@@ -462,7 +469,10 @@ export const renderValidityMessage = () => {
   if (isValid) {
     validityMessage.innerHTML = `Asset selection is <span class="label label-success">valid for submission</span>`;
     validityMessage.setAttribute("aria-live", "assertive");
-    validityMessage.setAttribute("title", "Asset selection is valid for submission");
+    validityMessage.setAttribute(
+      "title",
+      "Asset selection is valid for submission"
+    );
   } else {
     validityMessage.removeAttribute("aria-live");
     validityMessage.setAttribute("title", "Selection requirements");
@@ -553,10 +563,10 @@ export const highlightSelectedAsset = (
     )
   ) {
     view.whenLayerView(graphic.layer).then((layerView) => {
-      const mapDataLayerId = `${layerName}-${graphic.layer.id}`;
+      const mapDataLayerId = `${graphic.layer.id}`;
       const layerAssetMax = layerProperties.maximumAssetsRequired;
       const totalLayerAssetsSelected = chosenAssets.filter(
-        (h) => h.layerId === `${layerName}-${graphic.layer.id}`
+        (h) => h.layerId === `${graphic.layer.id}`
       ).length;
       if (layerAssetMax > 0 && totalLayerAssetsSelected >= layerAssetMax) {
         document
@@ -588,7 +598,7 @@ export const highlightSelectedAsset = (
         assetLabel: labelMaskValue,
         assetType: graphic.layer.layerProperties.layerName,
         layerData: graphic.layer,
-        layerId: `${layerName}-${layerId}`,
+        layerId: `${layerId}`,
         layerName: layerName,
         layerTitle: graphic.layer.title,
         layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
@@ -631,13 +641,14 @@ const renderSelectedAssetLabels = () => {
   selectedLayerAssetListArray.forEach((list) => {
     list.innerHTML = "";
   });
-  console.log('selectedLayerAssetListArray:', selectedLayerAssetListArray);
+  // console.log('selectedLayerAssetListArray:', selectedLayerAssetListArray);
   chosenAssets.forEach((asset) => {
-    // console.log('Processing asset for rendering:', asset);
+    console.log("Processing asset for rendering:", asset);
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
-      console.log('Checking against selectedLayerAssetList with id:', selectedLayerAssetList.id);
-      console.log('selectedLayerAssetList', selectedLayerAssetList);
-      console.log('Asset layerId:', asset.layerId);
+      console.log("selectedLayerAssetList:", selectedLayerAssetList);
+      // console.log('Checking against selectedLayerAssetList with id:', selectedLayerAssetList.id);
+      // console.log('selectedLayerAssetList', selectedLayerAssetList);
+      // console.log('Asset layerId:', asset.layerId);
       if (asset.layerId === selectedLayerAssetList.id) {
         let assetLabel = asset.assetLabel;
         if (
@@ -646,10 +657,18 @@ const renderSelectedAssetLabels = () => {
         ) {
           assetLabel = `Alley`;
         }
+        if (assetLabel.includes("0 to 0")) {
+          assetLabel = "Alley";
+        }
         if (assetLabel.includes("null")) {
           assetLabel = "Asset data unavailable";
         }
-        console.log('Rendering asset label for asset:', asset, 'with label:', assetLabel);
+        console.log(
+          "Rendering asset label for asset:",
+          asset,
+          "with label:",
+          assetLabel
+        );
         const assetLabelListItem = document.createElement("li");
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
@@ -677,7 +696,8 @@ const renderSelectedAssetLabels = () => {
 
         removeAssetBtn.addEventListener("click", () => {
           chosenAssets.forEach((asset) => {
-            const formattedLayerName = asset.layerData.layerProperties.formattedLayerName;
+            const formattedLayerName =
+              asset.layerData.layerProperties.formattedLayerName;
             if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
               const listItemToRemove = document.getElementById(
@@ -702,7 +722,10 @@ const renderSelectedAssetLabels = () => {
   });
   selectedLayerAssetListArray.forEach((list) => {
     if (list.innerHTML === "") {
-      list.innerHTML = `<li title="No assets selected from ${list.dataset.layerName.replace(/-/g, " ")} layer">None selected</li>`;
+      list.innerHTML = `<li title="No assets selected from ${list.dataset.layerName.replace(
+        /-/g,
+        " "
+      )} layer">None selected</li>`;
     }
   });
 };
@@ -711,7 +734,10 @@ const renderSelectedAssetLabels = () => {
 // validate asset selection for each individual layer, used in highlightSelectedAsset function
 const validateLayerSelections = () => {
   featureLayers.forEach((mapLayer) => {
-    const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
+    console.log("Validating layer selections for:", mapLayer);
+    // const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
+    const layerId = mapLayer.id;
+    console.log("Validating layer:", layerId);
     const layerAssetMin = parseInt(
       mapLayer.layerProperties.minimumAssetsRequired
     );

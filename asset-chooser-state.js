@@ -11,6 +11,7 @@ export const defaultShowSearch = true;
 export const mapLayersToAdd = [];
 export const sketchableMapLayersToAdd = [];
 export const featureLayers = [];
+export const graphicLayers = [];
 export const chosenAssets = [];
 export const createdAssets = [];
 export const chosenAssetFormData = [];
@@ -19,6 +20,7 @@ export const allSketchableLayerIds = [];
 export const layersWithNoSelectionRequired = [];
 export const sketchableLayersWithNoAdditionRequired = [];
 export const validLayers = [];
+export const validSketchableLayers = [];
 export let addressMarkerX;
 export function setAddressMarkerX(value) {
   addressMarkerX = value;

@@ -148,7 +148,7 @@ export const initializeMap = async () => {
         sketch.setAttribute("hidden", "true");
         arcGisMap.appendChild(sketch);
         sketch.componentOnReady().then(() => {
-          console.log("Sketch component is ready:", sketch.view);
+          // console.log("Sketch component is ready:", sketch.view);
           sketch.availableCreateTools = ["point", "polyline", "polygon"];
         });
 
@@ -157,6 +157,8 @@ export const initializeMap = async () => {
           addSketchableMapLayer({
             sketchableMapLayer,
             map,
+            view,
+            reactiveUtils,
           });
         });
         const sketchableLayerDataDivHeading = document.createElement("h3");

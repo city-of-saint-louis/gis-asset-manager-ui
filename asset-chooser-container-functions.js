@@ -138,7 +138,7 @@ const handleAssetEditButtonClick = () => {
     acc[key] = value;
     return acc;
   }, {});
-  console.log("Prefill Data:", prefillData);
+  // console.log("Prefill Data:", prefillData);
   // Remove the existing modal if it exists
   const existingModal = document.getElementById("asset-modal");
   if (existingModal) {
@@ -244,19 +244,19 @@ export const handleAccomodationButtonClick = () => {
 export const enableSketchMode = (isSketchEnabled) => {
   if (isSketchEnabled) {
   setIsSketchEnabled(true);
-  console.log("Sketch mode enabled");
+  // console.log("Sketch mode enabled");
   } else {
     setIsSketchEnabled(false);
-    console.log("Sketch mode disabled");
+    // console.log("Sketch mode disabled");
   }
 }
 
 export const enableSelectMode = (isSelectEnabled) => {
   if (isSelectEnabled) {
     setIsSelectEnabled(true);
-    console.log("Select mode enabled");
+    // console.log("Select mode enabled");
   } else {
     setIsSelectEnabled(false);
-    console.log("Select mode disabled");
+    // console.log("Select mode disabled");
   }
 }

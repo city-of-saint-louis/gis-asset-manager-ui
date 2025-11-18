@@ -3,28 +3,34 @@ import {
   sketchableMapLayersToAdd,
   allSketchableLayerIds,
   sketchableLayersWithNoAdditionRequired,
+  graphicLayers,
   // createdAssets,
   // isSketchEnabled,
 } from "./asset-chooser-state.js";
+// import from asset-chooser-functions.js
+import { 
+  hideOrShowLayer,
+  monitorLayerVisibility,
+ } from "./asset-chooser-functions.js";
 // import asset-chooser-map-layer-data-display component
 import "./asset-chooser-map-layer-data-display.js";
-import { hideOrShowLayer } from "./asset-chooser-functions.js";
+
 
 // event listener to capture sketchable layer data from sketchable-map-layer.js
 export const captureSketachableMapLayers = () => {
   document.addEventListener("sketchableLayerDetailsProvided", (event) => {
     const sketchableLayer = event.detail;
     sketchableMapLayersToAdd.push(sketchableLayer);
-    console.log("Sketchable layer details captured:", sketchableLayer);
-    console.log(
-      "Current sketchableMapLayersToAdd array:",
-      sketchableMapLayersToAdd
-    );
+    // console.log("Sketchable layer details captured:", sketchableLayer);
+    // console.log(
+    //   "Current sketchableMapLayersToAdd array:",
+    //   sketchableMapLayersToAdd
+    // );
   });
 };
 
 const enableSketchForLayer = (layer) => {
-  console.log("Enabling sketch for layer:", layer);
+  // console.log("Enabling sketch for layer:", layer);
   // Logic to enable sketching for the specified layer
   // This could involve activating a sketch widget or similar functionality
   const sketch = document.getElementById("asset-chooser-sketch");
@@ -32,22 +38,26 @@ const enableSketchForLayer = (layer) => {
   sketch.removeAttribute("hidden");
   // sketch.layer = layer;????
   // how do i set the layer?
- // Set the sketch widget's layer to the correct GraphicsLayer
+  // Set the sketch widget's layer to the correct GraphicsLayer
   if (layer.graphicsLayer) {
     sketch.layer = layer.graphicsLayer;
   } else {
     console.warn("No graphicsLayer found on layer object!");
   }
-}
+};
 
 const hideLayerHandler = (layerName) => {
   console.log("Hiding layer:", layerName);
   hideOrShowLayer(layerName, false);
-}
+};
 
-export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
+export const addSketchableMapLayer = async ({ 
+  sketchableMapLayer, 
+  map, 
+  view,
+  reactiveUtils,
+}) => {
   console.log("Adding sketchable map layer:", sketchableMapLayer);
-  // const arcGisMap = document.querySelector("arcgis-map");
 
   const GraphicsLayer = await $arcgis.import(
     "@arcgis/core/layers/GraphicsLayer.js"
@@ -62,62 +72,93 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
     sketchType: sketchableMapLayer.sketchType,
     layerProperties: {
       layerName: sketchableMapLayer.name,
-      formatLayerName: sketchableMapLayer.name.replace(/[-]/g, " "),
+      formattedLayerName: sketchableMapLayer.name.replace(/[-]/g, " "),
       minAssetsRequired: parseInt(sketchableMapLayer.minimum),
       maxAssetsAllowed: parseInt(sketchableMapLayer.maximum),
       isSketchable: true,
       minScale: sketchableMapLayer.minScale,
       maxScale: sketchableMapLayer.maxScale,
-      sketchType: sketchableMapLayer.sketchType
-    }
+      sketchType: sketchableMapLayer.sketchType,
+    },
   });
-  map.add(sketchableGraphicLayer);
+
   const sketchableGraphicLayerId = `${sketchableGraphicLayer.layerProperties.layerName}-${sketchableGraphicLayer.id}`;
   allSketchableLayerIds.push(sketchableGraphicLayerId);
-  console.log("Updated allSketchableLayerIds array:", allSketchableLayerIds);
+  graphicLayers.push(sketchableGraphicLayer);
   // Attach the GraphicsLayer instance to the layer object
   sketchableMapLayer.graphicsLayer = sketchableGraphicLayer;
-  const sketchableLayerDataDiv = document.getElementById("sketchable-layer-data-div");
-  const sketchableLayerName = sketchableMapLayer.name;
-  console.log("Sketchable Layer Name:", sketchableLayerName);
-  const layerName = sketchableLayerName;
-  const formattedLayerName = layerName.replace(/[-]/g, " ");
-  console.log("Formatted Layer Name:", formattedLayerName);
-  const minAssetsRequired = parseInt(sketchableMapLayer.minimum);
-  const maxAssetsAllowed = parseInt(sketchableMapLayer.maximum);
-  const layerMinScale = parseInt(sketchableMapLayer.minScale);
-  const layerMaxScale = parseInt(sketchableMapLayer.maxScale);
-  if (minAssetsRequired === 0) {
-    sketchableLayersWithNoAdditionRequired.push(sketchableLayerName);
+  console.log("sketchableMapLayer with graphicsLayer:", sketchableMapLayer);
+  sketchableGraphicLayer.id = sketchableGraphicLayerId;
+
+  map.add(sketchableGraphicLayer);
+  const layerName = sketchableGraphicLayer.layerProperties.layerName;
+  console.log("layerName", layerName);
+  const formattedLayerName =
+    sketchableGraphicLayer.layerProperties.formattedLayerName;
+  const minAssetsRequired = parseInt(
+    sketchableGraphicLayer.layerProperties.minAssetsRequired
+  );
+  console.log("minAssetsRequired", minAssetsRequired);
+    if (minAssetsRequired === 0) {
+    sketchableLayersWithNoAdditionRequired.push(layerName);
   }
+  const maxAssetsAllowed = parseInt(
+    sketchableGraphicLayer.layerProperties.maxAssetsAllowed
+  );
+  const layerMinScale = parseInt(
+    sketchableGraphicLayer.layerProperties.minScale
+  );
+  const layerMaxScale = parseInt(
+    sketchableGraphicLayer.layerProperties.maxScale
+  );
+  const sketchableLayerDataDiv = document.getElementById(
+    "sketchable-layer-data-div"
+  );
 
 
-  const mapLayerDataDisplay = document.createElement("asset-chooser-map-layer-data-display");
+
+  view.on("layerview-create", function (event) {
+  if (event.layer === sketchableGraphicLayer) {
+    monitorLayerVisibility(
+      reactiveUtils,
+      event.layerView,
+      sketchableGraphicLayer,
+      layerName,
+      formattedLayerName,
+      layerMinScale,
+      layerMaxScale
+    );
+  }
+});
+
+
+
+  const mapLayerDataDisplay = document.createElement(
+    "asset-chooser-map-layer-data-display"
+  );
   mapLayerDataDisplay.data = {
-    layerName: sketchableLayerName,
+    layerName: layerName,
     formattedLayerName: formattedLayerName,
-    minAssetsRequired,
-    maxAssetsAllowed,
+    minAssetsRequired: minAssetsRequired,
+    maxAssetsAllowed: maxAssetsAllowed,
     enableSketchHandler: enableSketchForLayer,
     hideLayerHandler: hideLayerHandler,
     isSketchable: true,
     layerMinScale: layerMinScale,
     layerMaxScale: layerMaxScale,
     availableCreateTools: sketchableMapLayer.sketchType,
-    layer: sketchableMapLayer
+    layer: sketchableMapLayer,
   };
   sketchableLayerDataDiv.appendChild(mapLayerDataDisplay);
-  console.log("Appended mapLayerDataDisplay for sketchable layer:", sketchableLayerName, mapLayerDataDisplay.data);
+  // console.log("Appended mapLayerDataDisplay for sketchable layer:", sketchableLayerName, mapLayerDataDisplay.data);
 };
-
-
 
 //   const sketchableLayerDataDivElement = document.createElement("div");
 
 //   sketchableLayerDataDiv.innerHTML += `
 //     <div class="sketchable-map-layer-data-container stat-container stat-medium">
-//       <div 
-//         class="stat-title" 
+//       <div
+//         class="stat-title"
 //         id="${sketchableLayerName}-layer-selected-asset-container"
 //         aria-label="${sketchableLayerName} Layer"
 //         title="${sketchableLayerName} Layer"
@@ -135,7 +176,7 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
 //           id="${sketchableLayerName}-enable-sketch-btn"
 //           class="toggleLayerVisibilityButton"
 //           att-layer-id="${sketchableLayerName}"
-//           aria-label="" 
+//           aria-label=""
 //           title="Enable sketch for ${sketchableLayerName} layer"
 //         >
 //           <span id="${sketchableLayerName}-toggle-visibility-btn-text-span">
@@ -147,7 +188,7 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
 //           id="${sketchableLayerName}-show-hide-layer-btn"
 //           class="toggleLayerVisibilityButton"
 //           att-layer-id="${sketchableLayerName}"
-//           aria-label="" 
+//           aria-label=""
 //           title="Hide ${sketchableLayerName} layer"
 //         >
 //           <span id="${sketchableLayerName}-toggle-visibility-btn-text-span">
@@ -156,7 +197,7 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
 //         </button>
 //         </div>
 //       </div>
-//       <div 
+//       <div
 //         aria-live="polite"
 //         aria-atomic="true"
 //         class="asset-selection-requirements"
@@ -205,7 +246,7 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
 //         aria-live="polite"
 //         aria-atomic="true"
 //       >
-//         <li 
+//         <li
 //           title="No assets added for ${sketchableLayerName} layer"
 //         >
 //           None added
@@ -219,55 +260,46 @@ export const addSketchableMapLayer = async ({ sketchableMapLayer, map }) => {
 //   btn.addEventListener("click", () => enableSketchForLayer(sketchableLayerName));
 // }
 
+// const sketch = document.createElement("arcgis-sketch");
+// sketch.setAttribute("position", "bottom-right");
+// sketch.setAttribute("hide-selection-tools-lasso-selection", "true");
+// sketch.setAttribute("hide-selection-tools-rectangle-selection", "true");
+// sketch.setAttribute("id", `sketch-component-${sketchableMapLayer.name}`);
+// // sketch.setAttribute("layer", sketchableMapLayer.name);
+// // sketch.setAttribute("creation-mode", "continuous");
+// // sketch.availableCreateTools = sketchableMapLayer.sketchType;
+// // sketch.layer = sketchableGraphicLayer;
+// arcGisMap.appendChild(sketch);
+// // console.log(sketch);
+// // connect a graphic layer to the sketch widget
+// sketch.componentOnReady().then(() => {
+//   sketch.layer = sketchableGraphicLayer; // <-- This is the key step!
+//   sketch.availableCreateTools = sketchableMapLayer.sketchType;
+//   console.log("Sketch widget is ready and configured:", sketch);
+//   // console.log(sketchableGraphicLayer.graphics.toArray());
+//   console.log(map.layers);
+// });
 
+//  let createEventCount = 0;
+//   sketch.addEventListener("arcgisCreate", (event) => {
+//     createEventCount++;
+//     console.log("arcgisCreate event fired:", createEventCount);
+//     const graphic = event.detail.graphic;
+//     // Attach custom data
+//     graphic.attributes.customKey = "customValue";
 
+//     // Prevent duplicates by checking for a unique property (e.g., OBJECTID or geometry)
+//     const alreadyExists = createdAssets.some(
+//       (g) =>
+//         g.attributes.OBJECTID === graphic.attributes.OBJECTID &&
+//         JSON.stringify(g.geometry) === JSON.stringify(graphic.geometry)
+//     );
 
-
-  // const sketch = document.createElement("arcgis-sketch");
-  // sketch.setAttribute("position", "bottom-right");
-  // sketch.setAttribute("hide-selection-tools-lasso-selection", "true");
-  // sketch.setAttribute("hide-selection-tools-rectangle-selection", "true");
-  // sketch.setAttribute("id", `sketch-component-${sketchableMapLayer.name}`);
-  // // sketch.setAttribute("layer", sketchableMapLayer.name);
-  // // sketch.setAttribute("creation-mode", "continuous");
-  // // sketch.availableCreateTools = sketchableMapLayer.sketchType;
-  // // sketch.layer = sketchableGraphicLayer;
-  // arcGisMap.appendChild(sketch);
-  // // console.log(sketch);
-  // // connect a graphic layer to the sketch widget
-  // sketch.componentOnReady().then(() => {
-  //   sketch.layer = sketchableGraphicLayer; // <-- This is the key step!
-  //   sketch.availableCreateTools = sketchableMapLayer.sketchType;
-  //   console.log("Sketch widget is ready and configured:", sketch);
-  //   // console.log(sketchableGraphicLayer.graphics.toArray());
-  //   console.log(map.layers);
-  // });
-  
-
-
-  //  let createEventCount = 0;
-  //   sketch.addEventListener("arcgisCreate", (event) => {
-  //     createEventCount++;
-  //     console.log("arcgisCreate event fired:", createEventCount);
-  //     const graphic = event.detail.graphic;
-  //     // Attach custom data
-  //     graphic.attributes.customKey = "customValue";
-      
-
-  //     // Prevent duplicates by checking for a unique property (e.g., OBJECTID or geometry)
-  //     const alreadyExists = createdAssets.some(
-  //       (g) =>
-  //         g.attributes.OBJECTID === graphic.attributes.OBJECTID &&
-  //         JSON.stringify(g.geometry) === JSON.stringify(graphic.geometry)
-  //     );
-
-  //     if (!alreadyExists) {
-  //       createdAssets.push(graphic);
-  //       console.log("Added graphic to createdAssets:", graphic);
-  //     } else {
-  //       console.log("Duplicate graphic skipped:", graphic);
-  //     }
-  //     console.log("Created assets array:", createdAssets);
-  //   });
-  
-
+//     if (!alreadyExists) {
+//       createdAssets.push(graphic);
+//       console.log("Added graphic to createdAssets:", graphic);
+//     } else {
+//       console.log("Duplicate graphic skipped:", graphic);
+//     }
+//     console.log("Created assets array:", createdAssets);
+//   });
