@@ -37,7 +37,7 @@ const enableSketchForLayer = (layer) => {
   } else {
     console.warn("No graphicsLayer found on layer object!");
   }
-
+setTimeout(() => {
   // Collect all shadow DOM buttons into an array
   const shadowButtons = [];
   function collectShadowButtons(node) {
@@ -57,7 +57,7 @@ const enableSketchForLayer = (layer) => {
   }
 
   collectShadowButtons(sketch);
-  console.log("All shadow DOM buttons:", shadowButtons);
+  // console.log("All shadow DOM buttons:", shadowButtons);
   const targetButton = shadowButtons.find((b) =>
     b.getAttribute("aria-label") &&
     b.getAttribute("aria-label").toLowerCase().includes(sketchType)
@@ -68,6 +68,7 @@ const enableSketchForLayer = (layer) => {
   } else {
     console.warn(`Could not find the sketch tool button for type: ${sketchType}`);
   }
+}, 0);
 };
 
 const hideOrShowSketchableLayer = (layerName) => {
@@ -190,10 +191,10 @@ export const sketchAsset = (sketchComponent) => {
     graphic.attributes = {
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
-      status: "proposed",
+      status: "Proposed",
       layerName: sketchComponent.layer.title,
+      formattedLayerName: sketchComponent.layer.layerProperties.formattedLayerName,
       layerId: sketchComponent.layer.id,
-      // point, line, or polygon
       geometryType: graphic.geometry.type,
     };
     console.log("New graphic created via sketch widget:", graphic);
@@ -209,8 +210,15 @@ export const sketchAsset = (sketchComponent) => {
     }
     createdAssets.push(graphic);
     console.log("Updated createdAssets array:", createdAssets);
+    renderCreatedAssetLabels();
   });
+  
 };
+
+const renderCreatedAssetLabels = () => {
+  // Implementation for rendering created asset labels
+  console.log("Rendering created asset labels...");
+}
 
 //   const sketchableLayerDataDivElement = document.createElement("div");
 

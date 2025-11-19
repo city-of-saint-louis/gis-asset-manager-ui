@@ -635,7 +635,7 @@ export const highlightSelectedAsset = (
 const renderSelectedAssetLabels = () => {
   // console.log('chosenAssets:', chosenAssets);
   const selectedLayerAssetListArray = document.querySelectorAll(
-    ".highlighted-asset-data-list"
+    ".chosen-asset-data-list"
   );
   // Clear existing list items before appending new ones
   selectedLayerAssetListArray.forEach((list) => {
