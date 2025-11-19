@@ -26,19 +26,47 @@ export const captureSketachableMapLayers = () => {
 };
 
 const enableSketchForLayer = (layer) => {
-  // console.log("Enabling sketch for layer:", layer);
-  // Logic to enable sketching for the specified layer
-  // This could involve activating a sketch widget or similar functionality
+  console.log("Enabling sketch for layer:", layer);
   const sketch = document.getElementById("asset-chooser-sketch");
+  const sketchType = layer.sketchType;
   sketch.availableCreateTools = layer.sketchType;
   sketch.removeAttribute("hidden");
-  // sketch.layer = layer;????
-  // how do i set the layer?
   // Set the sketch widget's layer to the correct GraphicsLayer
   if (layer.graphicsLayer) {
     sketch.layer = layer.graphicsLayer;
   } else {
     console.warn("No graphicsLayer found on layer object!");
+  }
+
+  // Collect all shadow DOM buttons into an array
+  const shadowButtons = [];
+  function collectShadowButtons(node) {
+    if (!node) return;
+    if (node.querySelectorAll) {
+      const btns = node.querySelectorAll("button");
+      if (btns.length) {
+        shadowButtons.push(...btns);
+      }
+    }
+    if (node.shadowRoot) {
+      collectShadowButtons(node.shadowRoot);
+    }
+    if (node.children) {
+      Array.from(node.children).forEach((child) => collectShadowButtons(child));
+    }
+  }
+
+  collectShadowButtons(sketch);
+  console.log("All shadow DOM buttons:", shadowButtons);
+  const targetButton = shadowButtons.find((b) =>
+    b.getAttribute("aria-label") &&
+    b.getAttribute("aria-label").toLowerCase().includes(sketchType)
+  );
+  if (targetButton) {
+    targetButton.click();
+    console.log(`Clicked sketch tool button for type: ${sketchType}`);
+  } else {
+    console.warn(`Could not find the sketch tool button for type: ${sketchType}`);
   }
 };
 
@@ -54,11 +82,6 @@ const hideOrShowSketchableLayer = (layerName) => {
     console.warn(`Layer ${layerName} not found in graphicLayers array!`);
   }
 };
-
-// const hideLayerHandler = (layerName) => {
-//   console.log("Hiding layer:", layerName);
-//   hideOrShowSketchableLayer(layerName);
-// };
 
 export const addSketchableMapLayer = async ({
   sketchableMapLayer,
