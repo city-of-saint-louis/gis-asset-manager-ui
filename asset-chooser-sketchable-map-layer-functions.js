@@ -17,16 +17,10 @@ export const captureSketachableMapLayers = () => {
   document.addEventListener("sketchableLayerDetailsProvided", (event) => {
     const sketchableLayer = event.detail;
     sketchableMapLayersToAdd.push(sketchableLayer);
-    // console.log("Sketchable layer details captured:", sketchableLayer);
-    // console.log(
-    //   "Current sketchableMapLayersToAdd array:",
-    //   sketchableMapLayersToAdd
-    // );
   });
 };
 
 const enableSketchForLayer = (layer) => {
-  console.log("Enabling sketch for layer:", layer);
   const sketch = document.getElementById("asset-chooser-sketch");
   const sketchType = layer.sketchType;
   sketch.availableCreateTools = layer.sketchType;
@@ -37,38 +31,43 @@ const enableSketchForLayer = (layer) => {
   } else {
     console.warn("No graphicsLayer found on layer object!");
   }
-setTimeout(() => {
-  // Collect all shadow DOM buttons into an array
-  const shadowButtons = [];
-  function collectShadowButtons(node) {
-    if (!node) return;
-    if (node.querySelectorAll) {
-      const btns = node.querySelectorAll("button");
-      if (btns.length) {
-        shadowButtons.push(...btns);
+  setTimeout(() => {
+    // Collect all shadow DOM buttons into an array
+    const shadowButtons = [];
+    function collectShadowButtons(node) {
+      if (!node) return;
+      if (node.querySelectorAll) {
+        const btns = node.querySelectorAll("button");
+        if (btns.length) {
+          shadowButtons.push(...btns);
+        }
+      }
+      if (node.shadowRoot) {
+        collectShadowButtons(node.shadowRoot);
+      }
+      if (node.children) {
+        Array.from(node.children).forEach((child) =>
+          collectShadowButtons(child)
+        );
       }
     }
-    if (node.shadowRoot) {
-      collectShadowButtons(node.shadowRoot);
-    }
-    if (node.children) {
-      Array.from(node.children).forEach((child) => collectShadowButtons(child));
-    }
-  }
 
-  collectShadowButtons(sketch);
-  // console.log("All shadow DOM buttons:", shadowButtons);
-  const targetButton = shadowButtons.find((b) =>
-    b.getAttribute("aria-label") &&
-    b.getAttribute("aria-label").toLowerCase().includes(sketchType)
-  );
-  if (targetButton) {
-    targetButton.click();
-    console.log(`Clicked sketch tool button for type: ${sketchType}`);
-  } else {
-    console.warn(`Could not find the sketch tool button for type: ${sketchType}`);
-  }
-}, 0);
+    collectShadowButtons(sketch);
+    // console.log("All shadow DOM buttons:", shadowButtons);
+    const targetButton = shadowButtons.find(
+      (b) =>
+        b.getAttribute("aria-label") &&
+        b.getAttribute("aria-label").toLowerCase().includes(sketchType)
+    );
+    if (targetButton) {
+      targetButton.click();
+      console.log(`Clicked sketch tool button for type: ${sketchType}`);
+    } else {
+      console.warn(
+        `Could not find the sketch tool button for type: ${sketchType}`
+      );
+    }
+  }, 0);
 };
 
 const hideOrShowSketchableLayer = (layerName) => {
@@ -90,7 +89,6 @@ export const addSketchableMapLayer = async ({
   view,
   reactiveUtils,
 }) => {
-  console.log("Adding sketchable map layer:", sketchableMapLayer);
 
   const GraphicsLayer = await $arcgis.import(
     "@arcgis/core/layers/GraphicsLayer.js"
@@ -168,6 +166,7 @@ export const addSketchableMapLayer = async ({
   mapLayerDataDisplay.data = {
     layerName: layerName,
     formattedLayerName: formattedLayerName,
+    mapDataLayerId: sketchableGraphicLayerId,
     minAssetsRequired: minAssetsRequired,
     maxAssetsAllowed: maxAssetsAllowed,
     enableSketchHandler: enableSketchForLayer,
@@ -182,6 +181,78 @@ export const addSketchableMapLayer = async ({
   // console.log("Appended mapLayerDataDisplay for sketchable layer:", sketchableLayerName, mapLayerDataDisplay.data);
 };
 
+const handleRemoveSketchedAsset = (assetId) => {
+  console.log("Removing sketched asset with ID:", assetId);
+  const assetIndex = createdAssets.findIndex(
+    (asset) => asset.attributes.id === assetId
+  );
+  if (assetIndex !== -1) {
+    const asset = createdAssets[assetIndex];
+    // Remove from the graphics layer
+    const layer = asset.layer;
+    if (layer && layer.graphics) {
+      layer.graphics.remove(asset);
+    }
+    // Remove from createdAssets array
+    createdAssets.splice(assetIndex, 1);
+    // Remove the list item from the DOM
+    const listItem = document.getElementById(assetId);
+    if (listItem) listItem.remove();
+    // If the list is now empty, add back the "None added" item
+    const layerAssetList = document.getElementById(asset.attributes.layerId);
+    if (layerAssetList && layerAssetList.children.length === 0) {
+      const noneAddedItem = document.createElement("li");
+      noneAddedItem.title = `No assets added for ${asset.attributes.formattedLayerName} layer`;
+      noneAddedItem.textContent = "None added";
+      layerAssetList.appendChild(noneAddedItem);
+    }
+  }
+};
+
+const renderCreatedAssetLabel = (graphic) => {
+  console.log("asset created",graphic);
+  // see if the ul has a "None added" li and remove it
+  const noneAddedLi = document.querySelector(
+    `#${graphic.attributes.layerId} li[title="No assets added for ${graphic.attributes.formattedLayerName} layer"]`
+  );
+  if (noneAddedLi) {
+    noneAddedLi.remove();
+  }
+  const layerAssetList = document.getElementById(
+    `${graphic.attributes.layerId}`
+  );
+  // layerAssetList.textContent = "Proposed Additions:";
+  const listItem = document.createElement("li");
+  listItem.id = graphic.attributes.id;
+  listItem.title = `Proposed ${graphic.attributes.formattedLayerName} added with ID: ${graphic.attributes.id}`;
+  // listItem.textContent = `ID: ${graphic.attributes.id}`;
+  const listItemContentSpan = document.createElement("span");
+  listItemContentSpan.textContent = `ID: ${graphic.attributes.id}`;
+  const listItemRemoveButton = document.createElement("button");
+  listItemRemoveButton.setAttribute("type", "button");
+  listItemRemoveButton.setAttribute("aria-label", `Remove asset ${graphic.attributes.id}`);
+  listItemRemoveButton.setAttribute("title", `Remove asset ${graphic.attributes.id}`);
+  listItemRemoveButton.setAttribute("id", `remove-${graphic.attributes.id}-btn`);
+  listItemRemoveButton.classList.add(
+  "pull-right",
+  "link-button",
+  "small-button",
+  "red-button",
+  "transparent-button",
+  "remove-asset-btn"
+);
+  const removeIconSpan = document.createElement("span");
+  removeIconSpan.classList.add("glyphicons", "glyphicons-remove");
+  listItemRemoveButton.appendChild(removeIconSpan);
+  listItemRemoveButton.appendChild(document.createTextNode(" Remove"));
+  listItemRemoveButton.addEventListener("click", () => {
+    handleRemoveSketchedAsset(graphic.attributes.id);
+  });
+  listItem.appendChild(listItemContentSpan);
+  listItem.appendChild(listItemRemoveButton);
+  layerAssetList.appendChild(listItem);
+};
+
 export const sketchAsset = (sketchComponent) => {
   console.log("sketchComponent:", sketchComponent);
   if (sketchComponent._arcgisCreateListenerAttached) return; // Prevent duplicate listeners
@@ -193,11 +264,13 @@ export const sketchAsset = (sketchComponent) => {
       createdAt: new Date().toISOString(),
       status: "Proposed",
       layerName: sketchComponent.layer.title,
-      formattedLayerName: sketchComponent.layer.layerProperties.formattedLayerName,
+      formattedLayerName:
+        sketchComponent.layer.layerProperties.formattedLayerName,
       layerId: sketchComponent.layer.id,
       geometryType: graphic.geometry.type,
+      geometryString: JSON.stringify(graphic.geometry),
     };
-    console.log("New graphic created via sketch widget:", graphic);
+    // console.log("New graphic created via sketch widget:", graphic);
     // Additional logic here
     if (!sketchComponent.availableCreateTools.includes(graphic.geometry.type)) {
       console.warn(
@@ -209,164 +282,7 @@ export const sketchAsset = (sketchComponent) => {
       return;
     }
     createdAssets.push(graphic);
-    console.log("Updated createdAssets array:", createdAssets);
-    renderCreatedAssetLabels();
+    // console.log("Updated createdAssets array:", createdAssets);
+    renderCreatedAssetLabel(graphic);
   });
-  
 };
-
-const renderCreatedAssetLabels = () => {
-  // Implementation for rendering created asset labels
-  console.log("Rendering created asset labels...");
-}
-
-//   const sketchableLayerDataDivElement = document.createElement("div");
-
-//   sketchableLayerDataDiv.innerHTML += `
-//     <div class="sketchable-map-layer-data-container stat-container stat-medium">
-//       <div
-//         class="stat-title"
-//         id="${sketchableLayerName}-layer-selected-asset-container"
-//         aria-label="${sketchableLayerName} Layer"
-//         title="${sketchableLayerName} Layer"
-//       >
-//         <div>
-//           <span>
-//             <strong>
-//               ${sketchableLayerName} Layer
-//             </strong>
-//           </span>
-//         </div>
-//         <div>
-//         <button
-//           type="button"
-//           id="${sketchableLayerName}-enable-sketch-btn"
-//           class="toggleLayerVisibilityButton"
-//           att-layer-id="${sketchableLayerName}"
-//           aria-label=""
-//           title="Enable sketch for ${sketchableLayerName} layer"
-//         >
-//           <span id="${sketchableLayerName}-toggle-visibility-btn-text-span">
-//             Add Assets
-//           </span>
-//         </button>
-//         <button
-//           type="button"
-//           id="${sketchableLayerName}-show-hide-layer-btn"
-//           class="toggleLayerVisibilityButton"
-//           att-layer-id="${sketchableLayerName}"
-//           aria-label=""
-//           title="Hide ${sketchableLayerName} layer"
-//         >
-//           <span id="${sketchableLayerName}-toggle-visibility-btn-text-span">
-//             Hide
-//           </span>
-//         </button>
-//         </div>
-//       </div>
-//       <div
-//         aria-live="polite"
-//         aria-atomic="true"
-//         class="asset-selection-requirements"
-//       >
-//         <span class="sr-only">Asset addition requirements and status for ${sketchableLayerName} layer</span>
-
-//         ${
-//           minAssetsRequired === 0
-//             ? `
-//             <span id="${sketchableLayerName}-min-asset-required-message" title="No additions required">
-//               <span class="label label-success">
-//                 No additions required
-//               </span>
-//             </span>
-//             `
-//             : minAssetsRequired === 1
-//             ? `
-//             <span id="${sketchableLayerName}-min-asset-required-message" title="${minAssetsRequired} additions required from ${sketchableLayerName} layer">
-//               <span class="label label-error">
-//                ${minAssetsRequired} required
-//               </span>
-//             </span>
-//             `
-//             : `
-//             <span id="${sketchableLayerName}-min-asset-required-message" title="At least ${minAssetsRequired} additions required from ${sketchableLayerName} layer">
-//               <span class="label label-error">
-//                 At least ${minAssetsRequired} required
-//               </span>
-//             </span>
-//             `
-//         }
-//         ${
-//           maxAssetsAllowed > 0
-//             ? `
-//             <span id="${sketchableLayerName}-max-asset-required-message" title="Add a maximum of ${maxAssetsAllowed} for ${sketchableLayerName} layer">
-//               <span class="label label-default">Add a maximum of ${maxAssetsAllowed}
-//               </span>
-//             </span>`
-//             : ``
-//         }
-//       </div>
-//       <ul
-//         data-layer-name=${sketchableLayerName}
-//         class="list-group highlighted-asset-data-list"
-//         id="${sketchableLayerName}"
-//         aria-live="polite"
-//         aria-atomic="true"
-//       >
-//         <li
-//           title="No assets added for ${sketchableLayerName} layer"
-//         >
-//           None added
-//         </li>
-//       </ul>
-//     </div>
-//   `;
-// // After you add the HTML to the DOM:
-// const btn = document.getElementById(`${sketchableLayerName}-enable-sketch-btn`);
-// if (btn) {
-//   btn.addEventListener("click", () => enableSketchForLayer(sketchableLayerName));
-// }
-
-// const sketch = document.createElement("arcgis-sketch");
-// sketch.setAttribute("position", "bottom-right");
-// sketch.setAttribute("hide-selection-tools-lasso-selection", "true");
-// sketch.setAttribute("hide-selection-tools-rectangle-selection", "true");
-// sketch.setAttribute("id", `sketch-component-${sketchableMapLayer.name}`);
-// // sketch.setAttribute("layer", sketchableMapLayer.name);
-// // sketch.setAttribute("creation-mode", "continuous");
-// // sketch.availableCreateTools = sketchableMapLayer.sketchType;
-// // sketch.layer = sketchableGraphicLayer;
-// arcGisMap.appendChild(sketch);
-// // console.log(sketch);
-// // connect a graphic layer to the sketch widget
-// sketch.componentOnReady().then(() => {
-//   sketch.layer = sketchableGraphicLayer; // <-- This is the key step!
-//   sketch.availableCreateTools = sketchableMapLayer.sketchType;
-//   console.log("Sketch widget is ready and configured:", sketch);
-//   // console.log(sketchableGraphicLayer.graphics.toArray());
-//   console.log(map.layers);
-// });
-
-//  let createEventCount = 0;
-//   sketch.addEventListener("arcgisCreate", (event) => {
-//     createEventCount++;
-//     console.log("arcgisCreate event fired:", createEventCount);
-//     const graphic = event.detail.graphic;
-//     // Attach custom data
-//     graphic.attributes.customKey = "customValue";
-
-//     // Prevent duplicates by checking for a unique property (e.g., OBJECTID or geometry)
-//     const alreadyExists = createdAssets.some(
-//       (g) =>
-//         g.attributes.OBJECTID === graphic.attributes.OBJECTID &&
-//         JSON.stringify(g.geometry) === JSON.stringify(graphic.geometry)
-//     );
-
-//     if (!alreadyExists) {
-//       createdAssets.push(graphic);
-//       console.log("Added graphic to createdAssets:", graphic);
-//     } else {
-//       console.log("Duplicate graphic skipped:", graphic);
-//     }
-//     console.log("Created assets array:", createdAssets);
-//   });

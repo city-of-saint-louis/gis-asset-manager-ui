@@ -544,6 +544,7 @@ export const highlightSelectedAsset = (
   highlightedSelection
 ) => {
   const graphic = response.results[0].graphic;
+  console.log("Graphic selected:", graphic);
   const layerProperties = response.results[0].layer.layerProperties;
   const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
   const layerName = graphic.layer.layerProperties.layerName;
@@ -641,14 +642,8 @@ const renderSelectedAssetLabels = () => {
   selectedLayerAssetListArray.forEach((list) => {
     list.innerHTML = "";
   });
-  // console.log('selectedLayerAssetListArray:', selectedLayerAssetListArray);
   chosenAssets.forEach((asset) => {
-    console.log("Processing asset for rendering:", asset);
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
-      console.log("selectedLayerAssetList:", selectedLayerAssetList);
-      // console.log('Checking against selectedLayerAssetList with id:', selectedLayerAssetList.id);
-      // console.log('selectedLayerAssetList', selectedLayerAssetList);
-      // console.log('Asset layerId:', asset.layerId);
       if (asset.layerId === selectedLayerAssetList.id) {
         let assetLabel = asset.assetLabel;
         if (
@@ -667,12 +662,6 @@ const renderSelectedAssetLabels = () => {
         if (assetLabel.includes("null")) {
           assetLabel = "Asset data unavailable";
         };
-        console.log(
-          "Rendering asset label for asset:",
-          asset,
-          "with label:",
-          assetLabel
-        );
         const assetLabelListItem = document.createElement("li");
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
@@ -689,7 +678,6 @@ const renderSelectedAssetLabels = () => {
           >
             <span class="glyphicons glyphicons-remove"></span>
             Remove
-            <span class="sr-only">${assetLabel}</span>
           </button>
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
