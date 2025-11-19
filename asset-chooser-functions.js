@@ -643,22 +643,23 @@ const renderSelectedAssetLabels = () => {
     list.innerHTML = "";
   });
   chosenAssets.forEach((asset) => {
+    console.log("Rendering asset label for:", asset);
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
       if (asset.layerId === selectedLayerAssetList.id) {
         let assetLabel = asset.assetLabel;
-        if (
-          asset.assetAttributes.RoadType &&
-          asset.assetAttributes.RoadType === "Alley"
-        ) {
-          assetLabel = `Alley`;
-        };
-        if (assetLabel.includes("0 to 0") && asset.assetAttributes.RoadType !== "Interstate") {
-          assetLabel = "Alley";
-        };
-        if (assetLabel.includes("0 to 0") && asset.assetAttributes.RoadType === "Interstate") {
-          // filter and remove "0 to 0" from interstate labels
-          assetLabel = assetLabel.replace("0 to 0", "").trim();
-        };
+        // if (
+        //   asset.assetAttributes.RoadType &&
+        //   asset.assetAttributes.RoadType === "Alley"
+        // ) {
+        //   assetLabel = `Alley`;
+        // };
+        // if (assetLabel.includes("0 to 0") && asset.assetAttributes.RoadType !== "Interstate") {
+        //   assetLabel = "Alley";
+        // };
+        // if (assetLabel.includes("0 to 0") && asset.assetAttributes.RoadType === "Interstate") {
+        //   // filter and remove "0 to 0" from interstate labels
+        //   assetLabel = assetLabel.replace("0 to 0", "").trim();
+        // };
         if (assetLabel.includes("null")) {
           assetLabel = "Asset data unavailable";
         };
