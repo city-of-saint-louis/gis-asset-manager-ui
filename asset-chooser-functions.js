@@ -132,8 +132,8 @@ export const addMapLayer = ({
       layerClassUrl: mapLayer.layerClassUrl,
       layerAssetIDFieldName: mapLayer.layerAssetIDFieldName,
       labelMask: mapLayer.labelMask,
-      minimumAssetsRequired: mapLayer.minimumSelections,
-      maximumAssetsRequired: mapLayer.maximumSelections,
+      minAssetsRequired: mapLayer.minimumSelectionsRequired,
+      maxAssetsAllowed: mapLayer.maximumSelectionsAllowed,
       minScale: mapLayer.minScale,
       maxScale: mapLayer.maxScale,
     },
@@ -176,10 +176,10 @@ export const addMapLayer = ({
   const layerName = mapDataLayer.layerProperties.layerName;
   const formattedLayerName = mapDataLayer.layerProperties.formattedLayerName;
   const minAssetsRequired = parseInt(
-    mapDataLayer.layerProperties.minimumAssetsRequired
+    mapDataLayer.layerProperties.minAssetsRequired
   );
   const maxAssetsAllowed = parseInt(
-    mapDataLayer.layerProperties.maximumAssetsRequired
+    mapDataLayer.layerProperties.maxAssetsAllowed
   );
   const layerMinScale = mapDataLayer.minScale;
   if (minAssetsRequired === 0) {
@@ -216,6 +216,7 @@ export const addMapLayer = ({
     showHideHandler: hideOrShowLayer,
     isSketchable: false,
   };
+  console.log("mapLayerDataDisplay.data", mapLayerDataDisplay.data);
   layerDataDiv.appendChild(mapLayerDataDisplay);
 
   // layerDataDiv.innerHTML += `
@@ -478,12 +479,13 @@ export const renderValidityMessage = () => {
     validityMessage.setAttribute("title", "Selection requirements");
     featureLayers.forEach((mapLayer) => {
       const layerAssetMin = parseInt(
-        mapLayer.layerProperties.minimumAssetsRequired
+        mapLayer.layerProperties.minAssetsRequired
       );
       const totalLayerAssetsSelected = chosenAssets.filter(
         (asset) =>
           asset.layerId ===
-          `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
+          // `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
+           `${mapLayer.id}`
       ).length;
       const formattedLayerName = mapLayer.layerProperties.formattedLayerName;
       if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
@@ -565,7 +567,7 @@ export const highlightSelectedAsset = (
   ) {
     view.whenLayerView(graphic.layer).then((layerView) => {
       const mapDataLayerId = `${graphic.layer.id}`;
-      const layerAssetMax = layerProperties.maximumAssetsRequired;
+      const layerAssetMax = layerProperties.maxAssetsAllowed;
       const totalLayerAssetsSelected = chosenAssets.filter(
         (h) => h.layerId === `${graphic.layer.id}`
       ).length;
@@ -603,7 +605,7 @@ export const highlightSelectedAsset = (
         layerName: layerName,
         layerTitle: graphic.layer.title,
         layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
-        layerAssetMax: graphic.layer.layerProperties.maximumAssetsRequired,
+        layerAssetMax: graphic.layer.layerProperties.maxAssetsAllowed,
         highlightSelect: highlightedSelection,
       };
       chosenAssets.push(chosenAsset);
@@ -730,16 +732,15 @@ const validateLayerSelections = () => {
     console.log("Validating layer selections for:", mapLayer);
     // const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
     const layerId = mapLayer.id;
-    console.log("Validating layer:", layerId);
     const layerAssetMin = parseInt(
-      mapLayer.layerProperties.minimumAssetsRequired
+      mapLayer.layerProperties.minAssetsRequired
     );
     const layerAssetMax = parseInt(
-      mapLayer.layerProperties.maximumAssetsRequired
+      mapLayer.layerProperties.maxAssetsAllowed
     );
     const totalLayerAssetsSelected = chosenAssets.filter(
       (asset) =>
-        asset.layerId === `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
+        asset.layerId === `${mapLayer.id}`
     ).length;
     const minAssetMessageElement = document.getElementById(
       `${layerId}-min-asset-required-message`
