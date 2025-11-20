@@ -163,6 +163,7 @@ export const addSketchableMapLayer = async ({
   const mapLayerDataDisplay = document.createElement(
     "asset-chooser-map-layer-data-display"
   );
+  mapLayerDataDisplay.setAttribute("data-layer-id", sketchableGraphicLayerId);
   mapLayerDataDisplay.data = {
     layerName: layerName,
     formattedLayerName: formattedLayerName,
@@ -181,8 +182,48 @@ export const addSketchableMapLayer = async ({
   // console.log("Appended mapLayerDataDisplay for sketchable layer:", sketchableLayerName, mapLayerDataDisplay.data);
 };
 
+export const updateLayerRequirementDisplay = (asset) => {
+  console.log("Updating layer requirement display for:", asset);
+  const layerAssetMin = parseInt(
+    asset.layer.layerProperties.minAssetsRequired
+  );
+  console.log("layerAssetMin", layerAssetMin);
+  const layerAssetMax = parseInt(
+    asset.layer.layerProperties.maxAssetsAllowed
+  );
+  console.log("layerAssetMax", layerAssetMax);
+  console.log("createdAssets", createdAssets);
+  const totalLayerAssetsCreated = createdAssets.filter(
+    (createdAsset) =>
+      createdAsset.attributes.layerId === `${asset.layer.id}`
+  ).length;
+  console.log("totalLayerAssetsCreated", totalLayerAssetsCreated);
+  const layerId = asset.layer.id;
+  const minAssetMessageElement = document.getElementById(
+    `${layerId}-min-asset-required-message`
+  );
+  const maxAssetMessageElement = document.getElementById(
+    `${layerId}-max-asset-allowed-message`
+  );
+  if (totalLayerAssetsCreated >= layerAssetMin) {
+    minAssetMessageElement.classList.remove("label-error");
+    minAssetMessageElement.classList.add("label-success");
+    minAssetMessageElement.title = `Minimum requirements met for ${asset.layer.layerProperties.formattedLayerName} layer`;
+  }
+  minAssetMessageElement.textContent = `${totalLayerAssetsCreated} added. ${layerAssetMin} required.`;
+  const assetCountDisplay = document.querySelector(
+  `asset-chooser-map-layer-data-display[data-layer-id="${layerId}"]`
+);
+  if (assetCountDisplay) {
+    assetCountDisplay.assetCount = totalLayerAssetsCreated;
+  }
+}
+
 const handleRemoveSketchedAsset = (assetId) => {
   console.log("Removing sketched asset with ID:", assetId);
+  const asset = createdAssets.find(
+    (asset) => asset.attributes.id === assetId
+  );
   const assetIndex = createdAssets.findIndex(
     (asset) => asset.attributes.id === assetId
   );
@@ -254,11 +295,25 @@ const renderCreatedAssetLabel = (graphic) => {
 };
 
 export const sketchAsset = (sketchComponent) => {
-  console.log("sketchComponent:", sketchComponent);
-  if (sketchComponent._arcgisCreateListenerAttached) return; // Prevent duplicate listeners
+  // if (sketchComponent._arcgisCreateListenerAttached) return; // Prevent duplicate listeners
   sketchComponent.addEventListener("arcgisCreate", (event) => {
     if (event.detail.state !== "complete") return; // Only handle completed graphics
     const graphic = event.detail.graphic;
+    console.log("Graphic created event received:", graphic);
+    const layerAssetMax = parseInt(
+      sketchComponent.layer.layerProperties.maxAssetsAllowed
+    );
+    const totalLayerAssetsCreated = createdAssets.filter(
+      (createdAsset) =>
+        createdAsset.attributes.layerId === `${sketchComponent.layer.id}`
+    ).length;
+    if (totalLayerAssetsCreated >= layerAssetMax) {
+      alert(`Maximum assets allowed for ${sketchComponent.layer.layerProperties.formattedLayerName} layer reached!`);
+      console.warn(
+        `Cannot add more assets to ${sketchComponent.layer.layerProperties.formattedLayerName} layer. Maximum of ${layerAssetMax} reached.`
+      );
+      return;
+    }
     graphic.attributes = {
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
@@ -270,8 +325,6 @@ export const sketchAsset = (sketchComponent) => {
       geometryType: graphic.geometry.type,
       geometryString: JSON.stringify(graphic.geometry),
     };
-    // console.log("New graphic created via sketch widget:", graphic);
-    // Additional logic here
     if (!sketchComponent.availableCreateTools.includes(graphic.geometry.type)) {
       console.warn(
         `Created graphic type ${graphic.geometry.type} is not allowed in this layer!`
@@ -284,5 +337,7 @@ export const sketchAsset = (sketchComponent) => {
     createdAssets.push(graphic);
     // console.log("Updated createdAssets array:", createdAssets);
     renderCreatedAssetLabel(graphic);
+    console.log("sketched graphic", graphic);
+    updateLayerRequirementDisplay(graphic);
   });
 };

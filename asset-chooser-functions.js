@@ -205,6 +205,7 @@ export const addMapLayer = ({
   const mapLayerDataDisplay = document.createElement(
     "asset-chooser-map-layer-data-display"
   );
+  mapLayerDataDisplay.setAttribute("data-layer-id", mapDataLayerId);
   mapLayerDataDisplay.data = {
     layerName,
     formattedLayerName,
@@ -289,7 +290,7 @@ export const addMapLayer = ({
   //       ${
   //         maxAssetsAllowed > 0
   //           ? `
-  //           <span id="${mapDataLayerId}-max-asset-required-message" title="Select a maximum of ${maxAssetsAllowed} from ${formattedLayerName} layer">
+  //           <span id="${mapDataLayerId}-max-asset-allowed-message" title="Select a maximum of ${maxAssetsAllowed} from ${formattedLayerName} layer">
   //             <span class="label label-default">Select a maximum of ${maxAssetsAllowed}
   //             </span>
   //           </span>`
@@ -573,20 +574,20 @@ export const highlightSelectedAsset = (
       ).length;
       if (layerAssetMax > 0 && totalLayerAssetsSelected >= layerAssetMax) {
         document
-          .getElementById(`${mapDataLayerId}-max-asset-required-message`)
+          .getElementById(`${mapDataLayerId}-max-asset-allowed-message`)
           .classList.remove("label-default");
         document
-          .getElementById(`${mapDataLayerId}-max-asset-required-message`)
+          .getElementById(`${mapDataLayerId}-max-asset-allowed-message`)
           .classList.add("label-error");
         setTimeout(() => {
           alert(
             `You have already selected the maximum of ${layerAssetMax} asset(s) from the ${formattedLayerName} layer.`
           );
           document
-            .getElementById(`${mapDataLayerId}-max-asset-required-message`)
+            .getElementById(`${mapDataLayerId}-max-asset-allowed-message`)
             .classList.remove("label-error");
           document
-            .getElementById(`${mapDataLayerId}-max-asset-required-message`)
+            .getElementById(`${mapDataLayerId}-max-asset-allowed-message`)
             .classList.add("label-default");
         }, 500);
         return;
@@ -746,7 +747,7 @@ const validateLayerSelections = () => {
       `${layerId}-min-asset-required-message`
     );
     const maxAssetMessageElement = document.getElementById(
-      `${layerId}-max-asset-required-message`
+      `${layerId}-max-asset-allowed-message`
     );
     if (layerAssetMin === 0 && totalLayerAssetsSelected === 0) {
       minAssetMessageElement.innerHTML = `No selection required.`;
