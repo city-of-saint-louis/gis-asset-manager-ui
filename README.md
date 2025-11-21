@@ -12,6 +12,8 @@ When the asset selection requirements have been met by the user, the array of ch
 
 The parent application can then receive the 'chosenAssets' array through the use of a custom event listener and consume the data as needed.
 
+## **[Link to Demo](https://miniature-chainsaw-9qqvvzp.pages.github.io/)**
+
 ## **Contents**
 
 - [Parts of the GIS Asset Chooser Module](#parts-of-the-gis-asset-chooser-module)
