@@ -33,6 +33,14 @@ export let isValid = false;
 export function setIsValid(value) {
   isValid = value;
 }
+export let createdAssetsValid = false;
+export function setCreatedAssetsValid(value) {
+  createdAssetsValid = value;
+}
+export let allAssetsValid = false;
+export function setAllAssetsValid(value) {
+  allAssetsValid = value;
+}
 export let currentView = null;
 export function setCurrentView(view) {
   currentView = view;

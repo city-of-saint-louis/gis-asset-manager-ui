@@ -21,6 +21,17 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     if (countSpan) {
       countSpan.textContent = this._assetCount;
     }
+    // Also update the min-asset-required-message if it exists
+    const minAssetMsg = this.querySelector(
+      '[id$="-min-asset-required-message"]'
+    );
+    if (
+      minAssetMsg &&
+      this._data &&
+      typeof this._data.minAssetsRequired === "number"
+    ) {
+      minAssetMsg.textContent = `${this._assetCount} added. ${this._data.minAssetsRequired} required.`;
+    }
   }
 
   set data(layerData) {
@@ -194,7 +205,8 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     // componentContainer.appendChild(layerTitleDiv); // Add title section to container
     // this.appendChild(componentContainer); // Add container to custom element
 
-    
+    // <span class="asset-count-span">(${this._assetCount})</span>
+
     this.innerHTML = `
       <div class="map-layer-data-container stat-container stat-medium">
         <div
@@ -206,7 +218,6 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       <div>
         <span>
           ${displayName} Layer
-           <span class="asset-count-span">(${this._assetCount})</span>
         </span>
        <br>
        <span class="zoom-alert-span" id="${sanitizedLayerName}-zoom-alert-span" style="height: 14px; display: inline-block">

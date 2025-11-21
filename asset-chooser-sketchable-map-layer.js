@@ -6,7 +6,7 @@ class SketchableMapLayer extends HTMLElement {
     try {
       const name = (this.getAttribute("name") || "").replace(/\s/g, "-");
       const minimum = this.getAttribute("minimum") || 0;
-      const maximum = this.getAttribute("maximum") || 0;
+      const maximum = this.getAttribute("maximum");
       const minScale = this.getAttribute("min-scale") || "0";
       const maxScale = this.getAttribute("max-scale") || "0";
       const sketchTypeAttr = this.getAttribute("sketch-type") || "point";
