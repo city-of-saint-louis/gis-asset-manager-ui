@@ -8,7 +8,7 @@ class MapLayer extends HTMLElement {
       const displayName = this.getAttribute("display-name") || "";
       const layerClassUrl = this.getAttribute("layer-class-url") || ""; 
       const minimumSelectionsRequired = this.getAttribute("minimum") || 0;
-      const maximumSelectionsAllowed = this.getAttribute("maximum") || 0;
+      const maximumSelectionsAllowed = this.getAttribute("maximum") || 10;
       const labelMask = this.getAttribute("label-mask") || "";
       const layerAssetIDFieldName = this.getAttribute("layer-asset-id-field-name") || "GUID";
       const minScale = this.getAttribute("min-scale") || "";

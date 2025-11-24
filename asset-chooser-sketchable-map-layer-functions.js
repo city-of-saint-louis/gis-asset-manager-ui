@@ -6,8 +6,8 @@ import {
   graphicLayers,
   createdAssets,
   validSketchableLayers,
-  setCreatedAssetsValid,
-  createdAssetsValid,
+  setCreatedAssetsAreValid,
+  createdAssetsAreValid,
   // isSketchEnabled,
 } from "./asset-chooser-state.js";
 // import from asset-chooser-functions.js
@@ -140,9 +140,9 @@ export const addSketchableMapLayer = async ({
     console.log("validSketchableLayers:", validSketchableLayers);
   }
   if (validSketchableLayers.length === allSketchableLayerIds.length) {
-    setCreatedAssetsValid(true);
+    setCreatedAssetsAreValid(true);
   }
-  console.log("createdAssetsValid:", createdAssetsValid);
+  console.log("createdAssetsAreValid:", createdAssetsAreValid);
   const maxAssetsAllowed = parseInt(
     sketchableGraphicLayer.layerProperties.maxAssetsAllowed
   );
@@ -194,11 +194,11 @@ export const addSketchableMapLayer = async ({
 export const validateCreatedAssets = () => {
   console.log("Validating created assets...");
   if (validSketchableLayers.length === allSketchableLayerIds.length) {
-    setCreatedAssetsValid(true);
+    setCreatedAssetsAreValid(true);
   } else {
-    setCreatedAssetsValid(false);
+    setCreatedAssetsAreValid(false);
   }
-  console.log("createdAssetsValid:", createdAssetsValid);
+  console.log("createdAssetsAreValid:", createdAssetsAreValid);
 }
 
 export const updateLayerRequirementDisplay = (asset) => {
@@ -230,7 +230,7 @@ export const updateLayerRequirementDisplay = (asset) => {
       validSketchableLayers.push(layerId);
     }
     validateCreatedAssets();
-    console.log("createdAssetsValid:", createdAssetsValid);
+    console.log("createdAssetsAreValid:", createdAssetsAreValid);
   } else {
     minAssetMessageElement.classList.remove("label-success");
     minAssetMessageElement.classList.add("label-error");
