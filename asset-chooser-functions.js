@@ -10,6 +10,7 @@ import {
   currentView,
   setCurrentView,
   isValid,
+  createdAssetsAreValid,
   setIsValid,
 } from "./asset-chooser-state.js";
 
@@ -466,10 +467,10 @@ export const monitorLayerVisibility = (
 // exported functions
 // render the validity message for asset selection based on assets selected
 export const renderValidityMessage = () => {
+  console.log("Rendering validity message...");
   const validityMessage = document.getElementById("validity-message");
-  let makeMinimunRequireMessage = `Select `;
-  if (isValid) {
-    validityMessage.innerHTML = `Asset selection is <span class="label label-success">valid for submission</span>`;
+  if (isValid && createdAssetsAreValid ) {
+    validityMessage.innerHTML = `<span class="label label-success">Valid for submission</span>`;
     validityMessage.setAttribute("aria-live", "assertive");
     validityMessage.setAttribute(
       "title",
@@ -477,54 +478,70 @@ export const renderValidityMessage = () => {
     );
   } else {
     validityMessage.removeAttribute("aria-live");
-    validityMessage.setAttribute("title", "Selection requirements");
-    featureLayers.forEach((mapLayer) => {
-      const layerAssetMin = parseInt(
-        mapLayer.layerProperties.minAssetsRequired
-      );
-      const totalLayerAssetsSelected = chosenAssets.filter(
-        (asset) =>
-          asset.layerId ===
-          // `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
-           `${mapLayer.id}`
-      ).length;
-      const formattedLayerName = mapLayer.layerProperties.formattedLayerName;
-      if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
-        makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${formattedLayerName} layer</strong></span>, `;
-      }
-      if (layerAssetMin > 1 && totalLayerAssetsSelected < layerAssetMin) {
-        makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
-      }
-      if (layerAssetMin === 1 && totalLayerAssetsSelected === layerAssetMin) {
-        makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
-      }
-      if (layerAssetMin === 1 && totalLayerAssetsSelected > layerAssetMin) {
-        makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
-      }
-      if (layerAssetMin > 1 && totalLayerAssetsSelected >= layerAssetMin) {
-        makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
-      }
-    });
-
-    // Remove the last comma and space if present
-    if (makeMinimunRequireMessage.endsWith(", ")) {
-      makeMinimunRequireMessage = makeMinimunRequireMessage.slice(0, -2);
-    }
-    // Replace the last comma with ', and '
-    const lastCommaIndex = makeMinimunRequireMessage.lastIndexOf(", ");
-    if (lastCommaIndex !== -1) {
-      makeMinimunRequireMessage = `${makeMinimunRequireMessage.substring(
-        0,
-        lastCommaIndex
-      )}, and ${makeMinimunRequireMessage.substring(lastCommaIndex + 2)}`;
-    }
-    makeMinimunRequireMessage = makeMinimunRequireMessage.replace(
-      /at least (\d+ \w+)/g,
-      "at least <strong>$1</strong>"
-    );
-    validityMessage.innerHTML = `${makeMinimunRequireMessage}`;
+    validityMessage.innerHTML="";
   }
 };
+
+// export const renderValidityMessage = () => {
+//   const validityMessage = document.getElementById("validity-message");
+//   let makeMinimunRequireMessage = `Select `;
+//   if (isValid) {
+//     validityMessage.innerHTML = `Asset selection is <span class="label label-success">valid for submission</span>`;
+//     validityMessage.setAttribute("aria-live", "assertive");
+//     validityMessage.setAttribute(
+//       "title",
+//       "Asset selection is valid for submission"
+//     );
+//   } else {
+//     validityMessage.removeAttribute("aria-live");
+//     validityMessage.setAttribute("title", "Selection requirements");
+//     featureLayers.forEach((mapLayer) => {
+//       const layerAssetMin = parseInt(
+//         mapLayer.layerProperties.minAssetsRequired
+//       );
+//       const totalLayerAssetsSelected = chosenAssets.filter(
+//         (asset) =>
+//           asset.layerId ===
+//           // `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
+//            `${mapLayer.id}`
+//       ).length;
+//       const formattedLayerName = mapLayer.layerProperties.formattedLayerName;
+//       if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
+//         makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${formattedLayerName} layer</strong></span>, `;
+//       }
+//       if (layerAssetMin > 1 && totalLayerAssetsSelected < layerAssetMin) {
+//         makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
+//       }
+//       if (layerAssetMin === 1 && totalLayerAssetsSelected === layerAssetMin) {
+//         makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
+//       }
+//       if (layerAssetMin === 1 && totalLayerAssetsSelected > layerAssetMin) {
+//         makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
+//       }
+//       if (layerAssetMin > 1 && totalLayerAssetsSelected >= layerAssetMin) {
+//         makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
+//       }
+//     });
+
+//     // Remove the last comma and space if present
+//     if (makeMinimunRequireMessage.endsWith(", ")) {
+//       makeMinimunRequireMessage = makeMinimunRequireMessage.slice(0, -2);
+//     }
+//     // Replace the last comma with ', and '
+//     const lastCommaIndex = makeMinimunRequireMessage.lastIndexOf(", ");
+//     if (lastCommaIndex !== -1) {
+//       makeMinimunRequireMessage = `${makeMinimunRequireMessage.substring(
+//         0,
+//         lastCommaIndex
+//       )}, and ${makeMinimunRequireMessage.substring(lastCommaIndex + 2)}`;
+//     }
+//     makeMinimunRequireMessage = makeMinimunRequireMessage.replace(
+//       /at least (\d+ \w+)/g,
+//       "at least <strong>$1</strong>"
+//     );
+//     validityMessage.innerHTML = `${makeMinimunRequireMessage}`;
+//   }
+// };
 
 // dispatch the chosenAssets to the parent application
 export const dispatchChosenAssets = (chosenAssets) => {
@@ -691,6 +708,7 @@ const renderSelectedAssetLabels = () => {
         );
 
         removeAssetBtn.addEventListener("click", () => {
+          renderValidityMessage();
           chosenAssets.forEach((asset) => {
             const formattedLayerName =
               asset.layerData.layerProperties.formattedLayerName;

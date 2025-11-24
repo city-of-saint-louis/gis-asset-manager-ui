@@ -8,16 +8,21 @@ import {
   mapLayersToAdd,
   sketchableMapLayersToAdd,
   featureLayers,
+  graphicLayers,
   chosenAssets,
   createdAssets,
   allMapLayerIds,
+  allSketchableLayerIds,
   layersWithNoSelectionRequired,
+  sketchableLayersWithNoAdditionRequired,
   setIsValid,
   setCurrentView,
   isSketchEnabled,
   setIsSketchEnabled,
   isSelectEnabled,
   setIsSelectEnabled,
+  createdAssetsAreValid,
+  setCreatedAssetsAreValid,
 } from "./asset-chooser-state.js";
 
 // import from asset-chooser-functions.js
@@ -32,7 +37,7 @@ import {
   highlightSelectedAsset,
 } from "./asset-chooser-functions.js";
 
-import { addSketchableMapLayer, sketchAsset } from "./asset-chooser-sketchable-map-layer-functions.js";
+import { addSketchableMapLayer, sketchAsset, dispatchCreatedAssets, secureCreatedAssets } from "./asset-chooser-sketchable-map-layer-functions.js";
 
 export const initializeMap = async () => {
   destroyPreviousMapView();
@@ -184,8 +189,18 @@ export const initializeMap = async () => {
         setIsValid(false);
         secureChosenAssets();
       }
-      renderValidityMessage();
+      // renderValidityMessage();
       hideOrShowLayer();
+
+      if (sketchableLayersWithNoAdditionRequired.length >0 && allSketchableLayerIds.length >0 && sketchableLayersWithNoAdditionRequired.length === allSketchableLayerIds.length) {
+        console.log("sketchableLayersWithNoAdditionRequired.length:", sketchableLayersWithNoAdditionRequired.length);
+        console.log("allSketchableLayerIds.length:", allSketchableLayerIds.length);
+        setCreatedAssetsAreValid(true);
+        dispatchCreatedAssets(createdAssets);
+      } else {
+        setCreatedAssetsAreValid(false);
+        secureCreatedAssets();
+      }
 
       view.on("click", (event) => {
         view.hitTest(event).then((response) => {

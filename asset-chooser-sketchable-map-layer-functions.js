@@ -11,9 +11,24 @@ import {
   // isSketchEnabled,
 } from "./asset-chooser-state.js";
 // import from asset-chooser-functions.js
-import { monitorLayerVisibility } from "./asset-chooser-functions.js";
+import { monitorLayerVisibility, renderValidityMessage } from "./asset-chooser-functions.js";
 // import asset-chooser-map-layer-data-display component
 import "./asset-chooser-map-layer-data-display.js";
+
+export const dispatchCreatedAssets = (createdAssets) => {
+  const event = new CustomEvent("createdAssetsAreValidIsTrue", {
+    detail: { createdAssets },
+  });
+  document.dispatchEvent(event);  
+  console.log("Dispatched createdAssetsAreValidIsTrue event:", event);
+}; 
+
+// custom event listener to signal when createdAssets are not valid
+export const secureCreatedAssets = () => {
+  const event = new CustomEvent("createdAssetsAreValidIsFalse", { detail: { createdAssetsAreValid } });
+  document.dispatchEvent(event);
+  console.log("Dispatched createdAssetsAreValidIsFalse event:", event);
+};
 
 // event listener to capture sketchable layer data from sketchable-map-layer.js
 export const captureSketachableMapLayers = () => {
@@ -195,10 +210,13 @@ export const validateCreatedAssets = () => {
   console.log("Validating created assets...");
   if (validSketchableLayers.length === allSketchableLayerIds.length) {
     setCreatedAssetsAreValid(true);
+    dispatchCreatedAssets(createdAssets);
   } else {
     setCreatedAssetsAreValid(false);
+    secureCreatedAssets();
   }
   console.log("createdAssetsAreValid:", createdAssetsAreValid);
+  renderValidityMessage();
 }
 
 export const updateLayerRequirementDisplay = (asset) => {
@@ -334,6 +352,7 @@ const renderCreatedAssetLabel = (graphic) => {
   listItemRemoveButton.appendChild(document.createTextNode(" Remove"));
   listItemRemoveButton.addEventListener("click", () => {
     handleRemoveSketchedAsset(graphic.attributes.id);
+    renderValidityMessage();
   });
   listItem.appendChild(listItemContentSpan);
   listItem.appendChild(listItemRemoveButton);
@@ -391,3 +410,4 @@ export const sketchAsset = (sketchComponent) => {
     updateLayerRequirementDisplay(graphic);
   });
 };
+
