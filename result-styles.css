@@ -1,0 +1,25 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+main {
+  flex: 1;
+}
+h1 {
+  text-align: center;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  font-size: 32px;
+}
+
+footer {
+  text-align: center;
+  font-size: 12px;
+  margin-bottom: 6px;
+}

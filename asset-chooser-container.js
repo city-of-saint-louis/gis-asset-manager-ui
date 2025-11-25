@@ -1,7 +1,6 @@
 // import from asset-chooser-container-functions.js
 import { handleAccomodationButtonClick } from "./asset-chooser-container-functions.js";
 import { enableSketchMode, enableSelectMode } from "./asset-chooser-container-functions.js";
-// import { isSketchEnabled, setIsSketchEnabled } from "./asset-chooser-state.js";
 
 class AssetChooserContainerComponent extends HTMLElement {
   constructor() {
@@ -21,7 +20,7 @@ class AssetChooserContainerComponent extends HTMLElement {
       this.innerHTML = `
         <section id="asset-chooser-interface">
           <h2>${this.title}</h2>
-          <p>${this.hint}</p>
+          <p id="asset-chooser-hint" data-original-hint="${this.hint}">${this.hint}</p>
           <div id="accomodation-button-container">
             <button
               type="button"
@@ -35,12 +34,12 @@ class AssetChooserContainerComponent extends HTMLElement {
               Accessible Accommodation
             </button>
           </div>
-          <p id="validity-message" title="Selection requirements"></p>
-          <div class="row">
+         
+          <div class="row" id="asset-chooser-map-and-layer-data-wrapper">
             <div class="col-md-7">
               <div id="viewDiv" style="width: 100%; height: 500px;" aria-label="interactive map for selecting assets" >
+              </div>
             </div>
-          </div>
             <div class="col-md-5" id="layer-data-container">
               <div id="layer-data-div" class="stat-group"></div>
               <div id="sketchable-layer-data-div" class="stat-group"></div>
@@ -66,3 +65,6 @@ class AssetChooserContainerComponent extends HTMLElement {
 }
 
 export { AssetChooserContainerComponent };
+
+
+//  <p id="validity-message" title="Selection requirements"></p>

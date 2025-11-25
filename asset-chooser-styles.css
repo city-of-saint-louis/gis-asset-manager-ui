@@ -1,10 +1,4 @@
 /* asset-chooser */
-footer {
-  text-align: center;
-  font-size: 12px;
-  margin-bottom: 6px;;
-}
-
 .zoom-alert-span {
   margin-top: 5px;
   display: inline-block;
@@ -115,10 +109,13 @@ footer {
   margin-right: 5px;
 }
 
-#validity-message {
-  min-height: 1.75em; /* or use px, e.g. min-height: 24px; */
+/* #validity-message {
+  min-height: 1.75em;
+  display: block; 
+} */
 
-  display: block; /* ensure block layout */
+#asset-chooser-map-and-layer-data-wrapper {
+  margin-top: 1em;
 }
 
 /* media queries */

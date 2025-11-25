@@ -468,17 +468,19 @@ export const monitorLayerVisibility = (
 // render the validity message for asset selection based on assets selected
 export const renderValidityMessage = () => {
   console.log("Rendering validity message...");
-  const validityMessage = document.getElementById("validity-message");
+  // const validityMessage = document.getElementById("validity-message");
+  const validityMessage = document.getElementById("asset-chooser-hint");
+  const originalHintText = validityMessage.getAttribute("data-original-hint");
   if (isValid && createdAssetsAreValid ) {
-    validityMessage.innerHTML = `<span class="label label-success">Valid for submission</span>`;
+    validityMessage.innerHTML = `<span class="label label-success">Assets valid for submission</span>`;
     validityMessage.setAttribute("aria-live", "assertive");
     validityMessage.setAttribute(
       "title",
-      "Asset selection is valid for submission"
+      "Assets valid for submission"
     );
   } else {
     validityMessage.removeAttribute("aria-live");
-    validityMessage.innerHTML="";
+    validityMessage.textContent = originalHintText;
   }
 };
 
