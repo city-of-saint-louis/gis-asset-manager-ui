@@ -119,24 +119,7 @@ const displayChosenAssets = () => {
   });
 };
 
-// Function to manipulate 'chosenAssets' data for use within parent application
-const convertChosenAssets = () => {
-  const chosenAssets = JSON.parse(localStorage.getItem("chosenAssets") || "[]");
-  chosenAssets.forEach((asset) => {
-    const caseAsset = {
-      AssetEsriAttributes: asset.assetAttributes,
-      AssetId: asset.assetId,
-      AssetIdType: asset.assetIdType,
-      AssetType: asset.layerName,
-      FeatureAssetId: asset.assetId,
-      FeatureClass: asset.layerName,
-      Location: asset.assetLabel,
-    };
-    caseAssets.push(caseAsset);
-    console.log("caseAssets:", caseAssets);
-  });
-};
-
+// Function to display created assets
 const displayCreatedAssets = () => {
   const createdAssets = JSON.parse(localStorage.getItem("createdAssets") || "[]");
   console.log("createdAssets:", createdAssets);
@@ -155,6 +138,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.location.href.includes("results.html")) {
     displayChosenAssets();
     displayCreatedAssets();
-    convertChosenAssets();
+    // convertChosenAssets();
   }
 });
