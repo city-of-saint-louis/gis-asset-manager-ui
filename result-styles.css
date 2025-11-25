@@ -23,3 +23,10 @@ footer {
   font-size: 12px;
   margin-bottom: 6px;
 }
+
+#console-message {
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 12px;
+  font-style: italic;
+}
