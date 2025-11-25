@@ -1,5 +1,7 @@
 # **GIS Asset Chooser Module**
 
+*Please note: The documentation below does not yet include the new Sketch feature currently in development. The Sketch feature can be seen in the demo deployment but is not yet documented.*
+
 ## **Description**
 
 The GIS Asset Chooser Module utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) to create an interactive map that can be configured with various different graphic layers.
