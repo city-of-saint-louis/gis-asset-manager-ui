@@ -6,13 +6,24 @@ import {
   defaultBaseMap,
   defaultShowSearch,
   mapLayersToAdd,
+  sketchableMapLayersToAdd,
   featureLayers,
+  graphicLayers,
   chosenAssets,
+  createdAssets,
   allMapLayerIds,
+  allSketchableLayerIds,
   layersWithNoSelectionRequired,
+  sketchableLayersWithNoAdditionRequired,
   setIsValid,
-  setCurrentView
-} from "./asset-chooser-state.js"
+  setCurrentView,
+  isSketchEnabled,
+  setIsSketchEnabled,
+  isSelectEnabled,
+  setIsSelectEnabled,
+  createdAssetsAreValid,
+  setCreatedAssetsAreValid,
+} from "./asset-chooser-state.js";
 
 // import from asset-chooser-functions.js
 import {
@@ -24,7 +35,9 @@ import {
   dispatchChosenAssets,
   secureChosenAssets,
   highlightSelectedAsset,
-} from "./asset-chooser-functions.js"
+} from "./asset-chooser-functions.js";
+
+import { addSketchableMapLayer, sketchAsset, dispatchCreatedAssets, secureCreatedAssets } from "./asset-chooser-sketchable-map-layer-functions.js";
 
 export const initializeMap = async () => {
   destroyPreviousMapView();
@@ -64,15 +77,15 @@ export const initializeMap = async () => {
     });
     // Dynamically create the <arcgis-map> component
     const mapContainer = document.querySelector("#viewDiv");
-    const arcgisMap = document.createElement("arcgis-map");
-    arcgisMap.setAttribute("basemap", baseMap);
-    arcgisMap.setAttribute("zoom", zoom);
-    arcgisMap.setAttribute("center", `${centerX},${centerY}`);
-    arcgisMap.setAttribute("extent", JSON.stringify(stLouisExtent.toJSON()));
-    mapContainer.appendChild(arcgisMap);
+    const arcGisMap = document.createElement("arcgis-map");
+    arcGisMap.setAttribute("basemap", baseMap);
+    arcGisMap.setAttribute("zoom", zoom);
+    arcGisMap.setAttribute("center", `${centerX},${centerY}`);
+    arcGisMap.setAttribute("extent", JSON.stringify(stLouisExtent.toJSON()));
+    mapContainer.appendChild(arcGisMap);
     const zoomControl = document.createElement("arcgis-zoom");
     zoomControl.setAttribute("position", "top-left");
-    arcgisMap.appendChild(zoomControl);
+    arcGisMap.appendChild(zoomControl);
     // Add a LocatorSearchSource for local search suggestions
     const locatorSearchSource = new LocatorSearchSource({
       url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
@@ -92,33 +105,82 @@ export const initializeMap = async () => {
       searchComponent.setAttribute("popup-disabled", "true");
       searchComponent.setAttribute("include-default-sources-disabled", "true");
       searchComponent.sources = [locatorSearchSource];
-      arcgisMap.appendChild(searchComponent);
+      arcGisMap.appendChild(searchComponent);
     } else {
       // Check if the search component exists and remove it
-      const existingSearchComponent = arcgisMap.querySelector("arcgis-search");
+      const existingSearchComponent = arcGisMap.querySelector("arcgis-search");
       if (existingSearchComponent) {
-        arcgisMap.removeChild(existingSearchComponent);
+        arcGisMap.removeChild(existingSearchComponent);
       }
     }
-    arcgisMap.addEventListener("arcgisViewReadyChange", () => {
-      const map = arcgisMap.map; // access the map object
-      const view = arcgisMap.view; // Access the mapView object
+    arcGisMap.addEventListener("arcgisViewReadyChange", () => {
+      const map = arcGisMap.map; // access the map object
+      const view = arcGisMap.view; // Access the mapView object
       setCurrentView(view);
       view.constraints = {
         geometry: stLouisExtent,
       };
-      mapLayersToAdd.forEach((mapLayer) => {
-        addMapLayer({
-          mapLayer,
-          FeatureLayer,
-          reactiveUtils,
-          map,
-          view,
-          allMapLayerIds,
-          featureLayers,
-          layersWithNoSelectionRequired,
+
+      if (isSelectEnabled === "true" || isSelectEnabled === true) {
+        mapLayersToAdd.forEach((mapLayer) => {
+          addMapLayer({
+            mapLayer,
+            FeatureLayer,
+            reactiveUtils,
+            map,
+            view,
+            allMapLayerIds,
+            featureLayers,
+            layersWithNoSelectionRequired,
+          });
         });
-      });
+        const selectableLayerDataDivHeading = document.createElement("h3");
+        selectableLayerDataDivHeading.textContent = "Selectable Layers";
+        const layerDataDiv = document.getElementById(
+          "layer-data-div"
+        );
+        layerDataDiv.insertBefore(selectableLayerDataDivHeading, layerDataDiv.firstChild);
+      }
+
+      if (isSketchEnabled === "true" || isSketchEnabled === true) {
+        const sketch = document.createElement("arcgis-sketch");
+        sketch.view = view;
+        sketch.setAttribute("id", "asset-chooser-sketch");
+        sketch.setAttribute("slot", "bottom-right");
+        sketch.setAttribute("hide-selection-tools-lasso-selection", "true");
+        sketch.setAttribute("hide-selection-tools-rectangle-selection", "true");
+        // sketch.setAttribute("hide-settings-menu", "true");
+        // sketch.setAttribute("available-create-tools", "point,polyline,polygon");
+        sketch.setAttribute("hidden", "true");
+        arcGisMap.appendChild(sketch);
+        sketch.componentOnReady().then(() => {
+          // console.log("Sketch component is ready:", sketch.view);
+          console.log(document.querySelectorAll("arcgis-sketch").length);
+          sketchAsset(sketch);
+        });
+
+        // Add sketchable map layers
+        sketchableMapLayersToAdd.forEach((sketchableMapLayer) => {
+          addSketchableMapLayer({
+            sketchableMapLayer,
+            map,
+            view,
+            reactiveUtils,
+          });
+        });
+        const sketchableLayerDataDivHeading = document.createElement("h3");
+        sketchableLayerDataDivHeading.textContent = "Sketchable Layers";
+        const sketchableLayerDataDiv = document.getElementById(
+          "sketchable-layer-data-div"
+        );
+        sketchableLayerDataDiv.appendChild(sketchableLayerDataDivHeading);
+      }
+
+      if (!isSelectEnabled && !isSketchEnabled) {
+        alert(
+          "Please enable either Select Mode or Sketch Mode to choose assets on the map."
+        );
+      }
 
       if (layersWithNoSelectionRequired.length === allMapLayerIds.length) {
         setIsValid(true);
@@ -127,8 +189,18 @@ export const initializeMap = async () => {
         setIsValid(false);
         secureChosenAssets();
       }
-      renderValidityMessage();
+      // renderValidityMessage();
       hideOrShowLayer();
+
+      if (sketchableLayersWithNoAdditionRequired.length >0 && allSketchableLayerIds.length >0 && sketchableLayersWithNoAdditionRequired.length === allSketchableLayerIds.length) {
+        console.log("sketchableLayersWithNoAdditionRequired.length:", sketchableLayersWithNoAdditionRequired.length);
+        console.log("allSketchableLayerIds.length:", allSketchableLayerIds.length);
+        setCreatedAssetsAreValid(true);
+        dispatchCreatedAssets(createdAssets);
+      } else {
+        setCreatedAssetsAreValid(false);
+        secureCreatedAssets();
+      }
 
       view.on("click", (event) => {
         view.hitTest(event).then((response) => {

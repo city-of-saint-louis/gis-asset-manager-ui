@@ -10,6 +10,7 @@ import {
   currentView,
   setCurrentView,
   isValid,
+  createdAssetsAreValid,
   setIsValid,
 } from "./asset-chooser-state.js";
 
@@ -27,7 +28,7 @@ export const destroyPreviousMapView = () => {
     if (oldArcgisMap) {
       viewDiv.removeChild(oldArcgisMap);
     }
-    viewDiv.innerHTML = ""; 
+    viewDiv.innerHTML = "";
   }
 };
 
@@ -56,47 +57,59 @@ export const captureMapLayers = () => {
 };
 
 // hide or show layers on the map
-export const hideOrShowLayer = () => {
-  featureLayers.forEach((outerLayer) => {
-    const formattedLayerName = outerLayer.layerProperties.formattedLayerName;
-    const toggleLayerVisibilityButtons = document.querySelectorAll(
-      ".toggleLayerVisibilityButton"
-    );
-    toggleLayerVisibilityButtons.forEach((toggleLayerVisibilityButton) => {
-      toggleLayerVisibilityButton.addEventListener("click", () => {
-        const layerId =
-          toggleLayerVisibilityButton.getAttribute("att-layer-id");
-        const spanElement = toggleLayerVisibilityButton.querySelector("span");
-        if (
-          `${outerLayer.layerProperties.layerName}-${outerLayer.id}` === layerId
-        ) {
-          if (outerLayer.visible) {
-            outerLayer.visible = false;
-            spanElement.innerHTML = `<span>Show</span>`;
-            toggleLayerVisibilityButton.setAttribute(
-              "aria-label",
-              `Show ${formattedLayerName} layer`
-            );
-            toggleLayerVisibilityButton.setAttribute(
-              "title",
-              `Show ${formattedLayerName} layer`
-            );
-          } else {
-            outerLayer.visible = true;
-            spanElement.innerHTML = `<span>Hide</span>`;
-            toggleLayerVisibilityButton.setAttribute(
-              "aria-label",
-              `Hide ${formattedLayerName} layer`
-            );
-            toggleLayerVisibilityButton.setAttribute(
-              "title",
-              `Hide ${formattedLayerName} layer`
-            );
-          }
-        }
-      });
-    });
-  });
+// export const hideOrShowLayer = () => {
+//   featureLayers.forEach((outerLayer) => {
+//     const formattedLayerName = outerLayer.layerProperties.formattedLayerName;
+//     const toggleLayerVisibilityButtons = document.querySelectorAll(
+//       ".toggleLayerVisibilityButton"
+//     );
+//     toggleLayerVisibilityButtons.forEach((toggleLayerVisibilityButton) => {
+//       toggleLayerVisibilityButton.addEventListener("click", () => {
+//         const layerId =
+//           toggleLayerVisibilityButton.getAttribute("att-layer-id");
+//         const spanElement = toggleLayerVisibilityButton.querySelector("span");
+//         if (
+//           `${outerLayer.layerProperties.layerName}-${outerLayer.id}` === layerId
+//         ) {
+//           if (outerLayer.visible) {
+//             outerLayer.visible = false;
+//             spanElement.innerHTML = `<span>Show</span>`;
+//             toggleLayerVisibilityButton.setAttribute(
+//               "aria-label",
+//               `Show ${formattedLayerName} layer`
+//             );
+//             toggleLayerVisibilityButton.setAttribute(
+//               "title",
+//               `Show ${formattedLayerName} layer`
+//             );
+//           } else {
+//             outerLayer.visible = true;
+//             spanElement.innerHTML = `<span>Hide</span>`;
+//             toggleLayerVisibilityButton.setAttribute(
+//               "aria-label",
+//               `Hide ${formattedLayerName} layer`
+//             );
+//             toggleLayerVisibilityButton.setAttribute(
+//               "title",
+//               `Hide ${formattedLayerName} layer`
+//             );
+//           }
+//         }
+//       });
+//     });
+//   });
+// };
+
+// --- UPDATED: hideOrShowLayer only toggles visibility ---
+export const hideOrShowLayer = (layerName) => {
+  // Find the correct layer by name
+  const layer = featureLayers.find(
+    (l) => l.layerProperties.layerName === layerName
+  );
+  if (layer) {
+    layer.visible = !layer.visible;
+    // UI will be updated by monitorLayerVisibility calling updateVisibility
+  }
 };
 
 // add map layers to the map
@@ -120,8 +133,8 @@ export const addMapLayer = ({
       layerClassUrl: mapLayer.layerClassUrl,
       layerAssetIDFieldName: mapLayer.layerAssetIDFieldName,
       labelMask: mapLayer.labelMask,
-      minimumAssetsRequired: mapLayer.minimumSelections,
-      maximumAssetsRequired: mapLayer.maximumSelections,
+      minAssetsRequired: mapLayer.minimumSelectionsRequired,
+      maxAssetsAllowed: mapLayer.maximumSelectionsAllowed,
       minScale: mapLayer.minScale,
       maxScale: mapLayer.maxScale,
     },
@@ -154,24 +167,27 @@ export const addMapLayer = ({
   });
   mapDataLayer.outFields = ["*"];
   mapDataLayer.popupEnabled = false;
+
   const mapDataLayerId = `${mapDataLayer.layerProperties.layerName}-${mapDataLayer.id}`;
+  mapDataLayer.id = mapDataLayerId;
   allMapLayerIds.push(mapDataLayerId);
   featureLayers.push(mapDataLayer);
+
   map.add(mapDataLayer);
-  const minAssetsRequired = parseInt(
-    mapDataLayer.layerProperties.minimumAssetsRequired
-  );
-  const maxAssetsRequired = parseInt(
-    mapDataLayer.layerProperties.maximumAssetsRequired
-  );
   const layerName = mapDataLayer.layerProperties.layerName;
   const formattedLayerName = mapDataLayer.layerProperties.formattedLayerName;
-  const layerDataDiv = document.getElementById("layer-data-div");
+  const minAssetsRequired = parseInt(
+    mapDataLayer.layerProperties.minAssetsRequired
+  );
+  const maxAssetsAllowed = parseInt(
+    mapDataLayer.layerProperties.maxAssetsAllowed
+  );
   const layerMinScale = mapDataLayer.minScale;
-  const layerMaxScale = mapDataLayer.maxScale;
   if (minAssetsRequired === 0) {
     layersWithNoSelectionRequired.push(mapDataLayerId);
   }
+  const layerMaxScale = mapDataLayer.maxScale;
+  const layerDataDiv = document.getElementById("layer-data-div");
 
   view.on("layerview-create", function (event) {
     if (event.layer === mapDataLayer) {
@@ -187,102 +203,157 @@ export const addMapLayer = ({
     }
   });
 
-  layerDataDiv.innerHTML += `
-    <div
-      class="map-layer-data-container stat-container stat-medium"
-    >
-      <div 
-        class="stat-title" 
-        id="${layerName}-layer-selected-asset-container"
-        aria-label="${formattedLayerName} Layer"
-        title="${formattedLayerName} Layer"
-      >
-       <div>
-         <span>
-           <strong>
-             ${formattedLayerName} Layer
-           </strong>
-         </span>
-         <br>
-         <span class="zoom-alert-span" id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
-          ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
-         </span>
-       </div>
-        <button
-          type="button"
-          id="${layerName}-show-hide-layer-btn"
-          class="toggleLayerVisibilityButton"
-          att-layer-id="${layerName}-${mapDataLayer.id}"
-          aria-label="Hide ${formattedLayerName} Layer" ${
-    layerMinScale > 0 ? "disabled hidden" : ""
-  } 
-          title="Hide ${formattedLayerName} layer"
-        >
-          <span id="${layerName}-toggle-visibility-btn-text-span">
-            ${layerMinScale > 0 ? `Show` : `Hide`}
-          </span>
-        </button>
-      </div>
-      <div 
-        aria-live="polite"
-        aria-atomic="true"
-        class="asset-selection-requirements"
-      >
-        <span class="sr-only">Asset selection requirements and status for ${layerName} layer</span>
-        ${
-          minAssetsRequired === 0
-            ? `
-            <span id="${mapDataLayerId}-min-asset-required-message" title="No selection required">
-              <span class="label label-success">
-                No selection required
-              </span>
-            </span>
-            `
-            : minAssetsRequired === 1
-            ? `
-            <span id="${mapDataLayerId}-min-asset-required-message" title="${minAssetsRequired} selection required from ${formattedLayerName} layer">
-              <span class="label label-error">
-               ${minAssetsRequired} required
-              </span>
-            </span>
-            `
-            : `
-            <span id="${mapDataLayerId}-min-asset-required-message" title="At least ${minAssetsRequired} selections required from ${formattedLayerName} layer">
-              <span class="label label-error">
-                At least ${minAssetsRequired} required
-              </span>
-            </span>
-            `
-        }
-        ${
-          maxAssetsRequired > 0
-            ? `
-            <span id="${mapDataLayerId}-max-asset-required-message" title="Select a maximum of ${maxAssetsRequired} from ${formattedLayerName} layer">
-              <span class="label label-default">Select a maximum of ${maxAssetsRequired}
-              </span>
-            </span>`
-            : ``
-        }
-      </div>
-      <ul
-        data-layer-name=${layerName}
-        class="list-group highlighted-asset-data-list"
-        id="${layerName}-${mapDataLayer.id}"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        <li 
-          title="No assets selected from ${formattedLayerName} layer"
-        >
-          None selected
-        </li>
-      </ul>
-    </div>
-  `;
-};
+  const mapLayerDataDisplay = document.createElement(
+    "asset-chooser-map-layer-data-display"
+  );
+  mapLayerDataDisplay.setAttribute("data-layer-id", mapDataLayerId);
+  mapLayerDataDisplay.data = {
+    layerName,
+    formattedLayerName,
+    mapDataLayerId,
+    minAssetsRequired,
+    maxAssetsAllowed,
+    layerMinScale,
+    layerMaxScale,
+    showHideHandler: hideOrShowLayer,
+    isSketchable: false,
+  };
+  console.log("mapLayerDataDisplay.data", mapLayerDataDisplay.data);
+  layerDataDiv.appendChild(mapLayerDataDisplay);
 
-// monitor layer visibility based on scale and adjust ui accordingly, used in addMapLayer function no need to export
-const monitorLayerVisibility = (
+  // layerDataDiv.innerHTML += `
+  //   <div
+  //     class="map-layer-data-container stat-container stat-medium"
+  //   >
+  //     <div
+  //       class="stat-title"
+  //       id="${layerName}-layer-selected-asset-container"
+  //       aria-label="${formattedLayerName} Layer"
+  //       title="${formattedLayerName} Layer"
+  //     >
+  //      <div>
+  //        <span>
+  //          <strong>
+  //            ${formattedLayerName} Layer
+  //          </strong>
+  //        </span>
+  //        <br>
+  //        <span class="zoom-alert-span" id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
+  //         ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
+  //        </span>
+  //      </div>
+  //       <button
+  //         type="button"
+  //         id="${layerName}-show-hide-layer-btn"
+  //         class="toggleLayerVisibilityButton"
+  //         att-layer-id="${mapDataLayerId}"
+  //         aria-label="Hide ${formattedLayerName} Layer" ${
+  //   layerMinScale > 0 ? "disabled hidden" : ""
+  // }
+  //         title="Hide ${formattedLayerName} layer"
+  //       >
+  //         <span id="${layerName}-toggle-visibility-btn-text-span">
+  //           ${layerMinScale > 0 ? `Show` : `Hide`}
+  //         </span>
+  //       </button>
+  //     </div>
+  //     <div
+  //       aria-live="polite"
+  //       aria-atomic="true"
+  //       class="asset-selection-requirements"
+  //     >
+  //       <span class="sr-only">Asset selection requirements and status for ${layerName} layer</span>
+  //       ${
+  //         minAssetsRequired === 0
+  //           ? `
+  //           <span id="${mapDataLayerId}-min-asset-required-message" title="No selection required">
+  //             <span class="label label-success">
+  //               No selection required
+  //             </span>
+  //           </span>
+  //           `
+  //           : minAssetsRequired === 1
+  //           ? `
+  //           <span id="${mapDataLayerId}-min-asset-required-message" title="${minAssetsRequired} selection required from ${formattedLayerName} layer">
+  //             <span class="label label-error">
+  //              ${minAssetsRequired} required
+  //             </span>
+  //           </span>
+  //           `
+  //           : `
+  //           <span id="${mapDataLayerId}-min-asset-required-message" title="At least ${minAssetsRequired} selections required from ${formattedLayerName} layer">
+  //             <span class="label label-error">
+  //               At least ${minAssetsRequired} required
+  //             </span>
+  //           </span>
+  //           `
+  //       }
+  //       ${
+  //         maxAssetsAllowed > 0
+  //           ? `
+  //           <span id="${mapDataLayerId}-max-asset-allowed-message" title="Select a maximum of ${maxAssetsAllowed} from ${formattedLayerName} layer">
+  //             <span class="label label-default">Select a maximum of ${maxAssetsAllowed}
+  //             </span>
+  //           </span>`
+  //           : ``
+  //       }
+  //     </div>
+  //     <ul
+  //       data-layer-name=${layerName}
+  //       class="list-group highlighted-asset-data-list"
+  //       id="${layerName}-${mapDataLayerId}"
+  //       aria-live="polite"
+  //       aria-atomic="true"
+  //     >
+  //       <li
+  //         title="No assets selected from ${formattedLayerName} layer"
+  //       >
+  //         None selected
+  //       </li>
+  //     </ul>
+  //   </div>
+  // `;
+};
+// const monitorLayerVisibility = (
+//   reactiveUtils,
+//   layerView,
+//   mapDataLayer,
+//   layerName,
+//   formattedLayerName,
+//   layerMinScale,
+//   layerMaxScale
+// ) => {
+//   reactiveUtils.watch(
+//     () => layerView.visibleAtCurrentScale,
+//     (visibleAtCurrentScale) => {
+//       // Find the correct AssetChooserMapLayerDataDisplay for this layer
+//       // Try to match by layerName (for regular) or formattedLayerName (for sketchable)
+//       const allDisplays = document.querySelectorAll("asset-chooser-map-layer-data-display");
+//       let mapLayerDataDisplay = null;
+//       allDisplays.forEach(display => {
+//         // Compare both layerName and formattedLayerName for robustness
+//         if (
+//           display.data &&
+//           (display.data.layerName === layerName ||
+//            display.data.formattedLayerName === formattedLayerName)
+//         ) {
+//           mapLayerDataDisplay = display;
+//         }
+//       });
+
+//       if (mapLayerDataDisplay && typeof mapLayerDataDisplay.updateVisibility === "function") {
+//         mapLayerDataDisplay.updateVisibility({
+//           visibleAtCurrentScale,
+//           visible: mapDataLayer.visible,
+//           formattedLayerName,
+//           layerMinScale,
+//           layerMaxScale,
+//         });
+//       }
+//     }
+//   );
+// };
+export const monitorLayerVisibility = (
   reactiveUtils,
   layerView,
   mapDataLayer,
@@ -291,109 +362,188 @@ const monitorLayerVisibility = (
   layerMinScale,
   layerMaxScale
 ) => {
+  // Watch visibleAtCurrentScale (zoom/scale)
   reactiveUtils.watch(
     () => layerView.visibleAtCurrentScale,
-    (visibleAtCurrentScale) => {
-      const toggleLayerVisibilityButton = document.getElementById(
-        `${layerName}-show-hide-layer-btn`
-      );
-      const toggleVisibilityBtnTextSpan = document.getElementById(
-        `${layerName}-toggle-visibility-btn-text-span`
-      );
-      const zoomAlertSpan = document.getElementById(
-        `${layerName}-zoom-alert-span`
-      );
-
-      if (zoomAlertSpan) {
-        if (visibleAtCurrentScale) {
-          zoomAlertSpan.textContent = ``;
-          toggleLayerVisibilityButton.removeAttribute("disabled");
-          toggleLayerVisibilityButton.removeAttribute("hidden");
-          if (mapDataLayer.visible) {
-            toggleVisibilityBtnTextSpan.textContent = `Hide`;
-            toggleLayerVisibilityButton.setAttribute(
-              "title",
-              `Hide ${formattedLayerName} layer`
-            );
-          } else {
-            toggleVisibilityBtnTextSpan.textContent = `Show`;
-            toggleLayerVisibilityButton.setAttribute(
-              "title",
-              `Show ${formattedLayerName} layer`
-            );
-          }
-        } else {
-          zoomAlertSpan.textContent = `${
-            layerMinScale > 0 ? `Zoom in to see this layer.` : ""
-          } ${layerMaxScale > 0 ? `Zoom out to see this layer.` : ""}`;
-          toggleLayerVisibilityButton.setAttribute("disabled", true);
-          toggleLayerVisibilityButton.setAttribute("hidden", true);
-        }
-      }
+    // (visibleAtCurrentScale) => {
+    () => {
+      updateLayerDisplay();
     }
   );
+  // Watch visible property (show/hide)
+  reactiveUtils.watch(
+    () => mapDataLayer.visible,
+    // (visible) => {
+    () => {
+      updateLayerDisplay();
+    }
+  );
+
+  function updateLayerDisplay() {
+    const allDisplays = document.querySelectorAll(
+      "asset-chooser-map-layer-data-display"
+    );
+    let mapLayerDataDisplay = null;
+    allDisplays.forEach((display) => {
+      if (
+        display.data &&
+        (display.data.layerName === layerName ||
+          display.data.formattedLayerName === formattedLayerName)
+      ) {
+        mapLayerDataDisplay = display;
+      }
+    });
+
+    if (
+      mapLayerDataDisplay &&
+      typeof mapLayerDataDisplay.updateVisibility === "function"
+    ) {
+      mapLayerDataDisplay.updateVisibility({
+        visibleAtCurrentScale: layerView.visibleAtCurrentScale,
+        visible: mapDataLayer.visible,
+        formattedLayerName,
+        layerMinScale,
+        layerMaxScale,
+      });
+    }
+  }
 };
+// monitor layer visibility based on scale and adjust ui accordingly, used in addMapLayer function no need to export
+// const monitorLayerVisibility = (
+//   reactiveUtils,
+//   layerView,
+//   mapDataLayer,
+//   layerName,
+//   formattedLayerName,
+//   layerMinScale,
+//   layerMaxScale
+// ) => {
+//   reactiveUtils.watch(
+//     () => layerView.visibleAtCurrentScale,
+//     (visibleAtCurrentScale) => {
+//       const toggleLayerVisibilityButton = document.getElementById(
+//         `${layerName}-show-hide-layer-btn`
+//       );
+//       const toggleVisibilityBtnTextSpan = document.getElementById(
+//         `${layerName}-toggle-visibility-btn-text-span`
+//       );
+//       const zoomAlertSpan = document.getElementById(
+//         `${layerName}-zoom-alert-span`
+//       );
+
+//       if (zoomAlertSpan) {
+//         if (visibleAtCurrentScale) {
+//           zoomAlertSpan.textContent = ``;
+//           toggleLayerVisibilityButton.removeAttribute("disabled");
+//           toggleLayerVisibilityButton.removeAttribute("hidden");
+//           if (mapDataLayer.visible) {
+//             toggleVisibilityBtnTextSpan.textContent = `Hide`;
+//             toggleLayerVisibilityButton.setAttribute(
+//               "title",
+//               `Hide ${formattedLayerName} layer`
+//             );
+//           } else {
+//             toggleVisibilityBtnTextSpan.textContent = `Show`;
+//             toggleLayerVisibilityButton.setAttribute(
+//               "title",
+//               `Show ${formattedLayerName} layer`
+//             );
+//           }
+//         } else {
+//           zoomAlertSpan.textContent = `${
+//             layerMinScale > 0 ? `Zoom in to see this layer.` : ""
+//           } ${layerMaxScale > 0 ? `Zoom out to see this layer.` : ""}`;
+//           toggleLayerVisibilityButton.setAttribute("disabled", true);
+//           toggleLayerVisibilityButton.setAttribute("hidden", true);
+//         }
+//       }
+//     }
+//   );
+// };
+
 // *** end map related functions *** //
 
 // *** begin asset related functions *** //
 // exported functions
 // render the validity message for asset selection based on assets selected
 export const renderValidityMessage = () => {
-  const validityMessage = document.getElementById("validity-message");
-  let makeMinimunRequireMessage = `Select `;
-  if (isValid) {
-    validityMessage.innerHTML = `Asset selection is <span class="label label-success">valid for submission</span>`;
+  console.log("Rendering validity message...");
+  // const validityMessage = document.getElementById("validity-message");
+  const validityMessage = document.getElementById("asset-chooser-hint");
+  const originalHintText = validityMessage.getAttribute("data-original-hint");
+  if (isValid && createdAssetsAreValid ) {
+    validityMessage.innerHTML = `<span class="label label-success">Assets valid for submission</span>`;
     validityMessage.setAttribute("aria-live", "assertive");
-    validityMessage.setAttribute("title", "Asset selection is valid for submission");
+    validityMessage.setAttribute(
+      "title",
+      "Assets valid for submission"
+    );
   } else {
     validityMessage.removeAttribute("aria-live");
-    validityMessage.setAttribute("title", "Selection requirements");
-    featureLayers.forEach((mapLayer) => {
-      const layerAssetMin = parseInt(
-        mapLayer.layerProperties.minimumAssetsRequired
-      );
-      const totalLayerAssetsSelected = chosenAssets.filter(
-        (asset) =>
-          asset.layerId ===
-          `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
-      ).length;
-      const formattedLayerName = mapLayer.layerProperties.formattedLayerName;
-      if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
-        makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${formattedLayerName} layer</strong></span>, `;
-      }
-      if (layerAssetMin > 1 && totalLayerAssetsSelected < layerAssetMin) {
-        makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
-      }
-      if (layerAssetMin === 1 && totalLayerAssetsSelected === layerAssetMin) {
-        makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
-      }
-      if (layerAssetMin === 1 && totalLayerAssetsSelected > layerAssetMin) {
-        makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
-      }
-      if (layerAssetMin > 1 && totalLayerAssetsSelected >= layerAssetMin) {
-        makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
-      }
-    });
-
-    // Remove the last comma and space if present
-    if (makeMinimunRequireMessage.endsWith(", ")) {
-      makeMinimunRequireMessage = makeMinimunRequireMessage.slice(0, -2);
-    }
-    // Replace the last comma with ', and '
-    const lastCommaIndex = makeMinimunRequireMessage.lastIndexOf(", ");
-    if (lastCommaIndex !== -1) {
-      makeMinimunRequireMessage = `${makeMinimunRequireMessage.substring(
-        0,
-        lastCommaIndex
-      )}, and ${makeMinimunRequireMessage.substring(lastCommaIndex + 2)}`;
-    }
-    makeMinimunRequireMessage = makeMinimunRequireMessage.replace(
-      /at least (\d+ \w+)/g,
-      "at least <strong>$1</strong>"
-    );
-    validityMessage.innerHTML = `${makeMinimunRequireMessage}`;
+    validityMessage.textContent = originalHintText;
   }
 };
+
+// export const renderValidityMessage = () => {
+//   const validityMessage = document.getElementById("validity-message");
+//   let makeMinimunRequireMessage = `Select `;
+//   if (isValid) {
+//     validityMessage.innerHTML = `Asset selection is <span class="label label-success">valid for submission</span>`;
+//     validityMessage.setAttribute("aria-live", "assertive");
+//     validityMessage.setAttribute(
+//       "title",
+//       "Asset selection is valid for submission"
+//     );
+//   } else {
+//     validityMessage.removeAttribute("aria-live");
+//     validityMessage.setAttribute("title", "Selection requirements");
+//     featureLayers.forEach((mapLayer) => {
+//       const layerAssetMin = parseInt(
+//         mapLayer.layerProperties.minAssetsRequired
+//       );
+//       const totalLayerAssetsSelected = chosenAssets.filter(
+//         (asset) =>
+//           asset.layerId ===
+//           // `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
+//            `${mapLayer.id}`
+//       ).length;
+//       const formattedLayerName = mapLayer.layerProperties.formattedLayerName;
+//       if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
+//         makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${formattedLayerName} layer</strong></span>, `;
+//       }
+//       if (layerAssetMin > 1 && totalLayerAssetsSelected < layerAssetMin) {
+//         makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
+//       }
+//       if (layerAssetMin === 1 && totalLayerAssetsSelected === layerAssetMin) {
+//         makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
+//       }
+//       if (layerAssetMin === 1 && totalLayerAssetsSelected > layerAssetMin) {
+//         makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
+//       }
+//       if (layerAssetMin > 1 && totalLayerAssetsSelected >= layerAssetMin) {
+//         makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
+//       }
+//     });
+
+//     // Remove the last comma and space if present
+//     if (makeMinimunRequireMessage.endsWith(", ")) {
+//       makeMinimunRequireMessage = makeMinimunRequireMessage.slice(0, -2);
+//     }
+//     // Replace the last comma with ', and '
+//     const lastCommaIndex = makeMinimunRequireMessage.lastIndexOf(", ");
+//     if (lastCommaIndex !== -1) {
+//       makeMinimunRequireMessage = `${makeMinimunRequireMessage.substring(
+//         0,
+//         lastCommaIndex
+//       )}, and ${makeMinimunRequireMessage.substring(lastCommaIndex + 2)}`;
+//     }
+//     makeMinimunRequireMessage = makeMinimunRequireMessage.replace(
+//       /at least (\d+ \w+)/g,
+//       "at least <strong>$1</strong>"
+//     );
+//     validityMessage.innerHTML = `${makeMinimunRequireMessage}`;
+//   }
+// };
 
 // dispatch the chosenAssets to the parent application
 export const dispatchChosenAssets = (chosenAssets) => {
@@ -416,6 +566,7 @@ export const highlightSelectedAsset = (
   highlightedSelection
 ) => {
   const graphic = response.results[0].graphic;
+  console.log("Graphic selected:", graphic);
   const layerProperties = response.results[0].layer.layerProperties;
   const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
   const layerName = graphic.layer.layerProperties.layerName;
@@ -435,27 +586,27 @@ export const highlightSelectedAsset = (
     )
   ) {
     view.whenLayerView(graphic.layer).then((layerView) => {
-      const mapDataLayerId = `${layerName}-${graphic.layer.id}`;
-      const layerAssetMax = layerProperties.maximumAssetsRequired;
+      const mapDataLayerId = `${graphic.layer.id}`;
+      const layerAssetMax = layerProperties.maxAssetsAllowed;
       const totalLayerAssetsSelected = chosenAssets.filter(
-        (h) => h.layerId === `${layerName}-${graphic.layer.id}`
+        (h) => h.layerId === `${graphic.layer.id}`
       ).length;
       if (layerAssetMax > 0 && totalLayerAssetsSelected >= layerAssetMax) {
         document
-          .getElementById(`${mapDataLayerId}-max-asset-required-message`)
+          .getElementById(`${mapDataLayerId}-max-asset-allowed-message`)
           .classList.remove("label-default");
         document
-          .getElementById(`${mapDataLayerId}-max-asset-required-message`)
+          .getElementById(`${mapDataLayerId}-max-asset-allowed-message`)
           .classList.add("label-error");
         setTimeout(() => {
           alert(
             `You have already selected the maximum of ${layerAssetMax} asset(s) from the ${formattedLayerName} layer.`
           );
           document
-            .getElementById(`${mapDataLayerId}-max-asset-required-message`)
+            .getElementById(`${mapDataLayerId}-max-asset-allowed-message`)
             .classList.remove("label-error");
           document
-            .getElementById(`${mapDataLayerId}-max-asset-required-message`)
+            .getElementById(`${mapDataLayerId}-max-asset-allowed-message`)
             .classList.add("label-default");
         }, 500);
         return;
@@ -470,11 +621,11 @@ export const highlightSelectedAsset = (
         assetLabel: labelMaskValue,
         assetType: graphic.layer.layerProperties.layerName,
         layerData: graphic.layer,
-        layerId: `${layerName}-${layerId}`,
+        layerId: `${layerId}`,
         layerName: layerName,
         layerTitle: graphic.layer.title,
         layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
-        layerAssetMax: graphic.layer.layerProperties.maximumAssetsRequired,
+        layerAssetMax: graphic.layer.layerProperties.maxAssetsAllowed,
         highlightSelect: highlightedSelection,
       };
       chosenAssets.push(chosenAsset);
@@ -505,26 +656,35 @@ export const highlightSelectedAsset = (
 // render information about the assets that have been selected
 // used in highlightSelectedAsset function, no need to export
 const renderSelectedAssetLabels = () => {
+  // console.log('chosenAssets:', chosenAssets);
   const selectedLayerAssetListArray = document.querySelectorAll(
-    ".highlighted-asset-data-list"
+    ".chosen-asset-data-list"
   );
   // Clear existing list items before appending new ones
   selectedLayerAssetListArray.forEach((list) => {
     list.innerHTML = "";
   });
   chosenAssets.forEach((asset) => {
+    console.log("Rendering asset label for:", asset);
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
       if (asset.layerId === selectedLayerAssetList.id) {
         let assetLabel = asset.assetLabel;
-        if (
-          asset.assetAttributes.Road_Type &&
-          asset.assetAttributes.Road_Type === "Alley"
-        ) {
-          assetLabel = `Alley`;
-        }
+        // if (
+        //   asset.assetAttributes.RoadType &&
+        //   asset.assetAttributes.RoadType === "Alley"
+        // ) {
+        //   assetLabel = `Alley`;
+        // };
+        // if (assetLabel.includes("0 to 0") && asset.assetAttributes.RoadType !== "Interstate") {
+        //   assetLabel = "Alley";
+        // };
+        // if (assetLabel.includes("0 to 0") && asset.assetAttributes.RoadType === "Interstate") {
+        //   // filter and remove "0 to 0" from interstate labels
+        //   assetLabel = assetLabel.replace("0 to 0", "").trim();
+        // };
         if (assetLabel.includes("null")) {
           assetLabel = "Asset data unavailable";
-        }
+        };
         const assetLabelListItem = document.createElement("li");
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
@@ -541,7 +701,6 @@ const renderSelectedAssetLabels = () => {
           >
             <span class="glyphicons glyphicons-remove"></span>
             Remove
-            <span class="sr-only">${assetLabel}</span>
           </button>
         `;
         selectedLayerAssetList.appendChild(assetLabelListItem);
@@ -551,8 +710,10 @@ const renderSelectedAssetLabels = () => {
         );
 
         removeAssetBtn.addEventListener("click", () => {
+          renderValidityMessage();
           chosenAssets.forEach((asset) => {
-            const formattedLayerName = asset.layerData.layerProperties.formattedLayerName;
+            const formattedLayerName =
+              asset.layerData.layerProperties.formattedLayerName;
             if (asset.internalAssetId === assetLabelListItem.id) {
               asset.highlightSelect.remove();
               const listItemToRemove = document.getElementById(
@@ -577,7 +738,10 @@ const renderSelectedAssetLabels = () => {
   });
   selectedLayerAssetListArray.forEach((list) => {
     if (list.innerHTML === "") {
-      list.innerHTML = `<li title="No assets selected from ${list.dataset.layerName.replace(/-/g, " ")} layer">None selected</li>`;
+      list.innerHTML = `<li title="No assets selected from ${list.dataset.layerName.replace(
+        /-/g,
+        " "
+      )} layer">None selected</li>`;
     }
   });
 };
@@ -586,22 +750,24 @@ const renderSelectedAssetLabels = () => {
 // validate asset selection for each individual layer, used in highlightSelectedAsset function
 const validateLayerSelections = () => {
   featureLayers.forEach((mapLayer) => {
-    const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
+    console.log("Validating layer selections for:", mapLayer);
+    // const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
+    const layerId = mapLayer.id;
     const layerAssetMin = parseInt(
-      mapLayer.layerProperties.minimumAssetsRequired
+      mapLayer.layerProperties.minAssetsRequired
     );
     const layerAssetMax = parseInt(
-      mapLayer.layerProperties.maximumAssetsRequired
+      mapLayer.layerProperties.maxAssetsAllowed
     );
     const totalLayerAssetsSelected = chosenAssets.filter(
       (asset) =>
-        asset.layerId === `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
+        asset.layerId === `${mapLayer.id}`
     ).length;
     const minAssetMessageElement = document.getElementById(
       `${layerId}-min-asset-required-message`
     );
     const maxAssetMessageElement = document.getElementById(
-      `${layerId}-max-asset-required-message`
+      `${layerId}-max-asset-allowed-message`
     );
     if (layerAssetMin === 0 && totalLayerAssetsSelected === 0) {
       minAssetMessageElement.innerHTML = `No selection required.`;

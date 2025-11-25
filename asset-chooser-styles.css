@@ -1,5 +1,4 @@
 /* asset-chooser */
-
 .zoom-alert-span {
   margin-top: 5px;
   display: inline-block;
@@ -26,8 +25,13 @@
   transform: scale(0.95);
 }
 
-.remove-asset-btn {
-  transition: transform 0.1s;
+/* .remove-asset-btn {
+   transition: transform 0.1s; 
+} */
+
+.remove-asset-btn:hover {
+  /* transform: scale(1.05); */
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 6px 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 .remove-asset-btn:active {
@@ -103,6 +107,15 @@
 
 #accessibility-icon {
   margin-right: 5px;
+}
+
+/* #validity-message {
+  min-height: 1.75em;
+  display: block; 
+} */
+
+#asset-chooser-map-and-layer-data-wrapper {
+  margin-top: 1em;
 }
 
 /* media queries */

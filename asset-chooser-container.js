@@ -1,44 +1,51 @@
 // import from asset-chooser-container-functions.js
 import { handleAccomodationButtonClick } from "./asset-chooser-container-functions.js";
+import { enableSketchMode, enableSelectMode } from "./asset-chooser-container-functions.js";
 
 class AssetChooserContainerComponent extends HTMLElement {
   constructor() {
     super(); // always call super() first in the constructor for a custom web component
     this.title = this.getAttribute("title") || "";
     this.hint = this.getAttribute("hint") || "";
+    this.isSelectEnabled = this.getAttribute("is-select-enabled") === "true";
+    this.isSketchEnabled = this.getAttribute("is-sketch-enabled") === "true";
   }
   connectedCallback() {
+    // console.log("sketch enabled",this.isSketchEnabled);
+    enableSketchMode(this.isSketchEnabled);
+    enableSelectMode(this.isSelectEnabled);
+    const accomodationButtonMessage =
+      "Click this button to enter assets if you are using assistive technology and are unable to select assets on the map.";
     try {
       this.innerHTML = `
-      <section id="asset-chooser-section">
-        <div id="asset-chooser-interface">
+        <section id="asset-chooser-interface">
           <h2>${this.title}</h2>
-          <p>${this.hint}</p>
+          <p id="asset-chooser-hint" data-original-hint="${this.hint}">${this.hint}</p>
           <div id="accomodation-button-container">
             <button
               type="button"
               id="accomodation-button"
               class="link-button inverse-button"
-              aria-label="Click this button to enter assets if you are using assistive technology and are unable to select assets on the map."
-              title="Click this button to enter assets only if you are using assistive technology and are unable to select assets on the map."
+              aria-label="${accomodationButtonMessage}"
+              title="${accomodationButtonMessage}"
             >
               <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched">
               </span>
               Accessible Accommodation
             </button>
           </div>
-          <p id="validity-message" title="Selection requirements"></p>
-          <div class="row">
+         
+          <div class="row" id="asset-chooser-map-and-layer-data-wrapper">
             <div class="col-md-7">
               <div id="viewDiv" style="width: 100%; height: 500px;" aria-label="interactive map for selecting assets" >
+              </div>
             </div>
-          </div>
-            <div class="col-md-5">
+            <div class="col-md-5" id="layer-data-container">
               <div id="layer-data-div" class="stat-group"></div>
+              <div id="sketchable-layer-data-div" class="stat-group"></div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
       `;
       // Add event listener for the accomodation button click
       const accomodationButton = this.querySelector("#accomodation-button");
@@ -58,3 +65,6 @@ class AssetChooserContainerComponent extends HTMLElement {
 }
 
 export { AssetChooserContainerComponent };
+
+
+//  <p id="validity-message" title="Selection requirements"></p>

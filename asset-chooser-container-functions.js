@@ -1,10 +1,14 @@
-// import required state variables from asset-chooser-state.js
+ // import required state variables from asset-chooser-state.js
 import {
   featureLayers,
   chosenAssets,
   chosenAssetFormData,
   isValid,
   setIsValid,
+  isSketchEnabled,
+  setIsSketchEnabled,
+  isSelectEnabled,
+  setIsSelectEnabled,
 } from "./asset-chooser-state.js";
 // import required functions from asset-chooser-functions.js
 import { secureChosenAssets } from "./asset-chooser-functions.js";
@@ -134,7 +138,7 @@ const handleAssetEditButtonClick = () => {
     acc[key] = value;
     return acc;
   }, {});
-  console.log("Prefill Data:", prefillData);
+  // console.log("Prefill Data:", prefillData);
   // Remove the existing modal if it exists
   const existingModal = document.getElementById("asset-modal");
   if (existingModal) {
@@ -236,3 +240,23 @@ export const handleAccomodationButtonClick = () => {
   }
   openModal();
 };
+
+export const enableSketchMode = (isSketchEnabled) => {
+  if (isSketchEnabled) {
+  setIsSketchEnabled(true);
+  // console.log("Sketch mode enabled");
+  } else {
+    setIsSketchEnabled(false);
+    // console.log("Sketch mode disabled");
+  }
+}
+
+export const enableSelectMode = (isSelectEnabled) => {
+  if (isSelectEnabled) {
+    setIsSelectEnabled(true);
+    // console.log("Select mode enabled");
+  } else {
+    setIsSelectEnabled(false);
+    // console.log("Select mode disabled");
+  }
+}

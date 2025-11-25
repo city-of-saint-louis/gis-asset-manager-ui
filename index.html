@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="asset-chooser-styles.css" />
     <link
       rel="stylesheet"
-      href="https://js.arcgis.com/4.33/esri/themes/light/main.css"
+      href="https://js.arcgis.com/4.34/esri/themes/light/main.css"
     />
     <link
       href="https://www.stlouis-mo.gov/style/screen.css"
@@ -15,9 +15,10 @@
       type="text/css"
       media="all"
     />
+    <link rel="stylesheet" href="dev-styles.css" />
     <script type="module" src="https://js.arcgis.com/calcite-components/3.2.1/calcite.esm.js"></script>
-    <script src="https://js.arcgis.com/4.33/"></script>
-    <script type="module" src="https://js.arcgis.com/4.33/map-components/"></script>
+    <script src="https://js.arcgis.com/4.34/"></script>
+    <script type="module" src="https://js.arcgis.com/4.34/map-components/"></script>
   </head>
   <body>
     <header class=""></header>
@@ -27,62 +28,65 @@
           class="link-button disabled-button"
           aria-live="polite"
           disabled
-          id="submit-chosen-assets-button"
+          id="submit-assets-button"
           style="margin: 0 auto"
         >
-          Submit Selected Assets
+          Submit Assets
         </button>
       </div>
       <!-- <div id="viewDiv" style="height: 400px;"></div> -->
       <asset-chooser-container
-        title="Select Assets Required For Your Use Case"
-        hint="Click on the map to select required assets. Click again to unselect."
+        title="Provide Required Assets for Your Special Event Permit Application"
+        hint="Click on the map to select required assets for Selectable Layers. Use the sketch tool to add custom assets to the Sketchable Layers by clicking 'Add Assets'."
+        is-sketch-enabled="true"
+        is-select-enabled="true"
       >
-       <!-- <asset-chooser-map-layer
-          name="street_segment"
-          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
-          layer-asset-id-field-name="OBJECTID"
-          minimum=1
-          maximum=1
-          label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
-          min-scale=20000
-          asset-label="FULLNAME"
+        <asset-chooser-sketchable-map-layer
+          name="Access Point"
+          minimum="2"
+          maximum="10"
+          sketch-type="point"
+          min-scale="8000"
         >
-        </asset-chooser-map-layer> -->
-          <asset-chooser-map-layer
+        </asset-chooser-sketchable-map-layer>
+        <asset-chooser-sketchable-map-layer
+          name="Barricade"
+          sketch-type="polyline"
+          min-scale="8000"
+        >
+        </asset-chooser-sketchable-map-layer>
+        <asset-chooser-sketchable-map-layer
+          name="First Aid Tent"
+          minimum="1"
+          sketch-type="polygon"
+          min-scale="8000"
+        >
+        </asset-chooser-sketchable-map-layer>
+       
+        <asset-chooser-map-layer
           name="street_segment"
           layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/0/"
           layer-asset-id-field-name="OBJECTID"
-          minimum=1
-          maximum=3
+          minimum="0"
           label-mask="{LeftFromAddress} to {RightToAddress} {StreetName}"
-          min-scale=20000
+          min-scale="20000"
           asset-label="StreetName"
         >
         </asset-chooser-map-layer>
-        <!-- <asset-chooser-map-layer
-          name="neighborhood"
-          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/Neighborhoods_Official/FeatureServer"
-          layer-asset-id-field-name="FID"
-          minimum=1
-          maximum=3
-          label-mask="{NHD_NAME}"
-          max-scale="30000"
-          asset-label="NHD_NAME"
-        > -->
+    
         </asset-chooser-map-layer>
         <asset-chooser-map-layer
           name="PARCEL"
           layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/4/"
           layer-asset-id-field-name="OBJECTID"
-          minimum=1
-          maximum=1
+          minimum="1"
+          maximum="6"
           label-mask="{SITEADDR}"
-          min-scale=30000
+          min-scale="30000"
           asset-label="SITEADDR"
         >
         </asset-chooser-map-layer>
-        <asset-chooser-map-layer
+        <!-- <asset-chooser-map-layer
           name="Parking meter"
           display-name="Parking meter"
           layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/ParkingServices/MapServer/1"
@@ -93,7 +97,29 @@
           min-scale=30000
           asset-label="OBJECTID"
         >
-        </asset-chooser-map-layer>
+        </asset-chooser-map-layer> -->
+
+        <!-- <asset-chooser-map-layer
+          name="street_segment"
+          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
+          layer-asset-id-field-name="OBJECTID"
+          minimum=1
+          maximum=1
+          label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
+          min-scale=20000
+          asset-label="FULLNAME"
+        >
+        </asset-chooser-map-layer> -->
+            <!-- <asset-chooser-map-layer
+          name="neighborhood"
+          layer-class-url="https://services6.arcgis.com/HZXbCkpCSqbGd0vK/arcgis/rest/services/Neighborhoods_Official/FeatureServer"
+          layer-asset-id-field-name="FID"
+          minimum=1
+          maximum=3
+          label-mask="{NHD_NAME}"
+          max-scale="30000"
+          asset-label="NHD_NAME"
+        > -->
             <!-- <asset-chooser-map-layer
           name="Parcel"
           layer-class-url=" https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/4"
@@ -146,7 +172,7 @@
         </asset-chooser-map-layer> -->
       </asset-chooser-container>
     </main>
-    <footer></footer>
+    <footer>Developed by The City of St. Louis Web Team</footer>
     <script type="module" src="asset-chooser.js"></script>
     <script src="parent-application.js"></script>
   </body>
