@@ -138,6 +138,5 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.location.href.includes("results.html")) {
     displayChosenAssets();
     displayCreatedAssets();
-    // convertChosenAssets();
   }
 });
