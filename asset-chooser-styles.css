@@ -25,6 +25,10 @@
   transform: scale(0.95);
 }
 
+.invisible-button {
+  visibility: hidden;
+}
+
 /* .remove-asset-btn {
    transition: transform 0.1s; 
 } */

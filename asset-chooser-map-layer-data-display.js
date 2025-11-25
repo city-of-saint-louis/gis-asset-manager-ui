@@ -89,7 +89,8 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       if (visibleAtCurrentScale) {
         zoomAlertSpan.textContent = ``;
         toggleLayerVisibilityButton.removeAttribute("disabled");
-        toggleLayerVisibilityButton.removeAttribute("hidden");
+        // toggleLayerVisibilityButton.removeAttribute("hidden");
+        toggleLayerVisibilityButton.classList.remove("invisible-button");
         if (visible) {
           toggleVisibilityBtnTextSpan.textContent = `Hide`;
           toggleLayerVisibilityButton.setAttribute(
@@ -108,7 +109,8 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
           layerMinScale > 0 ? `Zoom in to see this layer.` : ""
         } ${layerMaxScale > 0 ? `Zoom out to see this layer.` : ""}`;
         toggleLayerVisibilityButton.setAttribute("disabled", true);
-        toggleLayerVisibilityButton.setAttribute("hidden", true);
+        // toggleLayerVisibilityButton.setAttribute("hidden", true);
+        toggleLayerVisibilityButton.classList.add("invisible-button");
       }
     }
   }
@@ -243,10 +245,11 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       }
       <button
         type="button"
-        id="${sanitizedLayerName}-show-hide-layer-btn" class="toggleLayerVisibilityButton"
+        id="${sanitizedLayerName}-show-hide-layer-btn" 
+         class="toggleLayerVisibilityButton${layerMinScale > 0 ? " invisible-button" : ""}"
         att-layer-id="${mapDataLayerId}"
         aria-label="" title="Hide ${displayName} layer"${
-      layerMinScale > 0 ? "disabled hidden" : ""
+      layerMinScale > 0 ? "disabled" : ""
     }
         title="Hide ${displayName} layer"
       >
