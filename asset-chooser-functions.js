@@ -187,7 +187,9 @@ export const addMapLayer = ({
     layersWithNoSelectionRequired.push(mapDataLayerId);
   }
   const layerMaxScale = mapDataLayer.maxScale;
-  const layerDataDiv = document.getElementById("layer-data-div");
+  // const layerDataDiv = document.getElementById("layer-data-div");
+  const layerDataContainer = document.getElementById("layer-data-container");
+  layerDataContainer.classList.add("stat-group");
 
   view.on("layerview-create", function (event) {
     if (event.layer === mapDataLayer) {
@@ -207,6 +209,7 @@ export const addMapLayer = ({
     "asset-chooser-map-layer-data-display"
   );
   mapLayerDataDisplay.setAttribute("data-layer-id", mapDataLayerId);
+  mapLayerDataDisplay.classList.add("col-md-4");
   mapLayerDataDisplay.data = {
     layerName,
     formattedLayerName,
@@ -219,8 +222,8 @@ export const addMapLayer = ({
     isSketchable: false,
   };
   console.log("mapLayerDataDisplay.data", mapLayerDataDisplay.data);
-  layerDataDiv.appendChild(mapLayerDataDisplay);
-
+  // layerDataDiv.appendChild(mapLayerDataDisplay);
+  layerDataContainer.appendChild(mapLayerDataDisplay);
   // layerDataDiv.innerHTML += `
   //   <div
   //     class="map-layer-data-container stat-container stat-medium"

@@ -19,7 +19,7 @@ class AssetChooserContainerComponent extends HTMLElement {
     try {
       this.innerHTML = `
         <section id="asset-chooser-interface">
-          <h2>${this.title}</h2>
+          <h2 id="asset-chooser-title">${this.title}</h2>
           <p id="asset-chooser-hint" data-original-hint="${this.hint}">${this.hint}</p>
           <div id="accomodation-button-container">
             <button
@@ -35,14 +35,11 @@ class AssetChooserContainerComponent extends HTMLElement {
             </button>
           </div>
          
-          <div class="row" id="asset-chooser-map-and-layer-data-wrapper">
-            <div class="col-md-7">
-              <div id="viewDiv" style="width: 100%; height: 500px;" aria-label="interactive map for selecting assets" >
-              </div>
+          <div id="asset-chooser-map-and-layer-data-wrapper">
+            <div id="viewDiv" style="width: 100%; height: 500px;" aria-label="Interactive map for selecting and adding assets">
             </div>
-            <div class="col-md-5" id="layer-data-container">
-              <div id="layer-data-div" class="stat-group"></div>
-              <div id="sketchable-layer-data-div" class="stat-group"></div>
+            <div class="row" id="layer-data-container">
+              
             </div>
           </div>
         </section>
@@ -68,3 +65,14 @@ export { AssetChooserContainerComponent };
 
 
 //  <p id="validity-message" title="Selection requirements"></p>
+
+//  <div class="row" id="asset-chooser-map-and-layer-data-wrapper">
+//             <div class="col-md-7">
+//               <div id="viewDiv" style="width: 100%; height: 500px;" aria-label="Interactive map for selecting and adding assets">
+//             </div>
+//             </div>
+//             <div class="col-md-5" id="layer-data-container">
+//               <div id="layer-data-div" class="stat-group"></div>
+//               <div id="sketchable-layer-data-div" class="stat-group"></div>
+//             </div>
+//           </div>

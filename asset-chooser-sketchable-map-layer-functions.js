@@ -167,10 +167,12 @@ export const addSketchableMapLayer = async ({
   const layerMaxScale = parseInt(
     sketchableGraphicLayer.layerProperties.maxScale
   );
-  const sketchableLayerDataDiv = document.getElementById(
-    "sketchable-layer-data-div"
-  );
-
+  // const sketchableLayerDataDiv = document.getElementById(
+  //   "sketchable-layer-data-div"
+  // );
+  const layerDataContainer = document.getElementById("layer-data-container");
+  layerDataContainer.classList.add("stat-group");
+  
   view.on("layerview-create", function (event) {
     if (event.layer === sketchableGraphicLayer) {
       monitorLayerVisibility(
@@ -189,6 +191,7 @@ export const addSketchableMapLayer = async ({
     "asset-chooser-map-layer-data-display"
   );
   mapLayerDataDisplay.setAttribute("data-layer-id", sketchableGraphicLayerId);
+  mapLayerDataDisplay.classList.add("col-md-4");
   mapLayerDataDisplay.data = {
     layerName: layerName,
     formattedLayerName: formattedLayerName,
@@ -203,7 +206,8 @@ export const addSketchableMapLayer = async ({
     availableCreateTools: sketchableMapLayer.sketchType,
     layer: sketchableMapLayer,
   };
-  sketchableLayerDataDiv.appendChild(mapLayerDataDisplay);
+  // sketchableLayerDataDiv.appendChild(mapLayerDataDisplay);
+  layerDataContainer.appendChild(mapLayerDataDisplay);
 };
 
 export const validateCreatedAssets = () => {

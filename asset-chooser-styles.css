@@ -1,4 +1,14 @@
 /* asset-chooser */
+#asset-chooser-title {
+  margin: 0;
+  /* padding: 0; */
+}
+
+/* #layer-data-container {
+  padding-left: 1em;
+  padding-right: 1em;
+} */
+
 .zoom-alert-span {
   margin-top: 5px;
   display: inline-block;
@@ -132,3 +142,25 @@
 /* .esri-attribution {
   display: none !important;
 } */
+
+.map-layer-data-container {
+  /* height: 100%; */
+  min-height: 210px; /* Adjust as needed */
+  min-width: 250px;  /* Adjust as needed */
+  box-sizing: border-box;
+}
+
+.asset-selection-requirements {
+  min-height: 2em;
+}
+
+.list-group {
+  min-height: 2.5em;
+}
+
+@media screen and (max-width: 991px) {
+  #layer-data-container {
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+}

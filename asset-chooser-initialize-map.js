@@ -134,12 +134,12 @@ export const initializeMap = async () => {
             layersWithNoSelectionRequired,
           });
         });
-        const selectableLayerDataDivHeading = document.createElement("h3");
-        selectableLayerDataDivHeading.textContent = "Selectable Layers";
-        const layerDataDiv = document.getElementById(
-          "layer-data-div"
-        );
-        layerDataDiv.insertBefore(selectableLayerDataDivHeading, layerDataDiv.firstChild);
+        // const selectableLayerDataDivHeading = document.createElement("h3");
+        // selectableLayerDataDivHeading.textContent = "Selectable Layers";
+        // const layerDataDiv = document.getElementById(
+        //   "layer-data-div"
+        // );
+        // layerDataDiv.insertBefore(selectableLayerDataDivHeading, layerDataDiv.firstChild);
       }
 
       if (isSketchEnabled === "true" || isSketchEnabled === true) {
@@ -168,12 +168,12 @@ export const initializeMap = async () => {
             reactiveUtils,
           });
         });
-        const sketchableLayerDataDivHeading = document.createElement("h3");
-        sketchableLayerDataDivHeading.textContent = "Sketchable Layers";
-        const sketchableLayerDataDiv = document.getElementById(
-          "sketchable-layer-data-div"
-        );
-        sketchableLayerDataDiv.appendChild(sketchableLayerDataDivHeading);
+        // const sketchableLayerDataDivHeading = document.createElement("h3");
+        // sketchableLayerDataDivHeading.textContent = "Sketchable Layers";
+        // const sketchableLayerDataDiv = document.getElementById(
+        //   "sketchable-layer-data-div"
+        // );
+        // sketchableLayerDataDiv.appendChild(sketchableLayerDataDivHeading);
       }
 
       if (!isSelectEnabled && !isSketchEnabled) {
