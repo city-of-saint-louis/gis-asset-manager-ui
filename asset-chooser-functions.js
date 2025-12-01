@@ -209,7 +209,7 @@ export const addMapLayer = ({
     "asset-chooser-map-layer-data-display"
   );
   mapLayerDataDisplay.setAttribute("data-layer-id", mapDataLayerId);
-  mapLayerDataDisplay.classList.add("col-md-4");
+  mapLayerDataDisplay.classList.add("col-md-6", "col-lg-4", "col-xl-6");
   mapLayerDataDisplay.data = {
     layerName,
     formattedLayerName,
@@ -784,7 +784,7 @@ const validateLayerSelections = () => {
       if (!validLayers.includes(layerId)) validLayers.push(layerId);
     }
     if (layerAssetMin > 0 && totalLayerAssetsSelected >= layerAssetMin) {
-      minAssetMessageElement.innerHTML = `${totalLayerAssetsSelected} selected. At least ${layerAssetMin} required.`;
+      minAssetMessageElement.innerHTML = `${totalLayerAssetsSelected} selected. ${layerAssetMin} required.`;
       minAssetMessageElement.classList.add("label", "label-success");
       minAssetMessageElement.classList.remove("label-error");
       if (!validLayers.includes(layerId)) validLayers.push(layerId);

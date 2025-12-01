@@ -219,7 +219,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
         >
       <div>
         <span>
-          ${displayName} Layer
+          ${displayName}
         </span>
        <br>
        <span class="zoom-alert-span" id="${sanitizedLayerName}-zoom-alert-span" style="height: 14px; display: inline-block">
@@ -279,7 +279,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
         `
           : `
         <span id="${mapDataLayerId}-min-asset-required-message" title="At least ${minAssetsRequired} selections required from ${displayName} layer" class="label label-error">
-        At least ${minAssetsRequired} required
+          ${minAssetsRequired} required
         </span>
         `
       }
