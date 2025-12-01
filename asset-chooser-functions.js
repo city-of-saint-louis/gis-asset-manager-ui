@@ -692,6 +692,7 @@ const renderSelectedAssetLabels = () => {
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
           <span
+            class="asset-label-text"
             title="You have selected ${assetLabel}"
           >
             ${assetLabel}

@@ -260,9 +260,9 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       </div>
       </div>
       <div
-      aria-live="polite"
-      aria-atomic="true"
-      class="asset-selection-requirements"
+        aria-live="polite"
+        aria-atomic="true"
+        class="asset-selection-requirements"
       >
       <span class="sr-only">Asset requirements and status for ${displayName} layer</span>
       ${
