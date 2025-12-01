@@ -292,6 +292,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
           : ``
       }
       </div>
+      <div class="asset-list-wrapper">
       <ul
         data-layer-name="${sanitizedLayerName}"
         class="list-group ${assetListClass}"
@@ -307,6 +308,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
         None ${isSketchable ? "added" : "selected"}
         </li>
       </ul>
+      </div>
       </div>
     `;
 
