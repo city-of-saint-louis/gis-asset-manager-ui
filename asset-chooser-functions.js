@@ -774,12 +774,12 @@ const validateLayerSelections = () => {
       `${layerId}-max-asset-allowed-message`
     );
     if (layerAssetMin === 0 && totalLayerAssetsSelected === 0) {
-      minAssetMessageElement.innerHTML = `No selection required.`;
+      minAssetMessageElement.innerHTML = `0 required.`;
       minAssetMessageElement.classList.add("label", "label-success");
       if (!validLayers.includes(layerId)) validLayers.push(layerId);
     }
     if (layerAssetMin === 0 && totalLayerAssetsSelected > 0) {
-      minAssetMessageElement.innerHTML = `${totalLayerAssetsSelected} selected. None required`;
+      minAssetMessageElement.innerHTML = `${totalLayerAssetsSelected} selected. 0 required`;
       minAssetMessageElement.classList.add("label", "label-success");
       if (!validLayers.includes(layerId)) validLayers.push(layerId);
     }
@@ -815,7 +815,7 @@ const validateLayerSelections = () => {
     }
     if (layerAssetMax > 0 && totalLayerAssetsSelected < layerAssetMax) {
       maxAssetMessageElement.classList.add("label", "label-default");
-      maxAssetMessageElement.innerHTML = `Select a maximum of ${layerAssetMax}.`;
+      maxAssetMessageElement.innerHTML = `${layerAssetMax} maximum.`;
     }
   });
   validateAssetSelection();

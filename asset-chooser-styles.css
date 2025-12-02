@@ -151,6 +151,9 @@
   min-height: 2em;
 } */
 
+.zoom-alert-span {
+  font-size: 12px;
+}
 
 asset-chooser-map-layer-data-display li {
   font-size: .9em;

@@ -30,7 +30,11 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       this._data &&
       typeof this._data.minAssetsRequired === "number"
     ) {
+      if (this._assetCount === 0) {
+      minAssetMsg.textContent = `${this._data.minAssetsRequired} required.`;
+      } else {
       minAssetMsg.textContent = `${this._assetCount} added. ${this._data.minAssetsRequired} required.`;
+      }
     }
   }
 
@@ -269,7 +273,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
         minAssetsRequired === 0
           ? `
         <span id="${mapDataLayerId}-min-asset-required-message" title="No selection required" class="label label-success">
-          No ${isSketchable ? "additions" : "selection"} required</span>
+          0 required</span>
          `
           : minAssetsRequired === 1
           ? `
@@ -287,7 +291,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
         maxAssetsAllowed > 0
           ? `
          <span id="${mapDataLayerId}-max-asset-allowed-message" title="Select a maximum of ${maxAssetsAllowed} from ${displayName} layer" class="label label-default">
-       ${isSketchable ? "Add" : "Select"} a maximum of ${maxAssetsAllowed}
+       ${maxAssetsAllowed} maximun
         </span>`
           : ``
       }
