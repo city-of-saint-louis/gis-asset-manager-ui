@@ -209,7 +209,7 @@ export const addMapLayer = ({
     "asset-chooser-map-layer-data-display"
   );
   mapLayerDataDisplay.setAttribute("data-layer-id", mapDataLayerId);
-  mapLayerDataDisplay.classList.add("col-md-6", "col-lg-4", "col-xl-6");
+  mapLayerDataDisplay.classList.add("col-sm-6", "col-lg-4");
   mapLayerDataDisplay.data = {
     layerName,
     formattedLayerName,

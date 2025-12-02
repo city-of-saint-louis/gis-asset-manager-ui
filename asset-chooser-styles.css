@@ -17,11 +17,11 @@
 }
 
 .toggleLayerVisibilityButton {
-  font-size: 12px;
+  font-size: 10px;
   background-color: #eeeeee;
   transition: transform 0.1s;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 4px;
+  padding-right: 4px;
   min-width: 60px;
 }
 
@@ -156,7 +156,7 @@
 }
 
 asset-chooser-map-layer-data-display li {
-  font-size: .9em;
+  font-size: .8em;
   /* line-height: 1.2em; */
   padding: .35em !important;
   /* background-color: #cccccc; */
@@ -170,6 +170,7 @@ asset-chooser-map-layer-data-display li {
   overflow: hidden;
   /* padding: 0.35em; */
 }
+
 .list-group.chosen-asset-data-list,
 .list-group.created-asset-data-list {
   /* min-height: 6em;
