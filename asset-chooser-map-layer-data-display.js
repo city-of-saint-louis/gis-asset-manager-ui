@@ -31,9 +31,9 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       typeof this._data.minAssetsRequired === "number"
     ) {
       if (this._assetCount === 0) {
-      minAssetMsg.textContent = `${this._data.minAssetsRequired} required.`;
+        minAssetMsg.textContent = `${this._data.minAssetsRequired} required.`;
       } else {
-      minAssetMsg.textContent = `${this._assetCount} added. ${this._data.minAssetsRequired} required.`;
+        minAssetMsg.textContent = `${this._assetCount} added. ${this._data.minAssetsRequired} required.`;
       }
     }
   }
@@ -213,228 +213,112 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
 
     // <span class="asset-count-span">(${this._assetCount})</span>
 
-    // this.innerHTML = `
-    //   <div class="map-layer-data-container stat-container stat-medium">
-    //     <div
-    //       class="stat-title"
-    //       id="${sanitizedLayerName}-layer-selected-asset-container"
-    //       aria-label="${displayName} Layer"
-    //       title="${displayName} Layer"
-    //     >
-    //       <div>
-    //         <span>
-    //           ${displayName}
-    //         </span>
-    //         <br>
-    //         <span class="zoom-alert-span" id="${sanitizedLayerName}-zoom-alert-span" style="height: 14px; display: inline-block">
-    //           ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
-    //         </span>
-    //       </div>
-    //     <div>
-    //     ${isSketchable ? `
-    //       <button
-    //         type="button"
-    //         id="enable-sketch-btn-${sanitizedLayerName}" class="toggleLayerVisibilityButton"
-    //         aria-label=""
-    //         title="Enable sketch for ${displayName} layer"
-    //       >
-    //         Add Assets
-    //       </button>
-    //     `
-    //       : ""
-    //     }
-    //     <button
-    //       type="button"
-    //       id="${sanitizedLayerName}-show-hide-layer-btn" 
-    //       class="toggleLayerVisibilityButton${layerMinScale > 0 ? " invisible-button" : ""}"
-    //       att-layer-id="${mapDataLayerId}"
-    //       aria-label="" title="Hide ${displayName} layer"${layerMinScale > 0 ? "disabled" : ""}
-    //       title="Hide ${displayName} layer"
-    //     >
-    //       <span id="${layerName}-toggle-visibility-btn-text-span">
-    //         ${layerMinScale > 0 ? `Show` : `Hide`}
-    //       </span>
-    //     </button>
-    //   </div>
-    //   </div>
-    //   <div
-    //     aria-live="polite"
-    //     aria-atomic="true"
-    //     class="asset-selection-requirements"
-    //   >
-    //   <span class="sr-only">Asset requirements and status for ${displayName} layer</span>
-    //   ${
-    //     minAssetsRequired === 0
-    //       ? `
-    //     <span id="${mapDataLayerId}-min-asset-required-message" title="No selection required" class="label label-success">
-    //       0 required</span>
-    //      `
-    //       : minAssetsRequired === 1
-    //       ? `
-    //      <span id="${mapDataLayerId}-min-asset-required-message" title="${minAssetsRequired} selection required from ${displayName} layer" class="label label-error">
-    //       ${minAssetsRequired} required
-    //     </span>
-    //     `
-    //       : `
-    //     <span id="${mapDataLayerId}-min-asset-required-message" title="At least ${minAssetsRequired} selections required from ${displayName} layer" class="label label-error">
-    //       ${minAssetsRequired} required
-    //     </span>
-    //     `
-    //   }
-    //   ${
-    //     maxAssetsAllowed > 0
-    //       ? `
-    //      <span id="${mapDataLayerId}-max-asset-allowed-message" title="Select a maximum of ${maxAssetsAllowed} from ${displayName} layer" class="label label-default">
-    //    ${maxAssetsAllowed} maximun
-    //     </span>`
-    //       : ``
-    //   }
-    //   </div>
-    //   <div class="asset-list-wrapper">
-    //   <ul
-    //     data-layer-name="${sanitizedLayerName}"
-    //     class="list-group ${assetListClass}"
-    //     id="${mapDataLayerId}"
-    //     aria-live="polite"
-    //     aria-atomic="true"
-    //   >
-    //     <li
-    //     title="No assets ${
-    //       isSketchable ? "added" : "selected"
-    //     } for ${displayName} layer"
-    //     >
-    //     None ${isSketchable ? "added" : "selected"}
-    //     </li>
-    //   </ul>
-    //   </div>
-    //   </div>
-    // `;
-
-
 
     this.innerHTML = `
-  <div class="map-layer-data-container stat-container stat-medium">
-  <div
+      <div class="map-layer-data-container stat-container stat-medium">
+        <div
           class="zoom-alert-span"
           id="${sanitizedLayerName}-zoom-alert-span"
           style=" display: inline-block; margin-top: -2em; margin-bottom: -1em;"
         >
           ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
         </div>
-    <div
-      class="stat-title"
-      id="${sanitizedLayerName}-layer-selected-asset-container"
-      aria-label="${displayName} Layer"
-      title="${displayName} Layer"
-    >
-    
-      <div>
-        <div>
-          ${displayName}
+        <div
+          class="stat-title"
+          id="${sanitizedLayerName}-layer-selected-asset-container"
+          aria-label="${displayName} Layer"
+          title="${displayName} Layer"
+        >
+          <div>
+            ${displayName}
+          </div>
+          <div>
+            ${ isSketchable ? 
+            `
+              <button
+                type="button"
+                id="enable-sketch-btn-${sanitizedLayerName}"
+                class="toggleLayerVisibilityButton"
+                aria-label=""
+                title="Enable sketch for ${displayName} layer"
+              >
+                Add Assets
+              </button>
+            `
+              : ""
+            }
+            <button
+              type="button"
+              id="${sanitizedLayerName}-show-hide-layer-btn"
+              class="toggleLayerVisibilityButton${layerMinScale > 0 ? " invisible-button" : ""}"
+              att-layer-id="${mapDataLayerId}"
+              aria-label=""
+              title="Hide ${displayName} layer"
+              ${layerMinScale > 0 ? "disabled" : ""}
+            >
+              <span id="${layerName}-toggle-visibility-btn-text-span">
+                ${layerMinScale > 0 ? `Show` : `Hide`}
+              </span>
+            </button>
+          </div>
         </div>
-        
-        
-      </div>
-      <div>
-        ${isSketchable ? `
-          <button
-            type="button"
-            id="enable-sketch-btn-${sanitizedLayerName}"
-            class="toggleLayerVisibilityButton"
-            aria-label=""
-            title="Enable sketch for ${displayName} layer"
-          >
-            Add Assets
-          </button>
-        ` : ""}
-        <button
-          type="button"
-          id="${sanitizedLayerName}-show-hide-layer-btn"
-          class="toggleLayerVisibilityButton${layerMinScale > 0 ? " invisible-button" : ""}"
-          att-layer-id="${mapDataLayerId}"
-          aria-label=""
-          title="Hide ${displayName} layer"
-          ${layerMinScale > 0 ? "disabled" : ""}
+        <div
+          aria-live="polite"
+          aria-atomic="true"
+          class="asset-selection-requirements"
         >
-          <span id="${layerName}-toggle-visibility-btn-text-span">
-            ${layerMinScale > 0 ? `Show` : `Hide`}
+          <span class="sr-only">
+            Asset requirements and status for ${displayName} layer
           </span>
-        </button>
-      </div>
-    </div>
-    <div
-      aria-live="polite"
-      aria-atomic="true"
-      class="asset-selection-requirements"
-    >
-      <span class="sr-only">
-        Asset requirements and status for ${displayName} layer
-      </span>
-      ${
-        minAssetsRequired === 0
-          ? `
-            <span
-              id="${mapDataLayerId}-min-asset-required-message"
-              title="No selection required"
-              class="label label-success"
-            >
-              0 required
-            </span>
-          `
-          : minAssetsRequired === 1
-          ? `
-            <span
-              id="${mapDataLayerId}-min-asset-required-message"
-              title="${minAssetsRequired} selection required from ${displayName} layer"
-              class="label label-error"
-            >
-              ${minAssetsRequired} required
-            </span>
-          `
+            ${ minAssetsRequired === 0 ? `
+          <span
+            id="${mapDataLayerId}-min-asset-required-message"
+            title="No selection required"
+            class="label label-success"
+          >
+            0 required
+          </span>`
+          : minAssetsRequired === 1 ? `
+          <span
+            id="${mapDataLayerId}-min-asset-required-message"
+            title="${minAssetsRequired} selection required from ${displayName} layer"
+            class="label label-error"
+          >
+            ${minAssetsRequired} required
+          </span>`
           : `
-            <span
-              id="${mapDataLayerId}-min-asset-required-message"
-              title="At least ${minAssetsRequired} selections required from ${displayName} layer"
-              class="label label-error"
-            >
-              ${minAssetsRequired} required
-            </span>
-          `
-      }
-      ${
-        maxAssetsAllowed > 0
-          ? `
-            <span
-              id="${mapDataLayerId}-max-asset-allowed-message"
-              title="Select a maximum of ${maxAssetsAllowed} from ${displayName} layer"
-              class="label label-default"
-            >
-              ${maxAssetsAllowed} maximum
-            </span>
-          `
-          : ""
-      }
-    </div>
-    <div class="asset-list-wrapper">
-      <ul
-        data-layer-name="${sanitizedLayerName}"
-        class="list-group ${assetListClass}"
-        id="${mapDataLayerId}"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        <li
-          title="No assets ${isSketchable ? "added" : "selected"} for ${displayName} layer"
-        >
-          None ${isSketchable ? "added" : "selected"}
-        </li>
-      </ul>
-    </div>
-  </div>
-`;
-
-
-
+          <span
+            id="${mapDataLayerId}-min-asset-required-message"
+            title="At least ${minAssetsRequired} selections required from ${displayName} layer"
+            class="label label-error"
+          >
+            ${minAssetsRequired} required
+          </span>`}
+          ${maxAssetsAllowed > 0 ? `
+          <span
+            id="${mapDataLayerId}-max-asset-allowed-message"
+            title="Select a maximum of ${maxAssetsAllowed} from ${displayName} layer"
+            class="label label-default"
+          >
+            ${maxAssetsAllowed} maximum
+          </span>`
+          : ""}
+        </div>
+        <div class="asset-list-wrapper">
+          <ul
+            data-layer-name="${sanitizedLayerName}"
+            class="list-group ${assetListClass}"
+            id="${mapDataLayerId}"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <li title="No assets ${isSketchable ? "added" : "selected"} for ${displayName} layer">
+              None ${isSketchable ? "added" : "selected"}
+            </li>
+          </ul>
+        </div>
+      </div>
+   `;
 
     // Attach event listeners
     if (
