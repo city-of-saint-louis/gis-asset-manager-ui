@@ -36,7 +36,7 @@ class AssetChooserContainerComponent extends HTMLElement {
           </div>
          
           <div id="asset-chooser-map-and-layer-data-wrapper">
-            <div id="viewDiv" style="width: 100%; height: 500px;" aria-label="Interactive map for selecting and adding assets">
+            <div id="viewDiv" aria-label="Interactive map for selecting and adding assets">
             </div>
             <div class="row" id="layer-data-container">
               
