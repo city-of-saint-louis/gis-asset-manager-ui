@@ -241,7 +241,7 @@ export const addMapLayer = ({
   //          </strong>
   //        </span>
   //        <br>
-  //        <span class="zoom-alert-span" id="${layerName}-zoom-alert-span" style="height: 14px; display: inline-block">
+  //        <span class="zoom-alert-div" id="${layerName}-zoom-alert-div" style="height: 14px; display: inline-block">
   //         ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
   //        </span>
   //      </div>
@@ -431,7 +431,7 @@ export const monitorLayerVisibility = (
 //         `${layerName}-toggle-visibility-btn-text-span`
 //       );
 //       const zoomAlertSpan = document.getElementById(
-//         `${layerName}-zoom-alert-span`
+//         `${layerName}-zoom-alert-div`
 //       );
 
 //       if (zoomAlertSpan) {

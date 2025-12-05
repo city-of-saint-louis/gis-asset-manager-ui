@@ -82,7 +82,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       `#${this._data.layerName}-toggle-visibility-btn-text-span`
     );
     const zoomAlertSpan = this.querySelector(
-      `#${sanitizedLayerName}-zoom-alert-span`
+      `#${sanitizedLayerName}-zoom-alert-div`
     );
 
     if (
@@ -176,8 +176,8 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
 
     // // Zoom alert
     // const zoomAlertSpan = document.createElement("span");
-    // zoomAlertSpan.className = "zoom-alert-span";
-    // zoomAlertSpan.id = `${sanitizedLayerName}-zoom-alert-span`;
+    // zoomAlertSpan.className = "zoom-alert-div";
+    // zoomAlertSpan.id = `${sanitizedLayerName}-zoom-alert-div`;
     // zoomAlertSpan.style.height = "14px";
     // zoomAlertSpan.style.display = "inline-block";
     // zoomAlertSpan.textContent =
@@ -217,10 +217,9 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     this.innerHTML = `
       <div class="map-layer-data-container stat-container stat-medium">
         <div
-          class="zoom-alert-span"
-          id="${sanitizedLayerName}-zoom-alert-span"
+          class="zoom-alert-div"
+          id="${sanitizedLayerName}-zoom-alert-div"
           title="Zoom in to see this layer."
-          style=" display: inline-block; margin-top: -2em; margin-bottom: -1em;"
         >
           ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
         </div>
@@ -415,7 +414,7 @@ export { AssetChooserMapLayerDataDisplay };
 //       `#${this._data.layerName}-toggle-visibility-btn-text-span`
 //     );
 //     const zoomAlertSpan = this.querySelector(
-//       `#${sanitizedLayerName}-zoom-alert-span`
+//       `#${sanitizedLayerName}-zoom-alert-div`
 //     );
 
 //     if (
@@ -504,8 +503,8 @@ export { AssetChooserMapLayerDataDisplay };
 
 //     // Zoom alert
 //     const zoomAlertSpan = document.createElement("span");
-//     zoomAlertSpan.className = "zoom-alert-span";
-//     zoomAlertSpan.id = `${sanitizedLayerName}-zoom-alert-span`;
+//     zoomAlertSpan.className = "zoom-alert-div";
+//     zoomAlertSpan.id = `${sanitizedLayerName}-zoom-alert-div`;
 //     zoomAlertSpan.style.height = "14px";
 //     zoomAlertSpan.style.display = "inline-block";
 //     zoomAlertSpan.textContent = layerMinScale > 0 ? `Zoom in to see this layer.` : "";

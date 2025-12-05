@@ -9,8 +9,9 @@
   padding-right: 1em;
 } */
 
-.zoom-alert-span {
-  margin-top: 5px;
+.zoom-alert-div {
+  font-size: 12px;
+  margin-top: -1em;
   display: inline-block;
   min-height: 14px;
   vertical-align: middle;
@@ -151,9 +152,6 @@
   min-height: 2em;
 } */
 
-.zoom-alert-span {
-  font-size: 12px;
-}
 
 asset-chooser-map-layer-data-display li {
   font-size: .8em;
