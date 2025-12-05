@@ -219,6 +219,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
         <div
           class="zoom-alert-span"
           id="${sanitizedLayerName}-zoom-alert-span"
+          title="Zoom in to see this layer."
           style=" display: inline-block; margin-top: -2em; margin-bottom: -1em;"
         >
           ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
@@ -297,7 +298,9 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
           ${maxAssetsAllowed > 0 ? `
           <span
             id="${mapDataLayerId}-max-asset-allowed-message"
-            title="Select a maximum of ${maxAssetsAllowed} from ${displayName} layer"
+            title="${isSketchable 
+          ? `Add a maximum of ${maxAssetsAllowed} to ${displayName} layer`
+          : `Select a maximum of ${maxAssetsAllowed} from ${displayName} layer`}"
             class="label label-default"
           >
             ${maxAssetsAllowed} maximum
@@ -311,6 +314,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
             id="${mapDataLayerId}"
             aria-live="polite"
             aria-atomic="true"
+            title="Asset display for ${displayName} layer"
           >
             <li title="No assets ${isSketchable ? "added" : "selected"} for ${displayName} layer">
               None ${isSketchable ? "added" : "selected"}
