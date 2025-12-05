@@ -231,7 +231,8 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
           title="${displayName} Layer"
         >
           <div>
-            ${displayName}
+            <span class="glyphicons-svg ${isSketchable ? "glyphicons-svg-pencil" : "glyphicons-svg-cursor"}"></span>
+            <span>${displayName}</span>
           </div>
           <div>
             ${ isSketchable ? 
