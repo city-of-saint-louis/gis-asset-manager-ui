@@ -34,16 +34,39 @@ class AssetChooserContainerComponent extends HTMLElement {
               Accessible Accommodation
             </button>
           </div>
-         
           <div id="asset-chooser-map-and-layer-data-wrapper">
             <div id="viewDiv" aria-label="Interactive map for selecting and adding assets">
             </div>
             <div class="row" id="layer-data-container">
-              
             </div>
           </div>
         </section>
       `;
+      // this.innerHTML = `
+      //   <section id="asset-chooser-interface">
+      //     <h2 id="asset-chooser-title">${this.title}</h2>
+      //     <p id="asset-chooser-hint" data-original-hint="${this.hint}">${this.hint}</p>
+      //     <div id="asset-chooser-map-and-layer-data-wrapper">
+      //       <div id="viewDiv" aria-label="Interactive map for selecting and adding assets">
+      //       </div>
+      //       <div class="row" id="layer-data-container">
+      //       </div>
+      //     </div>
+      //      <div id="accomodation-button-container">
+      //       <button
+      //         type="button"
+      //         id="accomodation-button"
+      //         class="link-button inverse-button"
+      //         aria-label="${accomodationButtonMessage}"
+      //         title="${accomodationButtonMessage}"
+      //       >
+      //         <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched">
+      //         </span>
+      //         Accessible Accommodation
+      //       </button>
+      //     </div>
+      //   </section>
+      // `;
       // Add event listener for the accomodation button click
       const accomodationButton = this.querySelector("#accomodation-button");
       if (accomodationButton) {
@@ -52,6 +75,8 @@ class AssetChooserContainerComponent extends HTMLElement {
           handleAccomodationButtonClick
         );
       }
+      const modeToggleSwitch = document.createElement("asset-chooser-mode-toggle");
+      this.appendChild(modeToggleSwitch);
     } catch (e) {
       console.error(e);
       document.getElementById(

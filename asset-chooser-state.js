@@ -55,3 +55,9 @@ export let isSelectEnabled = false;
 export function setIsSelectEnabled(value) {
   isSelectEnabled = value;
 }
+
+export let assetMode = "select"; // possible values: "select", "sketch"
+export function setAssetMode(value) {
+  assetMode = value;
+  console.log("Asset mode set to:", assetMode);
+}

@@ -1,12 +1,18 @@
 /* asset-chooser */
 #asset-chooser-title {
   margin: 0;
-  /* padding: 0; */
+  padding: 0;
+}
+
+#asset-chooser-hint {
+  margin-bottom: .25rem;
+  margin-top: .25rem;
 }
 
 #viewDiv {
-  width: 100%;
-  height: 400px;
+  width: 75%;
+  /* height: 360px; */
+  height: 24rem;
 }
 
 /* #layer-data-container {
@@ -16,7 +22,7 @@
 
 .zoom-alert-div {
   font-size: 12px;
-  margin-top: -1em;
+  margin-top: -1rem;
   display: inline-block;
   min-height: 14px;
   vertical-align: middle;
@@ -115,10 +121,14 @@
 
 #accomodation-title {
   margin: 0;
-  font-size: 1.25em;
+  font-size: 1.25rem;
   border-bottom: 0;
   box-shadow: 0 0 0 0;
 }
+
+/* #accomodation-button-container { */
+  /* padding-left: .5rem; */
+/* } */
 
 #accomodation-subtitle {
   margin: 0;
@@ -135,15 +145,10 @@
 } */
 
 #asset-chooser-map-and-layer-data-wrapper {
-  margin-top: 1em;
+  margin-top: 1rem;
 }
 
-/* media queries */
-@media screen and (max-width: 1280px) {
-  .modal {
-    width: 90%;
-  }
-}
+
 
 /* .esri-attribution {
   display: none !important;
@@ -159,45 +164,128 @@
 
 
 asset-chooser-map-layer-data-display li {
-  font-size: .8em;
-  /* line-height: 1.2em; */
-  padding: .35em !important;
+  font-size: .8rem;
+  /* line-height: 1.2rem; */
+  padding: .35rem !important;
   /* background-color: #cccccc; */
 }
 
 .asset-list-wrapper {
-  margin-top: .8em;
-  border-radius: 0.5em;
+  margin-top: .8rem;
+  border-radius: 0.5rem;
   border: 1px solid #cccccc;
   background: #e0e0e0;
   overflow: hidden;
-  /* padding: 0.35em; */
+  /* padding: 0.35rem; */
 }
 
 .list-group.chosen-asset-data-list,
 .list-group.created-asset-data-list {
-  /* min-height: 6em;
-  max-height: 4em;
+  /* min-height: 6rem;
+  max-height: 4rem;
   overflow-y: auto;
   background-color: #e0e0e0;
-  border-radius: 0.5em;
-  padding: 0.35em;
+  border-radius: 0.5rem;
+  padding: 0.35rem;
   border: 1px solid #cccccc; */
-  min-height: 6em;
-  max-height: 4em;
+  min-height: 6rem;
+  max-height: 4rem;
   overflow-y: auto;
   margin: 0;
-  padding: 0.35em;
+  padding: 0.35rem;
   background: transparent;
   border: none;
   border-radius: 0;
 }
 
+.mode-button {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.25rem 1.5rem;
+  background-color: #e0e0e0;
+  font-size: 1rem;
+  border: black 1px solid;
+}
 
 
-@media screen and (max-width: 991px) {
+
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #a8d4e8;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #174054;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #174054;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+
+
+
+/* media queries */
+@media screen and (max-width: 767px) {
   #layer-data-container {
-    padding-left: 1em;
-    padding-right: 1em;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .modal {
+    width: 90%;
   }
 }
