@@ -110,8 +110,8 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
         }
       } else {
         zoomAlertSpan.textContent = `${
-          layerMinScale > 0 ? `Zoom in to see this layer.` : ""
-        } ${layerMaxScale > 0 ? `Zoom out to see this layer.` : ""}`;
+          layerMinScale > 0 ? `Zoom in to see this layer` : ""
+        } ${layerMaxScale > 0 ? `Zoom out to see this layer` : ""}`;
         toggleLayerVisibilityButton.setAttribute("disabled", true);
         // toggleLayerVisibilityButton.setAttribute("hidden", true);
         toggleLayerVisibilityButton.classList.add("invisible-button");
@@ -217,13 +217,6 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     this.innerHTML = `
       <div class="map-layer-data-container stat-container stat-medium">
         <div
-          class="zoom-alert-div"
-          id="${sanitizedLayerName}-zoom-alert-div"
-          title="Zoom in to see this layer."
-        >
-          ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
-        </div>
-        <div
           class="stat-title"
           id="${sanitizedLayerName}-layer-selected-asset-container"
           aria-label="${displayName} Layer"
@@ -233,36 +226,15 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
             <span class="glyphicons-svg ${isSketchable ? "glyphicons-svg-pencil" : "glyphicons-svg-cursor"}"></span>
             <span>${displayName}</span>
           </div>
-          <div>
-            ${ isSketchable ? 
-            `
-              <button
-                type="button"
-                id="enable-sketch-btn-${sanitizedLayerName}"
-                class="toggleLayerVisibilityButton"
-                aria-label=""
-                title="Enable sketch for ${displayName} layer"
-              >
-                Add Assets
-              </button>
-            `
-              : ""
-            }
-            <button
-              type="button"
-              id="${sanitizedLayerName}-show-hide-layer-btn"
-              class="toggleLayerVisibilityButton${layerMinScale > 0 ? " invisible-button" : ""}"
-              att-layer-id="${mapDataLayerId}"
-              aria-label=""
-              title="Hide ${displayName} layer"
-              ${layerMinScale > 0 ? "disabled" : ""}
-            >
-              <span id="${layerName}-toggle-visibility-btn-text-span">
-                ${layerMinScale > 0 ? `Show` : `Hide`}
-              </span>
-            </button>
-          </div>
+          <div
+          class="zoom-alert-div"
+          id="${sanitizedLayerName}-zoom-alert-div"
+          title="Zoom in to see this layer"
+        >
+          ${layerMinScale > 0 ? `Zoom in to see this layer` : ""}
         </div>
+        </div>
+        <div class="layer-data-display-row">
         <div
           aria-live="polite"
           aria-atomic="true"
@@ -307,6 +279,41 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
           </span>`
           : ""}
         </div>
+
+        <div class="layer-data-display-button-row">
+            ${ isSketchable ? 
+            `
+              <button
+                type="button"
+                id="enable-sketch-btn-${sanitizedLayerName}"
+                class="toggleLayerVisibilityButton"
+                aria-label=""
+                title="Enable sketch for ${displayName} layer"
+              >
+                Add Assets
+              </button>
+            `
+              : ""
+            }
+            <button
+              type="button"
+              id="${sanitizedLayerName}-show-hide-layer-btn"
+              class="toggleLayerVisibilityButton${layerMinScale > 0 ? " invisible-button" : ""}"
+              att-layer-id="${mapDataLayerId}"
+              aria-label=""
+              title="Hide ${displayName} layer"
+              ${layerMinScale > 0 ? "disabled" : ""}
+            >
+              <span id="${layerName}-toggle-visibility-btn-text-span">
+                ${layerMinScale > 0 ? `Show` : `Hide`}
+              </span>
+            </button>
+          </div>
+</div> 
+
+
+
+
         <div class="asset-list-wrapper">
           <ul
             data-layer-name="${sanitizedLayerName}"

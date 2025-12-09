@@ -20,16 +20,37 @@
   padding-right: 1em;
 } */
 
+.stat-title {
+  /* margin-bottom: 0 !important; */
+  padding-top: 0 !important;
+  padding-bottom: .35rem !important;
+}
+
 .zoom-alert-div {
   font-size: 12px;
-  margin-top: -1rem;
-  display: inline-block;
-  min-height: 14px;
-  vertical-align: middle;
+  /* margin-bottom: .25rem; */
+  /* font-weight: bold; */
+  /* margin-top: -1rem; */
+  /* display: inline-block; */
+  /* min-height: 18px; */
+  /* vertical-align: middle; */
+}
+
+.layer-data-display-row {
+  display: flex;
+  align-items: center; /* vertically align */
+  justify-content: flex-start; /* left to right */
+  gap: 1rem; /* optional spacing */
+}
+
+.layer-data-display-button-row {
+  margin-left: auto; /* ensures it hugs the right if needed */
+  display: flex;
+  gap: 0.5rem; /* space between buttons */
 }
 
 .toggleLayerVisibilityButton {
-  font-size: 10px;
+  font-size: 12px;
   background-color: #eeeeee;
   transition: transform 0.1s;
   padding-left: 4px;
