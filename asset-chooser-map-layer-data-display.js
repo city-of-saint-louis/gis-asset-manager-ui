@@ -135,7 +135,16 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       // layerMaxScale = 0, // for zoom alert
       // availableCreateTools, // for sketchable layers
     } = layerData;
-    console.log("layerData", layerData);
+    console.log("layerData", layerData.layer);
+    const sketchType = layerData.layer?.sketchType?.[0] || "unknown";
+    // Map sketchType to display name
+    let sketchTypeDisplay;
+    if (sketchType === "polyline") {
+      sketchTypeDisplay = "Line";
+    } else {
+      sketchTypeDisplay = sketchType.charAt(0).toUpperCase() + sketchType.slice(1);
+    }
+    console.log("sketchType", sketchType);
     const displayNameRaw = layerName.replace(/[-, _]/g, " ");
     console.log("displayNameRaw", displayNameRaw);
     const displayName = displayNameRaw.replace(
@@ -215,7 +224,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
 
 
     this.innerHTML = `
-      <div class="map-layer-data-container stat-container stat-medium">
+      <div class="map-layer-data-container stat-container stat-medium ${isSketchable ? "sketch-border" : "select-border"}">
         <div
           class="stat-title"
           id="${sanitizedLayerName}-layer-selected-asset-container"
@@ -286,12 +295,11 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
               <button
                 type="button"
                 id="enable-sketch-btn-${sanitizedLayerName}"
-                class="toggleLayerVisibilityButton"
+                class="enable-sketch-button toggleLayerVisibilityButton"
                 aria-label=""
                 title="Enable sketch for ${displayName} layer"
               >
-                Add Assets
-              </button>
+                <span class="glyphicons-svg glyphicons-svg-pencil"></span>Sketch ${sketchTypeDisplay}s</button>
             `
               : ""
             }

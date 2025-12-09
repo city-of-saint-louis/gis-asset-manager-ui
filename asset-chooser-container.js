@@ -21,24 +21,14 @@ class AssetChooserContainerComponent extends HTMLElement {
         <section id="asset-chooser-interface">
           <h2 id="asset-chooser-title">${this.title}</h2>
           <p id="asset-chooser-hint" data-original-hint="${this.hint}">${this.hint}</p>
-          <div id="accomodation-button-container">
-            <button
-              type="button"
-              id="accomodation-button"
-              class="link-button inverse-button"
-              aria-label="${accomodationButtonMessage}"
-              title="${accomodationButtonMessage}"
-            >
-              <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched">
-              </span>
-              Accessible Accommodation
-            </button>
-          </div>
-          <div id="asset-chooser-map-and-layer-data-wrapper">
+          <div id="asset-chooser-button-and-map-wrapper">
+           
             <div id="viewDiv" aria-label="Interactive map for selecting and adding assets">
             </div>
-            <div class="row" id="layer-data-container">
+             <div id="asset-chooser-button-container">
             </div>
+          </div>
+          <div class="row" id="layer-data-container">
           </div>
         </section>
       `;
@@ -68,15 +58,40 @@ class AssetChooserContainerComponent extends HTMLElement {
       //   </section>
       // `;
       // Add event listener for the accomodation button click
-      const accomodationButton = this.querySelector("#accomodation-button");
+      // const accomodationButton = this.querySelector("#accomodation-button");
+      const buttonContainer = this.querySelector("#asset-chooser-button-container");
+      // buttonContainer.style.display = "flex";
+      
+      const modeToggleSwitch = document.createElement("asset-chooser-mode-toggle");
+      
+      // buttonContainer.style.gap = "0.5rem";
+      // buttonContainer.style.alignItems = "center";
+      buttonContainer.appendChild(modeToggleSwitch);
+
+      const accomodationButton = document.createElement("button");
+      accomodationButton.type = "button";
+      accomodationButton.id = "accomodation-button";
+      accomodationButton.className = "link-button inverse-button";
+      accomodationButton.setAttribute("aria-label", accomodationButtonMessage);
+      accomodationButton.setAttribute("title", accomodationButtonMessage);
+      buttonContainer.appendChild(accomodationButton);
+      accomodationButton.innerHTML = `
+        <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched">
+        </span>
+        Accessible Accommodation
+      `;
+      const accomodationButtonHint = document.createElement("p");
+      accomodationButtonHint.id = "accomodation-button-hint";
+      accomodationButtonHint.textContent = "Please note that the accessible accommodation should only be used if you are using assitive technology and are not able to enter assets on the map.";
+      buttonContainer.appendChild(accomodationButtonHint);
       if (accomodationButton) {
         accomodationButton.addEventListener(
           "click",
           handleAccomodationButtonClick
         );
       }
-      const modeToggleSwitch = document.createElement("asset-chooser-mode-toggle");
-      this.appendChild(modeToggleSwitch);
+
+      
     } catch (e) {
       console.error(e);
       document.getElementById(
@@ -101,3 +116,20 @@ export { AssetChooserContainerComponent };
 //               <div id="sketchable-layer-data-div" class="stat-group"></div>
 //             </div>
 //           </div>
+
+
+
+
+
+
+{/* <button
+              type="button"
+              id="accomodation-button"
+              class="link-button inverse-button"
+              aria-label="${accomodationButtonMessage}"
+              title="${accomodationButtonMessage}"
+            >
+              <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched">
+              </span>
+              Accessible Accommodation
+            </button> */}

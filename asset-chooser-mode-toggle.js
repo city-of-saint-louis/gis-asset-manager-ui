@@ -14,24 +14,27 @@ class AssetChooserModeToggle extends HTMLElement {
       //     </label>
       //   </div>`;
       this.innerHTML = `
-        <div id="asset-chooser-mode-toggle-container">
-          <button
-            id="select-mode-button" 
-            class="mode-button"
-          >
-            <span class="glyphicons-svg glyphicons-svg-cursor"></span>
-          </button>
-          <button
-            id="sketch-mode-button" 
-            class="mode-button"
-          >
-            <span class="glyphicons-svg glyphicons-svg-pencil"></span>
-          </button>
+        <div id="asset-chooser-mode-toggle-container" style="">
+          <span id="mode-toggle-label">Asset Mode:</span>
+          <div class="mode-toggle-buttons" style="display: flex; gap: 8px;">
+        <button
+          id="select-mode-button" 
+          class="mode-button"
+        >
+          <span class="glyphicons-svg glyphicons-svg-cursor"></span>
+          <span class="mode-button-text">Select</span>
+        </button>
+        <button
+          id="sketch-mode-button" 
+          class="mode-button"
+        >
+          <span class="glyphicons-svg glyphicons-svg-pencil"></span>
+          <span class="mode-button-text">Sketch</span>
+        </button>
+          </div>
         </div>`;
-      this.querySelector("#select-mode-button")
-      .addEventListener("click", () => setAssetMode("select"));
-      this.querySelector("#sketch-mode-button")
-      .addEventListener("click", () => setAssetMode("sketch"));
+      this.querySelector("#select-mode-button").addEventListener("click", () => setAssetMode("select"));
+      this.querySelector("#sketch-mode-button").addEventListener("click", () => setAssetMode("sketch"));
     } catch (error) {
       console.error(
         "Error in AssetChooserModeToggle connectedCallback:",

@@ -9,10 +9,39 @@
   margin-top: .25rem;
 }
 
+#asset-chooser-button-and-map-wrapper {
+  /* display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;  */
+}
+
+#asset-chooser-button-and-map-wrapper {
+  display: grid;
+  grid-template-columns: 3fr 1fr; /* Button:Map ratio */
+  gap: 1rem;
+  align-items: start;
+}
+
+#asset-chooser-button-container {
+  display: flex;
+  flex-direction: column; /* or row if you want horizontal centering */
+  align-items: center;    /* centers children horizontally */
+  justify-content: center; /* optional: centers vertically if container has height */
+}
+
+@media (max-width: 900px) {
+  #asset-chooser-button-and-map-wrapper {
+    grid-template-columns: 1fr; /* Stack vertically on small screens */
+  }
+}
+
 #viewDiv {
-  width: 75%;
-  /* height: 360px; */
+  width: 100%;
   height: 24rem;
+  display: flex;
+  /* filter: drop-shadow(0 4px 8px #a8d4e8) drop-shadow(0 4px 8px #a8d4e8); */
+  /* filter: drop-shadow(4px 4px 4px #174054); */
 }
 
 /* #layer-data-container {
@@ -49,6 +78,8 @@
   gap: 0.5rem; /* space between buttons */
 }
 
+
+
 .toggleLayerVisibilityButton {
   font-size: 12px;
   background-color: #eeeeee;
@@ -68,6 +99,11 @@
   transform: scale(0.95);
 }
 
+.enable-sketch-button {
+  background-color: #174054;
+  color: #ffffff;
+}
+
 .invisible-button {
   visibility: hidden;
 }
@@ -83,6 +119,24 @@
 
 .remove-asset-btn:active {
   transform: scale(0.95);
+}
+
+.select-border {
+  border: 1px solid #a8d4e8 !important;
+  box-sizing: border-box;
+}
+
+.sketch-border {
+  border: 1px solid #174054 !important;
+  box-sizing: border-box;
+}
+
+.select-shadow {
+  box-shadow: 0 4px 8px #a8d4e8 !important;
+}
+
+.sketch-shadow {
+  box-shadow: 0 4px 8px #174054 !important;
 }
 
 #accessibility-icon {
@@ -140,16 +194,20 @@
   overflow: hidden;
 }
 
+#accomodation-button-hint {
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  font-style: italic;
+}
+
 #accomodation-title {
   margin: 0;
   font-size: 1.25rem;
   border-bottom: 0;
   box-shadow: 0 0 0 0;
 }
-
-/* #accomodation-button-container { */
-  /* padding-left: .5rem; */
-/* } */
 
 #accomodation-subtitle {
   margin: 0;
@@ -165,7 +223,7 @@
   display: block; 
 } */
 
-#asset-chooser-map-and-layer-data-wrapper {
+#asset-chooser-button-and-map-wrapper {
   margin-top: 1rem;
 }
 
@@ -219,13 +277,28 @@ asset-chooser-map-layer-data-display li {
   border-radius: 0;
 }
 
+#asset-chooser-mode-toggle-container {
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+}
+
 .mode-button {
-  margin-top: 1rem;
+  margin-top: .25rem;
   margin-bottom: 1rem;
-  padding: 0.25rem 1.5rem;
-  background-color: #e0e0e0;
+  padding: 0.25rem 1.42rem;
+  /* background-color: #e0e0e0; */
   font-size: 1rem;
   border: black 1px solid;
+}
+
+#select-mode-button {
+  background-color: #a8d4e8;
+}
+
+#sketch-mode-button {
+  background-color: #174054;
+  color: white;
 }
 
 
