@@ -1,4 +1,6 @@
-import { assetMode, setAssetMode } from "./asset-chooser-state.js";
+import { setAssetMode } from "./asset-chooser-state.js";
+
+import { handleSelectEnabled, handleSketchEnabled } from "./asset-chooser-functions.js";
 
 class AssetChooserModeToggle extends HTMLElement {
   constructor() {
@@ -33,8 +35,14 @@ class AssetChooserModeToggle extends HTMLElement {
         </button>
           </div>
         </div>`;
-      this.querySelector("#select-mode-button").addEventListener("click", () => setAssetMode("select"));
-      this.querySelector("#sketch-mode-button").addEventListener("click", () => setAssetMode("sketch"));
+      this.querySelector("#select-mode-button").addEventListener("click", () => {
+        setAssetMode("select");
+        handleSelectEnabled();
+      });
+      this.querySelector("#sketch-mode-button").addEventListener("click", () => {
+        setAssetMode("sketch");
+        handleSketchEnabled();
+      });
     } catch (error) {
       console.error(
         "Error in AssetChooserModeToggle connectedCallback:",

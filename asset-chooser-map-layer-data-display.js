@@ -295,7 +295,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
               <button
                 type="button"
                 id="enable-sketch-btn-${sanitizedLayerName}"
-                class="enable-sketch-button toggleLayerVisibilityButton"
+                class="enable-sketch-button "
                 aria-label=""
                 title="Enable sketch for ${displayName} layer"
               >

@@ -5,7 +5,7 @@ let createdAssets;
 let isChosenAssetsValid = false;
 let isCreatedAssetsValid = false;
 
-function updateSubmitButtonState() {
+const updateSubmitButtonState = () => {
   if (isChosenAssetsValid && isCreatedAssetsValid) {
     submitAssetsButton.removeAttribute("disabled");
     submitAssetsButton.classList.remove("disabled-button");

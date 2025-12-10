@@ -37,7 +37,12 @@ import {
   highlightSelectedAsset,
 } from "./asset-chooser-functions.js";
 
-import { addSketchableMapLayer, sketchAsset, dispatchCreatedAssets, secureCreatedAssets } from "./asset-chooser-sketchable-map-layer-functions.js";
+import {
+  addSketchableMapLayer,
+  sketchAsset,
+  dispatchCreatedAssets,
+  secureCreatedAssets,
+} from "./asset-chooser-sketchable-map-layer-functions.js";
 
 export const initializeMap = async () => {
   destroyPreviousMapView();
@@ -150,11 +155,9 @@ export const initializeMap = async () => {
         sketch.setAttribute("hide-selection-tools-lasso-selection", "true");
         sketch.setAttribute("hide-selection-tools-rectangle-selection", "true");
         // sketch.setAttribute("hide-settings-menu", "true");
-        // sketch.setAttribute("available-create-tools", "point,polyline,polygon");
         sketch.setAttribute("hidden", "true");
         arcGisMap.appendChild(sketch);
         sketch.componentOnReady().then(() => {
-          // console.log("Sketch component is ready:", sketch.view);
           console.log(document.querySelectorAll("arcgis-sketch").length);
           sketchAsset(sketch);
         });
@@ -192,9 +195,20 @@ export const initializeMap = async () => {
       // renderValidityMessage();
       hideOrShowLayer();
 
-      if (sketchableLayersWithNoAdditionRequired.length >0 && allSketchableLayerIds.length >0 && sketchableLayersWithNoAdditionRequired.length === allSketchableLayerIds.length) {
-        console.log("sketchableLayersWithNoAdditionRequired.length:", sketchableLayersWithNoAdditionRequired.length);
-        console.log("allSketchableLayerIds.length:", allSketchableLayerIds.length);
+      if (
+        sketchableLayersWithNoAdditionRequired.length > 0 &&
+        allSketchableLayerIds.length > 0 &&
+        sketchableLayersWithNoAdditionRequired.length ===
+          allSketchableLayerIds.length
+      ) {
+        console.log(
+          "sketchableLayersWithNoAdditionRequired.length:",
+          sketchableLayersWithNoAdditionRequired.length
+        );
+        console.log(
+          "allSketchableLayerIds.length:",
+          allSketchableLayerIds.length
+        );
         setCreatedAssetsAreValid(true);
         dispatchCreatedAssets(createdAssets);
       } else {

@@ -39,10 +39,20 @@ export const captureSketachableMapLayers = () => {
 };
 
 const enableSketchForLayer = (layer) => {
+  console.log("Enabling sketch for layer:", layer);
+  const enableSketchButtons = document.querySelectorAll(".enable-sketch-button");
+  enableSketchButtons.forEach((element) => {
+    element.classList.remove("sketch-button-shadow");
+  });
+  const layerEnableSketchButton = document.getElementById(`enable-sketch-btn-${layer.name}`);
+  layerEnableSketchButton.classList.add("sketch-button-shadow");
+  
   const sketch = document.getElementById("asset-chooser-sketch");
   const sketchType = layer.sketchType;
   sketch.availableCreateTools = layer.sketchType;
   sketch.removeAttribute("hidden");
+  const mapContainer = document.getElementById("viewDiv");
+  mapContainer.style.pointerEvents = 'auto';
   // Set the sketch widget's layer to the correct GraphicsLayer
   if (layer.graphicsLayer) {
     sketch.layer = layer.graphicsLayer;
@@ -56,6 +66,7 @@ const enableSketchForLayer = (layer) => {
       if (!node) return;
       if (node.querySelectorAll) {
         const btns = node.querySelectorAll("button");
+        console.log("Found buttons in shadow DOM:", btns);
         if (btns.length) {
           shadowButtons.push(...btns);
         }
@@ -84,6 +95,17 @@ const enableSketchForLayer = (layer) => {
       console.warn(
         `Could not find the sketch tool button for type: ${sketchType}`
       );
+    }
+    const selectButton = shadowButtons.find(
+      (b) =>
+        b.getAttribute("aria-label") &&
+        b.getAttribute("aria-label").toLowerCase().includes("select")
+    );
+    if (selectButton) {
+      selectButton.setAttribute("hidden", "true");
+      console.log(`Hidden select tool button`);
+    } else {
+      console.warn(`Could not find the select tool button`);
     }
   }, 0);
 };

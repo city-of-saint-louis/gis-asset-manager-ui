@@ -48,15 +48,17 @@ export function setCurrentView(view) {
 // state vars for sketch capability
 export let isSketchEnabled = false;
 export function setIsSketchEnabled(value) {
+  console.log("Setting isSketchEnabled to:", value);
   isSketchEnabled = value;
 }
 // state vars for select capability
 export let isSelectEnabled = false;
 export function setIsSelectEnabled(value) {
+  console.log("Setting isSelectEnabled to:", value);
   isSelectEnabled = value;
 }
 
-export let assetMode = "select"; // possible values: "select", "sketch"
+export let assetMode = ""; // possible values: "select", "sketch"
 export function setAssetMode(value) {
   assetMode = value;
   console.log("Asset mode set to:", assetMode);

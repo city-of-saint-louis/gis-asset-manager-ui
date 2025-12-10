@@ -22,7 +22,6 @@ class AssetChooserContainerComponent extends HTMLElement {
           <h2 id="asset-chooser-title">${this.title}</h2>
           <p id="asset-chooser-hint" data-original-hint="${this.hint}">${this.hint}</p>
           <div id="asset-chooser-button-and-map-wrapper">
-           
             <div id="viewDiv" aria-label="Interactive map for selecting and adding assets">
             </div>
              <div id="asset-chooser-button-container">

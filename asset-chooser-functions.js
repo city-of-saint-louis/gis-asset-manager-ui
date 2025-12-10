@@ -12,6 +12,10 @@ import {
   isValid,
   createdAssetsAreValid,
   setIsValid,
+  setIsSelectEnabled,
+  setIsSketchEnabled,
+  assetMode,
+  setAssetMode
 } from "./asset-chooser-state.js";
 
 // *** begin map related functions *** //
@@ -474,16 +478,32 @@ export const renderValidityMessage = () => {
   // const validityMessage = document.getElementById("validity-message");
   const validityMessage = document.getElementById("asset-chooser-hint");
   const originalHintText = validityMessage.getAttribute("data-original-hint");
-  if (isValid && createdAssetsAreValid ) {
+   const mapContainer = document.getElementById("viewDiv");
+   const mapLayerDataContainers = document.querySelectorAll(
+      ".map-layer-data-container"
+    );
+  if (isValid && createdAssetsAreValid) {
     validityMessage.innerHTML = `<span class="label label-success">Assets valid for submission</span>`;
     validityMessage.setAttribute("aria-live", "assertive");
-    validityMessage.setAttribute(
-      "title",
-      "Assets valid for submission"
-    );
+    validityMessage.setAttribute("title", "Assets valid for submission");
+    mapContainer.classList.remove("select-shadow", "select-border", "sketch-shadow", "sketch-border");
+    mapContainer.classList.add("assets-valid-shadow", "assets-valid-border");
+    // mapLayerDataContainers.forEach((container) => {
+    //   container.classList.remove("select-shadow", "sketch-shadow");
+    // });
+    mapLayerDataContainers.forEach((container) => {
+      container.classList.add("assets-valid-shadow", "assets-valid-border");
+    });
+    // setIsSelectEnabled(false);
+    // setIsSketchEnabled(false);
+    // setAssetMode('');
   } else {
     validityMessage.removeAttribute("aria-live");
     validityMessage.textContent = originalHintText;
+    mapContainer.classList.remove("assets-valid-shadow", "assets-valid-border");
+    mapLayerDataContainers.forEach((container) => {
+      container.classList.remove("assets-valid-shadow", "assets-valid-border");
+    });
   }
 };
 
@@ -687,7 +707,7 @@ const renderSelectedAssetLabels = () => {
         // };
         if (assetLabel.includes("null")) {
           assetLabel = "Asset data unavailable";
-        };
+        }
         const assetLabelListItem = document.createElement("li");
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
         assetLabelListItem.innerHTML = `
@@ -757,15 +777,10 @@ const validateLayerSelections = () => {
     console.log("Validating layer selections for:", mapLayer);
     // const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
     const layerId = mapLayer.id;
-    const layerAssetMin = parseInt(
-      mapLayer.layerProperties.minAssetsRequired
-    );
-    const layerAssetMax = parseInt(
-      mapLayer.layerProperties.maxAssetsAllowed
-    );
+    const layerAssetMin = parseInt(mapLayer.layerProperties.minAssetsRequired);
+    const layerAssetMax = parseInt(mapLayer.layerProperties.maxAssetsAllowed);
     const totalLayerAssetsSelected = chosenAssets.filter(
-      (asset) =>
-        asset.layerId === `${mapLayer.id}`
+      (asset) => asset.layerId === `${mapLayer.id}`
     ).length;
     const minAssetMessageElement = document.getElementById(
       `${layerId}-min-asset-required-message`
@@ -840,4 +855,128 @@ const validateAssetSelection = () => {
     secureChosenAssets();
   }
   renderValidityMessage();
+};
+
+const injectMapSurfaceFocusStyle = () => {
+  // Find the ArcGIS map widget's shadow root
+  const arcgisMapWidget = document.querySelector("arcgis-map");
+  if (!arcgisMapWidget) return;
+
+  // Find the shadow root
+  const shadowRoot = arcgisMapWidget.shadowRoot;
+  if (!shadowRoot) return;
+
+  // Find the .esri-view-surface element inside the shadow DOM
+  const viewSurface = shadowRoot.querySelector(".esri-view-surface");
+  if (!viewSurface) return;
+
+  // Create a style element to override the ::after focus indicator
+  const style = document.createElement("style");
+  style.textContent = `
+    .esri-view-surface:focus::after {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none !important;
+      background: none !important;
+      /* Or add your custom styling here */
+    }
+  `;
+  // Append the style to the shadow root
+  shadowRoot.appendChild(style);
+}
+
+export const handleSelectEnabled = () => {
+  console.log("Select enabled - hiding sketch buttons");
+  const enableSketchForLayerButtons = document.querySelectorAll(".enable-sketch-button");
+  enableSketchForLayerButtons.forEach((button) => {
+    button.style.visibility = "hidden";
+    button.classList.remove("sketch-button-shadow");
+  });
+  const mapContainer = document.getElementById("viewDiv");
+  mapContainer.classList.remove("sketch-shadow", "sketch-border");
+  mapContainer.classList.add("select-shadow", "select-border");
+  mapContainer.style.pointerEvents = 'auto';
+
+  const sketch = document.getElementById("asset-chooser-sketch");
+  sketch.setAttribute("hidden", "");
+
+  const selectableAssetDisplayElements =
+    document.querySelectorAll(".select-border");
+  selectableAssetDisplayElements.forEach((element) => {
+    element.classList.add("select-shadow");
+  });
+
+  const sketchableAssetDisplayElements =
+    document.querySelectorAll(".sketch-border");
+  sketchableAssetDisplayElements.forEach((element) => {
+    element.classList.remove("sketch-shadow");
+  });
+
+  const shadowButtons = [];
+  const collectShadowButtons = (node) => {
+    if (!node) return;
+    if (node.querySelectorAll) {
+      const btns = node.querySelectorAll("button");
+      console.log("Found buttons in shadow DOM:", btns);
+      if (btns.length) {
+        shadowButtons.push(...btns);
+      }
+    }
+    if (node.shadowRoot) {
+      collectShadowButtons(node.shadowRoot);
+    }
+    if (node.children) {
+      Array.from(node.children).forEach((child) => collectShadowButtons(child));
+    }
+  }
+
+  collectShadowButtons(sketch);
+  // console.log("All shadow DOM buttons:", shadowButtons);
+  const targetButton = shadowButtons.find(
+    (b) =>
+      b.getAttribute("aria-label") &&
+      b.getAttribute("aria-label").toLowerCase().includes("select")
+  );
+  if (targetButton) {
+    targetButton.click();
+    console.log(`Clicked select tool button`);
+  } else {
+    console.warn(`Could not find the select tool button`);
+  }
+
+  setTimeout(() => {
+    // Call this after the map widget is rendered
+    injectMapSurfaceFocusStyle();
+  }, 0);
+};
+
+export const handleSketchEnabled = () => {
+  console.log("Sketch enabled - showing sketch buttons");
+  const mapContainer = document.getElementById("viewDiv");
+  mapContainer.classList.remove("select-shadow", "select-border");
+  mapContainer.classList.add("sketch-shadow", "sketch-border");
+  mapContainer.style.pointerEvents = 'none';
+  document.querySelectorAll(".enable-sketch-button").forEach((button) => {
+    button.style.visibility = "visible";
+  });
+
+  const selectableAssetDisplayElements =
+    document.querySelectorAll(".select-border");
+  selectableAssetDisplayElements.forEach((element) => {
+    element.classList.remove("select-shadow");
+  });
+
+  const sketchableAssetDisplayElements =
+    document.querySelectorAll(".sketch-border");
+  sketchableAssetDisplayElements.forEach((element) => {
+    element.classList.add("sketch-shadow");
+  });
+};
+
+
+export const mapActionsDisabled = () => {
+  const mapContainer = document.getElementById("viewDiv");
+  mapContainer.style.pointerEvents = 'none';
+  const sketch = document.getElementById("asset-chooser-sketch");
+  sketch.setAttribute("hidden", "true");
 };
