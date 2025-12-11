@@ -1,17 +1,54 @@
 /* asset-chooser */
+#asset-chooser-interface {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+asset-chooser-mode-toggle {
+  margin-top: 1rem;
+}
+
+
 #asset-chooser-title {
   margin: 0;
   padding: 0;
 }
 
 #asset-chooser-hint {
+  font-size: 0.9rem;
   margin-bottom: .25rem;
   margin-top: .25rem;
+  min-height: 6.2rem;
+}
+
+#layer-data-container {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; 
+  gap: 1rem;
+  padding: .5rem 1rem;
+  align-items: start;
+  z-index: 0;
+}
+@media (max-width: 1200px) {
+  #layer-data-container {
+    grid-template-columns: 1fr 1fr; 
+  }
+}
+@media (max-width: 768px) {
+  #layer-data-container {
+    grid-template-columns: 1fr; 
+  }
+}
+
+#layer-data-container::before {
+  display: none !important;
+  content: none !important;
 }
 
 #asset-chooser-button-and-map-wrapper {
   display: grid;
-  grid-template-columns: 3fr 1fr; /* Button:Map ratio */
+  grid-template-columns: 1fr 3fr; /* Button:Map ratio */
   gap: 1rem;
   align-items: start;
 }
@@ -23,7 +60,13 @@
   justify-content: center; /* optional: centers vertically if container has height */
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
+  #asset-chooser-button-and-map-wrapper {
+    grid-template-columns: 1fr 1fr; /* Stack vertically on small screens */
+  }
+}
+
+@media (max-width: 768px) {
   #asset-chooser-button-and-map-wrapper {
     grid-template-columns: 1fr; /* Stack vertically on small screens */
   }
@@ -31,7 +74,7 @@
 
 #viewDiv {
   width: 100%;
-  height: 24rem;
+  height: 20rem;
   display: flex;
   pointer-events: none;
 }
@@ -57,7 +100,7 @@
   display: flex;
   align-items: center; /* vertically align */
   justify-content: flex-start; /* left to right */
-  gap: 1rem; /* optional spacing */
+  /* gap: 1rem;  */
 }
 
 .layer-data-display-button-row {
@@ -253,9 +296,10 @@
   display: none !important;
 } */
 
-/* .map-layer-data-container {
+.map-layer-data-container {
   box-sizing: border-box;
-} */
+  margin: 0;
+}
 
 /* .asset-selection-requirements {
   min-height: 2em;
@@ -319,75 +363,6 @@ asset-chooser-map-layer-data-display li {
   background-color: #174054;
   color: white;
 }
-
-
-
-
-/* The switch - the box around the slider */
-/* .switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-} */
-
-/* Hide default HTML checkbox */
-/* .switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-} */
-
-/* The slider */
-/* .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #a8d4e8;
-  -webkit-transition: .4s;
-  transition: .4s;
-} */
-
-/* .slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-} */
-
-/* input:checked + .slider {
-  background-color: #174054;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #174054;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-} */
-
-/* Rounded sliders */
-/* .slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-} */
-
-
-
 
 /* media queries */
 @media screen and (max-width: 767px) {

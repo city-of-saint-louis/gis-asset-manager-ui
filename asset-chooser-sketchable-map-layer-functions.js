@@ -43,10 +43,11 @@ const enableSketchForLayer = (layer) => {
   const enableSketchButtons = document.querySelectorAll(".enable-sketch-button");
   enableSketchButtons.forEach((element) => {
     element.classList.remove("sketch-button-shadow");
+    element.disabled = false;
   });
   const layerEnableSketchButton = document.getElementById(`enable-sketch-btn-${layer.name}`);
   layerEnableSketchButton.classList.add("sketch-button-shadow");
-  
+  layerEnableSketchButton.disabled = true;
   const sketch = document.getElementById("asset-chooser-sketch");
   const sketchType = layer.sketchType;
   sketch.availableCreateTools = layer.sketchType;
@@ -214,7 +215,7 @@ export const addSketchableMapLayer = async ({
     "asset-chooser-map-layer-data-display"
   );
   mapLayerDataDisplay.setAttribute("data-layer-id", sketchableGraphicLayerId);
-  mapLayerDataDisplay.classList.add("col-sm-6", "col-lg-4");
+  // mapLayerDataDisplay.classList.add("col-sm-6", "col-lg-4");
   mapLayerDataDisplay.data = {
     layerName: layerName,
     formattedLayerName: formattedLayerName,

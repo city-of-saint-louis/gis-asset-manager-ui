@@ -34,22 +34,12 @@
   </head>
   <body>
     <header class=""></header>
-    <main style="padding: 1rem">
-      <div style="padding-top: 2rem; padding-bottom: 2rem; text-align: center">
-        <button
-          class="link-button disabled-button"
-          aria-live="polite"
-          disabled
-          id="submit-assets-button"
-          style="margin: 0 auto"
-        >
-          Submit Assets
-        </button>
-      </div>
+    <main style="padding: 1rem; max-width: 1440px; margin: auto;">
+     
       <!-- <div id="viewDiv" style="height: 400px;"></div> -->
       <asset-chooser-container
         title="Provide Required Assets for Your Special Event Permit Application"
-        hint="Use the select tool to select required assets for selectable layers. Use the sketch tool to add custom assets to the sketchable layers. Select mode to begin."
+        hint="Use the select tool to select required assets for selectable layers. Use the sketch tool to add custom assets to the sketchable layers. Select a mode to begin."
         is-sketch-enabled="true"
         is-select-enabled="true"
       >
@@ -183,6 +173,17 @@
         > 
         </asset-chooser-map-layer> -->
       </asset-chooser-container>
+       <div style=" padding-top: 1rem;">
+        <button
+          class="link-button disabled-button"
+          aria-live="polite"
+          disabled
+          id="submit-assets-button"
+          style="margin-left: 0"
+        >
+          Submit Assets
+        </button>
+      </div>
     </main>
     <footer>Developed by The City of St. Louis Web Team</footer>
     <script type="module" src="asset-chooser.js"></script>

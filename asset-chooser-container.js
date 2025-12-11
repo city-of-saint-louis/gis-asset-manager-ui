@@ -20,11 +20,12 @@ class AssetChooserContainerComponent extends HTMLElement {
       this.innerHTML = `
         <section id="asset-chooser-interface">
           <h2 id="asset-chooser-title">${this.title}</h2>
-          <p id="asset-chooser-hint" data-original-hint="${this.hint}">${this.hint}</p>
+          
           <div id="asset-chooser-button-and-map-wrapper">
-            <div id="viewDiv" aria-label="Interactive map for selecting and adding assets">
+            <div id="asset-chooser-button-container">
+            <p id="asset-chooser-hint" data-original-hint="${this.hint}">${this.hint}</p>
             </div>
-             <div id="asset-chooser-button-container">
+            <div id="viewDiv" aria-label="Interactive map for selecting and adding assets">
             </div>
           </div>
           <div class="row" id="layer-data-container">
@@ -81,7 +82,7 @@ class AssetChooserContainerComponent extends HTMLElement {
       `;
       const accomodationButtonHint = document.createElement("p");
       accomodationButtonHint.id = "accomodation-button-hint";
-      accomodationButtonHint.textContent = "Please note that the accessible accommodation should only be used if you are using assitive technology and are not able to enter assets on the map.";
+      accomodationButtonHint.textContent = "Please note that the accessible accommodation should only be used if you are unable to enter assets on the map.";
       buttonContainer.appendChild(accomodationButtonHint);
       if (accomodationButton) {
         accomodationButton.addEventListener(

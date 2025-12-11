@@ -89,7 +89,7 @@ export const initializeMap = async () => {
     arcGisMap.setAttribute("extent", JSON.stringify(stLouisExtent.toJSON()));
     mapContainer.appendChild(arcGisMap);
     const zoomControl = document.createElement("arcgis-zoom");
-    zoomControl.setAttribute("position", "top-left");
+    zoomControl.setAttribute("position", "bottom-right");
     arcGisMap.appendChild(zoomControl);
     // Add a LocatorSearchSource for local search suggestions
     const locatorSearchSource = new LocatorSearchSource({
@@ -151,7 +151,7 @@ export const initializeMap = async () => {
         const sketch = document.createElement("arcgis-sketch");
         sketch.view = view;
         sketch.setAttribute("id", "asset-chooser-sketch");
-        sketch.setAttribute("slot", "bottom-right");
+        sketch.setAttribute("slot", "top-left");
         sketch.setAttribute("hide-selection-tools-lasso-selection", "true");
         sketch.setAttribute("hide-selection-tools-rectangle-selection", "true");
         // sketch.setAttribute("hide-settings-menu", "true");
