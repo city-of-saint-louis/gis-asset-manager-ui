@@ -299,7 +299,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
                 aria-label=""
                 title="Enable sketch for ${displayName} layer"
               >
-                <span class="glyphicons-svg glyphicons-svg-pencil"></span>Sketch ${sketchTypeDisplay}s</button>
+                <span class="glyphicons-svg glyphicons-svg-pencil"></span>Sketch</button>
             `
               : ""
             }

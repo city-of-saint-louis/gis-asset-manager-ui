@@ -62,13 +62,14 @@ const enableSketchForLayer = (layer) => {
   setTimeout(() => {
     // Collect all shadow DOM buttons into an array
     const shadowButtons = [];
-    function collectShadowButtons(node) {
+    const collectShadowButtons = (node) => {
       if (!node) return;
       if (node.querySelectorAll) {
         const btns = node.querySelectorAll("button");
-        console.log("Found buttons in shadow DOM:", btns);
+        // console.log("Found buttons in shadow DOM:", btns);
         if (btns.length) {
           shadowButtons.push(...btns);
+          console.log("Current shadowButtons array:", shadowButtons);
         }
       }
       if (node.shadowRoot) {
@@ -349,7 +350,7 @@ const renderCreatedAssetLabel = (graphic) => {
   listItem.title = `Proposed ${graphic.attributes.formattedLayerName} added with ID: ${graphic.attributes.id}`;
   // listItem.textContent = `ID: ${graphic.attributes.id}`;
   const listItemContentSpan = document.createElement("span");
-  listItemContentSpan.textContent = `ID: ${graphic.attributes.id}`;
+  listItemContentSpan.textContent = `${graphic.attributes.id}`;
   const listItemRemoveButton = document.createElement("button");
   listItemRemoveButton.setAttribute("type", "button");
   listItemRemoveButton.setAttribute(
