@@ -4,10 +4,9 @@
   margin: 0 auto;
 }
 
-asset-chooser-mode-toggle {
+/* asset-chooser-mode-toggle {
   margin-top: 1rem;
-}
-
+} */
 
 #asset-chooser-title {
   margin: 0;
@@ -16,15 +15,45 @@ asset-chooser-mode-toggle {
 
 #asset-chooser-hint {
   font-size: 0.9rem;
-  margin-bottom: .25rem;
-  margin-top: .25rem;
+  margin-bottom: 0rem;
+  margin-top: 0rem;
   min-height: 6.2rem;
 }
 
+#mode-status-banner {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 1rem;
+  /* top: 0.06rem; */
+  margin: 0;
+  /* border-radius: 0 0 0.25rem 0.25rem; */
+  width: 55%;
+  z-index: 100;
+  /* background: #174054; */
+  /* color: #fff; */
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  pointer-events: none; /* so it doesn't block map interaction */
+  z-index: 50;
+}
+
+.mode-status-banner-select {
+  background: #a8d4e8;
+  color: #000;
+}
+
+.mode-status-banner-sketch {
+  background: #174054;
+  color: #fff;
+}
+
 #layer-data-container {
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr; 
+  grid-template-columns: 1fr 1fr 1fr 1fr; 
   gap: 1rem;
   padding: .5rem 1rem;
   align-items: start;
@@ -47,6 +76,7 @@ asset-chooser-mode-toggle {
 }
 
 #asset-chooser-button-and-map-wrapper {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 3fr; /* Button:Map ratio */
   gap: 1rem;
@@ -73,12 +103,16 @@ asset-chooser-mode-toggle {
 }
 
 #viewDiv {
+  position: relative;
   width: 100%;
   height: 20rem;
   display: flex;
   pointer-events: none;
 }
 
+#layer-data-container {
+  margin-top: 1rem;
+}
 
 .stat-title {
   /* margin-bottom: 0 !important; */
@@ -353,6 +387,17 @@ asset-chooser-map-layer-data-display li {
   /* background-color: #e0e0e0; */
   font-size: 1rem;
   border: black 1px solid;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mode-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 6px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.mode-button:active {
+  transform: scale(0.95);
+  
 }
 
 #select-mode-button {

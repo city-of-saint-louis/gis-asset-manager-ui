@@ -887,6 +887,11 @@ const injectMapSurfaceFocusStyle = () => {
 
 export const handleSelectEnabled = () => {
   console.log("Select enabled - hiding sketch buttons");
+  const modeStatusBanner = document.getElementById("mode-status-banner");
+  modeStatusBanner.hidden = false;
+  modeStatusBanner.innerText = "Select Mode Enabled";
+  modeStatusBanner.classList.remove("mode-status-banner-sketch");
+  modeStatusBanner.classList.add("mode-status-banner-select");
   const enableSketchForLayerButtons = document.querySelectorAll(".enable-sketch-button");
   enableSketchForLayerButtons.forEach((button) => {
     button.style.visibility = "hidden";
@@ -952,6 +957,13 @@ export const handleSelectEnabled = () => {
 
 export const handleSketchEnabled = () => {
   console.log("Sketch enabled - showing sketch buttons");
+  const modeStatusBanner = document.getElementById("mode-status-banner");
+  modeStatusBanner.hidden = false;
+  modeStatusBanner.innerText = "Sketch Mode Enabled. Select layer below to add assets.";
+  modeStatusBanner.classList.remove("mode-status-banner-select");
+  modeStatusBanner.classList.add("mode-status-banner-sketch");
+  // const sketch = document.getElementById("asset-chooser-sketch");
+  // sketch.removeAttribute("hidden");
   const mapContainer = document.getElementById("viewDiv");
   mapContainer.classList.remove("select-shadow", "select-border");
   mapContainer.classList.add("sketch-shadow", "sketch-border");

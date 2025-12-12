@@ -20,14 +20,16 @@ class AssetChooserContainerComponent extends HTMLElement {
       this.innerHTML = `
         <section id="asset-chooser-interface">
           <h2 id="asset-chooser-title">${this.title}</h2>
-          
           <div id="asset-chooser-button-and-map-wrapper">
             <div id="asset-chooser-button-container">
-            <p id="asset-chooser-hint" data-original-hint="${this.hint}">${this.hint}</p>
+              <p id="asset-chooser-hint" data-original-hint="${this.hint}">${this.hint}</p>
             </div>
-            <div id="viewDiv" aria-label="Interactive map for selecting and adding assets">
+            <div id="viewDiv" aria-label="Interactive map for selecting and adding 
+            assets">
+             <span id="mode-status-banner">Select Mode Enabled</span>
             </div>
           </div>
+         
           <div class="row" id="layer-data-container">
           </div>
         </section>

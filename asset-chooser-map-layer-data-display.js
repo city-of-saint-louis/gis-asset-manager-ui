@@ -110,8 +110,8 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
         }
       } else {
         zoomAlertSpan.textContent = `${
-          layerMinScale > 0 ? `Zoom in for this layer` : ""
-        } ${layerMaxScale > 0 ? `Zoom out for this layer` : ""}`;
+          layerMinScale > 0 ? `Zoom In` : ""
+        } ${layerMaxScale > 0 ? `Zoom Out` : ""}`;
         toggleLayerVisibilityButton.setAttribute("disabled", true);
         // toggleLayerVisibilityButton.setAttribute("hidden", true);
         toggleLayerVisibilityButton.classList.add("invisible-button");
@@ -238,9 +238,9 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
           <div
           class="zoom-alert-div"
           id="${sanitizedLayerName}-zoom-alert-div"
-          title="Zoom in for this layer"
+          title="Zoom In"
         >
-          ${layerMinScale > 0 ? `Zoom in for this layer` : ""}
+          ${layerMinScale > 0 ? `Zoom In` : ""}
         </div>
         </div>
         <div class="layer-data-display-row">

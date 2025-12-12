@@ -40,6 +40,8 @@ export const captureSketachableMapLayers = () => {
 
 const enableSketchForLayer = (layer) => {
   console.log("Enabling sketch for layer:", layer);
+  const modeStatusBanner = document.getElementById("mode-status-banner");
+  modeStatusBanner.textContent = `Sketch Mode Enabled for ${layer.graphicsLayer.layerProperties.formattedLayerName}`;
   const enableSketchButtons = document.querySelectorAll(".enable-sketch-button");
   enableSketchButtons.forEach((element) => {
     element.classList.remove("sketch-button-shadow");
@@ -49,6 +51,17 @@ const enableSketchForLayer = (layer) => {
   layerEnableSketchButton.classList.add("sketch-button-shadow");
   layerEnableSketchButton.disabled = true;
   const sketch = document.getElementById("asset-chooser-sketch");
+  if (sketch && sketch.shadowRoot) {
+  const style = document.createElement("style");
+  style.textContent = `
+    .esri-sketch > div:first-of-type {
+      border: 2px solid #174054 !important;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+  `;
+  sketch.shadowRoot.appendChild(style);
+}
   const sketchType = layer.sketchType;
   sketch.availableCreateTools = layer.sketchType;
   sketch.removeAttribute("hidden");

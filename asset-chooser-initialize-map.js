@@ -89,7 +89,7 @@ export const initializeMap = async () => {
     arcGisMap.setAttribute("extent", JSON.stringify(stLouisExtent.toJSON()));
     mapContainer.appendChild(arcGisMap);
     const zoomControl = document.createElement("arcgis-zoom");
-    zoomControl.setAttribute("position", "bottom-right");
+    zoomControl.setAttribute("position", "bottom-left");
     arcGisMap.appendChild(zoomControl);
     // Add a LocatorSearchSource for local search suggestions
     const locatorSearchSource = new LocatorSearchSource({
@@ -106,6 +106,7 @@ export const initializeMap = async () => {
     });
     if (showSearch === "true" || showSearch === true) {
       const searchComponent = document.createElement("arcgis-search");
+      // searchComponent.setAttribute("position", "bottom-right");
       searchComponent.setAttribute("position", "top-right");
       searchComponent.setAttribute("popup-disabled", "true");
       searchComponent.setAttribute("include-default-sources-disabled", "true");
@@ -231,6 +232,27 @@ export const initializeMap = async () => {
         });
       });
     });
+    const modeStatusBanner = document.createElement("span");
+    modeStatusBanner.id = "mode-status-banner";
+    modeStatusBanner.hidden = true;
+    // modeStatusBanner.style.position = "absolute";
+    // modeStatusBanner.style.top = "0";
+    // modeStatusBanner.style.left = "50%";
+    // modeStatusBanner.style.transform = "translateX(-50%)";
+    // modeStatusBanner.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+    // modeStatusBanner.style.color = "white";
+    // modeStatusBanner.style.padding = "5px 10px";
+    // modeStatusBanner.style.borderRadius = "5px";
+    // modeStatusBanner.style.zIndex = "10";
+    // modeStatusBanner.style.fontSize = "1rem";
+    // modeStatusBanner.style.fontWeight = "bold";
+    modeStatusBanner.textContent = isSelectEnabled
+      ? "Now adding Acces POints"
+      : isSketchEnabled
+      ? "Sketch Mode Enabled"
+      : "No Mode Enabled";
+    mapContainer.appendChild(modeStatusBanner);
+    
   } catch (e) {
     console.error(e);
   }
