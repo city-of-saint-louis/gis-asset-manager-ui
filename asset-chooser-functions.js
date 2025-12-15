@@ -886,10 +886,28 @@ const injectMapSurfaceFocusStyle = () => {
 }
 
 export const handleSelectEnabled = () => {
-  console.log("Select enabled - hiding sketch buttons");
+  // console.log("Select enabled - hiding sketch buttons");
+  console.log('featureLayers:', featureLayers);
+  const selectableLayerNames = featureLayers.map(layer => layer.layerProperties.layerName);
+  console.log('selectableLayerNames:', selectableLayerNames);
+  // format selectableLayerNames for display. if two separate by and, if more than two separate last with , and
+  // capitalize first letter only of each layer name. set rest to lowercase
+  // const formattedSelectableLayerNames = selectableLayerNames.map(name => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase());
+  // if (formattedSelectableLayerNames.length > 2) {
+  //   const lastLayer = formattedSelectableLayerNames.pop();
+  //   formattedSelectableLayerNames.push(`and ${lastLayer}`);
+  // }
+  let formattedSelectableLayerNames = selectableLayerNames.map(name => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase());
+  if (formattedSelectableLayerNames.length === 2) {
+    formattedSelectableLayerNames = formattedSelectableLayerNames.join(' and ');
+  } else if (formattedSelectableLayerNames.length > 2) {
+    const lastLayer = formattedSelectableLayerNames.pop();
+    formattedSelectableLayerNames = `${formattedSelectableLayerNames.join(', ')}, and ${lastLayer}`;
+  }
+  
   const modeStatusBanner = document.getElementById("mode-status-banner");
   modeStatusBanner.hidden = false;
-  modeStatusBanner.innerText = "Select Mode Enabled";
+  modeStatusBanner.innerText = `Select Mode enabled for ${formattedSelectableLayerNames}.`;
   modeStatusBanner.classList.remove("mode-status-banner-sketch");
   modeStatusBanner.classList.add("mode-status-banner-select");
   const enableSketchForLayerButtons = document.querySelectorAll(".enable-sketch-button");
@@ -922,7 +940,7 @@ export const handleSelectEnabled = () => {
     if (!node) return;
     if (node.querySelectorAll) {
       const btns = node.querySelectorAll("button");
-      console.log("Found buttons in shadow DOM:", btns);
+      // console.log("Found buttons in shadow DOM:", btns);
       if (btns.length) {
         shadowButtons.push(...btns);
       }
@@ -959,7 +977,7 @@ export const handleSketchEnabled = () => {
   console.log("Sketch enabled - showing sketch buttons");
   const modeStatusBanner = document.getElementById("mode-status-banner");
   modeStatusBanner.hidden = false;
-  modeStatusBanner.innerText = "Sketch Mode Enabled. Select layer below to add assets.";
+  modeStatusBanner.innerText = "Sketch Mode enabled. Select layer below to add assets.";
   modeStatusBanner.classList.remove("mode-status-banner-select");
   modeStatusBanner.classList.add("mode-status-banner-sketch");
   // const sketch = document.getElementById("asset-chooser-sketch");

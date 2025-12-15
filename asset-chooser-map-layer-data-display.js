@@ -259,7 +259,9 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
             class="label label-success"
           >
             0 required
-          </span>`
+          </span>
+          <br>
+          `
           : minAssetsRequired === 1 ? `
           <span
             id="${mapDataLayerId}-min-asset-required-message"
@@ -267,7 +269,9 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
             class="label label-error"
           >
             ${minAssetsRequired} required
-          </span>`
+          </span>
+          <br>
+          `
           : `
           <span
             id="${mapDataLayerId}-min-asset-required-message"
@@ -275,7 +279,9 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
             class="label label-error"
           >
             ${minAssetsRequired} required
-          </span>`}
+          </span>
+          <br>
+          `}
           ${maxAssetsAllowed > 0 ? `
           <span
             id="${mapDataLayerId}-max-asset-allowed-message"
