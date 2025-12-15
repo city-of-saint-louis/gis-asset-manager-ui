@@ -109,9 +109,9 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
           );
         }
       } else {
-        zoomAlertSpan.textContent = `${
-          layerMinScale > 0 ? `Zoom In` : ""
-        } ${layerMaxScale > 0 ? `Zoom Out` : ""}`;
+        zoomAlertSpan.textContent = `${layerMinScale > 0 ? `Zoom In` : ""} ${
+          layerMaxScale > 0 ? `Zoom Out` : ""
+        }`;
         toggleLayerVisibilityButton.setAttribute("disabled", true);
         // toggleLayerVisibilityButton.setAttribute("hidden", true);
         toggleLayerVisibilityButton.classList.add("invisible-button");
@@ -142,7 +142,8 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     if (sketchType === "polyline") {
       sketchTypeDisplay = "Line";
     } else {
-      sketchTypeDisplay = sketchType.charAt(0).toUpperCase() + sketchType.slice(1);
+      sketchTypeDisplay =
+        sketchType.charAt(0).toUpperCase() + sketchType.slice(1);
     }
     console.log("sketchType", sketchType);
     const displayNameRaw = layerName.replace(/[-, _]/g, " ");
@@ -222,9 +223,10 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
 
     // <span class="asset-count-span">(${this._assetCount})</span>
 
-
     this.innerHTML = `
-      <div class="map-layer-data-container stat-container stat-medium ${isSketchable ? "sketch-border" : "select-border"}">
+      <div class="map-layer-data-container stat-container stat-medium ${
+        isSketchable ? "sketch-border" : "select-border"
+      }">
         <div
           class="stat-title"
           id="${sanitizedLayerName}-layer-selected-asset-container"
@@ -232,72 +234,96 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
           title="${displayName} Layer"
         >
           <div>
-            <span class="glyphicons-svg ${isSketchable ? "glyphicons-svg-pencil" : "glyphicons-svg-cursor"}"></span>
+            <span class="glyphicons-svg ${
+              isSketchable ? "glyphicons-svg-pencil" : "glyphicons-svg-cursor"
+            }"></span>
             <span>${displayName}</span>
           </div>
           <div
-          class="zoom-alert-div"
-          id="${sanitizedLayerName}-zoom-alert-div"
-          title="Zoom In"
-        >
-          ${layerMinScale > 0 ? `Zoom In` : ""}
+            class="zoom-alert-div"
+            id="${sanitizedLayerName}-zoom-alert-div"
+            title="Zoom In"
+          >
+            ${layerMinScale > 0 ? `Zoom In` : ""}
+          </div>
+          <button
+            type="button"
+            id="${sanitizedLayerName}-show-hide-layer-btn"
+            class="toggleLayerVisibilityButton${layerMinScale > 0 ? " invisible-button" : ""}"
+            att-layer-id="${mapDataLayerId}"
+            aria-label=""
+            title="Hide ${displayName} layer" ${layerMinScale > 0 ? "disabled" : ""}
+          >
+            <span id="${layerName}-toggle-visibility-btn-text-span">
+              ${layerMinScale > 0 ? `Show` : `Hide`}
+            </span>
+          </button>
         </div>
-        </div>
+        
         <div class="layer-data-display-row">
-        <div
-          aria-live="polite"
-          aria-atomic="true"
-          class="asset-selection-requirements"
-        >
-          <span class="sr-only">
-            Asset requirements and status for ${displayName} layer
-          </span>
-            ${ minAssetsRequired === 0 ? `
-          <span
-            id="${mapDataLayerId}-min-asset-required-message"
-            title="No selection required"
-            class="label label-success"
+          <div
+            aria-live="polite"
+            aria-atomic="true"
+            class="asset-selection-requirements"
           >
-            0 required
-          </span>
-          <br>
-          `
-          : minAssetsRequired === 1 ? `
-          <span
-            id="${mapDataLayerId}-min-asset-required-message"
-            title="${minAssetsRequired} selection required from ${displayName} layer"
-            class="label label-error"
-          >
-            ${minAssetsRequired} required
-          </span>
-          <br>
-          `
-          : `
-          <span
-            id="${mapDataLayerId}-min-asset-required-message"
-            title="At least ${minAssetsRequired} selections required from ${displayName} layer"
-            class="label label-error"
-          >
-            ${minAssetsRequired} required
-          </span>
-          <br>
-          `}
-          ${maxAssetsAllowed > 0 ? `
-          <span
-            id="${mapDataLayerId}-max-asset-allowed-message"
-            title="${isSketchable 
-          ? `Add a maximum of ${maxAssetsAllowed} to ${displayName} layer`
-          : `Select a maximum of ${maxAssetsAllowed} from ${displayName} layer`}"
-            class="label label-default"
-          >
-            ${maxAssetsAllowed} maximum
-          </span>`
-          : ""}
-        </div>
-
-        <div class="layer-data-display-button-row">
-            ${ isSketchable ? 
+            <span class="sr-only">
+              Asset requirements and status for ${displayName} layer
+            </span>
+            ${
+              minAssetsRequired === 0
+                ? `
+              <span
+                id="${mapDataLayerId}-min-asset-required-message"
+                title="No selection required"
+                class="label label-success"
+              >
+                0 required
+              </span>
+              <br>
             `
+                : minAssetsRequired === 1
+                ? `
+              <span
+                id="${mapDataLayerId}-min-asset-required-message"
+                title="${minAssetsRequired} selection required from ${displayName} layer"
+                class="label label-error"
+              >
+                ${minAssetsRequired} required
+              </span>
+              <br>
+            `
+                : `
+              <span
+                id="${mapDataLayerId}-min-asset-required-message"
+                title="At least ${minAssetsRequired} selections required from ${displayName} layer"
+                class="label label-error"
+              >
+                ${minAssetsRequired} required
+              </span>
+              <br>
+            `
+            }
+            ${
+              maxAssetsAllowed > 0
+                ? `
+              <span
+                id="${mapDataLayerId}-max-asset-allowed-message"
+                title="${
+                  isSketchable
+                    ? `Add a maximum of ${maxAssetsAllowed} to ${displayName} layer`
+                    : `Select a maximum of ${maxAssetsAllowed} from ${displayName} layer`
+                }"
+                class="label label-default"
+              >
+                ${maxAssetsAllowed} maximum
+              </span>`
+                : ""
+            }
+          </div>
+          <div class="layer-data-display-button-row">
+            ${
+              isSketchable
+                ? `
               <button
                 type="button"
                 id="enable-sketch-btn-${sanitizedLayerName}"
@@ -307,27 +333,25 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
               >
                 <span class="glyphicons-svg glyphicons-svg-pencil"></span>Sketch</button>
             `
-              : ""
+                : ""
             }
-            <button
-              type="button"
-              id="${sanitizedLayerName}-show-hide-layer-btn"
-              class="toggleLayerVisibilityButton${layerMinScale > 0 ? " invisible-button" : ""}"
-              att-layer-id="${mapDataLayerId}"
-              aria-label=""
-              title="Hide ${displayName} layer"
-              ${layerMinScale > 0 ? "disabled" : ""}
-            >
-              <span id="${layerName}-toggle-visibility-btn-text-span">
-                ${layerMinScale > 0 ? `Show` : `Hide`}
-              </span>
-            </button>
+              <button
+                type="button"
+                id="${sanitizedLayerName}-show-hide-layer-btn"
+                class="toggleLayerVisibilityButton${
+                  layerMinScale > 0 ? " invisible-button" : ""
+                }"
+                att-layer-id="${mapDataLayerId}"
+                aria-label=""
+                title="Hide ${displayName} layer"
+                ${layerMinScale > 0 ? "disabled" : ""}
+              >
+                <span id="${layerName}-toggle-visibility-btn-text-span">
+                  ${layerMinScale > 0 ? `Show` : `Hide`}
+                </span>
+              </button>
           </div>
-</div> 
-
-
-
-
+        </div> 
         <div class="asset-list-wrapper">
           <ul
             data-layer-name="${sanitizedLayerName}"
@@ -337,7 +361,9 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
             aria-atomic="true"
             title="Asset display for ${displayName} layer"
           >
-            <li title="No assets ${isSketchable ? "added" : "selected"} for ${displayName} layer">
+            <li title="No assets ${
+              isSketchable ? "added" : "selected"
+            } for ${displayName} layer">
               None ${isSketchable ? "added" : "selected"}
             </li>
           </ul>

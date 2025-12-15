@@ -124,6 +124,7 @@
   /* margin-bottom: 0 !important; */
   padding-top: 0 !important;
   padding-bottom: .35rem !important;
+  min-height: 32px;;
 }
 
 .zoom-alert-div {
@@ -199,7 +200,8 @@
 }
 
 .invisible-button {
-  visibility: hidden;
+  /* visibility: hidden; */
+  display: none;
 }
 
 /* .remove-asset-btn {
