@@ -51,6 +51,10 @@
   color: #fff;
 }
 
+.mode-status-icon {
+  margin-right: 0.5rem;
+}
+
 #layer-data-container {
   /* margin-top: 1rem; */
   display: grid;

@@ -26,7 +26,7 @@ class AssetChooserContainerComponent extends HTMLElement {
             </div>
             <div id="viewDiv" aria-label="Interactive map for selecting and adding 
             assets">
-             <span id="mode-status-banner">Select Mode Enabled</span>
+             <span id="mode-status-banner"></span>
             </div>
           </div>
          

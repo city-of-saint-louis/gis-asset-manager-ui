@@ -910,6 +910,17 @@ export const handleSelectEnabled = () => {
   modeStatusBanner.innerText = `Select Mode enabled for ${formattedSelectableLayerNames}.`;
   modeStatusBanner.classList.remove("mode-status-banner-sketch");
   modeStatusBanner.classList.add("mode-status-banner-select");
+
+  let modeStatusIconSpan = modeStatusBanner.querySelector(".mode-status-icon");
+  if (!modeStatusIconSpan) {
+    modeStatusIconSpan = document.createElement("span");
+    modeStatusIconSpan.classList.add("mode-status-icon", "glyphicons-svg");
+  }
+  modeStatusIconSpan.classList.remove("glyphicons-svg-pencil");
+  modeStatusIconSpan.classList.add("glyphicons-svg-cursor");
+  modeStatusBanner.prepend(modeStatusIconSpan);
+
+  
   const enableSketchForLayerButtons = document.querySelectorAll(".enable-sketch-button");
   enableSketchForLayerButtons.forEach((button) => {
     button.style.visibility = "hidden";
@@ -980,8 +991,15 @@ export const handleSketchEnabled = () => {
   modeStatusBanner.innerText = "Sketch Mode enabled. Select layer below to add assets.";
   modeStatusBanner.classList.remove("mode-status-banner-select");
   modeStatusBanner.classList.add("mode-status-banner-sketch");
-  // const sketch = document.getElementById("asset-chooser-sketch");
-  // sketch.removeAttribute("hidden");
+  
+  let modeStatusIconSpan = modeStatusBanner.querySelector(".mode-status-icon");
+  if (!modeStatusIconSpan) {
+    modeStatusIconSpan = document.createElement("span");
+    modeStatusIconSpan.classList.add("mode-status-icon", "glyphicons-svg");
+  }
+  modeStatusIconSpan.classList.remove("glyphicons-svg-cursor");
+  modeStatusIconSpan.classList.add("glyphicons-svg-pencil");
+  modeStatusBanner.prepend(modeStatusIconSpan);
   const mapContainer = document.getElementById("viewDiv");
   mapContainer.classList.remove("select-shadow", "select-border");
   mapContainer.classList.add("sketch-shadow", "sketch-border");

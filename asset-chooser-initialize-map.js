@@ -246,13 +246,12 @@ export const initializeMap = async () => {
     // modeStatusBanner.style.zIndex = "10";
     // modeStatusBanner.style.fontSize = "1rem";
     // modeStatusBanner.style.fontWeight = "bold";
-    modeStatusBanner.textContent = isSelectEnabled
-      ? "Now adding Acces POints"
-      : isSketchEnabled
-      ? "Sketch Mode Enabled"
-      : "No Mode Enabled";
+    // modeStatusBanner.textContent = isSelectEnabled
+    //   ? ""
+    //   : isSketchEnabled
+    //   ? "Sketch Mode Enabled"
+    //   : "No Mode Enabled";
     mapContainer.appendChild(modeStatusBanner);
-    
   } catch (e) {
     console.error(e);
   }
