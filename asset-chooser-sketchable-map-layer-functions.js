@@ -362,9 +362,11 @@ const renderCreatedAssetLabel = (graphic) => {
   const listItem = document.createElement("li");
   listItem.id = graphic.attributes.id;
   listItem.title = `Proposed ${graphic.attributes.formattedLayerName} added with ID: ${graphic.attributes.id}`;
-  // listItem.textContent = `ID: ${graphic.attributes.id}`;
+  const listItemIndex = Array.from(layerAssetList.children).length;
+  const listItemPosition = listItemIndex + 1;
+  console.log("listItemIndex", listItemIndex);
   const listItemContentSpan = document.createElement("span");
-  listItemContentSpan.textContent = `${graphic.attributes.id}`;
+  listItemContentSpan.textContent = `${graphic.attributes.formattedLayerName} ${listItemPosition}`;
   const listItemRemoveButton = document.createElement("button");
   listItemRemoveButton.setAttribute("type", "button");
   listItemRemoveButton.setAttribute(
