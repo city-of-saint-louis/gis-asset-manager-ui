@@ -421,6 +421,10 @@ asset-chooser-map-layer-data-display li {
   color: white;
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
 /* media queries */
 @media screen and (max-width: 767px) {
   #layer-data-container {

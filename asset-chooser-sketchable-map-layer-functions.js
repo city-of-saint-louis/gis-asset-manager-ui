@@ -48,7 +48,7 @@ const enableSketchForLayer = (layer) => {
     element.disabled = false;
   });
   const layerEnableSketchButton = document.getElementById(`enable-sketch-btn-${layer.name}`);
-  layerEnableSketchButton.classList.add("sketch-button-shadow");
+  layerEnableSketchButton.classList.add("sketch-button-shadow", "pointer-events-none");
   layerEnableSketchButton.disabled = true;
   const sketch = document.getElementById("asset-chooser-sketch");
   if (sketch && sketch.shadowRoot) {
