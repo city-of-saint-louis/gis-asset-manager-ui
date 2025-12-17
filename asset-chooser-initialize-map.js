@@ -231,6 +231,24 @@ export const initializeMap = async () => {
           }
         });
       });
+
+
+
+      // Assuming you have a MapView instance called 'view'
+view.when(() => {
+  const basemap = view.map.basemap;
+  // basemap.baseLayers is a Collection of layers
+  basemap.baseLayers.forEach(layer => {
+    if (layer.tileInfo) {
+      console.log("This basemap layer has tileInfo:", layer);
+    } else {
+      console.log("This basemap layer does NOT have tileInfo:", layer);
+    }
+  });
+});
+
+
+
     });
     const modeStatusBanner = document.createElement("span");
     modeStatusBanner.id = "mode-status-banner";

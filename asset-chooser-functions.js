@@ -127,6 +127,8 @@ export const addMapLayer = ({
   featureLayers,
   layersWithNoSelectionRequired,
 }) => {
+  const layerMinScale = parseInt(mapLayer.minScale, 10) || 0;
+  const layerMaxScale = parseInt(mapLayer.maxScale, 10) || 0;
   const mapDataLayer = new FeatureLayer({
     url: mapLayer.layerClassUrl,
     minScale: mapLayer.minScale,
@@ -139,8 +141,8 @@ export const addMapLayer = ({
       labelMask: mapLayer.labelMask,
       minAssetsRequired: mapLayer.minimumSelectionsRequired,
       maxAssetsAllowed: mapLayer.maximumSelectionsAllowed,
-      minScale: mapLayer.minScale,
-      maxScale: mapLayer.maxScale,
+      minScale: layerMinScale,
+      maxScale: layerMaxScale,
     },
     // labelingInfo: [
     //   {
@@ -186,11 +188,11 @@ export const addMapLayer = ({
   const maxAssetsAllowed = parseInt(
     mapDataLayer.layerProperties.maxAssetsAllowed
   );
-  const layerMinScale = mapDataLayer.minScale;
+  // const layerMinScale = mapDataLayer.minScale;
   if (minAssetsRequired === 0) {
     layersWithNoSelectionRequired.push(mapDataLayerId);
   }
-  const layerMaxScale = mapDataLayer.maxScale;
+  // const layerMaxScale = mapDataLayer.maxScale;
   // const layerDataDiv = document.getElementById("layer-data-div");
   const layerDataContainer = document.getElementById("layer-data-container");
   layerDataContainer.classList.add("stat-group");
@@ -224,6 +226,8 @@ export const addMapLayer = ({
     layerMaxScale,
     showHideHandler: hideOrShowLayer,
     isSketchable: false,
+    view,
+    layer: mapDataLayer,
   };
   console.log("mapLayerDataDisplay.data", mapLayerDataDisplay.data);
   // layerDataDiv.appendChild(mapLayerDataDisplay);
@@ -434,13 +438,13 @@ export const monitorLayerVisibility = (
 //       const toggleVisibilityBtnTextSpan = document.getElementById(
 //         `${layerName}-toggle-visibility-btn-text-span`
 //       );
-//       const zoomAlertSpan = document.getElementById(
+//       const zoomAlertDiv = document.getElementById(
 //         `${layerName}-zoom-alert-div`
 //       );
 
-//       if (zoomAlertSpan) {
+//       if (zoomAlertDiv) {
 //         if (visibleAtCurrentScale) {
-//           zoomAlertSpan.textContent = ``;
+//           zoomAlertDiv.textContent = ``;
 //           toggleLayerVisibilityButton.removeAttribute("disabled");
 //           toggleLayerVisibilityButton.removeAttribute("hidden");
 //           if (mapDataLayer.visible) {
@@ -457,7 +461,7 @@ export const monitorLayerVisibility = (
 //             );
 //           }
 //         } else {
-//           zoomAlertSpan.textContent = `${
+//           zoomAlertDiv.textContent = `${
 //             layerMinScale > 0 ? `Zoom in to see this layer.` : ""
 //           } ${layerMaxScale > 0 ? `Zoom out to see this layer.` : ""}`;
 //           toggleLayerVisibilityButton.setAttribute("disabled", true);

@@ -81,17 +81,18 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     const toggleVisibilityBtnTextSpan = this.querySelector(
       `#${this._data.layerName}-toggle-visibility-btn-text-span`
     );
-    const zoomAlertSpan = this.querySelector(
+    const zoomAlertDiv = this.querySelector(
       `#${sanitizedLayerName}-zoom-alert-div`
     );
 
     if (
-      zoomAlertSpan &&
+      zoomAlertDiv &&
       toggleLayerVisibilityButton &&
       toggleVisibilityBtnTextSpan
     ) {
       if (visibleAtCurrentScale) {
-        zoomAlertSpan.textContent = ``;
+        zoomAlertDiv.textContent = ``;
+        zoomAlertDiv.classList.add("invisible-button");
         toggleLayerVisibilityButton.removeAttribute("disabled");
         // toggleLayerVisibilityButton.removeAttribute("hidden");
         toggleLayerVisibilityButton.classList.remove("invisible-button");
@@ -109,7 +110,8 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
           );
         }
       } else {
-        zoomAlertSpan.textContent = `${layerMinScale > 0 ? `Zoom In` : ""} ${
+        zoomAlertDiv.classList.remove("invisible-button");
+        zoomAlertDiv.textContent = `${layerMinScale > 0 ? `Zoom In` : ""} ${
           layerMaxScale > 0 ? `Zoom Out` : ""
         }`;
         toggleLayerVisibilityButton.setAttribute("disabled", true);
@@ -132,7 +134,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       // formattedLayerName, // for regular layers
       showHideHandler,
       layerMinScale = 0, // for zoom alert
-      // layerMaxScale = 0, // for zoom alert
+      layerMaxScale = 0, // for zoom alert
       // availableCreateTools, // for sketchable layers
     } = layerData;
     console.log("layerData", layerData.layer);
@@ -185,12 +187,12 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     // assetCountSpan.textContent = `(${this._assetCount})`;
 
     // // Zoom alert
-    // const zoomAlertSpan = document.createElement("span");
-    // zoomAlertSpan.className = "zoom-alert-div";
-    // zoomAlertSpan.id = `${sanitizedLayerName}-zoom-alert-div`;
-    // zoomAlertSpan.style.height = "14px";
-    // zoomAlertSpan.style.display = "inline-block";
-    // zoomAlertSpan.textContent =
+    // const zoomAlertDiv = document.createElement("span");
+    // zoomAlertDiv.className = "zoom-alert-div";
+    // zoomAlertDiv.id = `${sanitizedLayerName}-zoom-alert-div`;
+    // zoomAlertDiv.style.height = "14px";
+    // zoomAlertDiv.style.display = "inline-block";
+    // zoomAlertDiv.textContent =
     //   layerMinScale > 0 ? `Zoom in to see this layer.` : "";
 
     // const enableSketchButton = isSketchable
@@ -214,7 +216,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     // layerTitleSpan.appendChild(assetCountSpan); // <span>Layer Name <span>(0)</span></span>
     // layerTitleDiv.appendChild(layerTitleSpan); // Add the title+count
     // layerTitleDiv.appendChild(document.createElement("br")); // Add line break
-    // layerTitleDiv.appendChild(zoomAlertSpan); // Add zoom alert
+    // layerTitleDiv.appendChild(zoomAlertDiv); // Add zoom alert
     // if (enableSketchButton) {
     //   layerTitleDiv.appendChild(enableSketchButton); // Add button last
     // }
@@ -239,20 +241,24 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
             }"></span>
             <span>${displayName}</span>
           </div>
-          <div
-            class="zoom-alert-div"
+          <button
+            class="zoom-alert-div zoom-alert-button"
             id="${sanitizedLayerName}-zoom-alert-div"
             title="Zoom In"
           >
             ${layerMinScale > 0 ? `Zoom In` : ""}
-          </div>
+          </button>
           <button
             type="button"
             id="${sanitizedLayerName}-show-hide-layer-btn"
-            class="toggleLayerVisibilityButton${layerMinScale > 0 ? " invisible-button" : ""}"
+            class="toggleLayerVisibilityButton${
+              layerMinScale > 0 ? " invisible-button" : ""
+            }"
             att-layer-id="${mapDataLayerId}"
             aria-label=""
-            title="Hide ${displayName} layer" ${layerMinScale > 0 ? "disabled" : ""}
+            title="Hide ${displayName} layer" ${
+      layerMinScale > 0 ? "disabled" : ""
+    }
           >
             <span id="${layerName}-toggle-visibility-btn-text-span">
               ${layerMinScale > 0 ? `Show` : `Hide`}
@@ -370,6 +376,70 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
         </div>
       </div>
    `;
+    const view = layerData.view;
+    console.log("view in map layer data display", view);
+    // ...inside render(), after creating zoomAlertBtn...
+
+    function getLodAtOrBelow(view, targetScale) {
+      const tileInfo = view.map.basemap.baseLayers.items[0].tileInfo;
+      if (!tileInfo || !tileInfo.lods) return targetScale;
+      // Find the LOD with the largest scale <= targetScale (i.e., most detailed that is still valid)
+      const lods = tileInfo.lods
+        .filter((lod) => lod.scale <= targetScale)
+        .sort((a, b) => b.scale - a.scale);
+      if (lods.length > 0) return lods[0].scale;
+      // If none found, use the most detailed LOD
+      return tileInfo.lods[tileInfo.lods.length - 1].scale;
+    }
+
+    function getLodAtOrAbove(view, targetScale) {
+      const tileInfo = view.map.basemap.baseLayers.items[0].tileInfo;
+      if (!tileInfo || !tileInfo.lods) return targetScale;
+      // Find the LOD with the smallest scale >= targetScale (i.e., least detailed that is still valid)
+      const lods = tileInfo.lods
+        .filter((lod) => lod.scale >= targetScale)
+        .sort((a, b) => a.scale - b.scale);
+      if (lods.length > 0) return lods[0].scale;
+      // If none found, use the least detailed LOD
+      return tileInfo.lods[0].scale;
+    }
+
+    const zoomAlertBtn = this.querySelector(
+      `#${sanitizedLayerName}-zoom-alert-div`
+    );
+
+    if (zoomAlertBtn && this._data.view && this._data.layer) {
+      zoomAlertBtn.onclick = (e) => {
+        e.preventDefault();
+        const view = this._data.view;
+        const layer = this._data.layer;
+        const minScale = layer.minScale || layer.layerMinScale || 0;
+        const maxScale = layer.maxScale || layer.layerMaxScale || 0;
+        console.log(
+          `[Zoom Alert] Layer: ${
+            layer.title || layer.id
+          }, minScale: ${minScale}, maxScale: ${maxScale}, current view.scale: ${
+            view.scale
+          }`
+        );
+        // Snap to nearest LOD
+        if (minScale > 0 && view.scale > minScale) {
+          const snapScale = getLodAtOrBelow(view, minScale);
+          console.log(
+            `[Zoom Alert] Zooming in to snapped minScale: ${snapScale}`
+          );
+          view.goTo({ scale: snapScale });
+        } else if (maxScale > 0 && view.scale < maxScale) {
+          const snapScale = getLodAtOrAbove(view, maxScale);
+          console.log(
+            `[Zoom Alert] Zooming out to snapped maxScale: ${snapScale}`
+          );
+          view.goTo({ scale: snapScale });
+        } else {
+          console.log("[Zoom Alert] No zoom action taken.");
+        }
+      };
+    }
 
     // Attach event listeners
     if (
@@ -460,17 +530,17 @@ export { AssetChooserMapLayerDataDisplay };
 //     const toggleVisibilityBtnTextSpan = this.querySelector(
 //       `#${this._data.layerName}-toggle-visibility-btn-text-span`
 //     );
-//     const zoomAlertSpan = this.querySelector(
+//     const zoomAlertDiv = this.querySelector(
 //       `#${sanitizedLayerName}-zoom-alert-div`
 //     );
 
 //     if (
-//       zoomAlertSpan &&
+//       zoomAlertDiv &&
 //       toggleLayerVisibilityButton &&
 //       toggleVisibilityBtnTextSpan
 //     ) {
 //       if (visibleAtCurrentScale) {
-//         zoomAlertSpan.textContent = ``;
+//         zoomAlertDiv.textContent = ``;
 //         toggleLayerVisibilityButton.removeAttribute("disabled");
 //         toggleLayerVisibilityButton.removeAttribute("hidden");
 //         if (visible) {
@@ -487,7 +557,7 @@ export { AssetChooserMapLayerDataDisplay };
 //           );
 //         }
 //       } else {
-//         zoomAlertSpan.textContent = `${
+//         zoomAlertDiv.textContent = `${
 //           layerMinScale > 0 ? `Zoom in to see this layer.` : ""
 //         } ${layerMaxScale > 0 ? `Zoom out to see this layer.` : ""}`;
 //         toggleLayerVisibilityButton.setAttribute("disabled", true);
@@ -549,13 +619,13 @@ export { AssetChooserMapLayerDataDisplay };
 //     layerNameDiv.appendChild(document.createElement("br"));
 
 //     // Zoom alert
-//     const zoomAlertSpan = document.createElement("span");
-//     zoomAlertSpan.className = "zoom-alert-div";
-//     zoomAlertSpan.id = `${sanitizedLayerName}-zoom-alert-div`;
-//     zoomAlertSpan.style.height = "14px";
-//     zoomAlertSpan.style.display = "inline-block";
-//     zoomAlertSpan.textContent = layerMinScale > 0 ? `Zoom in to see this layer.` : "";
-//     layerNameDiv.appendChild(zoomAlertSpan);
+//     const zoomAlertDiv = document.createElement("span");
+//     zoomAlertDiv.className = "zoom-alert-div";
+//     zoomAlertDiv.id = `${sanitizedLayerName}-zoom-alert-div`;
+//     zoomAlertDiv.style.height = "14px";
+//     zoomAlertDiv.style.display = "inline-block";
+//     zoomAlertDiv.textContent = layerMinScale > 0 ? `Zoom in to see this layer.` : "";
+//     layerNameDiv.appendChild(zoomAlertDiv);
 
 //     statTitle.appendChild(layerNameDiv);
 

@@ -11,7 +11,6 @@ class AssetChooserContainerComponent extends HTMLElement {
     this.isSketchEnabled = this.getAttribute("is-sketch-enabled") === "true";
   }
   connectedCallback() {
-    // console.log("sketch enabled",this.isSketchEnabled);
     enableSketchMode(this.isSketchEnabled);
     enableSelectMode(this.isSelectEnabled);
     const accomodationButtonMessage =
