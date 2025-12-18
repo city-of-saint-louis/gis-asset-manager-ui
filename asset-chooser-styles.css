@@ -426,3 +426,15 @@ asset-chooser-map-layer-data-display li {
     width: 90%;
   }
 }
+
+arcgis-sketch#asset-chooser-sketch {
+  position: absolute;
+  left: -1.12rem;
+}
+
+arcgis-search#asset-chooser-arcgis-search {
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+  /* z-index: 10; */
+}

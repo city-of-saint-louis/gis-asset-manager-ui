@@ -79,7 +79,7 @@ const enableSketchForLayer = (layer) => {
     style.textContent = `
     .esri-sketch > div:first-of-type {
       border: 2px solid #174054 !important;
-      border-radius: 4px;
+      
       box-sizing: border-box;
     }
   `;

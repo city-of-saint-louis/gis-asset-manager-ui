@@ -110,6 +110,7 @@ export const initializeMap = async () => {
       searchComponent.setAttribute("position", "top-right");
       searchComponent.setAttribute("popup-disabled", "true");
       searchComponent.setAttribute("include-default-sources-disabled", "true");
+      searchComponent.setAttribute("id", "asset-chooser-arcgis-search");
       searchComponent.sources = [locatorSearchSource];
       arcGisMap.appendChild(searchComponent);
       
@@ -156,6 +157,7 @@ export const initializeMap = async () => {
         sketch.setAttribute("slot", "top-left");
         sketch.setAttribute("hide-selection-tools-lasso-selection", "true");
         sketch.setAttribute("hide-selection-tools-rectangle-selection", "true");
+        // sketch.setAttribute("layout", "vertical");
         // sketch.setAttribute("hide-settings-menu", "true");
         sketch.setAttribute("hidden", "true");
         arcGisMap.appendChild(sketch);
