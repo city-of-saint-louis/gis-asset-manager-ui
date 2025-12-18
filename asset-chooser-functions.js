@@ -904,27 +904,21 @@ export const handleSelectEnabled = () => {
   
   const modeStatusBanner = document.getElementById("mode-status-banner");
   modeStatusBanner.hidden = false;
-  // modeStatusBanner.innerText = `Select Mode enabled for ${formattedSelectableLayerNames}.`;
   modeStatusBanner.classList.remove("mode-status-banner-sketch");
   modeStatusBanner.classList.add("mode-status-banner-select");
   
   const modeStatusIconSpan = document.getElementById("mode-status-icon-span");
-  // let modeStatusIconSpan = modeStatusBanner.querySelector(".mode-status-icon");
-  // if (!modeStatusIconSpan) {
-  //   modeStatusIconSpan = document.createElement("span");
-  //   modeStatusIconSpan.classList.add("mode-status-icon", "glyphicons-svg");
-  // }
   modeStatusIconSpan.classList.remove("glyphicons-svg-pencil");
   modeStatusIconSpan.classList.add("glyphicons-svg-cursor");
   
   const modeStatusTextSpan = document.getElementById("mode-status-text-span");
   modeStatusTextSpan.innerText = `Select Mode enabled for ${formattedSelectableLayerNames}.`;
-
   
   const enableSketchForLayerButtons = document.querySelectorAll(".enable-sketch-button");
   enableSketchForLayerButtons.forEach((button) => {
     button.style.visibility = "hidden";
-    button.classList.remove("sketch-button-shadow");
+    button.classList.remove("sketch-button-shadow", "pointer-events-none");
+    button.disabled = false;
   });
   const mapContainer = document.getElementById("viewDiv");
   mapContainer.classList.remove("sketch-shadow", "sketch-border");
@@ -988,19 +982,12 @@ export const handleSketchEnabled = () => {
   console.log("Sketch enabled - showing sketch buttons");
   const modeStatusBanner = document.getElementById("mode-status-banner");
   modeStatusBanner.hidden = false;
-  // modeStatusBanner.innerText = "Sketch Mode enabled. Select layer below.";
   modeStatusBanner.classList.remove("mode-status-banner-select");
   modeStatusBanner.classList.add("mode-status-banner-sketch");
   
-  // let modeStatusIconSpan = modeStatusBanner.querySelector(".mode-status-icon");
-  // if (!modeStatusIconSpan) {
-  //   modeStatusIconSpan = document.createElement("span");
-  //   modeStatusIconSpan.classList.add("mode-status-icon", "glyphicons-svg");
-  // }
   const modeStatusIconSpan = document.getElementById("mode-status-icon-span");
   modeStatusIconSpan.classList.remove("glyphicons-svg-cursor");
   modeStatusIconSpan.classList.add("glyphicons-svg-pencil");
-  // modeStatusBanner.prepend(modeStatusIconSpan);
 
   const modeStatusTextSpan = document.getElementById("mode-status-text-span");
   modeStatusTextSpan.innerText = "Sketch Mode enabled. Select layer below.";

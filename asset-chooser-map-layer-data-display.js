@@ -341,21 +341,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
             `
                 : ""
             }
-              <button
-                type="button"
-                id="${sanitizedLayerName}-show-hide-layer-btn"
-                class="toggleLayerVisibilityButton${
-                  layerMinScale > 0 ? " invisible-button" : ""
-                }"
-                att-layer-id="${mapDataLayerId}"
-                aria-label=""
-                title="Hide ${displayName} layer"
-                ${layerMinScale > 0 ? "disabled" : ""}
-              >
-                <span id="${layerName}-toggle-visibility-btn-text-span">
-                  ${layerMinScale > 0 ? `Show` : `Hide`}
-                </span>
-              </button>
+              
           </div>
         </div> 
         <div class="asset-list-wrapper">
