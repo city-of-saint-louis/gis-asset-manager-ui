@@ -22,15 +22,14 @@
 
 #mode-status-banner {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  /* right: 0; */
-  /* bottom: 1rem; */
-  top: 0;
+  /* left: 50%; */
+  /* transform: translateX(-50%); */
+  right: 0;
+  bottom: 1rem;
+  /* top: 0; */
   margin: 0;
   /* border-radius: 0 0 0.25rem 0.25rem; */
   width: 48%;
-  z-index: 100;
   /* background: #174054; */
   /* color: #fff; */
   padding: 0.2rem;
@@ -38,7 +37,11 @@
   font-weight: bold;
   font-size: 0.8rem;
   pointer-events: none; /* so it doesn't block map interaction */
-  z-index: 50;
+  z-index: 10;
+}
+
+.arcgis-search_form {
+  z-index: 1000 !important;
 }
 
 .mode-status-banner-select {
@@ -102,7 +105,7 @@
 
 @media (max-width: 1200px) {
   #asset-chooser-button-and-map-wrapper {
-    grid-template-columns: 1fr 1fr; /* Stack vertically on small screens */
+    grid-template-columns: 1fr 2fr; /* Stack vertically on small screens */
   }
 }
 
@@ -127,7 +130,7 @@
 .stat-title {
   /* margin-bottom: 0 !important; */
   padding-top: 0 !important;
-  padding-bottom: .35rem !important;
+  padding-bottom: .25rem !important;
   min-height: 32px;;
 }
 

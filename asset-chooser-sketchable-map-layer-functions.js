@@ -51,7 +51,7 @@ const enableSketchForLayer = (layer) => {
     ".enable-sketch-button"
   );
   enableSketchButtons.forEach((element) => {
-    element.classList.remove("sketch-button-shadow");
+    element.classList.remove("sketch-button-shadow", "pointer-events-none");
     element.disabled = false;
   });
   // Sanitize the layer title the same way as in asset-chooser-map-layer-data-display.js
