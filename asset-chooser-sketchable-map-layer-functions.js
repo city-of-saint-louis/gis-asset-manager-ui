@@ -439,8 +439,8 @@ const renderCreatedAssetLabel = (graphic) => {
       renderValidityMessage();
     });
     // --- Make the list item clickable to zoom to asset ---
-    listItem.style.cursor = "pointer";
-    listItem.addEventListener("click", () => {
+    listItemContentSpan.style.cursor = "pointer";
+    listItemContentSpan.addEventListener("click", () => {
       // Try to get the view from the graphicsLayer or pass it in as needed
       // const view = graphic.layer.graphicsLayer?.view || window.assetChooserMapView;
       const arcGisMap = document.querySelector("arcgis-map");
