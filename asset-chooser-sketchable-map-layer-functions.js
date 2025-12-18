@@ -407,6 +407,7 @@ const renderCreatedAssetLabel = (graphic) => {
     const listItemPosition = listItemIndex + 1;
     console.log("listItemIndex", listItemIndex);
     const listItemContentSpan = document.createElement("span");
+    listItemContentSpan.classList.add("asset-list-item-content-span");
     listItemContentSpan.textContent = `${formattedLayerName} ${listItemPosition}`;
     const listItemRemoveButton = document.createElement("button");
     listItemRemoveButton.setAttribute("type", "button");
