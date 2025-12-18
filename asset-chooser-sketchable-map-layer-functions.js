@@ -45,8 +45,10 @@ export const captureSketachableMapLayers = () => {
 
 const enableSketchForLayer = (layer) => {
   console.log("Enabling sketch for layer:", layer);
-  const modeStatusBanner = document.getElementById("mode-status-banner");
-  modeStatusBanner.textContent = `Sketch Mode Enabled for ${layer.graphicsLayer.formattedLayerName}`;
+  // const modeStatusBanner = document.getElementById("mode-status-banner");
+  // modeStatusBanner.textContent = `Sketch Mode Enabled for ${layer.graphicsLayer.formattedLayerName}`;
+  const modeStatusTextSpan = document.getElementById("mode-status-text-span");
+  modeStatusTextSpan.innerText = `Sketch Mode Enabled for ${layer.graphicsLayer.formattedLayerName}.`;
   const enableSketchButtons = document.querySelectorAll(
     ".enable-sketch-button"
   );

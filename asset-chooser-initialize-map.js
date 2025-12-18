@@ -101,7 +101,7 @@ export const initializeMap = async () => {
       singleLineFieldName: "SingleLine",
       name: "ArcGIS World Geocoding Service",
       placeholder: "Search for places or addresses",
-      maxSuggestions: 6,
+      maxSuggestions: 4,
       suggestionsEnabled: true,
     });
     if (showSearch === "true" || showSearch === true) {
@@ -173,12 +173,6 @@ export const initializeMap = async () => {
             reactiveUtils,
           });
         });
-        // const sketchableLayerDataDivHeading = document.createElement("h3");
-        // sketchableLayerDataDivHeading.textContent = "Sketchable Layers";
-        // const sketchableLayerDataDiv = document.getElementById(
-        //   "sketchable-layer-data-div"
-        // );
-        // sketchableLayerDataDiv.appendChild(sketchableLayerDataDivHeading);
       }
 
       if (!isSelectEnabled && !isSketchEnabled) {
@@ -246,26 +240,18 @@ export const initializeMap = async () => {
         });
       });
     });
-    const modeStatusBanner = document.createElement("span");
+    const modeStatusBanner = document.createElement("div");
     modeStatusBanner.id = "mode-status-banner";
     modeStatusBanner.hidden = true;
-    // modeStatusBanner.style.position = "absolute";
-    // modeStatusBanner.style.top = "0";
-    // modeStatusBanner.style.left = "50%";
-    // modeStatusBanner.style.transform = "translateX(-50%)";
-    // modeStatusBanner.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-    // modeStatusBanner.style.color = "white";
-    // modeStatusBanner.style.padding = "5px 10px";
-    // modeStatusBanner.style.borderRadius = "5px";
-    // modeStatusBanner.style.zIndex = "10";
-    // modeStatusBanner.style.fontSize = "1rem";
-    // modeStatusBanner.style.fontWeight = "bold";
-    // modeStatusBanner.textContent = isSelectEnabled
-    //   ? ""
-    //   : isSketchEnabled
-    //   ? "Sketch Mode Enabled"
-    //   : "No Mode Enabled";
     mapContainer.appendChild(modeStatusBanner);
+    const modeStatusIconSpan = document.createElement("span");
+    modeStatusIconSpan.id = "mode-status-icon-span";
+    modeStatusIconSpan.classList.add("mode-status-icon", "glyphicons-svg");
+    modeStatusBanner.appendChild(modeStatusIconSpan);
+    const modeStatusTextSpan = document.createElement("span"); 
+    modeStatusTextSpan.id = "mode-status-text-span";
+    modeStatusBanner.appendChild(modeStatusTextSpan);
+
   } catch (e) {
     console.error(e);
   }

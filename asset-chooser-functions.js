@@ -890,17 +890,10 @@ const injectMapSurfaceFocusStyle = () => {
 }
 
 export const handleSelectEnabled = () => {
-  // console.log("Select enabled - hiding sketch buttons");
   console.log('featureLayers:', featureLayers);
   const selectableLayerNames = featureLayers.map(layer => layer.layerProperties.layerName);
   console.log('selectableLayerNames:', selectableLayerNames);
-  // format selectableLayerNames for display. if two separate by and, if more than two separate last with , and
-  // capitalize first letter only of each layer name. set rest to lowercase
-  // const formattedSelectableLayerNames = selectableLayerNames.map(name => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase());
-  // if (formattedSelectableLayerNames.length > 2) {
-  //   const lastLayer = formattedSelectableLayerNames.pop();
-  //   formattedSelectableLayerNames.push(`and ${lastLayer}`);
-  // }
+ 
   let formattedSelectableLayerNames = selectableLayerNames.map(name => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase());
   if (formattedSelectableLayerNames.length === 2) {
     formattedSelectableLayerNames = formattedSelectableLayerNames.join(' and ');
@@ -911,18 +904,21 @@ export const handleSelectEnabled = () => {
   
   const modeStatusBanner = document.getElementById("mode-status-banner");
   modeStatusBanner.hidden = false;
-  modeStatusBanner.innerText = `Select Mode enabled for ${formattedSelectableLayerNames}.`;
+  // modeStatusBanner.innerText = `Select Mode enabled for ${formattedSelectableLayerNames}.`;
   modeStatusBanner.classList.remove("mode-status-banner-sketch");
   modeStatusBanner.classList.add("mode-status-banner-select");
-
-  let modeStatusIconSpan = modeStatusBanner.querySelector(".mode-status-icon");
-  if (!modeStatusIconSpan) {
-    modeStatusIconSpan = document.createElement("span");
-    modeStatusIconSpan.classList.add("mode-status-icon", "glyphicons-svg");
-  }
+  
+  const modeStatusIconSpan = document.getElementById("mode-status-icon-span");
+  // let modeStatusIconSpan = modeStatusBanner.querySelector(".mode-status-icon");
+  // if (!modeStatusIconSpan) {
+  //   modeStatusIconSpan = document.createElement("span");
+  //   modeStatusIconSpan.classList.add("mode-status-icon", "glyphicons-svg");
+  // }
   modeStatusIconSpan.classList.remove("glyphicons-svg-pencil");
   modeStatusIconSpan.classList.add("glyphicons-svg-cursor");
-  modeStatusBanner.prepend(modeStatusIconSpan);
+  
+  const modeStatusTextSpan = document.getElementById("mode-status-text-span");
+  modeStatusTextSpan.innerText = `Select Mode enabled for ${formattedSelectableLayerNames}.`;
 
   
   const enableSketchForLayerButtons = document.querySelectorAll(".enable-sketch-button");
@@ -992,18 +988,24 @@ export const handleSketchEnabled = () => {
   console.log("Sketch enabled - showing sketch buttons");
   const modeStatusBanner = document.getElementById("mode-status-banner");
   modeStatusBanner.hidden = false;
-  modeStatusBanner.innerText = "Sketch Mode enabled. Select layer below to add assets.";
+  // modeStatusBanner.innerText = "Sketch Mode enabled. Select layer below.";
   modeStatusBanner.classList.remove("mode-status-banner-select");
   modeStatusBanner.classList.add("mode-status-banner-sketch");
   
-  let modeStatusIconSpan = modeStatusBanner.querySelector(".mode-status-icon");
-  if (!modeStatusIconSpan) {
-    modeStatusIconSpan = document.createElement("span");
-    modeStatusIconSpan.classList.add("mode-status-icon", "glyphicons-svg");
-  }
+  // let modeStatusIconSpan = modeStatusBanner.querySelector(".mode-status-icon");
+  // if (!modeStatusIconSpan) {
+  //   modeStatusIconSpan = document.createElement("span");
+  //   modeStatusIconSpan.classList.add("mode-status-icon", "glyphicons-svg");
+  // }
+  const modeStatusIconSpan = document.getElementById("mode-status-icon-span");
   modeStatusIconSpan.classList.remove("glyphicons-svg-cursor");
   modeStatusIconSpan.classList.add("glyphicons-svg-pencil");
-  modeStatusBanner.prepend(modeStatusIconSpan);
+  // modeStatusBanner.prepend(modeStatusIconSpan);
+
+  const modeStatusTextSpan = document.getElementById("mode-status-text-span");
+  modeStatusTextSpan.innerText = "Sketch Mode enabled. Select layer below.";
+
+
   const mapContainer = document.getElementById("viewDiv");
   mapContainer.classList.remove("select-shadow", "select-border");
   mapContainer.classList.add("sketch-shadow", "sketch-border");
