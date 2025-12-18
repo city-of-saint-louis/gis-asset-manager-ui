@@ -438,6 +438,41 @@ const renderCreatedAssetLabel = (graphic) => {
       handleRemoveSketchedAsset(graphic.attributes.id);
       renderValidityMessage();
     });
+    // --- Make the list item clickable to zoom to asset ---
+    listItem.style.cursor = "pointer";
+    listItem.addEventListener("click", () => {
+      // Try to get the view from the graphicsLayer or pass it in as needed
+      // const view = graphic.layer.graphicsLayer?.view || window.assetChooserMapView;
+      const arcGisMap = document.querySelector("arcgis-map");
+      const view = arcGisMap.view;
+      if (view && graphic.geometry) {
+        if (graphic.geometry.type === "point") {
+          view.goTo(
+            {
+              center: [graphic.geometry.longitude, graphic.geometry.latitude],
+              zoom: 17,
+            },
+            { duration: 800 }
+          );
+        } else if (graphic.geometry.extent) {
+          // For polygons/lines, zoom to centroid
+          view.goTo(
+            {
+              target: graphic.geometry.extent.center,
+              zoom: 17,
+            },
+            { duration: 800 }
+          );
+        } else {
+          view.goTo(graphic.geometry, { duration: 800 });
+        }
+      }
+      if (!view) {
+        console.warn("Map view not available for zooming to asset.");
+      }
+    });
+    // -----------------------------------------------------
+
     listItem.appendChild(listItemContentSpan);
     listItem.appendChild(listItemRemoveButton);
     layerAssetList.appendChild(listItem);
@@ -485,12 +520,13 @@ export const sketchAsset = (sketchComponent) => {
       geometryString: JSON.stringify(graphic.geometry),
     };
 
-
     // Add the graphic to the ArcGIS GraphicsLayer so it appears on the map
-    if (sketchComponent.layer.graphicsLayer && sketchComponent.layer.graphicsLayer.graphics) {
+    if (
+      sketchComponent.layer.graphicsLayer &&
+      sketchComponent.layer.graphicsLayer.graphics
+    ) {
       sketchComponent.layer.graphicsLayer.graphics.add(graphic);
     }
-
 
     if (!sketchComponent.availableCreateTools.includes(graphic.geometry.type)) {
       console.warn(
