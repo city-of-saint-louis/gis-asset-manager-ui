@@ -113,7 +113,22 @@ export const initializeMap = async () => {
       searchComponent.setAttribute("id", "asset-chooser-arcgis-search");
       searchComponent.sources = [locatorSearchSource];
       arcGisMap.appendChild(searchComponent);
-      
+      function updateSearchPosition() {
+        const searchComponent = document.getElementById(
+          "asset-chooser-arcgis-search"
+        );
+        if (!searchComponent) return;
+        if (window.innerWidth <= 500) {
+          searchComponent.setAttribute("position", "top-left");
+        } else {
+          searchComponent.setAttribute("position", "top-right");
+        }
+      }
+
+      // Run on load
+      updateSearchPosition();
+      // Run on resize
+      window.addEventListener("resize", updateSearchPosition);
     } else {
       // Check if the search component exists and remove it
       const existingSearchComponent = arcGisMap.querySelector("arcgis-search");
@@ -250,10 +265,9 @@ export const initializeMap = async () => {
     modeStatusIconSpan.id = "mode-status-icon-span";
     modeStatusIconSpan.classList.add("mode-status-icon", "glyphicons-svg");
     modeStatusBanner.appendChild(modeStatusIconSpan);
-    const modeStatusTextSpan = document.createElement("span"); 
+    const modeStatusTextSpan = document.createElement("span");
     modeStatusTextSpan.id = "mode-status-text-span";
     modeStatusBanner.appendChild(modeStatusTextSpan);
-
   } catch (e) {
     console.error(e);
   }
