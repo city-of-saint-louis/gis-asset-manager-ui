@@ -45,8 +45,6 @@ export const captureSketachableMapLayers = () => {
 
 const enableSketchForLayer = (layer) => {
   console.log("Enabling sketch for layer:", layer);
-  // const modeStatusBanner = document.getElementById("mode-status-banner");
-  // modeStatusBanner.textContent = `Sketch Mode Enabled for ${layer.graphicsLayer.formattedLayerName}`;
   const modeStatusTextSpan = document.getElementById("mode-status-text-span");
   modeStatusTextSpan.innerText = `Sketch Mode Enabled for ${layer.graphicsLayer.formattedLayerName}.`;
   const enableSketchButtons = document.querySelectorAll(
@@ -79,7 +77,6 @@ const enableSketchForLayer = (layer) => {
     style.textContent = `
     .esri-sketch > div:first-of-type {
       border: 2px solid #174054 !important;
-      
       box-sizing: border-box;
     }
   `;
@@ -92,7 +89,8 @@ const enableSketchForLayer = (layer) => {
   mapContainer.style.pointerEvents = "auto";
   // Set the sketch widget's layer to the correct GraphicsLayer
   if (layer.graphicsLayer) {
-    sketch.layer = layer;
+    // sketch.layer = layer;
+    sketch.layer = layer.graphicsLayer;
   } else {
     console.warn("No graphicsLayer found on layer object!");
   }
@@ -196,6 +194,8 @@ export const addSketchableMapLayer = async ({
       sketchType: sketchableMapLayer.sketchType,
     },
   });
+  // After creating the GraphicsLayer:
+  sketchableGraphicLayer.config = sketchableMapLayer;
   console.log("sketchableGraphicLayer created:", sketchableGraphicLayer);
   const sketchableGraphicLayerId = `${sketchableGraphicLayer.layerProperties.layerName}-${sketchableGraphicLayer.id}`;
   allSketchableLayerIds.push(sketchableGraphicLayerId);
@@ -392,7 +392,7 @@ const renderCreatedAssetLabel = (graphic) => {
   const layerAssetList = document.getElementById(graphic.attributes.layerId);
   if (layerAssetList) {
     const formattedLayerName =
-      graphic.attributes.formattedLayerName || "Unknown";
+      graphic.layer.formattedLayerName || "Unknown";
     const firstLi = layerAssetList.querySelector("li");
     if (
       firstLi &&
@@ -481,16 +481,18 @@ const renderCreatedAssetLabel = (graphic) => {
 };
 
 export const sketchAsset = (sketchComponent) => {
-  console.log("sketchComponent received:", sketchComponent.layer);
+  console.log("!!!!!!!!!!!!!!!!!!sketchComponent received:", sketchComponent.layer);
   // if (sketchComponent._arcgisCreateListenerAttached) return; // Prevent duplicate listeners
   sketchComponent.addEventListener("arcgisCreate", (event) => {
     if (event.detail.state !== "complete") return; // Only handle completed graphics
     const graphic = event.detail.graphic;
     console.log("Graphic created event received:", graphic);
+    const config = sketchComponent.layer.config;
+    console.log("Sketch component layer config:", config);
     const layerAssetMax =
-      parseInt(sketchComponent.layer.maxAssetsAllowed) ||
+      sketchComponent.layer.maxAssetsAllowed ??
       (sketchComponent.layer.layerProperties &&
-        parseInt(sketchComponent.layer.layerProperties.maxAssetsAllowed));
+        sketchComponent.layer.layerProperties.maxAssetsAllowed);
     console.log("layerAssetMax", layerAssetMax);
     const totalLayerAssetsCreated = createdAssets.filter(
       (createdAsset) =>
@@ -509,13 +511,13 @@ export const sketchAsset = (sketchComponent) => {
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
       status: "Proposed",
-      layerName: sketchComponent.layer.name,
+      layerName: config.name,
       formattedLayerName:
         (sketchComponent.layer.graphicsLayer &&
           sketchComponent.layer.graphicsLayer.formattedLayerName) ||
         sketchComponent.layer.name ||
         "Unknown",
-      layerId: sketchComponent.layer.graphicsLayer.id,
+      layerId: sketchComponent.layer.id,
       layer: sketchComponent.layer,
       geometryType: graphic.geometry.type,
       geometryString: JSON.stringify(graphic.geometry),
