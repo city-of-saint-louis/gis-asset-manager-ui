@@ -379,7 +379,6 @@ function removeLabelForAsset(assetId) {
   }
 }
 
-
 const handleRemoveSketchedAsset = (assetId) => {
   removeLabelForAsset(assetId);
   console.log("Current createdAssets array (snapshot):", [...createdAssets]);
