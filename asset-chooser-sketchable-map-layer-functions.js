@@ -26,6 +26,23 @@ export const dispatchCreatedAssets = (createdAssets) => {
   console.log("Dispatched createdAssetsAreValidIsTrue event:", event);
 };
 
+// export const dispatchCreatedAssets = (createdAssets) => {
+//   // Only include serializable fields: attributes (without 'layer') and geometry as JSON
+//   const serializableAssets = createdAssets.map(asset => {
+//     // Clone attributes, omitting any non-serializable fields (like 'layer')
+//     const { layer, ...safeAttributes } = asset.attributes || {};
+//     return {
+//       attributes: safeAttributes,
+//       geometry: asset.geometry && asset.geometry.toJSON ? asset.geometry.toJSON() : asset.geometry
+//     };
+//   });
+//   const event = new CustomEvent("createdAssetsAreValidIsTrue", {
+//     detail: { createdAssets: serializableAssets },
+//   });
+//   document.dispatchEvent(event);
+//   console.log("Dispatched createdAssetsAreValidIsTrue event:", event);
+// };
+
 // custom event listener to signal when createdAssets are not valid
 export const secureCreatedAssets = () => {
   const event = new CustomEvent("createdAssetsAreValidIsFalse", {
@@ -349,7 +366,22 @@ export const updateLayerRequirementDisplay = (asset) => {
   }
 };
 
+function removeLabelForAsset(assetId) {
+  // Find the asset in createdAssets to get its layer
+  const asset = createdAssets.find((a) => a.attributes.id === assetId);
+  if (!asset || !asset.layer || !asset.layer.graphics) return;
+  // Find the label graphic by relatedAssetId
+  const label = asset.layer.graphics.find(
+    (g) => g.attributes && g.attributes.relatedAssetId === assetId
+  );
+  if (label) {
+    asset.layer.graphics.remove(label);
+  }
+}
+
+
 const handleRemoveSketchedAsset = (assetId) => {
+  removeLabelForAsset(assetId);
   console.log("Current createdAssets array (snapshot):", [...createdAssets]);
   console.log("Removing sketched asset with ID:", assetId);
 
@@ -391,8 +423,7 @@ const renderCreatedAssetLabel = (graphic) => {
   // Use getElementById for the container, then querySelector for the child
   const layerAssetList = document.getElementById(graphic.attributes.layerId);
   if (layerAssetList) {
-    const formattedLayerName =
-      graphic.layer.formattedLayerName || "Unknown";
+    const formattedLayerName = graphic.layer.formattedLayerName || "Unknown";
     const firstLi = layerAssetList.querySelector("li");
     if (
       firstLi &&
@@ -481,19 +512,19 @@ const renderCreatedAssetLabel = (graphic) => {
 };
 
 export const sketchAsset = (sketchComponent) => {
-  console.log("!!!!!!!!!!!!!!!!!!sketchComponent received:", sketchComponent.layer);
+  // console.log("!!!!!!!!!!!!!!!!!!sketchComponent received:", sketchComponent.layer);
   // if (sketchComponent._arcgisCreateListenerAttached) return; // Prevent duplicate listeners
-  sketchComponent.addEventListener("arcgisCreate", (event) => {
+  sketchComponent.addEventListener("arcgisCreate", async (event) => {
     if (event.detail.state !== "complete") return; // Only handle completed graphics
     const graphic = event.detail.graphic;
-    console.log("Graphic created event received:", graphic);
+    // console.log("Graphic created event received:", graphic);
     const config = sketchComponent.layer.config;
     console.log("Sketch component layer config:", config);
     const layerAssetMax =
       sketchComponent.layer.maxAssetsAllowed ??
       (sketchComponent.layer.layerProperties &&
         sketchComponent.layer.layerProperties.maxAssetsAllowed);
-    console.log("layerAssetMax", layerAssetMax);
+    // console.log("layerAssetMax", layerAssetMax);
     const totalLayerAssetsCreated = createdAssets.filter(
       (createdAsset) =>
         createdAsset.attributes.layerId === `${sketchComponent.layer.id}`
@@ -512,13 +543,13 @@ export const sketchAsset = (sketchComponent) => {
       createdAt: new Date().toISOString(),
       status: "Proposed",
       layerName: config.name,
-      formattedLayerName:
-        (sketchComponent.layer.graphicsLayer &&
-          sketchComponent.layer.graphicsLayer.formattedLayerName) ||
-        sketchComponent.layer.name ||
-        "Unknown",
+      formattedLayerName: config.graphicsLayer.formattedLayerName,
+      // (sketchComponent.layer.graphicsLayer &&
+      //   sketchComponent.layer.graphicsLayer.formattedLayerName) ||
+      // sketchComponent.layer.name ||
+      // "Unknown",
       layerId: sketchComponent.layer.id,
-      layer: sketchComponent.layer,
+      // layer: sketchComponent.layer,
       geometryType: graphic.geometry.type,
       geometryString: JSON.stringify(graphic.geometry),
     };
@@ -531,6 +562,50 @@ export const sketchAsset = (sketchComponent) => {
       sketchComponent.layer.graphicsLayer.graphics.add(graphic);
     }
 
+    const Graphic = await $arcgis.import("@arcgis/core/Graphic.js");
+
+    // Create the label text
+    const labelText = config.labelPrefix
+      ? `${config.labelPrefix} ${totalLayerAssetsCreated + 1}`
+      : `${graphic.attributes.formattedLayerName} ${
+          totalLayerAssetsCreated + 1
+        }`;
+
+    const labelSymbol = {
+      type: "text",
+      color: "black",
+      haloColor: "white",
+      haloSize: "1px",
+      text: labelText,
+      xoffset: 0,
+      yoffset: 12,
+      font: {
+        size: 12,
+        family: "sans-serif",
+        weight: "bold",
+      },
+    };
+
+    // For points, use the geometry directly; for lines/polygons, use centroid
+    let labelGeometry = graphic.geometry;
+    if (graphic.geometry.type !== "point" && graphic.geometry.extent) {
+      labelGeometry = graphic.geometry.extent.center;
+    }
+
+    // Only store the asset's ID in the label's attributes
+    const labelGraphic = new Graphic({
+      geometry: labelGeometry,
+      symbol: labelSymbol,
+      attributes: {
+        relatedAssetId: graphic.attributes.id, // Only the ID, not the full object!
+      },
+    });
+
+    sketchComponent.layer.graphics.add(labelGraphic);
+
+    // (Optional) If you want to keep a reference to the label for UI logic (not for serialization), you can do:
+    graphic.attributes.labelGraphicId = labelGraphic.uid; // This is safe, as it's just a string/number
+
     if (!sketchComponent.availableCreateTools.includes(graphic.geometry.type)) {
       console.warn(
         `Created graphic type ${graphic.geometry.type} is not allowed in this layer!`
@@ -541,7 +616,7 @@ export const sketchAsset = (sketchComponent) => {
       return;
     }
     createdAssets.push(graphic);
-    // console.log("Updated createdAssets array:", createdAssets);
+    console.log("Updated createdAssets array:", createdAssets);
     renderCreatedAssetLabel(graphic);
     console.log("sketched graphic", graphic);
     updateLayerRequirementDisplay(graphic);
