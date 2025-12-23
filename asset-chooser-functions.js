@@ -15,7 +15,7 @@ import {
   setIsSelectEnabled,
   setIsSketchEnabled,
   assetMode,
-  setAssetMode
+  setAssetMode,
 } from "./asset-chooser-state.js";
 
 // *** begin map related functions *** //
@@ -482,15 +482,20 @@ export const renderValidityMessage = () => {
   // const validityMessage = document.getElementById("validity-message");
   const validityMessage = document.getElementById("asset-chooser-hint");
   const originalHintText = validityMessage.getAttribute("data-original-hint");
-   const mapContainer = document.getElementById("viewDiv");
-   const mapLayerDataContainers = document.querySelectorAll(
-      ".map-layer-data-container"
-    );
+  const mapContainer = document.getElementById("viewDiv");
+  const mapLayerDataContainers = document.querySelectorAll(
+    ".map-layer-data-container"
+  );
   if (isValid && createdAssetsAreValid) {
     validityMessage.innerHTML = `<span class="label label-success">Assets valid for submission</span>`;
     validityMessage.setAttribute("aria-live", "assertive");
     validityMessage.setAttribute("title", "Assets valid for submission");
-    mapContainer.classList.remove("select-shadow", "select-border", "sketch-shadow", "sketch-border");
+    mapContainer.classList.remove(
+      "select-shadow",
+      "select-border",
+      "sketch-shadow",
+      "sketch-border"
+    );
     mapContainer.classList.add("assets-valid-shadow", "assets-valid-border");
     // mapLayerDataContainers.forEach((container) => {
     //   container.classList.remove("select-shadow", "sketch-shadow");
@@ -654,6 +659,7 @@ export const highlightSelectedAsset = (
         layerClassUrl: graphic.layer.layerProperties.layerClassUrl,
         layerAssetMax: graphic.layer.layerProperties.maxAssetsAllowed,
         highlightSelect: highlightedSelection,
+        graphic: graphic,
       };
       chosenAssets.push(chosenAsset);
       renderSelectedAssetLabels();
@@ -712,30 +718,42 @@ const renderSelectedAssetLabels = () => {
         if (assetLabel.includes("null")) {
           assetLabel = "Asset data unavailable";
         }
+        const arcGisMap = document.querySelector("arcgis-map");
+        const view = arcGisMap.view;
         const assetLabelListItem = document.createElement("li");
         assetLabelListItem.setAttribute("id", asset.internalAssetId);
-        assetLabelListItem.innerHTML = `
-          <span
-            class="asset-label-text"
-            title="You have selected ${assetLabel}"
-          >
-            ${assetLabel}
-          </span>
-          <button
-            type="button"
-            id="remove-${asset.internalAssetId}-btn"
-            class="pull-right link-button small-button red-button transparent-button remove-asset-btn"
-            title="Remove ${assetLabel}"
-          >
-            <span class="glyphicons glyphicons-remove"></span>
-            Remove
-          </button>
-        `;
-        selectedLayerAssetList.appendChild(assetLabelListItem);
 
-        const removeAssetBtn = document.getElementById(
-          `remove-${asset.internalAssetId}-btn`
-        );
+        // Create the label span
+        const assetLabelTextSpan = document.createElement("span");
+        assetLabelTextSpan.className = "asset-label-text";
+        assetLabelTextSpan.title = `You have selected ${assetLabel}`;
+        assetLabelTextSpan.id = `label-${asset.internalAssetId}`;
+        assetLabelTextSpan.textContent = assetLabel;
+
+        // Add the click handler 
+        assetLabelTextSpan.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          view.goTo({
+            target: asset.graphic.geometry,
+            zoom: 18,
+          });
+        });
+
+        // Add the label span to the list item
+        assetLabelListItem.appendChild(assetLabelTextSpan);
+
+        // add the remove button 
+        const removeAssetBtn = document.createElement("button");
+        removeAssetBtn.type = "button";
+        removeAssetBtn.id = `remove-${asset.internalAssetId}-btn`;
+        removeAssetBtn.className =
+          "pull-right link-button small-button red-button transparent-button remove-asset-btn";
+        removeAssetBtn.title = `Remove ${assetLabel}`;
+        removeAssetBtn.innerHTML = `<span class="glyphicons glyphicons-remove"></span> Remove`;
+
+        assetLabelListItem.appendChild(removeAssetBtn);
+        selectedLayerAssetList.appendChild(assetLabelListItem);
 
         removeAssetBtn.addEventListener("click", () => {
           renderValidityMessage();
@@ -887,34 +905,42 @@ const injectMapSurfaceFocusStyle = () => {
   `;
   // Append the style to the shadow root
   shadowRoot.appendChild(style);
-}
+};
 
 export const handleSelectEnabled = () => {
-  console.log('featureLayers:', featureLayers);
-  const selectableLayerNames = featureLayers.map(layer => layer.layerProperties.layerName);
-  console.log('selectableLayerNames:', selectableLayerNames);
- 
-  let formattedSelectableLayerNames = selectableLayerNames.map(name => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase());
+  console.log("featureLayers:", featureLayers);
+  const selectableLayerNames = featureLayers.map(
+    (layer) => layer.layerProperties.layerName
+  );
+  console.log("selectableLayerNames:", selectableLayerNames);
+
+  let formattedSelectableLayerNames = selectableLayerNames.map(
+    (name) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+  );
   if (formattedSelectableLayerNames.length === 2) {
-    formattedSelectableLayerNames = formattedSelectableLayerNames.join(' and ');
+    formattedSelectableLayerNames = formattedSelectableLayerNames.join(" and ");
   } else if (formattedSelectableLayerNames.length > 2) {
     const lastLayer = formattedSelectableLayerNames.pop();
-    formattedSelectableLayerNames = `${formattedSelectableLayerNames.join(', ')}, and ${lastLayer}`;
+    formattedSelectableLayerNames = `${formattedSelectableLayerNames.join(
+      ", "
+    )}, and ${lastLayer}`;
   }
-  
+
   const modeStatusBanner = document.getElementById("mode-status-banner");
   modeStatusBanner.hidden = false;
   modeStatusBanner.classList.remove("mode-status-banner-sketch");
   modeStatusBanner.classList.add("mode-status-banner-select");
-  
+
   const modeStatusIconSpan = document.getElementById("mode-status-icon-span");
   modeStatusIconSpan.classList.remove("glyphicons-svg-pencil");
   modeStatusIconSpan.classList.add("glyphicons-svg-cursor");
-  
+
   const modeStatusTextSpan = document.getElementById("mode-status-text-span");
   modeStatusTextSpan.innerText = `Select Mode enabled for ${formattedSelectableLayerNames}.`;
-  
-  const enableSketchForLayerButtons = document.querySelectorAll(".enable-sketch-button");
+
+  const enableSketchForLayerButtons = document.querySelectorAll(
+    ".enable-sketch-button"
+  );
   enableSketchForLayerButtons.forEach((button) => {
     button.style.visibility = "hidden";
     button.classList.remove("sketch-button-shadow", "pointer-events-none");
@@ -923,7 +949,7 @@ export const handleSelectEnabled = () => {
   const mapContainer = document.getElementById("viewDiv");
   mapContainer.classList.remove("sketch-shadow", "sketch-border");
   mapContainer.classList.add("select-shadow", "select-border");
-  mapContainer.style.pointerEvents = 'auto';
+  mapContainer.style.pointerEvents = "auto";
 
   const sketch = document.getElementById("asset-chooser-sketch");
   sketch.setAttribute("hidden", "");
@@ -956,7 +982,7 @@ export const handleSelectEnabled = () => {
     if (node.children) {
       Array.from(node.children).forEach((child) => collectShadowButtons(child));
     }
-  }
+  };
 
   collectShadowButtons(sketch);
   // console.log("All shadow DOM buttons:", shadowButtons);
@@ -984,7 +1010,7 @@ export const handleSketchEnabled = () => {
   modeStatusBanner.hidden = false;
   modeStatusBanner.classList.remove("mode-status-banner-select");
   modeStatusBanner.classList.add("mode-status-banner-sketch");
-  
+
   const modeStatusIconSpan = document.getElementById("mode-status-icon-span");
   modeStatusIconSpan.classList.remove("glyphicons-svg-cursor");
   modeStatusIconSpan.classList.add("glyphicons-svg-pencil");
@@ -992,11 +1018,10 @@ export const handleSketchEnabled = () => {
   const modeStatusTextSpan = document.getElementById("mode-status-text-span");
   modeStatusTextSpan.innerText = "Sketch Mode enabled. Select layer below.";
 
-
   const mapContainer = document.getElementById("viewDiv");
   mapContainer.classList.remove("select-shadow", "select-border");
   mapContainer.classList.add("sketch-shadow", "sketch-border");
-  mapContainer.style.pointerEvents = 'none';
+  mapContainer.style.pointerEvents = "none";
   document.querySelectorAll(".enable-sketch-button").forEach((button) => {
     button.style.visibility = "visible";
   });
@@ -1014,10 +1039,9 @@ export const handleSketchEnabled = () => {
   });
 };
 
-
 export const mapActionsDisabled = () => {
   const mapContainer = document.getElementById("viewDiv");
-  mapContainer.style.pointerEvents = 'none';
+  mapContainer.style.pointerEvents = "none";
   const sketch = document.getElementById("asset-chooser-sketch");
   sketch.setAttribute("hidden", "true");
 };
