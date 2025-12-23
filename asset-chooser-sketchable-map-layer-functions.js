@@ -538,6 +538,11 @@ export const sketchAsset = (sketchComponent) => {
       return;
     }
     graphic.attributes = {
+      assetLabel: config.labelPrefix
+        ? `${config.labelPrefix} ${totalLayerAssetsCreated + 1}`
+        : `${config.graphicsLayer.formattedLayerName} ${
+            totalLayerAssetsCreated + 1
+          }`,
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
       status: "Proposed",
