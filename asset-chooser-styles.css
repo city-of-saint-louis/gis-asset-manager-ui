@@ -25,6 +25,15 @@
   /* align-items: start; */
 }
 
+#viewDiv {
+  border: 2px solid rgb(148, 148, 148);
+  position: relative;
+  width: 100%;
+  height: 20rem;
+  display: flex;
+  pointer-events: none;
+}
+
 #mode-status-banner {
   position: absolute;
   left: 0;
@@ -107,13 +116,7 @@
   }
 }
 
-#viewDiv {
-  position: relative;
-  width: 100%;
-  height: 20rem;
-  display: flex;
-  pointer-events: none;
-}
+
 
 .stat-title {
   /* margin-bottom: 0 !important; */
@@ -477,8 +480,4 @@ arcgis-search#asset-chooser-arcgis-search {
   text-decoration: underline;
   color: #0645AD;
   cursor: pointer;
-}
-
-#viewDiv {
-  border: 2px solid rgb(148, 148, 148);
 }
