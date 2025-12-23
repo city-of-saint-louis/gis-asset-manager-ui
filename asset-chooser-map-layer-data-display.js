@@ -81,18 +81,18 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     const toggleVisibilityBtnTextSpan = this.querySelector(
       `#${this._data.layerName}-toggle-visibility-btn-text-span`
     );
-    const zoomAlertDiv = this.querySelector(
-      `#${sanitizedLayerName}-zoom-alert-div`
+    const zoomAlertButton = this.querySelector(
+      `#${sanitizedLayerName}-zoom-alert-button`
     );
 
     if (
-      zoomAlertDiv &&
+      zoomAlertButton &&
       toggleLayerVisibilityButton &&
       toggleVisibilityBtnTextSpan
     ) {
       if (visibleAtCurrentScale) {
-        zoomAlertDiv.textContent = ``;
-        zoomAlertDiv.classList.add("invisible-button");
+        zoomAlertButton.textContent = ``;
+        zoomAlertButton.classList.add("invisible-button");
         toggleLayerVisibilityButton.removeAttribute("disabled");
         // toggleLayerVisibilityButton.removeAttribute("hidden");
         toggleLayerVisibilityButton.classList.remove("invisible-button");
@@ -110,8 +110,8 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
           );
         }
       } else {
-        zoomAlertDiv.classList.remove("invisible-button");
-        zoomAlertDiv.textContent = `${layerMinScale > 0 ? `Zoom In` : ""} ${
+        zoomAlertButton.classList.remove("invisible-button");
+        zoomAlertButton.textContent = `${layerMinScale > 0 ? `Zoom In` : ""} ${
           layerMaxScale > 0 ? `Zoom Out` : ""
         }`;
         toggleLayerVisibilityButton.setAttribute("disabled", true);
@@ -187,12 +187,12 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     // assetCountSpan.textContent = `(${this._assetCount})`;
 
     // // Zoom alert
-    // const zoomAlertDiv = document.createElement("span");
-    // zoomAlertDiv.className = "zoom-alert-div";
-    // zoomAlertDiv.id = `${sanitizedLayerName}-zoom-alert-div`;
-    // zoomAlertDiv.style.height = "14px";
-    // zoomAlertDiv.style.display = "inline-block";
-    // zoomAlertDiv.textContent =
+    // const zoomAlertButton = document.createElement("span");
+    // zoomAlertButton.className = "zoom-alert-button";
+    // zoomAlertButton.id = `${sanitizedLayerName}-zoom-alert-button`;
+    // zoomAlertButton.style.height = "14px";
+    // zoomAlertButton.style.display = "inline-block";
+    // zoomAlertButton.textContent =
     //   layerMinScale > 0 ? `Zoom in to see this layer.` : "";
 
     // const enableSketchButton = isSketchable
@@ -216,7 +216,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     // layerTitleSpan.appendChild(assetCountSpan); // <span>Layer Name <span>(0)</span></span>
     // layerTitleDiv.appendChild(layerTitleSpan); // Add the title+count
     // layerTitleDiv.appendChild(document.createElement("br")); // Add line break
-    // layerTitleDiv.appendChild(zoomAlertDiv); // Add zoom alert
+    // layerTitleDiv.appendChild(zoomAlertButton); // Add zoom alert
     // if (enableSketchButton) {
     //   layerTitleDiv.appendChild(enableSketchButton); // Add button last
     // }
@@ -242,8 +242,8 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
             <span>${displayName}</span>
           </div>
           <button
-            class="zoom-alert-div zoom-alert-button"
-            id="${sanitizedLayerName}-zoom-alert-div"
+            class="zoom-alert-button zoom-alert-button"
+            id="${sanitizedLayerName}-zoom-alert-button"
             title="Zoom In"
           >
             ${layerMinScale > 0 ? `Zoom In` : ""}
@@ -391,7 +391,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
     }
 
     const zoomAlertBtn = this.querySelector(
-      `#${sanitizedLayerName}-zoom-alert-div`
+      `#${sanitizedLayerName}-zoom-alert-button`
     );
 
     if (zoomAlertBtn && this._data.view && this._data.layer) {
@@ -516,17 +516,17 @@ export { AssetChooserMapLayerDataDisplay };
 //     const toggleVisibilityBtnTextSpan = this.querySelector(
 //       `#${this._data.layerName}-toggle-visibility-btn-text-span`
 //     );
-//     const zoomAlertDiv = this.querySelector(
-//       `#${sanitizedLayerName}-zoom-alert-div`
+//     const zoomAlertButton = this.querySelector(
+//       `#${sanitizedLayerName}-zoom-alert-button`
 //     );
 
 //     if (
-//       zoomAlertDiv &&
+//       zoomAlertButton &&
 //       toggleLayerVisibilityButton &&
 //       toggleVisibilityBtnTextSpan
 //     ) {
 //       if (visibleAtCurrentScale) {
-//         zoomAlertDiv.textContent = ``;
+//         zoomAlertButton.textContent = ``;
 //         toggleLayerVisibilityButton.removeAttribute("disabled");
 //         toggleLayerVisibilityButton.removeAttribute("hidden");
 //         if (visible) {
@@ -543,7 +543,7 @@ export { AssetChooserMapLayerDataDisplay };
 //           );
 //         }
 //       } else {
-//         zoomAlertDiv.textContent = `${
+//         zoomAlertButton.textContent = `${
 //           layerMinScale > 0 ? `Zoom in to see this layer.` : ""
 //         } ${layerMaxScale > 0 ? `Zoom out to see this layer.` : ""}`;
 //         toggleLayerVisibilityButton.setAttribute("disabled", true);
@@ -605,13 +605,13 @@ export { AssetChooserMapLayerDataDisplay };
 //     layerNameDiv.appendChild(document.createElement("br"));
 
 //     // Zoom alert
-//     const zoomAlertDiv = document.createElement("span");
-//     zoomAlertDiv.className = "zoom-alert-div";
-//     zoomAlertDiv.id = `${sanitizedLayerName}-zoom-alert-div`;
-//     zoomAlertDiv.style.height = "14px";
-//     zoomAlertDiv.style.display = "inline-block";
-//     zoomAlertDiv.textContent = layerMinScale > 0 ? `Zoom in to see this layer.` : "";
-//     layerNameDiv.appendChild(zoomAlertDiv);
+//     const zoomAlertButton = document.createElement("span");
+//     zoomAlertButton.className = "zoom-alert-button";
+//     zoomAlertButton.id = `${sanitizedLayerName}-zoom-alert-button`;
+//     zoomAlertButton.style.height = "14px";
+//     zoomAlertButton.style.display = "inline-block";
+//     zoomAlertButton.textContent = layerMinScale > 0 ? `Zoom in to see this layer.` : "";
+//     layerNameDiv.appendChild(zoomAlertButton);
 
 //     statTitle.appendChild(layerNameDiv);
 

@@ -249,7 +249,7 @@ export const addMapLayer = ({
   //          </strong>
   //        </span>
   //        <br>
-  //        <span class="zoom-alert-div" id="${layerName}-zoom-alert-div" style="height: 14px; display: inline-block">
+  //        <span class="zoom-alert-button" id="${layerName}-zoom-alert-button" style="height: 14px; display: inline-block">
   //         ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
   //        </span>
   //      </div>
@@ -438,13 +438,13 @@ export const monitorLayerVisibility = (
 //       const toggleVisibilityBtnTextSpan = document.getElementById(
 //         `${layerName}-toggle-visibility-btn-text-span`
 //       );
-//       const zoomAlertDiv = document.getElementById(
-//         `${layerName}-zoom-alert-div`
+//       const zoomAlertButton = document.getElementById(
+//         `${layerName}-zoom-alert-button`
 //       );
 
-//       if (zoomAlertDiv) {
+//       if (zoomAlertButton) {
 //         if (visibleAtCurrentScale) {
-//           zoomAlertDiv.textContent = ``;
+//           zoomAlertButton.textContent = ``;
 //           toggleLayerVisibilityButton.removeAttribute("disabled");
 //           toggleLayerVisibilityButton.removeAttribute("hidden");
 //           if (mapDataLayer.visible) {
@@ -461,7 +461,7 @@ export const monitorLayerVisibility = (
 //             );
 //           }
 //         } else {
-//           zoomAlertDiv.textContent = `${
+//           zoomAlertButton.textContent = `${
 //             layerMinScale > 0 ? `Zoom in to see this layer.` : ""
 //           } ${layerMaxScale > 0 ? `Zoom out to see this layer.` : ""}`;
 //           toggleLayerVisibilityButton.setAttribute("disabled", true);
