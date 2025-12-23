@@ -476,6 +476,7 @@ arcgis-search#asset-chooser-arcgis-search {
 .asset-list-item-content-span {
   text-decoration: underline;
   color: #0645AD;
+  cursor: pointer;
 }
 
 #viewDiv {

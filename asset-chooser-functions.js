@@ -729,6 +729,7 @@ const renderSelectedAssetLabels = () => {
         assetLabelTextSpan.title = `You have selected ${assetLabel}`;
         assetLabelTextSpan.id = `label-${asset.internalAssetId}`;
         assetLabelTextSpan.textContent = assetLabel;
+        assetLabelTextSpan.classList.add("asset-list-item-content-span");
 
         // Add the click handler 
         assetLabelTextSpan.addEventListener("click", (e) => {
