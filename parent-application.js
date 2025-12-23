@@ -128,7 +128,7 @@ const displayCreatedAssets = () => {
   }
   createdAssets.map((asset) => {
     const createdAssetLabel = document.createElement("p");
-    createdAssetLabel.textContent = asset.attributes.id;
+    createdAssetLabel.textContent = asset.attributes.assetLabel;
     assetsDisplayContainer.appendChild(createdAssetLabel);
   });
 };
