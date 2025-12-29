@@ -909,11 +909,11 @@ const injectMapSurfaceFocusStyle = () => {
 };
 
 export const handleSelectEnabled = () => {
-  console.log("featureLayers:", featureLayers);
+  // console.log("featureLayers:", featureLayers);
   const selectableLayerNames = featureLayers.map(
     (layer) => layer.layerProperties.layerName
   );
-  console.log("selectableLayerNames:", selectableLayerNames);
+  // console.log("selectableLayerNames:", selectableLayerNames);
 
   let formattedSelectableLayerNames = selectableLayerNames.map(
     (name) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()

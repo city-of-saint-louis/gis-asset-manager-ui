@@ -244,7 +244,6 @@ export const initializeMap = async () => {
         });
       });
 
-      // Assuming you have a MapView instance called 'view'
       view.when(() => {
         const basemap = view.map.basemap;
         // basemap.baseLayers is a Collection of layers
@@ -257,6 +256,7 @@ export const initializeMap = async () => {
         });
       });
     });
+    
     const modeStatusBanner = document.createElement("div");
     modeStatusBanner.id = "mode-status-banner";
     modeStatusBanner.hidden = true;
