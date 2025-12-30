@@ -137,7 +137,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       layerMaxScale = 0, // for zoom alert
       // availableCreateTools, // for sketchable layers
     } = layerData;
-    console.log("layerData", layerData.layer);
+    // console.log("layerData", layerData.layer);
     const sketchType = layerData.layer?.sketchType?.[0] || "unknown";
     // Map sketchType to display name
     let sketchTypeDisplay;
@@ -147,18 +147,18 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       sketchTypeDisplay =
         sketchType.charAt(0).toUpperCase() + sketchType.slice(1);
     }
-    console.log("sketchType", sketchType);
+    // console.log("sketchType", sketchType);
     const displayNameRaw = layerName.replace(/[-, _]/g, " ");
-    console.log("displayNameRaw", displayNameRaw);
+    // console.log("displayNameRaw", displayNameRaw);
     const displayName = displayNameRaw.replace(
       /\w\S*/g,
       (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
     );
-    console.log("displayName", displayName);
+    // console.log("displayName", displayName);
     const sanitizedLayerName = displayName
       .replace(/\s+/g, "-")
       .replace(/[^a-zA-Z0-9-_]/g, "");
-    console.log("sanitizedLayerName", sanitizedLayerName);
+    // console.log("sanitizedLayerName", sanitizedLayerName);
     const assetListClass = isSketchable
       ? "created-asset-data-list"
       : "chosen-asset-data-list";
@@ -363,7 +363,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
       </div>
    `;
     const view = layerData.view;
-    console.log("view in map layer data display", view);
+    // console.log("view in map layer data display", view);
     // ...inside render(), after creating zoomAlertBtn...
 
     function getLodAtOrBelow(view, targetScale) {
@@ -401,28 +401,28 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
         const layer = this._data.layer;
         const minScale = layer.minScale || layer.layerMinScale || 0;
         const maxScale = layer.maxScale || layer.layerMaxScale || 0;
-        console.log(
-          `[Zoom Alert] Layer: ${
-            layer.title || layer.id
-          }, minScale: ${minScale}, maxScale: ${maxScale}, current view.scale: ${
-            view.scale
-          }`
-        );
+        // console.log(
+        //   `[Zoom Alert] Layer: ${
+        //     layer.title || layer.id
+        //   }, minScale: ${minScale}, maxScale: ${maxScale}, current view.scale: ${
+        //     view.scale
+        //   }`
+        // );
         // Snap to nearest LOD
         if (minScale > 0 && view.scale > minScale) {
           const snapScale = getLodAtOrBelow(view, minScale);
-          console.log(
-            `[Zoom Alert] Zooming in to snapped minScale: ${snapScale}`
-          );
+          // console.log(
+          //   `[Zoom Alert] Zooming in to snapped minScale: ${snapScale}`
+          // );
           view.goTo({ scale: snapScale });
         } else if (maxScale > 0 && view.scale < maxScale) {
           const snapScale = getLodAtOrAbove(view, maxScale);
-          console.log(
-            `[Zoom Alert] Zooming out to snapped maxScale: ${snapScale}`
-          );
+          // console.log(
+          //   `[Zoom Alert] Zooming out to snapped maxScale: ${snapScale}`
+          // );
           view.goTo({ scale: snapScale });
         } else {
-          console.log("[Zoom Alert] No zoom action taken.");
+          // console.log("[Zoom Alert] No zoom action taken.");
         }
       };
     }

@@ -7,7 +7,7 @@ import {
   createdAssets,
   validSketchableLayers,
   setCreatedAssetsAreValid,
-  createdAssetsAreValid,
+  // createdAssetsAreValid,
   // isSketchEnabled,
 } from "./asset-chooser-state.js";
 // import from asset-chooser-functions.js
@@ -18,38 +18,24 @@ import {
 // import asset-chooser-map-layer-data-display component
 import "./asset-chooser-map-layer-data-display.js";
 
+import { getCreatedAssetsAreValid } from "./asset-chooser-state.js";
+
 export const dispatchCreatedAssets = (createdAssets) => {
   const event = new CustomEvent("createdAssetsAreValidIsTrue", {
     detail: { createdAssets },
   });
   document.dispatchEvent(event);
-  console.log("Dispatched createdAssetsAreValidIsTrue event:", event);
+  // console.log("Dispatched createdAssetsAreValidIsTrue event:", event);
 };
-
-// export const dispatchCreatedAssets = (createdAssets) => {
-//   // Only include serializable fields: attributes (without 'layer') and geometry as JSON
-//   const serializableAssets = createdAssets.map(asset => {
-//     // Clone attributes, omitting any non-serializable fields (like 'layer')
-//     const { layer, ...safeAttributes } = asset.attributes || {};
-//     return {
-//       attributes: safeAttributes,
-//       geometry: asset.geometry && asset.geometry.toJSON ? asset.geometry.toJSON() : asset.geometry
-//     };
-//   });
-//   const event = new CustomEvent("createdAssetsAreValidIsTrue", {
-//     detail: { createdAssets: serializableAssets },
-//   });
-//   document.dispatchEvent(event);
-//   console.log("Dispatched createdAssetsAreValidIsTrue event:", event);
-// };
 
 // custom event listener to signal when createdAssets are not valid
 export const secureCreatedAssets = () => {
+  const createdAssetsAreValid = getCreatedAssetsAreValid();
   const event = new CustomEvent("createdAssetsAreValidIsFalse", {
     detail: { createdAssetsAreValid },
   });
   document.dispatchEvent(event);
-  console.log("Dispatched createdAssetsAreValidIsFalse event:", event);
+  // console.log("Dispatched createdAssetsAreValidIsFalse event:", event);
 };
 
 // event listener to capture sketchable layer data from sketchable-map-layer.js
@@ -61,7 +47,7 @@ export const captureSketachableMapLayers = () => {
 };
 
 const enableSketchForLayer = (layer) => {
-  console.log("Enabling sketch for layer:", layer);
+  // console.log("Enabling sketch for layer:", layer);
   const modeStatusTextSpan = document.getElementById("mode-status-text-span");
   modeStatusTextSpan.innerText = `Sketch Mode Enabled for ${layer.graphicsLayer.formattedLayerName}.`;
   const enableSketchButtons = document.querySelectorAll(
@@ -143,7 +129,7 @@ const enableSketchForLayer = (layer) => {
     );
     if (targetButton) {
       targetButton.click();
-      console.log(`Clicked sketch tool button for type: ${sketchType}`);
+      // console.log(`Clicked sketch tool button for type: ${sketchType}`);
     } else {
       console.warn(
         `Could not find the sketch tool button for type: ${sketchType}`
@@ -156,7 +142,7 @@ const enableSketchForLayer = (layer) => {
     );
     if (selectButton) {
       selectButton.setAttribute("hidden", "true");
-      console.log(`Hidden select tool button`);
+      // console.log(`Hidden select tool button`);
     } else {
       console.warn(`Could not find the select tool button`);
     }
@@ -164,13 +150,13 @@ const enableSketchForLayer = (layer) => {
 };
 
 const hideOrShowSketchableLayer = (layerName) => {
-  console.log("graphicLayers:", graphicLayers);
+  // console.log("graphicLayers:", graphicLayers);
   const layer = graphicLayers.find(
     (lyr) => lyr.layerProperties.layerName === layerName
   );
   if (layer) {
     layer.visible = !layer.visible;
-    console.log(`Layer ${layerName} visibility toggled to:`, layer.visible);
+    // console.log(`Layer ${layerName} visibility toggled to:`, layer.visible);
   } else {
     console.warn(`Layer ${layerName} not found in graphicLayers array!`);
   }
@@ -213,7 +199,7 @@ export const addSketchableMapLayer = async ({
   });
   // After creating the GraphicsLayer:
   sketchableGraphicLayer.config = sketchableMapLayer;
-  console.log("sketchableGraphicLayer created:", sketchableGraphicLayer);
+  // console.log("sketchableGraphicLayer created:", sketchableGraphicLayer);
   const sketchableGraphicLayerId = `${sketchableGraphicLayer.layerProperties.layerName}-${sketchableGraphicLayer.id}`;
   allSketchableLayerIds.push(sketchableGraphicLayerId);
   graphicLayers.push(sketchableGraphicLayer);
@@ -224,39 +210,31 @@ export const addSketchableMapLayer = async ({
 
   map.add(sketchableGraphicLayer);
   const layerName = sketchableGraphicLayer.layerProperties.layerName;
-  console.log("layerName", layerName);
+  // console.log("layerName", layerName);
   const formattedLayerName =
     sketchableGraphicLayer.layerProperties.formattedLayerName;
-  console.log("formattedLayerName", formattedLayerName);
+  // console.log("formattedLayerName", formattedLayerName);
   const minAssetsRequired = parseInt(
     sketchableGraphicLayer.layerProperties.minAssetsRequired
   );
-  console.log("minAssetsRequired", minAssetsRequired);
+  // console.log("minAssetsRequired", minAssetsRequired);
   if (minAssetsRequired === 0) {
     sketchableLayersWithNoAdditionRequired.push(sketchableGraphicLayerId);
     validSketchableLayers.push(sketchableGraphicLayerId);
-    console.log(
-      "sketchableLayersWithNoAdditionRequired:",
-      sketchableLayersWithNoAdditionRequired
-    );
-    console.log("validSketchableLayers:", validSketchableLayers);
+    // console.log(
+    //   "sketchableLayersWithNoAdditionRequired:",
+    //   sketchableLayersWithNoAdditionRequired
+    // );
+    // console.log("validSketchableLayers:", validSketchableLayers);
   }
   if (validSketchableLayers.length === allSketchableLayerIds.length) {
     setCreatedAssetsAreValid(true);
   }
-  console.log("createdAssetsAreValid:", createdAssetsAreValid);
+  // console.log("createdAssetsAreValid:", createdAssetsAreValid);
   const maxAssetsAllowed = parseInt(
     sketchableGraphicLayer.layerProperties.maxAssetsAllowed
   );
-  // const layerMinScale = parseInt(
-  //   sketchableGraphicLayer.layerProperties.minScale
-  // );
-  // const layerMaxScale = parseInt(
-  //   sketchableGraphicLayer.layerProperties.maxScale
-  // );
-  // const sketchableLayerDataDiv = document.getElementById(
-  //   "sketchable-layer-data-div"
-  // );
+
   const layerDataContainer = document.getElementById("layer-data-container");
   layerDataContainer.classList.add("stat-group");
 
@@ -295,16 +273,16 @@ export const addSketchableMapLayer = async ({
     arcgisLayer: sketchableGraphicLayer, // <-- the real ArcGIS layer (for zoom alert)
     view: view,
   };
-  console.log(
-    "mapLayerDataDisplay for sketchable layer:",
-    mapLayerDataDisplay.data
-  );
+  // console.log(
+  //   "mapLayerDataDisplay for sketchable layer:",
+  //   mapLayerDataDisplay.data
+  // );
   // sketchableLayerDataDiv.appendChild(mapLayerDataDisplay);
   layerDataContainer.appendChild(mapLayerDataDisplay);
 };
 
 export const validateCreatedAssets = () => {
-  console.log("Validating created assets...");
+  // console.log("Validating created assets...");
   if (validSketchableLayers.length === allSketchableLayerIds.length) {
     setCreatedAssetsAreValid(true);
     dispatchCreatedAssets(createdAssets);
@@ -312,7 +290,7 @@ export const validateCreatedAssets = () => {
     setCreatedAssetsAreValid(false);
     secureCreatedAssets();
   }
-  console.log("createdAssetsAreValid:", createdAssetsAreValid);
+  // console.log("createdAssetsAreValid:", createdAssetsAreValid);
   renderValidityMessage();
 };
 
@@ -331,7 +309,7 @@ export const updateLayerRequirementDisplay = (asset) => {
   const totalLayerAssetsCreated = createdAssets.filter(
     (createdAsset) => createdAsset.attributes.layerId === `${layerId}`
   ).length;
-  console.log("totalLayerAssetsCreated", totalLayerAssetsCreated);
+  // console.log("totalLayerAssetsCreated", totalLayerAssetsCreated);
 
   const minAssetMessageElement = document.getElementById(
     `${layerId}-min-asset-required-message`
@@ -347,7 +325,7 @@ export const updateLayerRequirementDisplay = (asset) => {
       validSketchableLayers.push(layerId);
     }
     validateCreatedAssets();
-    console.log("createdAssetsAreValid:", createdAssetsAreValid);
+    // console.log("createdAssetsAreValid:", createdAssetsAreValid);
   } else {
     minAssetMessageElement.classList.remove("label-success");
     minAssetMessageElement.classList.add("label-error");
@@ -381,11 +359,11 @@ function removeLabelForAsset(assetId) {
 
 const handleRemoveSketchedAsset = (assetId) => {
   removeLabelForAsset(assetId);
-  console.log("Current createdAssets array (snapshot):", [...createdAssets]);
-  console.log("Removing sketched asset with ID:", assetId);
+  // console.log("Current createdAssets array (snapshot):", [...createdAssets]);
+  // console.log("Removing sketched asset with ID:", assetId);
 
-  const asset = createdAssets.find((asset) => asset.attributes.id === assetId);
-  console.log("!!!!!!!!!!!!!Asset found for removal:", asset);
+  // const asset = createdAssets.find((asset) => asset.attributes.id === assetId);
+  // console.log("!!!!!!!!!!!!!Asset found for removal:", asset);
 
   const assetIndex = createdAssets.findIndex(
     (asset) => asset.attributes.id === assetId
@@ -393,7 +371,7 @@ const handleRemoveSketchedAsset = (assetId) => {
   if (assetIndex !== -1) {
     const asset = createdAssets[assetIndex];
     // Remove from the graphics layer
-    console.log("Asset to remove:", asset);
+    // console.log("Asset to remove:", asset);
     const layer = asset.layer;
     if (layer && layer.graphics) {
       layer.graphics.remove(asset);
@@ -413,12 +391,12 @@ const handleRemoveSketchedAsset = (assetId) => {
     }
     updateLayerRequirementDisplay(asset);
   }
-  console.log("Updated createdAssets array after removal:", createdAssets);
+  // console.log("Updated createdAssets array after removal:", createdAssets);
   validateCreatedAssets();
 };
 
 const renderCreatedAssetLabel = (graphic) => {
-  console.log("asset created", graphic);
+  // console.log("asset created", graphic);
   // Use getElementById for the container, then querySelector for the child
   const layerAssetList = document.getElementById(graphic.attributes.layerId);
   if (layerAssetList) {
@@ -435,7 +413,7 @@ const renderCreatedAssetLabel = (graphic) => {
     listItem.title = `Proposed ${formattedLayerName} added with ID: ${graphic.attributes.id}`;
     const listItemIndex = Array.from(layerAssetList.children).length;
     const listItemPosition = listItemIndex + 1;
-    console.log("listItemIndex", listItemIndex);
+    // console.log("listItemIndex", listItemIndex);
     const listItemContentSpan = document.createElement("span");
     listItemContentSpan.classList.add("asset-list-item-content-span");
     listItemContentSpan.textContent = `${formattedLayerName} ${listItemPosition}`;
@@ -518,7 +496,7 @@ export const sketchAsset = (sketchComponent) => {
     const graphic = event.detail.graphic;
     // console.log("Graphic created event received:", graphic);
     const config = sketchComponent.layer.config;
-    console.log("Sketch component layer config:", config);
+    // console.log("Sketch component layer config:", config);
     const layerAssetMax =
       sketchComponent.layer.maxAssetsAllowed ??
       (sketchComponent.layer.layerProperties &&
@@ -620,9 +598,9 @@ export const sketchAsset = (sketchComponent) => {
       return;
     }
     createdAssets.push(graphic);
-    console.log("Updated createdAssets array:", createdAssets);
+    // console.log("Updated createdAssets array:", createdAssets);
     renderCreatedAssetLabel(graphic);
-    console.log("sketched graphic", graphic);
+    // console.log("sketched graphic", graphic);
     updateLayerRequirementDisplay(graphic);
   });
 };

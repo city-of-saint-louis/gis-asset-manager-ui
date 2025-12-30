@@ -10,13 +10,15 @@ import {
   currentView,
   setCurrentView,
   isValid,
-  createdAssetsAreValid,
+  // createdAssetsAreValid,
   setIsValid,
-  setIsSelectEnabled,
-  setIsSketchEnabled,
-  assetMode,
-  setAssetMode,
+  // setIsSelectEnabled,
+  // setIsSketchEnabled,
+  // assetMode,
+  // setAssetMode,
 } from "./asset-chooser-state.js";
+
+import { getCreatedAssetsAreValid } from "./asset-chooser-state.js";
 
 // *** begin map related functions *** //
 // destroy the previous map view
@@ -59,50 +61,6 @@ export const captureMapLayers = () => {
     mapLayersToAdd.push(mapLayer);
   });
 };
-
-// hide or show layers on the map
-// export const hideOrShowLayer = () => {
-//   featureLayers.forEach((outerLayer) => {
-//     const formattedLayerName = outerLayer.layerProperties.formattedLayerName;
-//     const toggleLayerVisibilityButtons = document.querySelectorAll(
-//       ".toggleLayerVisibilityButton"
-//     );
-//     toggleLayerVisibilityButtons.forEach((toggleLayerVisibilityButton) => {
-//       toggleLayerVisibilityButton.addEventListener("click", () => {
-//         const layerId =
-//           toggleLayerVisibilityButton.getAttribute("att-layer-id");
-//         const spanElement = toggleLayerVisibilityButton.querySelector("span");
-//         if (
-//           `${outerLayer.layerProperties.layerName}-${outerLayer.id}` === layerId
-//         ) {
-//           if (outerLayer.visible) {
-//             outerLayer.visible = false;
-//             spanElement.innerHTML = `<span>Show</span>`;
-//             toggleLayerVisibilityButton.setAttribute(
-//               "aria-label",
-//               `Show ${formattedLayerName} layer`
-//             );
-//             toggleLayerVisibilityButton.setAttribute(
-//               "title",
-//               `Show ${formattedLayerName} layer`
-//             );
-//           } else {
-//             outerLayer.visible = true;
-//             spanElement.innerHTML = `<span>Hide</span>`;
-//             toggleLayerVisibilityButton.setAttribute(
-//               "aria-label",
-//               `Hide ${formattedLayerName} layer`
-//             );
-//             toggleLayerVisibilityButton.setAttribute(
-//               "title",
-//               `Hide ${formattedLayerName} layer`
-//             );
-//           }
-//         }
-//       });
-//     });
-//   });
-// };
 
 // --- UPDATED: hideOrShowLayer only toggles visibility ---
 export const hideOrShowLayer = (layerName) => {
@@ -229,141 +187,11 @@ export const addMapLayer = ({
     view,
     layer: mapDataLayer,
   };
-  console.log("mapLayerDataDisplay.data", mapLayerDataDisplay.data);
+  // console.log("mapLayerDataDisplay.data", mapLayerDataDisplay.data);
   // layerDataDiv.appendChild(mapLayerDataDisplay);
   layerDataContainer.appendChild(mapLayerDataDisplay);
-  // layerDataDiv.innerHTML += `
-  //   <div
-  //     class="map-layer-data-container stat-container stat-medium"
-  //   >
-  //     <div
-  //       class="stat-title"
-  //       id="${layerName}-layer-selected-asset-container"
-  //       aria-label="${formattedLayerName} Layer"
-  //       title="${formattedLayerName} Layer"
-  //     >
-  //      <div>
-  //        <span>
-  //          <strong>
-  //            ${formattedLayerName} Layer
-  //          </strong>
-  //        </span>
-  //        <br>
-  //        <span class="zoom-alert-button" id="${layerName}-zoom-alert-button" style="height: 14px; display: inline-block">
-  //         ${layerMinScale > 0 ? `Zoom in to see this layer.` : ""}
-  //        </span>
-  //      </div>
-  //       <button
-  //         type="button"
-  //         id="${layerName}-show-hide-layer-btn"
-  //         class="toggleLayerVisibilityButton"
-  //         att-layer-id="${mapDataLayerId}"
-  //         aria-label="Hide ${formattedLayerName} Layer" ${
-  //   layerMinScale > 0 ? "disabled hidden" : ""
-  // }
-  //         title="Hide ${formattedLayerName} layer"
-  //       >
-  //         <span id="${layerName}-toggle-visibility-btn-text-span">
-  //           ${layerMinScale > 0 ? `Show` : `Hide`}
-  //         </span>
-  //       </button>
-  //     </div>
-  //     <div
-  //       aria-live="polite"
-  //       aria-atomic="true"
-  //       class="asset-selection-requirements"
-  //     >
-  //       <span class="sr-only">Asset selection requirements and status for ${layerName} layer</span>
-  //       ${
-  //         minAssetsRequired === 0
-  //           ? `
-  //           <span id="${mapDataLayerId}-min-asset-required-message" title="No selection required">
-  //             <span class="label label-success">
-  //               No selection required
-  //             </span>
-  //           </span>
-  //           `
-  //           : minAssetsRequired === 1
-  //           ? `
-  //           <span id="${mapDataLayerId}-min-asset-required-message" title="${minAssetsRequired} selection required from ${formattedLayerName} layer">
-  //             <span class="label label-error">
-  //              ${minAssetsRequired} required
-  //             </span>
-  //           </span>
-  //           `
-  //           : `
-  //           <span id="${mapDataLayerId}-min-asset-required-message" title="At least ${minAssetsRequired} selections required from ${formattedLayerName} layer">
-  //             <span class="label label-error">
-  //               At least ${minAssetsRequired} required
-  //             </span>
-  //           </span>
-  //           `
-  //       }
-  //       ${
-  //         maxAssetsAllowed > 0
-  //           ? `
-  //           <span id="${mapDataLayerId}-max-asset-allowed-message" title="Select a maximum of ${maxAssetsAllowed} from ${formattedLayerName} layer">
-  //             <span class="label label-default">Select a maximum of ${maxAssetsAllowed}
-  //             </span>
-  //           </span>`
-  //           : ``
-  //       }
-  //     </div>
-  //     <ul
-  //       data-layer-name=${layerName}
-  //       class="list-group highlighted-asset-data-list"
-  //       id="${layerName}-${mapDataLayerId}"
-  //       aria-live="polite"
-  //       aria-atomic="true"
-  //     >
-  //       <li
-  //         title="No assets selected from ${formattedLayerName} layer"
-  //       >
-  //         None selected
-  //       </li>
-  //     </ul>
-  //   </div>
-  // `;
 };
-// const monitorLayerVisibility = (
-//   reactiveUtils,
-//   layerView,
-//   mapDataLayer,
-//   layerName,
-//   formattedLayerName,
-//   layerMinScale,
-//   layerMaxScale
-// ) => {
-//   reactiveUtils.watch(
-//     () => layerView.visibleAtCurrentScale,
-//     (visibleAtCurrentScale) => {
-//       // Find the correct AssetChooserMapLayerDataDisplay for this layer
-//       // Try to match by layerName (for regular) or formattedLayerName (for sketchable)
-//       const allDisplays = document.querySelectorAll("asset-chooser-map-layer-data-display");
-//       let mapLayerDataDisplay = null;
-//       allDisplays.forEach(display => {
-//         // Compare both layerName and formattedLayerName for robustness
-//         if (
-//           display.data &&
-//           (display.data.layerName === layerName ||
-//            display.data.formattedLayerName === formattedLayerName)
-//         ) {
-//           mapLayerDataDisplay = display;
-//         }
-//       });
 
-//       if (mapLayerDataDisplay && typeof mapLayerDataDisplay.updateVisibility === "function") {
-//         mapLayerDataDisplay.updateVisibility({
-//           visibleAtCurrentScale,
-//           visible: mapDataLayer.visible,
-//           formattedLayerName,
-//           layerMinScale,
-//           layerMaxScale,
-//         });
-//       }
-//     }
-//   );
-// };
 export const monitorLayerVisibility = (
   reactiveUtils,
   layerView,
@@ -419,66 +247,20 @@ export const monitorLayerVisibility = (
     }
   }
 };
-// monitor layer visibility based on scale and adjust ui accordingly, used in addMapLayer function no need to export
-// const monitorLayerVisibility = (
-//   reactiveUtils,
-//   layerView,
-//   mapDataLayer,
-//   layerName,
-//   formattedLayerName,
-//   layerMinScale,
-//   layerMaxScale
-// ) => {
-//   reactiveUtils.watch(
-//     () => layerView.visibleAtCurrentScale,
-//     (visibleAtCurrentScale) => {
-//       const toggleLayerVisibilityButton = document.getElementById(
-//         `${layerName}-show-hide-layer-btn`
-//       );
-//       const toggleVisibilityBtnTextSpan = document.getElementById(
-//         `${layerName}-toggle-visibility-btn-text-span`
-//       );
-//       const zoomAlertButton = document.getElementById(
-//         `${layerName}-zoom-alert-button`
-//       );
-
-//       if (zoomAlertButton) {
-//         if (visibleAtCurrentScale) {
-//           zoomAlertButton.textContent = ``;
-//           toggleLayerVisibilityButton.removeAttribute("disabled");
-//           toggleLayerVisibilityButton.removeAttribute("hidden");
-//           if (mapDataLayer.visible) {
-//             toggleVisibilityBtnTextSpan.textContent = `Hide`;
-//             toggleLayerVisibilityButton.setAttribute(
-//               "title",
-//               `Hide ${formattedLayerName} layer`
-//             );
-//           } else {
-//             toggleVisibilityBtnTextSpan.textContent = `Show`;
-//             toggleLayerVisibilityButton.setAttribute(
-//               "title",
-//               `Show ${formattedLayerName} layer`
-//             );
-//           }
-//         } else {
-//           zoomAlertButton.textContent = `${
-//             layerMinScale > 0 ? `Zoom in to see this layer.` : ""
-//           } ${layerMaxScale > 0 ? `Zoom out to see this layer.` : ""}`;
-//           toggleLayerVisibilityButton.setAttribute("disabled", true);
-//           toggleLayerVisibilityButton.setAttribute("hidden", true);
-//         }
-//       }
-//     }
-//   );
-// };
-
 // *** end map related functions *** //
 
 // *** begin asset related functions *** //
 // exported functions
 // render the validity message for asset selection based on assets selected
 export const renderValidityMessage = () => {
-  console.log("Rendering validity message...");
+  const createdAssetsAreValid = getCreatedAssetsAreValid();
+  console.log(
+    "Rendering validity message...",
+    "isValid",
+    isValid,
+    "createdAssetsAreValid",
+    createdAssetsAreValid
+  );
   // const validityMessage = document.getElementById("validity-message");
   const validityMessage = document.getElementById("asset-chooser-hint");
   const originalHintText = validityMessage.getAttribute("data-original-hint");
@@ -516,67 +298,6 @@ export const renderValidityMessage = () => {
   }
 };
 
-// export const renderValidityMessage = () => {
-//   const validityMessage = document.getElementById("validity-message");
-//   let makeMinimunRequireMessage = `Select `;
-//   if (isValid) {
-//     validityMessage.innerHTML = `Asset selection is <span class="label label-success">valid for submission</span>`;
-//     validityMessage.setAttribute("aria-live", "assertive");
-//     validityMessage.setAttribute(
-//       "title",
-//       "Asset selection is valid for submission"
-//     );
-//   } else {
-//     validityMessage.removeAttribute("aria-live");
-//     validityMessage.setAttribute("title", "Selection requirements");
-//     featureLayers.forEach((mapLayer) => {
-//       const layerAssetMin = parseInt(
-//         mapLayer.layerProperties.minAssetsRequired
-//       );
-//       const totalLayerAssetsSelected = chosenAssets.filter(
-//         (asset) =>
-//           asset.layerId ===
-//           // `${mapLayer.layerProperties.layerName}-${mapLayer.id}`
-//            `${mapLayer.id}`
-//       ).length;
-//       const formattedLayerName = mapLayer.layerProperties.formattedLayerName;
-//       if (layerAssetMin === 1 && totalLayerAssetsSelected < layerAssetMin) {
-//         makeMinimunRequireMessage += `<span class="label label-error"><strong>${layerAssetMin} from ${formattedLayerName} layer</strong></span>, `;
-//       }
-//       if (layerAssetMin > 1 && totalLayerAssetsSelected < layerAssetMin) {
-//         makeMinimunRequireMessage += `at least <span class="label label-error"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
-//       }
-//       if (layerAssetMin === 1 && totalLayerAssetsSelected === layerAssetMin) {
-//         makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
-//       }
-//       if (layerAssetMin === 1 && totalLayerAssetsSelected > layerAssetMin) {
-//         makeMinimunRequireMessage += `<span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
-//       }
-//       if (layerAssetMin > 1 && totalLayerAssetsSelected >= layerAssetMin) {
-//         makeMinimunRequireMessage += `at least <span class="label label-success"><strong>${layerAssetMin} from ${formattedLayerName} Layer</strong></span>, `;
-//       }
-//     });
-
-//     // Remove the last comma and space if present
-//     if (makeMinimunRequireMessage.endsWith(", ")) {
-//       makeMinimunRequireMessage = makeMinimunRequireMessage.slice(0, -2);
-//     }
-//     // Replace the last comma with ', and '
-//     const lastCommaIndex = makeMinimunRequireMessage.lastIndexOf(", ");
-//     if (lastCommaIndex !== -1) {
-//       makeMinimunRequireMessage = `${makeMinimunRequireMessage.substring(
-//         0,
-//         lastCommaIndex
-//       )}, and ${makeMinimunRequireMessage.substring(lastCommaIndex + 2)}`;
-//     }
-//     makeMinimunRequireMessage = makeMinimunRequireMessage.replace(
-//       /at least (\d+ \w+)/g,
-//       "at least <strong>$1</strong>"
-//     );
-//     validityMessage.innerHTML = `${makeMinimunRequireMessage}`;
-//   }
-// };
-
 // dispatch the chosenAssets to the parent application
 export const dispatchChosenAssets = (chosenAssets) => {
   const event = new CustomEvent("isValidTrue", {
@@ -598,7 +319,7 @@ export const highlightSelectedAsset = (
   highlightedSelection
 ) => {
   const graphic = response.results[0].graphic;
-  console.log("Graphic selected:", graphic);
+  // console.log("Graphic selected:", graphic);
   const layerProperties = response.results[0].layer.layerProperties;
   const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
   const layerName = graphic.layer.layerProperties.layerName;
@@ -698,7 +419,7 @@ const renderSelectedAssetLabels = () => {
     list.innerHTML = "";
   });
   chosenAssets.forEach((asset) => {
-    console.log("Rendering asset label for:", asset);
+    // console.log("Rendering asset label for:", asset);
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
       if (asset.layerId === selectedLayerAssetList.id) {
         let assetLabel = asset.assetLabel;
@@ -731,7 +452,7 @@ const renderSelectedAssetLabels = () => {
         assetLabelTextSpan.textContent = assetLabel;
         assetLabelTextSpan.classList.add("asset-list-item-content-span");
 
-        // Add the click handler 
+        // Add the click handler
         assetLabelTextSpan.addEventListener("click", (e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -744,7 +465,7 @@ const renderSelectedAssetLabels = () => {
         // Add the label span to the list item
         assetLabelListItem.appendChild(assetLabelTextSpan);
 
-        // add the remove button 
+        // add the remove button
         const removeAssetBtn = document.createElement("button");
         removeAssetBtn.type = "button";
         removeAssetBtn.id = `remove-${asset.internalAssetId}-btn`;
@@ -797,7 +518,7 @@ const renderSelectedAssetLabels = () => {
 // validate asset selection for each individual layer, used in highlightSelectedAsset function
 const validateLayerSelections = () => {
   featureLayers.forEach((mapLayer) => {
-    console.log("Validating layer selections for:", mapLayer);
+    // console.log("Validating layer selections for:", mapLayer);
     // const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
     const layerId = mapLayer.id;
     const layerAssetMin = parseInt(mapLayer.layerProperties.minAssetsRequired);
@@ -994,7 +715,7 @@ export const handleSelectEnabled = () => {
   );
   if (targetButton) {
     targetButton.click();
-    console.log(`Clicked select tool button`);
+    // console.log(`Clicked select tool button`);
   } else {
     console.warn(`Could not find the select tool button`);
   }
@@ -1005,8 +726,103 @@ export const handleSelectEnabled = () => {
   }, 0);
 };
 
+// export const handleSketchEnabled = () => {
+//   // console.log("Sketch enabled - showing sketch buttons");
+//   const modeStatusBanner = document.getElementById("mode-status-banner");
+//   modeStatusBanner.hidden = false;
+//   modeStatusBanner.classList.remove("mode-status-banner-select");
+//   modeStatusBanner.classList.add("mode-status-banner-sketch");
+
+//   const modeStatusIconSpan = document.getElementById("mode-status-icon-span");
+//   modeStatusIconSpan.classList.remove("glyphicons-svg-cursor");
+//   modeStatusIconSpan.classList.add("glyphicons-svg-pencil");
+
+//   const modeStatusTextSpan = document.getElementById("mode-status-text-span");
+//   modeStatusTextSpan.innerText = "Sketch Mode enabled. Select layer below.";
+
+//   const mapContainer = document.getElementById("viewDiv");
+//   mapContainer.classList.remove("select-shadow", "select-border");
+//   mapContainer.classList.add("sketch-shadow", "sketch-border");
+//   mapContainer.style.pointerEvents = "none";
+//   setTimeout(() => {
+//     const enableSketchButtons = document.querySelectorAll(
+//       ".enable-sketch-button"
+//     );
+//     enableSketchButtons.forEach((button) => {
+//       button.style.visibility = "visible";
+//     });
+//   }, 100);
+
+//   const selectableAssetDisplayElements =
+//     document.querySelectorAll(".select-border");
+//   selectableAssetDisplayElements.forEach((element) => {
+//     element.classList.remove("select-shadow");
+//   });
+//   setTimeout(() => {
+//     const sketchableAssetDisplayElements =
+//       document.querySelectorAll(".sketch-border");
+//     sketchableAssetDisplayElements.forEach((element) => {
+//       element.classList.add("sketch-shadow");
+//     });
+//   }, 100);
+// };
+
+
+
+// export const handleSketchEnabled = () => {
+//   // console.log("Sketch enabled - showing sketch buttons");
+//   const modeStatusBanner = document.getElementById("mode-status-banner");
+//   modeStatusBanner.hidden = false;
+//   modeStatusBanner.classList.remove("mode-status-banner-select");
+//   modeStatusBanner.classList.add("mode-status-banner-sketch");
+
+//   const modeStatusIconSpan = document.getElementById("mode-status-icon-span");
+//   modeStatusIconSpan.classList.remove("glyphicons-svg-cursor");
+//   modeStatusIconSpan.classList.add("glyphicons-svg-pencil");
+
+//   const modeStatusTextSpan = document.getElementById("mode-status-text-span");
+//   modeStatusTextSpan.innerText = "Sketch Mode enabled. Select layer below.";
+
+//   const mapContainer = document.getElementById("viewDiv");
+//   mapContainer.classList.remove("select-shadow", "select-border");
+//   mapContainer.classList.add("sketch-shadow", "sketch-border");
+//   mapContainer.style.pointerEvents = "none";
+
+//   // --- MutationObserver implementation START ---
+//   // This observer will watch for the addition of .enable-sketch-button and .sketch-border elements
+//   const layerDataContainer = document.getElementById("layer-data-container");
+//   const observer = new MutationObserver((mutations, obs) => {
+//     const enableSketchButtons = document.querySelectorAll(".enable-sketch-button");
+//     const sketchableAssetDisplayElements = document.querySelectorAll(".sketch-border");
+
+//     if (enableSketchButtons.length && sketchableAssetDisplayElements.length) {
+//       enableSketchButtons.forEach((button) => {
+//         button.style.visibility = "visible";
+//       });
+//       sketchableAssetDisplayElements.forEach((element) => {
+//         element.classList.add("sketch-shadow");
+//       });
+//       // Clean up observer after applying styles
+//       obs.disconnect();
+//     }
+//   });
+
+//   // Start observing the map container for child and subtree changes
+//   observer.observe(layerDataContainer, { childList: true, subtree: true });
+//   // --- MutationObserver implementation END ---
+
+//   // The rest remains unchanged
+//   const selectableAssetDisplayElements =
+//     document.querySelectorAll(".select-border");
+//   selectableAssetDisplayElements.forEach((element) => {
+//     element.classList.remove("select-shadow");
+//   });
+// };
+
+
+
 export const handleSketchEnabled = () => {
-  console.log("Sketch enabled - showing sketch buttons");
+  // Show the mode status banner and update its style
   const modeStatusBanner = document.getElementById("mode-status-banner");
   modeStatusBanner.hidden = false;
   modeStatusBanner.classList.remove("mode-status-banner-select");
@@ -1023,22 +839,44 @@ export const handleSketchEnabled = () => {
   mapContainer.classList.remove("select-shadow", "select-border");
   mapContainer.classList.add("sketch-shadow", "sketch-border");
   mapContainer.style.pointerEvents = "none";
-  document.querySelectorAll(".enable-sketch-button").forEach((button) => {
-    button.style.visibility = "visible";
-  });
 
-  const selectableAssetDisplayElements =
-    document.querySelectorAll(".select-border");
-  selectableAssetDisplayElements.forEach((element) => {
-    element.classList.remove("select-shadow");
-  });
+  // Helper to apply sketch mode UI
+  function applySketchModeUI() {
+    // Show all sketch buttons
+    const enableSketchButtons = document.querySelectorAll(".enable-sketch-button");
+    enableSketchButtons.forEach((button) => {
+      button.style.visibility = "visible";
+    });
 
-  const sketchableAssetDisplayElements =
-    document.querySelectorAll(".sketch-border");
-  sketchableAssetDisplayElements.forEach((element) => {
-    element.classList.add("sketch-shadow");
-  });
+    // Remove select-shadow from selectable asset displays
+    const selectableAssetDisplayElements = document.querySelectorAll(".select-border");
+    selectableAssetDisplayElements.forEach((element) => {
+      element.classList.remove("select-shadow");
+    });
+
+    // Add sketch-shadow to sketchable asset displays
+    const sketchableAssetDisplayElements = document.querySelectorAll(".sketch-border");
+    sketchableAssetDisplayElements.forEach((element) => {
+      element.classList.add("sketch-shadow");
+    });
+  }
+
+  // Try to apply immediately
+  applySketchModeUI();
+
+  // Set up MutationObserver on the correct parent
+  const layerDataContainer = document.getElementById("layer-data-container");
+  if (layerDataContainer) {
+    const observer = new MutationObserver(() => {
+      applySketchModeUI();
+    });
+    observer.observe(layerDataContainer, { childList: true, subtree: true });
+
+    // Optionally disconnect after a short delay if you only need a one-time update
+    setTimeout(() => observer.disconnect(), 1000);
+  }
 };
+
 
 export const mapActionsDisabled = () => {
   const mapContainer = document.getElementById("viewDiv");

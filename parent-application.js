@@ -80,14 +80,14 @@ document.addEventListener("createdAssetsAreValidIsFalse", () => {
 // below is an example of how the chosenAssets could be submitted to the parent application using the custom events and custom event listeners
 // function to submit chosen assets
 const submitChosenAssets = (chosenAssets) => {
-  console.log("submitting chosenAssets:", chosenAssets);
+  // console.log("submitting chosenAssets:", chosenAssets);
   localStorage.removeItem("chosenAssets");
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
   document.location.href = "results.html";
 };
 
 const submitCreatedAssets = (createdAssets) => {
-  console.log("submitting createdAssets:", createdAssets);
+  // console.log("submitting createdAssets:", createdAssets);
   localStorage.removeItem("createdAssets");
   localStorage.setItem("createdAssets", JSON.stringify(createdAssets));
   document.location.href = "results.html";
@@ -96,12 +96,12 @@ const submitCreatedAssets = (createdAssets) => {
 // Function to display chosen assets
 const displayChosenAssets = () => {
   const chosenAssets = JSON.parse(localStorage.getItem("chosenAssets") || "[]");
-  console.log("chosenAssets:", chosenAssets);
+  // console.log("chosenAssets:", chosenAssets);
   if (chosenAssets.length === 0) {
     const chosenAssetFormData = JSON.parse(
       localStorage.getItem("chosenAssetFormData") || "[]"
     );
-    console.log("chosenAssetFormData:", chosenAssetFormData);
+    // console.log("chosenAssetFormData:", chosenAssetFormData);
     if (chosenAssetFormData) {
       chosenAssetFormData.map((data) => {
         const chosenAssetData = document.createElement("p");
@@ -122,7 +122,7 @@ const displayChosenAssets = () => {
 // Function to display created assets
 const displayCreatedAssets = () => {
   const createdAssets = JSON.parse(localStorage.getItem("createdAssets") || "[]");
-  console.log("createdAssets:", createdAssets);
+  // console.log("createdAssets:", createdAssets);
   if (createdAssets.length === 0) {
     return;
   }

@@ -8,7 +8,7 @@ import {
   mapLayersToAdd,
   sketchableMapLayersToAdd,
   featureLayers,
-  graphicLayers,
+  // graphicLayers,
   chosenAssets,
   createdAssets,
   allMapLayerIds,
@@ -18,12 +18,14 @@ import {
   setIsValid,
   setCurrentView,
   isSketchEnabled,
-  setIsSketchEnabled,
+  // setIsSketchEnabled,
   isSelectEnabled,
-  setIsSelectEnabled,
-  createdAssetsAreValid,
+  // setIsSelectEnabled,
+  // createdAssetsAreValid,
   setCreatedAssetsAreValid,
 } from "./asset-chooser-state.js";
+
+import { getCreatedAssetsAreValid } from "./asset-chooser-state.js";
 
 // import from asset-chooser-functions.js
 import {
@@ -31,10 +33,12 @@ import {
   clearMapData,
   hideOrShowLayer,
   addMapLayer,
-  renderValidityMessage,
+  // renderValidityMessage,
   dispatchChosenAssets,
   secureChosenAssets,
   highlightSelectedAsset,
+  // handleSelectEnabled,
+  handleSketchEnabled,
 } from "./asset-chooser-functions.js";
 
 import {
@@ -124,7 +128,6 @@ export const initializeMap = async () => {
           searchComponent.setAttribute("position", "top-right");
         }
       }
-
       // Run on load
       updateSearchPosition();
       // Run on resize
@@ -166,6 +169,9 @@ export const initializeMap = async () => {
       }
 
       if (isSketchEnabled === "true" || isSketchEnabled === true) {
+        const viewDiv = document.getElementById("viewDiv");
+        viewDiv.classList.add("pointer-events-none");
+
         const sketch = document.createElement("arcgis-sketch");
         sketch.view = view;
         sketch.setAttribute("id", "asset-chooser-sketch");
@@ -177,7 +183,7 @@ export const initializeMap = async () => {
         sketch.setAttribute("hidden", "true");
         arcGisMap.appendChild(sketch);
         sketch.componentOnReady().then(() => {
-          console.log(document.querySelectorAll("arcgis-sketch").length);
+          // console.log(document.querySelectorAll("arcgis-sketch").length);
           sketchAsset(sketch);
         });
 
@@ -190,11 +196,39 @@ export const initializeMap = async () => {
             reactiveUtils,
           });
         });
+
+         if (
+          sketchableLayersWithNoAdditionRequired.length > 0 &&
+          allSketchableLayerIds.length > 0 &&
+          sketchableLayersWithNoAdditionRequired.length ===
+            allSketchableLayerIds.length
+        ) {
+          setCreatedAssetsAreValid(true);
+          dispatchCreatedAssets(createdAssets);
+        } else {
+          setCreatedAssetsAreValid(false);
+          secureCreatedAssets();
+        }
+        
+      }
+
+      if (isSelectEnabled && !isSketchEnabled) {
+        console.log("Select Mode only enabled.");
+        setCreatedAssetsAreValid(true);
+        const createdAssetsAreValid = getCreatedAssetsAreValid();
+        console.log("createdAssetsAreValid", createdAssetsAreValid);
+        // dispatchCreatedAssets(createdAssets);
+      }
+
+      if (!isSelectEnabled && isSketchEnabled) {
+        setIsValid(true);
+        console.log("Sketch Mode only enabled.");
+        handleSketchEnabled();
       }
 
       if (!isSelectEnabled && !isSketchEnabled) {
         alert(
-          "Please enable either Select Mode or Sketch Mode to choose assets on the map."
+          "Please enable either Select Mode or Sketch Mode to choose or enter assets on the map."
         );
       }
 
@@ -208,26 +242,20 @@ export const initializeMap = async () => {
       // renderValidityMessage();
       hideOrShowLayer();
 
-      if (
-        sketchableLayersWithNoAdditionRequired.length > 0 &&
-        allSketchableLayerIds.length > 0 &&
-        sketchableLayersWithNoAdditionRequired.length ===
-          allSketchableLayerIds.length
-      ) {
-        console.log(
-          "sketchableLayersWithNoAdditionRequired.length:",
-          sketchableLayersWithNoAdditionRequired.length
-        );
-        console.log(
-          "allSketchableLayerIds.length:",
-          allSketchableLayerIds.length
-        );
-        setCreatedAssetsAreValid(true);
-        dispatchCreatedAssets(createdAssets);
-      } else {
-        setCreatedAssetsAreValid(false);
-        secureCreatedAssets();
-      }
+      // if (isSketchEnabled === "true" || isSketchEnabled === true) {
+      //   if (
+      //     sketchableLayersWithNoAdditionRequired.length > 0 &&
+      //     allSketchableLayerIds.length > 0 &&
+      //     sketchableLayersWithNoAdditionRequired.length ===
+      //       allSketchableLayerIds.length
+      //   ) {
+      //     setCreatedAssetsAreValid(true);
+      //     dispatchCreatedAssets(createdAssets);
+      //   } else {
+      //     setCreatedAssetsAreValid(false);
+      //     secureCreatedAssets();
+      //   }
+      // }
 
       view.on("click", (event) => {
         view.hitTest(event).then((response) => {
@@ -249,14 +277,14 @@ export const initializeMap = async () => {
         // basemap.baseLayers is a Collection of layers
         basemap.baseLayers.forEach((layer) => {
           if (layer.tileInfo) {
-            console.log("This basemap layer has tileInfo:", layer);
+            // console.log("This basemap layer has tileInfo:", layer);
           } else {
-            console.log("This basemap layer does NOT have tileInfo:", layer);
+            // console.log("This basemap layer does NOT have tileInfo:", layer);
           }
         });
       });
     });
-    
+
     const modeStatusBanner = document.createElement("div");
     modeStatusBanner.id = "mode-status-banner";
     modeStatusBanner.hidden = true;

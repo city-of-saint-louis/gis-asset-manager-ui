@@ -63,11 +63,10 @@ class AssetChooserContainerComponent extends HTMLElement {
       const buttonContainer = this.querySelector("#asset-chooser-button-container");
       // buttonContainer.style.display = "flex";
       
-      const modeToggleSwitch = document.createElement("asset-chooser-mode-toggle");
-      
-      // buttonContainer.style.gap = "0.5rem";
-      // buttonContainer.style.alignItems = "center";
-      buttonContainer.appendChild(modeToggleSwitch);
+      if (this.isSelectEnabled && this.isSketchEnabled) {
+        const modeToggleSwitch = document.createElement("asset-chooser-mode-toggle");
+        buttonContainer.appendChild(modeToggleSwitch);
+      }
 
       const accomodationButton = document.createElement("button");
       accomodationButton.type = "button";
