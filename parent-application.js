@@ -96,7 +96,7 @@ const submitCreatedAssets = (createdAssets) => {
 // Function to display chosen assets
 const displayChosenAssets = () => {
   const chosenAssets = JSON.parse(localStorage.getItem("chosenAssets") || "[]");
-  // console.log("chosenAssets:", chosenAssets);
+  console.log("chosenAssets:", chosenAssets);
   if (chosenAssets.length === 0) {
     const chosenAssetFormData = JSON.parse(
       localStorage.getItem("chosenAssetFormData") || "[]"
@@ -122,7 +122,7 @@ const displayChosenAssets = () => {
 // Function to display created assets
 const displayCreatedAssets = () => {
   const createdAssets = JSON.parse(localStorage.getItem("createdAssets") || "[]");
-  // console.log("createdAssets:", createdAssets);
+  console.log("createdAssets:", createdAssets);
   if (createdAssets.length === 0) {
     return;
   }
