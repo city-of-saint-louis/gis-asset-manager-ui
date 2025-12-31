@@ -224,6 +224,12 @@ export const initializeMap = async () => {
         setIsValid(true);
         console.log("Sketch Mode only enabled.");
         handleSketchEnabled();
+        const modeStatusTextSpan = document.getElementById("mode-status-text-span");
+        // const modeStatusIconSpan = document.getElementById(
+          // "mode-status-icon-span"
+        // );
+        modeStatusTextSpan.textContent =
+          "Click a sketch button below to begin.";
       }
 
       if (!isSelectEnabled && !isSketchEnabled) {

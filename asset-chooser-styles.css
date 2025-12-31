@@ -294,8 +294,9 @@
 }
 
 #accomodation-button {
-  margin-top: .5rem;
+  /* margin-top: .5rem; */
   /* margin-bottom: .25rem; */
+  margin: 0 !important;
 }
 
 #accomodation-button-hint {
