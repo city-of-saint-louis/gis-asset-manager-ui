@@ -1,0 +1,20 @@
+{
+  "name": "gis-asset-chooser",
+  "version": "1.0.0",
+  "description": "The GIS Asset Chooser Module creates an interactive ArcGIS map for asset selection and/or asset creation. It is intended for use within a parent application.",
+  "homepage": "https://github.com/city-of-saint-louis/gis-asset-chooser-development#readme",
+  "bugs": {
+    "url": "https://github.com/city-of-saint-louis/gis-asset-chooser-development/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/city-of-saint-louis/gis-asset-chooser-development.git"
+  },
+  "license": "MIT",
+  "author": "The City of St. Louis Web Team",
+  "type": "module",
+  "main": "asset-chooser.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
