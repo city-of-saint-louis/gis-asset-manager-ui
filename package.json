@@ -1,5 +1,5 @@
 {
-  "name": "gis-asset-chooser",
+  "name": "@cityofstlouis/gis-asset-chooser",
   "version": "1.0.0",
   "description": "The GIS Asset Chooser Module creates an interactive ArcGIS map for asset selection and/or asset creation. It is intended for use within a parent application.",
   "homepage": "https://github.com/city-of-saint-louis/gis-asset-chooser-development#readme",
@@ -13,7 +13,8 @@
   "license": "MIT",
   "author": "The City of St. Louis Web Team",
   "type": "module",
-  "main": "asset-chooser.js",
+  "main": "dist/asset-chooser.umd.js",
+  "module": "dist/asset-chooser.esm.js",
   "scripts": {
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -21,7 +22,8 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
-    "rollup": "^4.55.1"
+    "rollup": "^4.55.1",
+    "rollup-plugin-copy": "^3.5.0"
   },
   "files": [
     "dist",

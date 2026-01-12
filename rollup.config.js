@@ -1,5 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import copy from 'rollup-plugin-copy';
 
 export default {
   input: 'asset-chooser.js', // Your main entry file
@@ -19,6 +20,11 @@ export default {
   plugins: [
     resolve(),
     commonjs(),
+    copy({
+      targets: [
+        { src: 'asset-chooser-styles.css', dest: 'dist' }
+      ]
+    })
   ],
   external: [
     // List external dependencies here, e.g. 'arcgis-js-api'
