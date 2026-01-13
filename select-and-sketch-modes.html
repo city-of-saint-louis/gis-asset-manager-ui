@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GIS Asset Chooser Development</title>
+    <title>
+      GIS Asset Chooser Module - Select Mode and Sketch Mode Enabled
+    </title>
     <link
       rel="stylesheet"
       href="https://js.arcgis.com/4.34/esri/themes/light/main.css"
@@ -20,7 +22,7 @@
       type="text/css"
       media="all"
     /> -->
-     <link
+    <link
       href="https://stage.stlouis-mo.gov/style/glyphicons-svg.css"
       rel="stylesheet"
       type="text/css"
@@ -28,24 +30,24 @@
     />
     <link rel="stylesheet" href="asset-chooser-styles.css" />
     <link rel="stylesheet" href="dev-styles.css" />
-    <script type="module" src="https://js.arcgis.com/calcite-components/3.2.1/calcite.esm.js"></script>
+    <script
+      type="module"
+      src="https://js.arcgis.com/calcite-components/3.2.1/calcite.esm.js"
+    ></script>
     <script src="https://js.arcgis.com/4.34/"></script>
-    <script type="module" src="https://js.arcgis.com/4.34/map-components/"></script>
+    <script
+      type="module"
+      src="https://js.arcgis.com/4.34/map-components/"
+    ></script>
   </head>
   <body>
-    <header></header>
     <main>
-      <h1>GIS Asset Chooser Demo</h1>
-      <nav>
-        <a href="select-mode.html">Select Mode Only</a> |
-        <a href="sketch-mode.html">Sketch Mode Only</a> |
-        <a href="select-and-sketch-modes.html">Select Mode and Sketch Mode</a>
-      </nav>
-      <asset-chooser-container
+    <h1>GIS Asset Chooser Module - Select Mode and Sketch Mode Enabled</h1>
+    <asset-chooser-container
         title="Provide Required Assets for Your Special Event Permit Application"
         hint="Use select mode to select required assets for selectable layers. Use sketch mode to add custom assets to the sketchable layers. Choose a mode below  to begin."
         is-sketch-enabled="true"
-        is-select-enabled="false"
+        is-select-enabled="true"
       >
         <asset-chooser-sketchable-map-layer
           name="Access Point"
