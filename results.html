@@ -16,10 +16,21 @@
 <body>
   <header>
     <h1>Asset Data Received</h1>
+    <nav class="navigation">
+      <a href="index.html">Home</a> |
+      <a href="select-mode.html">Select Mode Only</a> |
+      <a href="sketch-mode.html">Sketch Mode Only</a> |
+      <a href="select-and-sketch-modes.html">Select Mode and Sketch Mode</a>
+    </nav>
   </header>
   <main>
-    <p id="console-message">Open console to view complete asset data</p>
-    <div id="asset-display-div"></div>
+    
+    <div id="asset-display-div">
+      <h2>Submitted Assets:</h2>
+      <p id="console-message">Open console to view complete asset data</p>
+      <ol id="submitted-asset-list">
+      </ol> 
+    </div>
   </main>
   <footer>Developed by The City of St. Louis Web Team</footer>
   <script src="parent-application.js"></script> 

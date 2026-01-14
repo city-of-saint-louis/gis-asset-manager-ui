@@ -1,3 +1,6 @@
+html {
+  scroll-behavior: smooth;
+}
 html,
 body {
   height: 100%;
@@ -8,8 +11,17 @@ body {
   display: flex;
   flex-direction: column;
 }
+h1 {
+  text-align: center;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  font-size: 32px;
+}
 main {
   flex: 1;
+  padding:1rem;
+  max-width: 1440px;
+  margin: auto;
 }
 
 footer {
@@ -17,3 +29,8 @@ footer {
   font-size: 12px;
   margin-bottom: 6px;;
 }
+
+.navigation {
+  text-align: center;
+}
+
