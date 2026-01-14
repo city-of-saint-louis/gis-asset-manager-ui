@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const caseAssets = [];
 const submitAssetsButton = document.getElementById("submit-assets-button");
 const assetsDisplayContainer = document.getElementById("asset-display-div");
+const submittedAssetList = document.getElementById("submitted-asset-list");
 // Custom event listener to receive chosenAssets from the asset chooser when isValid is true
 // recommended for integration with gis aset chooser - customize as needed
 document.addEventListener("isValidTrue", (event) => {
@@ -104,18 +105,20 @@ const displayChosenAssets = () => {
     // console.log("chosenAssetFormData:", chosenAssetFormData);
     if (chosenAssetFormData) {
       chosenAssetFormData.map((data) => {
-        const chosenAssetData = document.createElement("p");
+        const chosenAssetData = document.createElement("li");
         chosenAssetData.textContent = `${data.key}: ${
           data.value ? data.value : "No asset data provided"
         }`;
-        assetsDisplayContainer.appendChild(chosenAssetData);
+        // assetsDisplayContainer.appendChild(chosenAssetData);
+        submittedAssetList.appendChild(chosenAssetData);
       });
     }
   }
   chosenAssets.map((asset) => {
-    const chosenAssetLabel = document.createElement("p");
+    const chosenAssetLabel = document.createElement("li");
     chosenAssetLabel.textContent = asset.assetLabel;
-    assetsDisplayContainer.appendChild(chosenAssetLabel);
+    // assetsDisplayContainer.appendChild(chosenAssetLabel);
+    submittedAssetList.appendChild(chosenAssetLabel);
   });
 };
 
@@ -127,9 +130,10 @@ const displayCreatedAssets = () => {
     return;
   }
   createdAssets.map((asset) => {
-    const createdAssetLabel = document.createElement("p");
+    const createdAssetLabel = document.createElement("li");
     createdAssetLabel.textContent = asset.attributes.assetLabel;
-    assetsDisplayContainer.appendChild(createdAssetLabel);
+    // assetsDisplayContainer.appendChild(createdAssetLabel);
+    submittedAssetList.appendChild(createdAssetLabel);
   });
 };
 

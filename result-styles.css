@@ -18,6 +18,13 @@ h1 {
   font-size: 32px;
 }
 
+h2 {
+  text-align: center;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  font-size: 24px;
+}
+
 footer {
   text-align: center;
   font-size: 12px;
@@ -26,7 +33,18 @@ footer {
 
 #console-message {
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 12px;
   font-style: italic;
+  font-weight: bold;
+}
+
+.navigation {
+  text-align: center;
+}
+
+#asset-display-div{
+  max-width: 40rem;
+  margin: 0 auto;
+  padding-left: 1rem;
 }
