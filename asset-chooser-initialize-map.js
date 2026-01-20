@@ -217,7 +217,7 @@ export const initializeMap = async () => {
         setCreatedAssetsAreValid(true);
         const createdAssetsAreValid = getCreatedAssetsAreValid();
         console.log("createdAssetsAreValid", createdAssetsAreValid);
-        // dispatchCreatedAssets(createdAssets);
+        dispatchCreatedAssets(createdAssets);
       }
 
       if (!isSelectEnabled && isSketchEnabled) {

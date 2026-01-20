@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GIS Asset Chooser Module - Sketch Mode Enabled</title>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.34/esri/themes/light/main.css"
+    />
+    <link
+      href="https://www.stlouis-mo.gov/style/screen.css"
+      rel="stylesheet"
+      type="text/css"
+      media="all"
+    />
+    <link
+      href="https://stage.stlouis-mo.gov/style/glyphicons-svg.css"
+      rel="stylesheet"
+      type="text/css"
+      media="all"
+    />
+    <link rel="stylesheet" href="asset-chooser-styles.css" />
+    <link rel="stylesheet" href="dev-styles.css" />
+    <script
+      type="module"
+      src="https://js.arcgis.com/calcite-components/3.2.1/calcite.esm.js"
+    ></script>
+    <script src="https://js.arcgis.com/4.34/"></script>
+    <script
+      type="module"
+      src="https://js.arcgis.com/4.34/map-components/"
+    ></script>
+  </head>
+  <body>
+    <main>
+      <h1>GIS Asset Chooser Module - Sketch Mode Only</h1>
+      <nav class="navigation">
+        <a href="index.html">Home</a> |
+        <a href="select-mode.html">Select Mode Only</a> |
+        <a href="sketch-mode.html">Sketch Mode Only</a> |
+        <a href="select-and-sketch-modes.html">Select Mode and Sketch Mode</a>
+      </nav>
+      <asset-chooser-container
+        title="Add Custom Assets as Needed to Fulfill Requirements"
+        hint="Use the sketch tool to fullfill the requirements by adding custom assets to the map. Select a layer below to begin by clicking the layer's 'Sketch' button. Zoom in to the map as needed to add assets. Submit sketched assets when finished."
+        is-sketch-enabled="true"
+        is-select-enabled="false"
+      >
+        <asset-chooser-sketchable-map-layer
+          name="Access Point"
+          minimum="2"
+          maximum="10"
+          sketch-type="point"
+          min-scale="8000"
+        >
+        </asset-chooser-sketchable-map-layer>
+        <asset-chooser-sketchable-map-layer
+          name="Barricade"
+          sketch-type="polyline"
+          min-scale="8000"
+        >
+        </asset-chooser-sketchable-map-layer>
+        <asset-chooser-sketchable-map-layer
+          name="First Aid"
+          minimum="1"
+          sketch-type="polygon"
+          min-scale="8000"
+        >
+        </asset-chooser-sketchable-map-layer>
+      </asset-chooser-container>
+      <div>
+        <button
+          class="link-button disabled-button"
+          aria-live="polite"
+          disabled
+          id="submit-assets-button"
+        >
+          Submit Assets
+        </button>
+      </div>
+    </main>
+    <footer>Developed by The City of St. Louis Web Team</footer>
+    <script type="module" src="asset-chooser.js"></script>
+    <script src="parent-application.js"></script>
+  </body>
+</html>
