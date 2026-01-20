@@ -1,19 +1,27 @@
- // import required state variables from asset-chooser-state.js
+// import required state variables from asset-chooser-state.js
 import {
   featureLayers,
+  graphicLayers,
   chosenAssets,
+  createdAssets,
   chosenAssetFormData,
+  createdAssetFormData,
   isValid,
   setIsValid,
-  isSketchEnabled,
+  setCreatedAssetsAreValid,
+  getCreatedAssetsAreValid,
+  // isSketchEnabled,
   setIsSketchEnabled,
-  isSelectEnabled,
+  // isSelectEnabled,
   setIsSelectEnabled,
 } from "./asset-chooser-state.js";
 // import required functions from asset-chooser-functions.js
 import { secureChosenAssets } from "./asset-chooser-functions.js";
 // import initializeMap function from map-initialization.js
 import { initializeMap } from "./asset-chooser-initialize-map.js";
+console.log("featureLayers:", featureLayers);
+console.log("graphicLayers:", graphicLayers);
+
 const generateInputsContent = (prefillData = {}) => {
   return featureLayers
     .map((layer) => {
@@ -43,7 +51,36 @@ const generateInputsContent = (prefillData = {}) => {
     .join("");
 };
 
-const generateModalHTML = (inputsContent) => {
+const generateSketchLayerInputsContent = (prefillData = {}) => {
+  return graphicLayers
+    .map((layer) => {
+      const isRequired =
+        layer.layerProperties.minimumAssetsRequired >= 1 ? "required" : "";
+      const layerName = layer.layerProperties.layerName;
+      const formattedLayerName = layer.layerProperties.formattedLayerName;
+      const prefillValue = prefillData[formattedLayerName] || "";
+      return `
+        <div>
+          <label for="${layer.layerProperties.layerName}">
+            Enter information on any ${formattedLayerName} related to your request.
+          </label>
+          <p>
+            <input
+              size="60"
+              type="text"
+              name="${formattedLayerName}"
+              id="${layerName}"
+              value="${prefillValue}"
+              ${isRequired}
+            >
+          </p>
+        </div>
+      `;
+    })
+    .join("");
+};
+
+const generateModalHTML = (inputsContent, sketchInputsContent) => {
   return `
     <dialog id="asset-modal" class="modal">
       <div class="modal-content">
@@ -64,6 +101,7 @@ const generateModalHTML = (inputsContent) => {
         <div class="modal-body">
           <form id="modal-asset-form">
             ${inputsContent}
+            ${sketchInputsContent}
             <button
               id="accomodation-asset-submission-button"
               type="submit"
@@ -85,7 +123,8 @@ const openModal = (prefillData = {}) => {
     existingModal.remove();
   }
   const inputsContent = generateInputsContent(prefillData);
-  const modalHTML = generateModalHTML(inputsContent);
+  const sketchInputsContent = generateSketchLayerInputsContent(prefillData);
+  const modalHTML = generateModalHTML(inputsContent, sketchInputsContent);
   document.body.insertAdjacentHTML("beforeend", modalHTML);
   const modal = document.getElementById("asset-modal");
   modal.showModal();
@@ -114,7 +153,9 @@ const closeModal = () => {
 
 const clearStoredModalFormAssetData = () => {
   chosenAssetFormData.splice(0, chosenAssetFormData.length);
+  createdAssetFormData.splice(0, createdAssetFormData.length);
   setIsValid(false);
+  setCreatedAssetsAreValid(false);
   secureChosenAssets();
 };
 
@@ -132,13 +173,32 @@ const handleCancelSelectionsClick = () => {
   clearStoredModalFormAssetData();
 };
 
+// const handleAssetEditButtonClick = () => {
+//   // Create a prefill data object from chosenAssetFormData
+//   const prefillData = chosenAssetFormData.reduce((acc, { key, value }) => {
+//     acc[key] = value;
+//     return acc;
+//   }, {});
+//   // console.log("Prefill Data:", prefillData);
+//   // Remove the existing modal if it exists
+//   const existingModal = document.getElementById("asset-modal");
+//   if (existingModal) {
+//     existingModal.remove();
+//   }
+//   // Call openModal with prefilled data
+//   openModal(prefillData);
+// };
+
+
 const handleAssetEditButtonClick = () => {
-  // Create a prefill data object from chosenAssetFormData
-  const prefillData = chosenAssetFormData.reduce((acc, { key, value }) => {
-    acc[key] = value;
-    return acc;
-  }, {});
-  // console.log("Prefill Data:", prefillData);
+  // Create a prefill data object from both chosenAssetFormData and createdAssetFormData
+  const prefillData = {};
+  chosenAssetFormData.forEach(({ key, value }) => {
+    prefillData[key] = value;
+  });
+  createdAssetFormData.forEach(({ key, value }) => {
+    prefillData[key] = value;
+  });
   // Remove the existing modal if it exists
   const existingModal = document.getElementById("asset-modal");
   if (existingModal) {
@@ -147,6 +207,7 @@ const handleAssetEditButtonClick = () => {
   // Call openModal with prefilled data
   openModal(prefillData);
 };
+
 
 const handleModalAssetFormSubmit = (event) => {
   event.preventDefault();
@@ -158,24 +219,37 @@ const handleModalAssetFormSubmit = (event) => {
   if (chosenAssetFormData.length > 0) {
     chosenAssetFormData.splice(0, chosenAssetFormData.length);
   }
+  if (createdAssetFormData.length > 0) {
+    createdAssetFormData.splice(0, createdAssetFormData.length);
+  }
   formData.forEach((value, key) => {
     chosenAssetFormData.push({ key, value });
   });
   setIsValid(true);
+  setCreatedAssetsAreValid(true);
   // Dispatch custom event when isValid becomes true
-  if (isValid) {
+  const createdAssetsAreValid = getCreatedAssetsAreValid();
+  console.log("isValid:", isValid, "createdAssetsAreValid:", createdAssetsAreValid);
+  if (isValid && createdAssetsAreValid) {
     const customEvent = new CustomEvent("isValidTrue", {
       detail: { chosenAssets: [], chosenAssetFormData },
       bubbles: true,
     });
+    const createdAssetsAreValidEvent = new CustomEvent("createdAssetsAreValidTrue", {
+      detail: { createdAssetFormData },
+      bubbles: true,
+    });
     document.dispatchEvent(customEvent);
+    document.dispatchEvent(createdAssetsAreValidEvent);
   }
   // Clear the form
   event.target.reset();
   const container = document.querySelector("asset-chooser-container");
   const title = container?.getAttribute("title") || "";
-  const assetChooserInterface = document.getElementById("asset-chooser-interface")
-  assetChooserInterface.innerHTML = `
+  const assetChooserInterface = document.getElementById(
+    "asset-chooser-interface",
+  );
+assetChooserInterface.innerHTML = `
     <h2 id="asset-chooser-title">${title}</h2>
     <h3>The asset information has been added to your case.</h3>
     <p>You entered:</p>
@@ -183,12 +257,24 @@ const handleModalAssetFormSubmit = (event) => {
       ${chosenAssetFormData
         .map(
           (asset) =>
-            `<li><strong>${asset.key}</strong>: ${
+            `<li><strong>${asset.key} (selected)</strong>: ${
               asset.value
                 ? asset.value
-                : `Nothing entered for ${asset.key} layer`}
+                : `Nothing entered for ${asset.key} layer`
+            }
               </li>`
-          )
+        )
+        .join("")}
+      ${createdAssetFormData
+        .map(
+          (asset) =>
+            `<li><strong>${asset.key} (sketched)</strong>: ${
+              asset.value
+                ? asset.value
+                : `Nothing entered for ${asset.key} layer`
+            }
+              </li>`
+        )
         .join("")}
      </ul>
      <button
@@ -217,16 +303,16 @@ const handleModalAssetFormSubmit = (event) => {
     .scrollIntoView({ behavior: "smooth", block: "start" });
   // Add event listener for the dynamically created cancel button
   const cancelSelectionsButton = document.querySelector(
-    "#cancel-asset-selection-button"
+    "#cancel-asset-selection-button",
   );
   if (cancelSelectionsButton) {
     cancelSelectionsButton.addEventListener(
       "click",
-      handleCancelSelectionsClick
+      handleCancelSelectionsClick,
     );
   }
   const editSelectionsButton = document.querySelector(
-    "#edit-asset-selection-button"
+    "#edit-asset-selection-button",
   );
   if (editSelectionsButton) {
     editSelectionsButton.addEventListener("click", handleAssetEditButtonClick);
@@ -238,18 +324,21 @@ export const handleAccomodationButtonClick = () => {
     // remove assets from chosenAssetFormData array
     chosenAssetFormData.splice(0, chosenAssetFormData.length);
   }
+  if (createdAssetFormData.length > 0) {
+    createdAssetFormData.splice(0, createdAssetFormData.length);
+  }
   openModal();
 };
 
 export const enableSketchMode = (isSketchEnabled) => {
   if (isSketchEnabled) {
-  setIsSketchEnabled(true);
-  // console.log("Sketch mode enabled");
+    setIsSketchEnabled(true);
+    // console.log("Sketch mode enabled");
   } else {
     setIsSketchEnabled(false);
     // console.log("Sketch mode disabled");
   }
-}
+};
 
 export const enableSelectMode = (isSelectEnabled) => {
   if (isSelectEnabled) {
@@ -259,4 +348,4 @@ export const enableSelectMode = (isSelectEnabled) => {
     setIsSelectEnabled(false);
     // console.log("Select mode disabled");
   }
-}
+};

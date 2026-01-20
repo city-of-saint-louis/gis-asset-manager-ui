@@ -15,6 +15,7 @@ export const graphicLayers = [];
 export const chosenAssets = [];
 export const createdAssets = [];
 export const chosenAssetFormData = [];
+export const createdAssetFormData = [];
 export const allMapLayerIds = [];
 export const allSketchableLayerIds = [];
 export const layersWithNoSelectionRequired = [];
