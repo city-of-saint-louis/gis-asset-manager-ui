@@ -324,12 +324,10 @@ export const highlightSelectedAsset = (
   const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
   const layerName = graphic.layer.layerProperties.layerName;
   const formattedLayerName = graphic.layer.layerProperties.formattedLayerName;
-  const labelMaskValue = eval(
-    `"${graphic.layer.layerProperties.labelMask.replace(
-      /\{([^}]+)\}/g,
-      (match, p1) => `" + graphic.attributes.${p1} + "`
-    )}"`
-  );
+  const labelMaskValue = graphic.layer.layerProperties.labelMask.replace(
+  /\{([^}]+)\}/g,
+  (match, p1) => graphic.attributes[p1] ?? ""
+);
   const layerId = graphic.layer.id;
   if (
     !chosenAssets.find(
