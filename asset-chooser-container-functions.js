@@ -22,12 +22,28 @@ import { initializeMap } from "./asset-chooser-initialize-map.js";
 
 
 const handleAddAssetInputButtonClick = (event) => {
+  console.log("Add asset input button clicked:", event.target);
   if (event.target.classList.contains("add-asset-input-button")) {
     const layerName = event.target.dataset.layer;
-    const layer = featureLayers.find(
-      (layer) => layer.layerProperties.layerName === layerName
-    );
-    if (layer) {
+    console.log("Adding input for layer:", layerName);
+    const assetType = event.target.dataset.type;
+    console.log('assetType', assetType)
+
+    // const layer = featureLayers.find(
+    //   (layer) => layer.layerProperties.layerName === layerName
+    // );
+    let layer;
+    if (assetType === "selected") {
+      layer = featureLayers.find(
+        (layer) => layer.layerProperties.layerName === layerName
+      );
+    } else if (assetType === "sketched") {
+      layer = graphicLayers.find(
+        (layer) => layer.layerProperties.layerName === layerName
+      );
+    }
+    console.log("Found layer:", layer);
+    if (layer != null) {
       const inputContainer = document.getElementById(`${layerName}-input-container`);
       const newInput = document.createElement("input");
       newInput.type = "text";
@@ -82,7 +98,7 @@ const generateInputsContent = (prefillData = {}) => {
               .join("")}
             </div>
           </p>
-          <button type="button" class="add-asset-input-button" data-layer="${layerName}" aria-label="Add ${formattedLayerName} input"
+          <button type="button" class="add-asset-input-button" data-layer="${layerName}"  data-type="selected" aria-label="Add ${formattedLayerName} input"
           >
             Add input for ${formattedLayerName}
           </button>
@@ -142,6 +158,7 @@ const generateSketchLayerInputsContent = (prefillData = {}) => {
       const layerName = layer.layerProperties.layerName;
       const formattedLayerName = layer.layerProperties.formattedLayerName;
       const prefillValue = prefillData[formattedLayerName] || "";
+      const numOfInputs = numRequired > 0 ? numRequired : 1;
       console.log(`Sketch layer ${layerName} requires ${numRequired} assets.`);
       return `
         <div>
@@ -149,15 +166,31 @@ const generateSketchLayerInputsContent = (prefillData = {}) => {
             Enter information on any ${formattedLayerName} related to your request.
           </label>
           <p>
-            <input
-              size="60"
-              type="text"
-              name="${formattedLayerName}"
-              id="${layerName}"
-              value="${prefillValue}"
-              ${isRequired}
-            >
+            <p class="accessible-accommodation-num-assets-required">
+              ${numRequired} required for ${formattedLayerName}
+            </p>
+            <div class="accessible-accommodation-input-container" id="${layerName}-input-container">
+            ${Array.from({ length: numOfInputs })
+              .map(
+                (_, index) => `
+              <input
+                class="accessible-accommodation-input"
+                size="60"
+                type="text"
+                name="${formattedLayerName}"
+                id="${layerName}-${index}"
+                value="${prefillValue}"
+                ${isRequired}
+              >
+            `
+              )
+              .join("")}
+            </div>
           </p>
+          <button type="button" class="add-asset-input-button" data-layer="${layerName}" data-type="sketched" aria-label="Add ${formattedLayerName} input"
+          >
+            Add input for ${formattedLayerName}
+          </button>
         </div>
       `;
     })
