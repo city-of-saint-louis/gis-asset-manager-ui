@@ -19,8 +19,6 @@ import {
 import { secureChosenAssets } from "./asset-chooser-functions.js";
 // import initializeMap function from map-initialization.js
 import { initializeMap } from "./asset-chooser-initialize-map.js";
-console.log("featureLayers:", featureLayers);
-console.log("graphicLayers:", graphicLayers);
 
 const generateInputsContent = (prefillData = {}) => {
   return featureLayers
@@ -32,7 +30,7 @@ const generateInputsContent = (prefillData = {}) => {
       const prefillValue = prefillData[formattedLayerName] || "";
       return `
         <div>
-          <label for="${layer.layerProperties.layerName}">
+          <label for="${layerName}">
             Enter information on any ${formattedLayerName} related to your request.
           </label>
           <p>
@@ -61,7 +59,7 @@ const generateSketchLayerInputsContent = (prefillData = {}) => {
       const prefillValue = prefillData[formattedLayerName] || "";
       return `
         <div>
-          <label for="${layer.layerProperties.layerName}">
+          <label for="${layerName}">
             Enter information on any ${formattedLayerName} related to your request.
           </label>
           <p>
@@ -189,7 +187,6 @@ const handleCancelSelectionsClick = () => {
 //   openModal(prefillData);
 // };
 
-
 const handleAssetEditButtonClick = () => {
   // Create a prefill data object from both chosenAssetFormData and createdAssetFormData
   const prefillData = {};
@@ -207,7 +204,6 @@ const handleAssetEditButtonClick = () => {
   // Call openModal with prefilled data
   openModal(prefillData);
 };
-
 
 const handleModalAssetFormSubmit = (event) => {
   event.preventDefault();
@@ -229,16 +225,24 @@ const handleModalAssetFormSubmit = (event) => {
   setCreatedAssetsAreValid(true);
   // Dispatch custom event when isValid becomes true
   const createdAssetsAreValid = getCreatedAssetsAreValid();
-  console.log("isValid:", isValid, "createdAssetsAreValid:", createdAssetsAreValid);
+  console.log(
+    "isValid:",
+    isValid,
+    "createdAssetsAreValid:",
+    createdAssetsAreValid,
+  );
   if (isValid && createdAssetsAreValid) {
     const customEvent = new CustomEvent("isValidTrue", {
       detail: { chosenAssets: [], chosenAssetFormData },
       bubbles: true,
     });
-    const createdAssetsAreValidEvent = new CustomEvent("createdAssetsAreValidTrue", {
-      detail: { createdAssetFormData },
-      bubbles: true,
-    });
+    const createdAssetsAreValidEvent = new CustomEvent(
+      "createdAssetsAreValidIsTrue",
+      {
+        detail: { createdAssets: createdAssetFormData },
+        bubbles: true,
+      },
+    );
     document.dispatchEvent(customEvent);
     document.dispatchEvent(createdAssetsAreValidEvent);
   }
@@ -249,53 +253,35 @@ const handleModalAssetFormSubmit = (event) => {
   const assetChooserInterface = document.getElementById(
     "asset-chooser-interface",
   );
-assetChooserInterface.innerHTML = `
+  assetChooserInterface.innerHTML = `
     <h2 id="asset-chooser-title">${title}</h2>
     <h3>The asset information has been added to your case.</h3>
     <p>You entered:</p>
     <ul>
-      ${chosenAssetFormData
-        .map(
-          (asset) =>
-            `<li><strong>${asset.key} (selected)</strong>: ${
-              asset.value
-                ? asset.value
-                : `Nothing entered for ${asset.key} layer`
-            }
-              </li>`
-        )
-        .join("")}
-      ${createdAssetFormData
-        .map(
-          (asset) =>
-            `<li><strong>${asset.key} (sketched)</strong>: ${
-              asset.value
-                ? asset.value
-                : `Nothing entered for ${asset.key} layer`
-            }
-              </li>`
-        )
-        .join("")}
-     </ul>
-     <button
-       type="button"
-       id="edit-asset-selection-button"
-       class="link-button"
-     >
-       Edit Entry
-     </button>
-     <button
-       type="button"
-       id="cancel-asset-selection-button"
-       class="link-button"
-     >
-       Cancel Entry and Return to Map
-     </button>
-     <em>
-       <p>
-         Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please cancel your entry and return to the map to make your selections.
-       </p>
-     </em>
+      ${[...chosenAssetFormData, ...createdAssetFormData]
+      .map((asset) =>
+        `<li><strong>${asset.key}</strong>: ${asset.value ? asset.value : `Nothing entered for ${asset.key} layer`}
+         </li>`,).join("")}
+    </ul>
+    <button
+      type="button"
+      id="edit-asset-selection-button"
+      class="link-button"
+    >
+      Edit Entry
+    </button>
+    <button
+      type="button"
+      id="cancel-asset-selection-button"
+      class="link-button"
+    >
+      Cancel Entry and Return to Map
+    </button>
+    <em>
+      <p>
+        Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please cancel your entry and return to the map to make your selections.
+      </p>
+    </em>
   `;
   closeModal();
   document

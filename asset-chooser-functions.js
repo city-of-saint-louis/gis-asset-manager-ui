@@ -1,10 +1,13 @@
 // import state variables from asset-chooser-state.js
 import {
   chosenAssets,
+  createdAssets,
   allMapLayerIds,
   mapLayersToAdd,
   featureLayers,
+  graphicLayers,
   chosenAssetFormData,
+  createdAssetFormData,
   layersWithNoSelectionRequired,
   validLayers,
   currentView,
@@ -42,10 +45,16 @@ export const destroyPreviousMapView = () => {
 export const clearMapData = () => {
   // empty the stored featureLayers array
   featureLayers.splice(0, featureLayers.length);
+  // empty the stored graphicLayers array
+  graphicLayers.splice(0, graphicLayers.length);
   // empty the stored chosenAssets array
   chosenAssets.splice(0, chosenAssets.length);
+  // empty the stored createdAssets array
+  createdAssets.splice(0, createdAssets.length);
   // empty the stored chosenAssetFormData array
   chosenAssetFormData.splice(0, chosenAssetFormData.length);
+  // empty the stored createdAssetFormData array
+  createdAssetFormData.splice(0, createdAssetFormData.length);
   // empty the stored allMapLayerIds array
   allMapLayerIds.splice(0, allMapLayerIds.length);
   // empty the stored layersWithNoSelectionRequired array
