@@ -110,6 +110,8 @@ export const addMapLayer = ({
       maxAssetsAllowed: mapLayer.maximumSelectionsAllowed,
       minScale: layerMinScale,
       maxScale: layerMaxScale,
+      // searchFields: [mapLayer.labelMask],
+      // displayField: mapLayer.labelMask,
     },
     // labelingInfo: [
     //   {
