@@ -325,6 +325,26 @@
   margin-right: 5px;
 }
 
+.accessible-accommodation-num-assets-required {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 1rem;
+  font-size: 0.875rem;
+}
+
+.accessible-accommodation-input {
+  margin-left: 1rem;
+  margin-top: .25rem;
+  margin-bottom: .25rem;
+  font-size: 0.875rem;
+}
+
+.add-asset-input-button {
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
 /* #validity-message {
   min-height: 1.75em;
   display: block; 

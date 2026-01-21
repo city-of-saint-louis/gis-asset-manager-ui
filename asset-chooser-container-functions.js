@@ -20,43 +20,129 @@ import { secureChosenAssets } from "./asset-chooser-functions.js";
 // import initializeMap function from map-initialization.js
 import { initializeMap } from "./asset-chooser-initialize-map.js";
 
+
+const handleAddAssetInputButtonClick = (event) => {
+  if (event.target.classList.contains("add-asset-input-button")) {
+    const layerName = event.target.dataset.layer;
+    const layer = featureLayers.find(
+      (layer) => layer.layerProperties.layerName === layerName
+    );
+    if (layer) {
+      const inputContainer = document.getElementById(`${layerName}-input-container`);
+      const newInput = document.createElement("input");
+      newInput.type = "text";
+      newInput.name = layer.layerProperties.formattedLayerName;
+      newInput.id = `${layerName}-${inputContainer.querySelectorAll("input").length}`;
+      newInput.size = 60;
+      newInput.classList.add("accessible-accommodation-input");
+      inputContainer.appendChild(newInput);
+    }
+  }
+};
+
+document.addEventListener("click", handleAddAssetInputButtonClick);
+
 const generateInputsContent = (prefillData = {}) => {
+  console.log("featureLayers:", featureLayers);
   return featureLayers
     .map((layer) => {
+      console.log("Processing layer:", layer);
       const isRequired =
         layer.layerProperties.minimumAssetsRequired >= 1 ? "required" : "";
+      const numRequired = layer.layerProperties.minAssetsRequired;
       const layerName = layer.layerProperties.layerName;
       const formattedLayerName = layer.layerProperties.formattedLayerName;
       const prefillValue = prefillData[formattedLayerName] || "";
+      const numOfInputs = numRequired > 0 ? numRequired : 1;
+      console.log(`Layer ${layerName} requires ${numRequired} assets.`);
       return `
         <div>
           <label for="${layerName}">
             Enter information on any ${formattedLayerName} related to your request.
           </label>
           <p>
-            <input
-              size="60"
-              type="text"
-              name="${formattedLayerName}"
-              id="${layerName}"
-              value="${prefillValue}"
-              ${isRequired}
-            >
+            <p class="accessible-accommodation-num-assets-required">
+              ${numRequired} required for ${formattedLayerName}
+            </p>
+            <div class="accessible-accommodation-input-container" id="${layerName}-input-container">
+            ${Array.from({ length: numOfInputs })
+              .map(
+                (_, index) => `
+              <input
+                class="accessible-accommodation-input"
+                size="60"
+                type="text"
+                name="${formattedLayerName}"
+                id="${layerName}-${index}"
+                value="${prefillValue}"
+                ${isRequired}
+              >
+            `
+              )
+              .join("")}
+            </div>
           </p>
+          <button type="button" class="add-asset-input-button" data-layer="${layerName}" aria-label="Add ${formattedLayerName} input"
+          >
+            Add input for ${formattedLayerName}
+          </button>
         </div>
       `;
     })
     .join("");
 };
 
+// const generateSketchLayerInputsContent = (prefillData = {}) => {
+//   console.log("graphicLayers:", graphicLayers);
+//   return graphicLayers
+//     .map((layer) => {
+//       console.log("Processing sketch layer:", layer);
+//       const isRequired =
+//         layer.layerProperties.minimumAssetsRequired >= 1 ? "required" : "";
+//       const numRequired = layer.layerProperties.minAssetsRequired;
+//       const layerName = layer.layerProperties.layerName;
+//       const formattedLayerName = layer.layerProperties.formattedLayerName;
+//       const prefillValue = prefillData[formattedLayerName] || "";
+//       console.log(`Sketch layer ${layerName} requires ${numRequired} assets.`);
+//       return `
+//         <div>
+//           <label for="${layerName}">
+//             Enter information on any ${formattedLayerName} related to your request.
+//           </label>
+//           <p>
+//             ${Array.from({ length: numRequired })
+//               .map(
+//                 (_, index) => `
+//               <input
+//                 size="60"
+//                 type="text"
+//                 name="${formattedLayerName}"
+//                 id="${layerName}-${index}"
+//                 value="${prefillValue}"
+//                 ${isRequired}
+//               >
+//             `
+//               )
+//               .join("")}
+//           </p>
+//         </div>
+//       `;
+//     })
+//     .join("");
+// };
+
 const generateSketchLayerInputsContent = (prefillData = {}) => {
+  console.log("graphicLayers:", graphicLayers);
   return graphicLayers
     .map((layer) => {
+      console.log("Processing sketch layer:", layer);
       const isRequired =
         layer.layerProperties.minimumAssetsRequired >= 1 ? "required" : "";
+      const numRequired = layer.layerProperties.minAssetsRequired;
       const layerName = layer.layerProperties.layerName;
       const formattedLayerName = layer.layerProperties.formattedLayerName;
       const prefillValue = prefillData[formattedLayerName] || "";
+      console.log(`Sketch layer ${layerName} requires ${numRequired} assets.`);
       return `
         <div>
           <label for="${layerName}">
