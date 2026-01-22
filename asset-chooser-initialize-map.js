@@ -133,11 +133,17 @@ export const initializeMap = async () => {
       searchComponent.sources = [locatorSourceObj];
       arcGisMap.appendChild(searchComponent);
 
-
-      // searchComponent.on("sear")
-
-
-
+      searchComponent.addEventListener("arcgisSearchComplete", (event) => {
+        console.log("Search complete event:", event);
+        const results = event.detail.results;
+        console.log("Search results:", results);
+        if (results.length > 0 && results[0].results.length > 0) {
+          const firstResult = results[0].results[0];
+          console.log("First result:", firstResult);
+          chosenAssets.push(firstResult);
+          console.log("chosenAssets array:", chosenAssets);
+        }
+      });
 
       function updateSearchPosition() {
         const searchComponent = document.getElementById(
