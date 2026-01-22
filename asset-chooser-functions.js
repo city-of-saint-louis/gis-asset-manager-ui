@@ -418,7 +418,7 @@ export const highlightSelectedAsset = (
 // non-exported functions
 // render information about the assets that have been selected
 // used in highlightSelectedAsset function, no need to export
-const renderSelectedAssetLabels = () => {
+export const renderSelectedAssetLabels = () => {
   // console.log('chosenAssets:', chosenAssets);
   const selectedLayerAssetListArray = document.querySelectorAll(
     ".chosen-asset-data-list"
