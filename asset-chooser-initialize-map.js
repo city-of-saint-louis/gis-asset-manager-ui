@@ -132,6 +132,13 @@ export const initializeMap = async () => {
       searchComponent.setAttribute("id", "asset-chooser-arcgis-search");
       searchComponent.sources = [locatorSourceObj];
       arcGisMap.appendChild(searchComponent);
+
+
+      // searchComponent.on("sear")
+
+
+
+
       function updateSearchPosition() {
         const searchComponent = document.getElementById(
           "asset-chooser-arcgis-search",
