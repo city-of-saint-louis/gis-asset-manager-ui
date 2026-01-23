@@ -27,6 +27,6 @@ export default {
     })
   ],
   external: [
-    // List external dependencies here, e.g. 'arcgis-js-api'
+    // List external dependencies here
   ]
 };
