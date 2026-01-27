@@ -148,7 +148,7 @@ export const initializeMap = async () => {
           const results = event.detail.results;
           if (results.length > 0 && results[0].results.length > 0) {
             const result = results[0].results[0];
-            console.log("Search selected result:", result);
+            // console.log("Search selected result:", result);
             // CHANGE: Build a mock response object to match highlightSelectedAsset signature
             const response = {
               results: [
@@ -202,7 +202,7 @@ export const initializeMap = async () => {
 
       if (isSelectEnabled === "true" || isSelectEnabled === true) {
         mapLayersToAdd.forEach((mapLayer) => {
-          console.log("Adding map layer:", mapLayer);
+          // console.log("Adding map layer:", mapLayer);
           addMapLayer({
             mapLayer,
             FeatureLayer,
@@ -214,7 +214,7 @@ export const initializeMap = async () => {
             layersWithNoSelectionRequired,
           });
         });
-        console.log("featureLayers:", featureLayers);
+        // console.log("featureLayers:", featureLayers);
         const selectBySearchEnabledLayers = featureLayers.filter(
           (layer) =>
             layer.layerProperties.isSelectBySearchEnabled === "true" ||
@@ -236,7 +236,7 @@ export const initializeMap = async () => {
             suggestionTemplate: featureLayer.layerProperties.labelMask,
           };
         });
-        console.log("layerSearchSources:", layerSearchSources);
+        // console.log("layerSearchSources:", layerSearchSources);
         const searchComponent = document.getElementById(
           "asset-chooser-arcgis-search",
         );
@@ -294,16 +294,16 @@ export const initializeMap = async () => {
       }
 
       if (isSelectEnabled && !isSketchEnabled) {
-        console.log("Select Mode only enabled.");
+        // console.log("Select Mode only enabled.");
         setCreatedAssetsAreValid(true);
         const createdAssetsAreValid = getCreatedAssetsAreValid();
-        console.log("createdAssetsAreValid", createdAssetsAreValid);
+        // console.log("createdAssetsAreValid", createdAssetsAreValid);
         dispatchCreatedAssets(createdAssets);
       }
 
       if (!isSelectEnabled && isSketchEnabled) {
         setIsValid(true);
-        console.log("Sketch Mode only enabled.");
+        // console.log("Sketch Mode only enabled.");
         handleSketchEnabled();
         const modeStatusTextSpan = document.getElementById(
           "mode-status-text-span",

@@ -22,12 +22,12 @@ import { initializeMap } from "./asset-chooser-initialize-map.js";
 
 
 const handleAddAssetInputButtonClick = (event) => {
-  console.log("Add asset input button clicked:", event.target);
+  // console.log("Add asset input button clicked:", event.target);
   if (event.target.classList.contains("add-asset-input-button")) {
     const layerName = event.target.dataset.layer;
-    console.log("Adding input for layer:", layerName);
+    // console.log("Adding input for layer:", layerName);
     const assetType = event.target.dataset.type;
-    console.log('assetType', assetType)
+    // console.log('assetType', assetType)
 
     // const layer = featureLayers.find(
     //   (layer) => layer.layerProperties.layerName === layerName
@@ -42,7 +42,7 @@ const handleAddAssetInputButtonClick = (event) => {
         (layer) => layer.layerProperties.layerName === layerName
       );
     }
-    console.log("Found layer:", layer);
+    // console.log("Found layer:", layer);
     if (layer != null) {
       const inputContainer = document.getElementById(`${layerName}-input-container`);
       const newInput = document.createElement("input");
@@ -59,10 +59,10 @@ const handleAddAssetInputButtonClick = (event) => {
 document.addEventListener("click", handleAddAssetInputButtonClick);
 
 const generateInputsContent = (prefillData = {}) => {
-  console.log("featureLayers:", featureLayers);
+  // console.log("featureLayers:", featureLayers);
   return featureLayers
     .map((layer) => {
-      console.log("Processing layer:", layer);
+      // console.log("Processing layer:", layer);
       const isRequired =
         layer.layerProperties.minimumAssetsRequired >= 1 ? "required" : "";
       const numRequired = layer.layerProperties.minAssetsRequired;
@@ -70,7 +70,7 @@ const generateInputsContent = (prefillData = {}) => {
       const formattedLayerName = layer.layerProperties.formattedLayerName;
       const prefillValue = prefillData[formattedLayerName] || "";
       const numOfInputs = numRequired > 0 ? numRequired : 1;
-      console.log(`Layer ${layerName} requires ${numRequired} assets.`);
+      // console.log(`Layer ${layerName} requires ${numRequired} assets.`);
       return `
         <div>
           <label for="${layerName}">
@@ -151,7 +151,6 @@ const generateSketchLayerInputsContent = (prefillData = {}) => {
   console.log("graphicLayers:", graphicLayers);
   return graphicLayers
     .map((layer) => {
-      console.log("Processing sketch layer:", layer);
       const isRequired =
         layer.layerProperties.minimumAssetsRequired >= 1 ? "required" : "";
       const numRequired = layer.layerProperties.minAssetsRequired;
@@ -159,7 +158,6 @@ const generateSketchLayerInputsContent = (prefillData = {}) => {
       const formattedLayerName = layer.layerProperties.formattedLayerName;
       const prefillValue = prefillData[formattedLayerName] || "";
       const numOfInputs = numRequired > 0 ? numRequired : 1;
-      console.log(`Sketch layer ${layerName} requires ${numRequired} assets.`);
       return `
         <div>
           <label for="${layerName}">
@@ -344,12 +342,12 @@ const handleModalAssetFormSubmit = (event) => {
   setCreatedAssetsAreValid(true);
   // Dispatch custom event when isValid becomes true
   const createdAssetsAreValid = getCreatedAssetsAreValid();
-  console.log(
-    "isValid:",
-    isValid,
-    "createdAssetsAreValid:",
-    createdAssetsAreValid,
-  );
+  // console.log(
+  //   "isValid:",
+  //   isValid,
+  //   "createdAssetsAreValid:",
+  //   createdAssetsAreValid,
+  // );
   if (isValid && createdAssetsAreValid) {
     const customEvent = new CustomEvent("isValidTrue", {
       detail: { chosenAssets: [], chosenAssetFormData },

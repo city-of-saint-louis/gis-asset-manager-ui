@@ -268,13 +268,13 @@ export const monitorLayerVisibility = (
 // render the validity message for asset selection based on assets selected
 export const renderValidityMessage = () => {
   const createdAssetsAreValid = getCreatedAssetsAreValid();
-  console.log(
-    "Rendering validity message...",
-    "isValid",
-    isValid,
-    "createdAssetsAreValid",
-    createdAssetsAreValid
-  );
+  // console.log(
+  //   "Rendering validity message...",
+  //   "isValid",
+  //   isValid,
+  //   "createdAssetsAreValid",
+  //   createdAssetsAreValid
+  // );
   // const validityMessage = document.getElementById("validity-message");
   const validityMessage = document.getElementById("asset-chooser-hint");
   const originalHintText = validityMessage.getAttribute("data-original-hint");
@@ -377,7 +377,7 @@ export const highlightSelectedAsset = (
         return;
       }
       highlightedSelection = layerView.highlight(graphic);
-      console.log("Asset highlighted by click:", highlightedSelection);
+      // console.log("Asset highlighted by click:", highlightedSelection);
       const chosenAsset = {
         assetAttributes: graphic.attributes,
         internalAssetId: `${layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
@@ -395,9 +395,9 @@ export const highlightSelectedAsset = (
         highlightSelect: highlightedSelection,
         graphic: graphic,
       };
-      console.log("Chosen asset added:", chosenAsset);
+      // console.log("Chosen asset added:", chosenAsset);
       chosenAssets.push(chosenAsset);
-      console.log("chosenAssets array:", chosenAssets);
+      // console.log("chosenAssets array:", chosenAssets);
       renderSelectedAssetLabels();
       validateLayerSelections();
     });
