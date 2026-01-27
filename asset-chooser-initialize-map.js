@@ -20,6 +20,7 @@ import {
   isSketchEnabled,
   // setIsSketchEnabled,
   isSelectEnabled,
+  isSelectBySearchEnabled,
   // setIsSelectEnabled,
   // createdAssetsAreValid,
   setCreatedAssetsAreValid,
@@ -40,6 +41,7 @@ import {
   // handleSelectEnabled,
   handleSketchEnabled,
   renderSelectedAssetLabels,
+  validateLayerSelections,
 } from "./asset-chooser-functions.js";
 
 import {
@@ -131,109 +133,42 @@ export const initializeMap = async () => {
       searchComponent.setAttribute("popup-disabled", "true");
       searchComponent.setAttribute("include-default-sources-disabled", "true");
       searchComponent.setAttribute("id", "asset-chooser-arcgis-search");
+      // searchComponent.setAttribute("auto-select-disabled", "true");
       searchComponent.sources = [locatorSourceObj];
       arcGisMap.appendChild(searchComponent);
 
-      // searchComponent.addEventListener("arcgisSearchComplete", (event) => {
-      //   console.log("Search complete event:", event);
-      //   const results = event.detail.results;
-      //   console.log("Search results:", results);
-      //   if (results.length > 0 && results[0].results.length > 0) {
-      //     const firstResult = results[0].results[0];
-      //     console.log("First result:", firstResult);
-      //     chosenAssets.push(firstResult);
-      //     console.log("chosenAssets array:", chosenAssets);
-      //   }
-      // });
-
-      searchComponent.addEventListener("arcgisSearchComplete", (event) => {
-        const results = event.detail.results;
-        if (results.length > 0 && results[0].results.length > 0) {
-          const result = results[0].results[0];
-          const graphic = result.feature;
-          const layerProperties = graphic.layer.layerProperties;
-          const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
-          const labelMaskValue = eval(
-            `"${layerProperties.labelMask.replace(
-              /\{([^}]+)\}/g,
-              (match, p1) => `" + graphic.attributes.${p1} + "`,
-            )}"`,
-          );
-          const layerId = graphic.layer.id;
-          const internalAssetId = `${layerProperties.layerName}-${graphic.attributes[layerAssetIDFieldName]}`;
-          const mapDataLayerId = `${layerProperties.layerName}-${layerId}`;
-          const layerAssetMax = layerProperties.maximumAssetsRequired;
-          const totalLayerAssetsSelected = chosenAssets.filter(
-            (h) => h.layerId === mapDataLayerId,
-          ).length;
-
-          // Check for duplicate selection
-          if (
-            !chosenAssets.find((a) => a.internalAssetId === internalAssetId)
-          ) {
-            // Check for max selection
-            if (
-              layerAssetMax > 0 &&
-              totalLayerAssetsSelected >= layerAssetMax
-            ) {
-              const msgId = `${mapDataLayerId}-max-asset-required-message`;
-              const msgElem = document.getElementById(msgId);
-              if (msgElem) {
-                msgElem.classList.remove("label-default");
-                msgElem.classList.add("label-error");
-              }
-              setTimeout(() => {
-                alert(
-                  `You have already selected the maximum of ${layerAssetMax} assets from the ${layerProperties.layerName} layer.`,
-                );
-                if (msgElem) {
-                  msgElem.classList.remove("label-error");
-                  msgElem.classList.add("label-default");
-                }
-              }, 500);
-              return;
-            }
-            // Highlight and add asset
-            arcGisMap.view.whenLayerView(graphic.layer).then((layerView) => {
-              const highlightedSelection = layerView.highlight(graphic);
-              const chosenAsset = {
-                assetAttributes: graphic.attributes,
-                internalAssetId,
-                assetId: graphic.attributes[layerAssetIDFieldName],
-                assetIdType: layerAssetIDFieldName,
-                assetLabel: labelMaskValue,
-                layerData: graphic.layer,
-                layerId: mapDataLayerId,
-                layerName: graphic.layer.title,
-                layerClassUrl: layerProperties.layerClassUrl,
-                layerAssetMax,
-                highlightSelect: highlightedSelection,
-              };
-              chosenAssets.push(chosenAsset);
-              renderSelectedAssetLabels();
-              // validateNumberofAssetsSelected();
-              dispatchChosenAssets(chosenAssets);
-              console.log("chosenAssets array:", chosenAssets);
+      if (
+        isSelectBySearchEnabled === "true" ||
+        isSelectBySearchEnabled === true
+      ) {
+        searchComponent.setAttribute("auto-select-disabled", "true");
+        searchComponent.addEventListener("arcgisSearchComplete", (event) => {
+          // clear search input after selection
+          searchComponent.searchTerm = "";
+          const results = event.detail.results;
+          if (results.length > 0 && results[0].results.length > 0) {
+            const result = results[0].results[0];
+            console.log("Search selected result:", result);
+            // CHANGE: Build a mock response object to match highlightSelectedAsset signature
+            const response = {
+              results: [
+                {
+                  graphic: result.feature,
+                  layer: result.feature.layer,
+                },
+              ],
+            };
+            // CHANGE: Call the shared highlightSelectedAsset function for consistent logic
+            highlightSelectedAsset(response, arcGisMap.view);
+            // navigate to the selected location
+            arcGisMap.view.goTo({
+              target: result.feature.geometry,
+              // zoom to the layer zoom level
+              zoom: 18,
             });
-          } else {
-            // Unselect and remove highlight
-            chosenAssets.forEach((asset) => {
-              if (asset.internalAssetId === internalAssetId) {
-                asset.highlightSelect.remove();
-              }
-            });
-            const idx = chosenAssets.findIndex(
-              (a) => a.internalAssetId === internalAssetId,
-            );
-            if (idx !== -1) {
-              chosenAssets.splice(idx, 1);
-            }
-            renderSelectedAssetLabels();
-            // validateNumberofAssetsSelected();
-            dispatchChosenAssets(chosenAssets);
           }
-        }
-      });
+        });
+      }
 
       function updateSearchPosition() {
         const searchComponent = document.getElementById(
@@ -280,7 +215,12 @@ export const initializeMap = async () => {
           });
         });
         console.log("featureLayers:", featureLayers);
-        const searchSources = featureLayers.map((featureLayer) => {
+        const selectBySearchEnabledLayers = featureLayers.filter(
+          (layer) =>
+            layer.layerProperties.isSelectBySearchEnabled === "true" ||
+            layer.layerProperties.isSelectBySearchEnabled === true
+        );
+        const layerSearchSources = selectBySearchEnabledLayers.map((featureLayer) => {
           const labelMask = featureLayer.layerProperties.labelMask;
           const fieldMatches = labelMask.match(/\{([^}]+)\}/g) || [];
           const fieldNames = fieldMatches.map((f) => f.replace(/\{|\}/g, ""));
@@ -296,12 +236,18 @@ export const initializeMap = async () => {
             suggestionTemplate: featureLayer.layerProperties.labelMask,
           };
         });
-        console.log("searchSources:", searchSources);
+        console.log("layerSearchSources:", layerSearchSources);
         const searchComponent = document.getElementById(
           "asset-chooser-arcgis-search",
         );
-        const allSources = [locatorSourceObj, ...searchSources];
-        searchComponent.sources = allSources;
+        if (
+          isSelectBySearchEnabled === "true" ||
+          isSelectBySearchEnabled === true
+        ) {
+          // const allSources = [locatorSourceObj, ...layerSearchSources];
+          // searchComponent.sources = allSources;
+          searchComponent.sources = layerSearchSources;
+        }
       }
 
       if (isSketchEnabled === "true" || isSketchEnabled === true) {
