@@ -68,6 +68,11 @@ export function setIsSelectEnabled(value) {
   isSelectEnabled = value;
 }
 
+export let isSelectBySearchEnabled = false;
+export function setIsSelectBySearchEnabled(value) {
+  isSelectBySearchEnabled = value;
+}
+
 export let assetMode = ""; // possible values: "select", "sketch"
 export function setAssetMode(value) {
   assetMode = value;

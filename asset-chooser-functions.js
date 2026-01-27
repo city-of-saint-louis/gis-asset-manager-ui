@@ -15,6 +15,7 @@ import {
   isValid,
   // createdAssetsAreValid,
   setIsValid,
+  isSelectBySearchEnabled,
   // setIsSelectEnabled,
   // setIsSketchEnabled,
   // assetMode,
@@ -96,6 +97,7 @@ export const addMapLayer = ({
 }) => {
   const layerMinScale = parseInt(mapLayer.minScale, 10) || 0;
   const layerMaxScale = parseInt(mapLayer.maxScale, 10) || 0;
+  const isSelectBySearchEnabled = mapLayer.isSelectBySearchEnabled;
   const mapDataLayer = new FeatureLayer({
     url: mapLayer.layerClassUrl,
     minScale: mapLayer.minScale,
@@ -110,6 +112,9 @@ export const addMapLayer = ({
       maxAssetsAllowed: mapLayer.maximumSelectionsAllowed,
       minScale: layerMinScale,
       maxScale: layerMaxScale,
+      isSelectBySearchEnabled
+      // searchFields: [mapLayer.labelMask],
+      // displayField: mapLayer.labelMask,
     },
     // labelingInfo: [
     //   {
@@ -372,6 +377,7 @@ export const highlightSelectedAsset = (
         return;
       }
       highlightedSelection = layerView.highlight(graphic);
+      console.log("Asset highlighted by click:", highlightedSelection);
       const chosenAsset = {
         assetAttributes: graphic.attributes,
         internalAssetId: `${layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
@@ -389,7 +395,9 @@ export const highlightSelectedAsset = (
         highlightSelect: highlightedSelection,
         graphic: graphic,
       };
+      console.log("Chosen asset added:", chosenAsset);
       chosenAssets.push(chosenAsset);
+      console.log("chosenAssets array:", chosenAssets);
       renderSelectedAssetLabels();
       validateLayerSelections();
     });
@@ -413,10 +421,9 @@ export const highlightSelectedAsset = (
   }
 };
 
-// non-exported functions
 // render information about the assets that have been selected
 // used in highlightSelectedAsset function, no need to export
-const renderSelectedAssetLabels = () => {
+export const renderSelectedAssetLabels = () => {
   // console.log('chosenAssets:', chosenAssets);
   const selectedLayerAssetListArray = document.querySelectorAll(
     ".chosen-asset-data-list"
@@ -523,7 +530,7 @@ const renderSelectedAssetLabels = () => {
 
 // validation functions / not exported
 // validate asset selection for each individual layer, used in highlightSelectedAsset function
-const validateLayerSelections = () => {
+export const validateLayerSelections = () => {
   featureLayers.forEach((mapLayer) => {
     // console.log("Validating layer selections for:", mapLayer);
     // const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;

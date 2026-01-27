@@ -20,6 +20,7 @@ import {
   isSketchEnabled,
   // setIsSketchEnabled,
   isSelectEnabled,
+  isSelectBySearchEnabled,
   // setIsSelectEnabled,
   // createdAssetsAreValid,
   setCreatedAssetsAreValid,
@@ -39,6 +40,8 @@ import {
   highlightSelectedAsset,
   // handleSelectEnabled,
   handleSketchEnabled,
+  renderSelectedAssetLabels,
+  validateLayerSelections,
 } from "./asset-chooser-functions.js";
 
 import {
@@ -53,20 +56,24 @@ export const initializeMap = async () => {
   clearMapData();
   try {
     const FeatureLayer = await $arcgis.import(
-      "@arcgis/core/layers/FeatureLayer.js"
+      "@arcgis/core/layers/FeatureLayer.js",
     );
     const Extent = await $arcgis.import("@arcgis/core/geometry/Extent.js");
     const reactiveUtils = await $arcgis.import(
-      "@arcgis/core/core/reactiveUtils.js"
+      "@arcgis/core/core/reactiveUtils.js",
     );
     // LocatorSearchSource is a widget. All widgets are being converted to components. Update will be required at some point.
     // More info: https://developers.arcgis.com/javascript/latest/components-transition-plan/
     // https://developers.arcgis.com/javascript/latest/api-reference/esri-widgets-Search-LocatorSearchSource.html
     const LocatorSearchSource = await $arcgis.import(
-      "@arcgis/core/widgets/Search/LocatorSearchSource.js"
+      "@arcgis/core/widgets/Search/LocatorSearchSource.js",
     );
+    // const LayerSearchSource = await $arcgis.import(
+    //   "@arcgis/core/widgets/Search/LayerSearchSource.js"
+    // );
+    // console.log("LayerSearchSource:", LayerSearchSource);
     const assetChooserContainer = document.querySelector(
-      "asset-chooser-container"
+      "asset-chooser-container",
     );
     const zoom = assetChooserContainer.getAttribute("zoom") || defaultZoom;
     const baseMap =
@@ -96,18 +103,29 @@ export const initializeMap = async () => {
     zoomControl.setAttribute("position", "bottom-left");
     arcGisMap.appendChild(zoomControl);
     // Add a LocatorSearchSource for local search suggestions
-    const locatorSearchSource = new LocatorSearchSource({
+    // const locatorSearchSource = new LocatorSearchSource({
+    //   url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
+    //   filter: {
+    //     geometry: stLouisExtent,
+    //   },
+    //   outFields: ["*"],
+    //   singleLineFieldName: "SingleLine",
+    //   name: "ArcGIS World Geocoding Service",
+    //   placeholder: "Search for places or addresses",
+    //   maxSuggestions: 4,
+    //   suggestionsEnabled: true,
+    // });
+    const locatorSourceObj = {
       url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
-      filter: {
-        geometry: stLouisExtent,
-      },
+      filter: { geometry: stLouisExtent },
       outFields: ["*"],
       singleLineFieldName: "SingleLine",
       name: "ArcGIS World Geocoding Service",
       placeholder: "Search for places or addresses",
       maxSuggestions: 4,
       suggestionsEnabled: true,
-    });
+    };
+
     if (showSearch === "true" || showSearch === true) {
       const searchComponent = document.createElement("arcgis-search");
       // searchComponent.setAttribute("position", "bottom-right");
@@ -115,11 +133,46 @@ export const initializeMap = async () => {
       searchComponent.setAttribute("popup-disabled", "true");
       searchComponent.setAttribute("include-default-sources-disabled", "true");
       searchComponent.setAttribute("id", "asset-chooser-arcgis-search");
-      searchComponent.sources = [locatorSearchSource];
+      // searchComponent.setAttribute("auto-select-disabled", "true");
+      searchComponent.sources = [locatorSourceObj];
       arcGisMap.appendChild(searchComponent);
+
+      if (
+        isSelectBySearchEnabled === "true" ||
+        isSelectBySearchEnabled === true
+      ) {
+        searchComponent.setAttribute("auto-select-disabled", "true");
+        searchComponent.addEventListener("arcgisSearchComplete", (event) => {
+          // clear search input after selection
+          searchComponent.searchTerm = "";
+          const results = event.detail.results;
+          if (results.length > 0 && results[0].results.length > 0) {
+            const result = results[0].results[0];
+            console.log("Search selected result:", result);
+            // CHANGE: Build a mock response object to match highlightSelectedAsset signature
+            const response = {
+              results: [
+                {
+                  graphic: result.feature,
+                  layer: result.feature.layer,
+                },
+              ],
+            };
+            // CHANGE: Call the shared highlightSelectedAsset function for consistent logic
+            highlightSelectedAsset(response, arcGisMap.view);
+            // navigate to the selected location
+            arcGisMap.view.goTo({
+              target: result.feature.geometry,
+              // zoom to the layer zoom level
+              zoom: 18,
+            });
+          }
+        });
+      }
+
       function updateSearchPosition() {
         const searchComponent = document.getElementById(
-          "asset-chooser-arcgis-search"
+          "asset-chooser-arcgis-search",
         );
         if (!searchComponent) return;
         if (window.innerWidth <= 500) {
@@ -139,7 +192,7 @@ export const initializeMap = async () => {
         arcGisMap.removeChild(existingSearchComponent);
       }
     }
-    arcGisMap.addEventListener("arcgisViewReadyChange", () => {
+    arcGisMap.addEventListener("arcgisViewReadyChange", async () => {
       const map = arcGisMap.map; // access the map object
       const view = arcGisMap.view; // Access the mapView object
       setCurrentView(view);
@@ -149,6 +202,7 @@ export const initializeMap = async () => {
 
       if (isSelectEnabled === "true" || isSelectEnabled === true) {
         mapLayersToAdd.forEach((mapLayer) => {
+          console.log("Adding map layer:", mapLayer);
           addMapLayer({
             mapLayer,
             FeatureLayer,
@@ -160,12 +214,40 @@ export const initializeMap = async () => {
             layersWithNoSelectionRequired,
           });
         });
-        // const selectableLayerDataDivHeading = document.createElement("h3");
-        // selectableLayerDataDivHeading.textContent = "Selectable Layers";
-        // const layerDataDiv = document.getElementById(
-        //   "layer-data-div"
-        // );
-        // layerDataDiv.insertBefore(selectableLayerDataDivHeading, layerDataDiv.firstChild);
+        console.log("featureLayers:", featureLayers);
+        const selectBySearchEnabledLayers = featureLayers.filter(
+          (layer) =>
+            layer.layerProperties.isSelectBySearchEnabled === "true" ||
+            layer.layerProperties.isSelectBySearchEnabled === true
+        );
+        const layerSearchSources = selectBySearchEnabledLayers.map((featureLayer) => {
+          const labelMask = featureLayer.layerProperties.labelMask;
+          const fieldMatches = labelMask.match(/\{([^}]+)\}/g) || [];
+          const fieldNames = fieldMatches.map((f) => f.replace(/\{|\}/g, ""));
+          return {
+            layer: featureLayer,
+            searchFields: fieldNames,
+            displayField: fieldNames[0] || "",
+            name: featureLayer.layerProperties.layerName,
+            placeholder: `Search ${featureLayer.layerProperties.layerName}`,
+            suggestionsEnabled: true,
+            maxSuggestions: 10,
+            searchTemplate: featureLayer.layerProperties.labelMask,
+            suggestionTemplate: featureLayer.layerProperties.labelMask,
+          };
+        });
+        console.log("layerSearchSources:", layerSearchSources);
+        const searchComponent = document.getElementById(
+          "asset-chooser-arcgis-search",
+        );
+        if (
+          isSelectBySearchEnabled === "true" ||
+          isSelectBySearchEnabled === true
+        ) {
+          // const allSources = [locatorSourceObj, ...layerSearchSources];
+          // searchComponent.sources = allSources;
+          searchComponent.sources = layerSearchSources;
+        }
       }
 
       if (isSketchEnabled === "true" || isSketchEnabled === true) {
@@ -197,7 +279,7 @@ export const initializeMap = async () => {
           });
         });
 
-         if (
+        if (
           sketchableLayersWithNoAdditionRequired.length > 0 &&
           allSketchableLayerIds.length > 0 &&
           sketchableLayersWithNoAdditionRequired.length ===
@@ -209,7 +291,6 @@ export const initializeMap = async () => {
           setCreatedAssetsAreValid(false);
           secureCreatedAssets();
         }
-        
       }
 
       if (isSelectEnabled && !isSketchEnabled) {
@@ -224,9 +305,11 @@ export const initializeMap = async () => {
         setIsValid(true);
         console.log("Sketch Mode only enabled.");
         handleSketchEnabled();
-        const modeStatusTextSpan = document.getElementById("mode-status-text-span");
+        const modeStatusTextSpan = document.getElementById(
+          "mode-status-text-span",
+        );
         // const modeStatusIconSpan = document.getElementById(
-          // "mode-status-icon-span"
+        // "mode-status-icon-span"
         // );
         modeStatusTextSpan.textContent =
           "Click a sketch button below to begin.";
@@ -234,7 +317,7 @@ export const initializeMap = async () => {
 
       if (!isSelectEnabled && !isSketchEnabled) {
         alert(
-          "Please enable either Select Mode or Sketch Mode to choose or enter assets on the map."
+          "Please enable either Select Mode or Sketch Mode to choose or enter assets on the map.",
         );
       }
 
@@ -267,7 +350,7 @@ export const initializeMap = async () => {
         view.hitTest(event).then((response) => {
           if (!response.results[0].layer.layerProperties) {
             alert(
-              "Please try again. There are no assets to select at that location."
+              "Please try again. There are no assets to select at that location.",
             );
             return;
           }
