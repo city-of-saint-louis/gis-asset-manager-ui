@@ -98,7 +98,7 @@ const generateInputsContent = (prefillData = {}) => {
               .join("")}
             </div>
           </p>
-          <button type="button" class="add-asset-input-button" data-layer="${layerName}"  data-type="selected" aria-label="Add ${formattedLayerName} input"
+          <button type="button" class="add-asset-input-button" data-layer="${layerName}" data-type="selected" aria-label="Add ${formattedLayerName} input"
           >
             Add input for ${formattedLayerName}
           </button>
