@@ -4,8 +4,16 @@
 // provide setter functions for mutable variables
 // export all variables and functions for external access
 export const defaultZoom = 12;
-export const defaultCenterX = -90.25;
-export const defaultCenterY = 38.64;
+export const defaultCenterX = -90.25; // longitude, centered on St. Louis, MO
+export const defaultCenterY = 38.64; // latitude, centered on St. Louis, MO
+// default extent in Web Mercator (102100) keeps St. Louis city limits in view
+export const defaultExtent = {
+  xmin: -10054448.855908303,
+  ymin: 4654966.477336443,
+  xmax: -10038240.32627997,
+  ymax: 4689440.938430255,
+  spatialReference: { wkid: 102100 },
+};
 export const defaultBaseMap = "topo-vector";
 export const defaultShowSearch = true;
 export const mapLayersToAdd = [];

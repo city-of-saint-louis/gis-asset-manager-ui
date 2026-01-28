@@ -3,6 +3,7 @@ import {
   defaultZoom,
   defaultCenterX,
   defaultCenterY,
+  defaultExtent,
   defaultBaseMap,
   defaultShowSearch,
   mapLayersToAdd,
@@ -40,8 +41,8 @@ import {
   highlightSelectedAsset,
   // handleSelectEnabled,
   handleSketchEnabled,
-  renderSelectedAssetLabels,
-  validateLayerSelections,
+  // renderSelectedAssetLabels,
+  // validateLayerSelections,
 } from "./asset-chooser-functions.js";
 
 import {
@@ -65,9 +66,9 @@ export const initializeMap = async () => {
     // LocatorSearchSource is a widget. All widgets are being converted to components. Update will be required at some point.
     // More info: https://developers.arcgis.com/javascript/latest/components-transition-plan/
     // https://developers.arcgis.com/javascript/latest/api-reference/esri-widgets-Search-LocatorSearchSource.html
-    const LocatorSearchSource = await $arcgis.import(
-      "@arcgis/core/widgets/Search/LocatorSearchSource.js",
-    );
+    // const LocatorSearchSource = await $arcgis.import(
+    //   "@arcgis/core/widgets/Search/LocatorSearchSource.js",
+    // );
     // const LayerSearchSource = await $arcgis.import(
     //   "@arcgis/core/widgets/Search/LayerSearchSource.js"
     // );
@@ -84,20 +85,30 @@ export const initializeMap = async () => {
       assetChooserContainer.getAttribute("center-y") || defaultCenterY;
     const showSearch =
       assetChooserContainer.getAttribute("show-search") || defaultShowSearch;
-    const stLouisExtent = new Extent({
-      xmin: -10054448.855908303,
-      ymin: 4654966.477336443,
-      xmax: -10038240.32627997,
-      ymax: 4689440.938430255,
-      spatialReference: { wkid: 102100 }, // or 3857
+    // const stLouisExtent = new Extent({
+    //   xmin: -10054448.855908303,
+    //   ymin: 4654966.477336443,
+    //   xmax: -10038240.32627997,
+    //   ymax: 4689440.938430255,
+    //   spatialReference: { wkid: 102100 }, // or 3857
+    // });
+    const extent = new Extent({
+      xmin: assetChooserContainer.getAttribute("extent-xmin") || defaultExtent.xmin,
+      ymin: assetChooserContainer.getAttribute("extent-ymin") || defaultExtent.ymin,
+      xmax: assetChooserContainer.getAttribute("extent-xmax") || defaultExtent.xmax,
+      ymax: assetChooserContainer.getAttribute("extent-ymax") || defaultExtent.ymax,
+      spatialReference: assetChooserContainer.getAttribute("extent-spatial-reference-wkid")
+        ? { wkid: parseInt(assetChooserContainer.getAttribute("extent-spatial-reference-wkid"), 10) }
+        : defaultExtent.spatialReference,
     });
+    console.log("Map extent:", extent.toJSON());
     // Dynamically create the <arcgis-map> component
     const mapContainer = document.querySelector("#viewDiv");
     const arcGisMap = document.createElement("arcgis-map");
     arcGisMap.setAttribute("basemap", baseMap);
     arcGisMap.setAttribute("zoom", zoom);
     arcGisMap.setAttribute("center", `${centerX},${centerY}`);
-    arcGisMap.setAttribute("extent", JSON.stringify(stLouisExtent.toJSON()));
+    arcGisMap.setAttribute("extent", JSON.stringify(extent.toJSON()));
     mapContainer.appendChild(arcGisMap);
     const zoomControl = document.createElement("arcgis-zoom");
     zoomControl.setAttribute("position", "bottom-left");
@@ -117,7 +128,7 @@ export const initializeMap = async () => {
     // });
     const locatorSourceObj = {
       url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
-      filter: { geometry: stLouisExtent },
+      filter: { geometry: extent },
       outFields: ["*"],
       singleLineFieldName: "SingleLine",
       name: "ArcGIS World Geocoding Service",
@@ -197,7 +208,7 @@ export const initializeMap = async () => {
       const view = arcGisMap.view; // Access the mapView object
       setCurrentView(view);
       view.constraints = {
-        geometry: stLouisExtent,
+        geometry: extent,
       };
 
       if (isSelectEnabled === "true" || isSelectEnabled === true) {
