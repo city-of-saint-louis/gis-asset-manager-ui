@@ -242,7 +242,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
             <span>${displayName}</span>
           </div>
           <button
-            class="zoom-alert-button zoom-alert-button"
+            class="zoom-alert-button"
             id="${sanitizedLayerName}-zoom-alert-button"
             title="Zoom In"
           >

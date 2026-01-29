@@ -1,26 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GIS Asset Chooser Development</title>
-    <link
+    <!-- <link
       href="https://www.stlouis-mo.gov/style/screen.css"
       rel="stylesheet"
       type="text/css"
       media="all"
-    />
-    <link
+    /> -->
+    <!-- <link
       href="https://www.stlouis-mo.gov/style/glyphicons-svg.css"
       rel="stylesheet"
       type="text/css"
       media="all"
-    />
+    /> -->
+    <link rel="stylesheet" href="city-of-stl-styles.css" />
+    <link rel="stylesheet" href="asset-chooser-styles.css" />
     <link rel="stylesheet" href="dev-styles.css" />
   </head>
   <body>
-    <header></header>
-    <main>
+    <header>
       <h1>GIS Asset Chooser Demo</h1>
       <nav class="navigation">
         <a href="index.html">Home</a> |
@@ -28,27 +29,32 @@
         <a href="sketch-mode.html">Sketch Mode Only</a> |
         <a href="select-and-sketch-modes.html">Select Mode and Sketch Mode</a>
       </nav>
-      <p>
-        The GIS Asset Chooser can now be used in one of three modes: 
-      </p>
+    </header>
+    <main>
+      <p>The GIS Asset Chooser can now be used in one of three modes:</p>
       <ol>
         <li>
-          <strong>Select Mode Only</strong> - Users can select assets from predefined asset layers.
+          <strong>Select Mode Only</strong> - Users can select assets from
+          predefined asset layers.
         </li>
         <li>
-          <strong>Sketch Mode Only</strong> - Users can sketch custom assets on the map. Sketched assets can be points, polylines, or polygons as needed.
+          <strong>Sketch Mode Only</strong> - Users can sketch custom assets on
+          the map. Sketched assets can be points, polylines, or polygons as
+          needed.
         </li>
         <li>
-          <strong>Select Mode and Sketch Mode</strong> - Users can select assets from predefined asset layers <strong>AND</strong> sketch custom assets on the map.
+          <strong>Select Mode and Sketch Mode</strong> - Users can select assets
+          from predefined asset layers <strong>AND</strong> sketch custom assets
+          on the map.
         </li>
       </ol>
       <p>
-        Eventually we plan to have a configurable demo app that allows you to try out all three modes in one place with various different layers and assets, but for now we have separate demo pages for each mode.
+        Eventually we plan to have a configurable demo app that allows you to
+        try out all three modes in one place with various different layers and
+        assets, but for now we have separate demo pages for each mode.
       </p>
-      <p>
-        Use the navigation links above to view demos of each mode.
-      </p>
-   
+      <p>Use the navigation links above to view demos of each mode.</p>
+
       <!-- <asset-chooser-container
         title="Provide Required Assets for Your Special Event Permit Application"
         hint="Use select mode to select required assets for selectable layers. Use sketch mode to add custom assets to the sketchable layers. Choose a mode below  to begin."

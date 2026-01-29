@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -8,18 +8,19 @@
       rel="stylesheet"
       href="https://js.arcgis.com/4.34/esri/themes/light/main.css"
     />
-    <link
+    <!-- <link
       href="https://www.stlouis-mo.gov/style/screen.css"
       rel="stylesheet"
       type="text/css"
       media="all"
-    />
+    /> -->
     <link
       href="https://stage.stlouis-mo.gov/style/glyphicons-svg.css"
       rel="stylesheet"
       type="text/css"
       media="all"
     />
+    <link rel="stylesheet" href="city-of-stl-styles.css" />
     <link rel="stylesheet" href="asset-chooser-styles.css" />
     <link rel="stylesheet" href="dev-styles.css" />
     <script
@@ -33,7 +34,7 @@
     ></script>
   </head>
   <body>
-    <main>
+    <header>
       <h1>GIS Asset Chooser Module - Sketch Mode Only</h1>
       <nav class="navigation">
         <a href="index.html">Home</a> |
@@ -41,6 +42,8 @@
         <a href="sketch-mode.html">Sketch Mode Only</a> |
         <a href="select-and-sketch-modes.html">Select Mode and Sketch Mode</a>
       </nav>
+    </header>
+    <main>
       <asset-chooser-container
         title="Add Custom Assets as Needed to Fulfill Requirements"
         hint="Use the sketch tool to fullfill the requirements by adding custom assets to the map. Select a layer below to begin by clicking the layer's 'Sketch' button. Zoom in to the map as needed to add assets. Submit sketched assets when finished."

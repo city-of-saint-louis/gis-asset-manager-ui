@@ -13,21 +13,25 @@ body {
 }
 h1 {
   text-align: center;
-  margin-top: 12px;
-  margin-bottom: 12px;
+  /* margin-top: 12px; */
+  /* margin-bottom: 12px; */
   font-size: 2rem;
+}
+header {
+  /* margin-top: 1rem; */
+  padding: 1rem;
 }
 main {
   flex: 1;
-  padding:1rem;
+  padding: 1rem;
   max-width: 1440px;
   margin: auto;
 }
 
 footer {
   text-align: center;
-  font-size: 12px;
-  margin-bottom: 6px;;
+  font-size: .75rem;
+  margin-bottom: .4rem;
 }
 
 .navigation {
