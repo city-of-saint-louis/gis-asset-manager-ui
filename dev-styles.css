@@ -17,6 +17,15 @@ h1 {
   /* margin-bottom: 12px; */
   font-size: 2rem;
 }
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.75em;
+  }
+  h2 {
+    margin-top: 0;
+  }
+}
+
 header {
   /* margin-top: 1rem; */
   padding: 1rem;
