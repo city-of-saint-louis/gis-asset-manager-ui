@@ -255,6 +255,7 @@
   border: 1px solid #888;
   width: 60%;
   border-radius: 5px;
+  max-width: 800px;
 }
 
 .modal-header {

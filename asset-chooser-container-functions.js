@@ -20,7 +20,6 @@ import { secureChosenAssets } from "./asset-chooser-functions.js";
 // import initializeMap function from map-initialization.js
 import { initializeMap } from "./asset-chooser-initialize-map.js";
 
-
 const handleAddAssetInputButtonClick = (event) => {
   // console.log("Add asset input button clicked:", event.target);
   if (event.target.classList.contains("add-asset-input-button")) {
@@ -35,16 +34,18 @@ const handleAddAssetInputButtonClick = (event) => {
     let layer;
     if (assetType === "selected") {
       layer = featureLayers.find(
-        (layer) => layer.layerProperties.layerName === layerName
+        (layer) => layer.layerProperties.layerName === layerName,
       );
     } else if (assetType === "sketched") {
       layer = graphicLayers.find(
-        (layer) => layer.layerProperties.layerName === layerName
+        (layer) => layer.layerProperties.layerName === layerName,
       );
     }
     // console.log("Found layer:", layer);
     if (layer != null) {
-      const inputContainer = document.getElementById(`${layerName}-input-container`);
+      const inputContainer = document.getElementById(
+        `${layerName}-input-container`,
+      );
       const newInput = document.createElement("input");
       newInput.type = "text";
       newInput.name = layer.layerProperties.formattedLayerName;
@@ -93,7 +94,7 @@ const generateInputsContent = (prefillData = {}) => {
                 value="${prefillValue}"
                 ${isRequired}
               >
-            `
+            `,
               )
               .join("")}
             </div>
@@ -180,7 +181,7 @@ const generateSketchLayerInputsContent = (prefillData = {}) => {
                 value="${prefillValue}"
                 ${isRequired}
               >
-            `
+            `,
               )
               .join("")}
             </div>
@@ -201,9 +202,9 @@ const generateModalHTML = (inputsContent, sketchInputsContent) => {
       <div class="modal-content">
         <div class="modal-header">
           <button class="close" type="button" aria-label="Close">&times;</button>
-          <h2 id="accomodation-title">
+          <h1 id="accomodation-title">
             Enter the assets required for your request.
-          </h2>
+          </h1>
           <p>
             <em>
               Please note that this form should only be used if you are unable to select and submit assets through the map. If you are able to use the map, please close this window and return to the map to make your selections.
@@ -288,22 +289,6 @@ const handleCancelSelectionsClick = () => {
   clearStoredModalFormAssetData();
 };
 
-// const handleAssetEditButtonClick = () => {
-//   // Create a prefill data object from chosenAssetFormData
-//   const prefillData = chosenAssetFormData.reduce((acc, { key, value }) => {
-//     acc[key] = value;
-//     return acc;
-//   }, {});
-//   // console.log("Prefill Data:", prefillData);
-//   // Remove the existing modal if it exists
-//   const existingModal = document.getElementById("asset-modal");
-//   if (existingModal) {
-//     existingModal.remove();
-//   }
-//   // Call openModal with prefilled data
-//   openModal(prefillData);
-// };
-
 const handleAssetEditButtonClick = () => {
   // Create a prefill data object from both chosenAssetFormData and createdAssetFormData
   const prefillData = {};
@@ -367,18 +352,29 @@ const handleModalAssetFormSubmit = (event) => {
   event.target.reset();
   const container = document.querySelector("asset-chooser-container");
   const title = container?.getAttribute("title") || "";
+  const titleHeadingLevel =
+    container?.getAttribute("title-heading-level") || "2";
+  const subHeadingLevel = (() => {
+    const level = parseInt(titleHeadingLevel, 10);
+    if (isNaN(level) || level < 2) return "3";
+    if (level >= 6) return "6";
+    return (level + 1).toString();
+  })();
   const assetChooserInterface = document.getElementById(
     "asset-chooser-interface",
   );
   assetChooserInterface.innerHTML = `
-    <h2 id="asset-chooser-title">${title}</h2>
-    <h3>The asset information has been added to your case.</h3>
+    <h${titleHeadingLevel} id="asset-chooser-title">${title}</h${titleHeadingLevel}>
+    <h${subHeadingLevel}>The asset information has been added to your case.</h${subHeadingLevel}>
     <p>You entered:</p>
     <ul>
       ${[...chosenAssetFormData, ...createdAssetFormData]
-      .map((asset) =>
-        `<li><strong>${asset.key}</strong>: ${asset.value ? asset.value : `Nothing entered for ${asset.key} layer`}
-         </li>`,).join("")}
+        .map(
+          (asset) =>
+            `<li><strong>${asset.key}</strong>: ${asset.value ? asset.value : `Nothing entered for ${asset.key} layer`}
+         </li>`,
+        )
+        .join("")}
     </ul>
     <button
       type="button"

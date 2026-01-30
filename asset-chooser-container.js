@@ -14,6 +14,7 @@ class AssetChooserContainerComponent extends HTMLElement {
     this.isSelectEnabled = this.getAttribute("is-select-enabled") === "true";
     this.isSketchEnabled = this.getAttribute("is-sketch-enabled") === "true";
     this.isSelectBySearchEnabled = this.getAttribute("is-select-by-search-enabled") === "true";
+    this.titleHeadingLevel = this.getAttribute("title-heading-level") || "2";
   }
   connectedCallback() {
     enableSketchMode(this.isSketchEnabled);
@@ -27,7 +28,7 @@ class AssetChooserContainerComponent extends HTMLElement {
     try {
       this.innerHTML = `
         <section id="asset-chooser-interface">
-          <h2 id="asset-chooser-title">${this.title}</h2>
+          <h${this.titleHeadingLevel} id="asset-chooser-title">${this.title}</h${this.titleHeadingLevel}>
           <div id="asset-chooser-button-and-map-wrapper">
             <div id="asset-chooser-button-container">
               <p id="asset-chooser-hint" data-original-hint="${this.hint}">${this.hint}</p>

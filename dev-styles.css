@@ -13,8 +13,6 @@ body {
 }
 h1 {
   text-align: center;
-  /* margin-top: 12px; */
-  /* margin-bottom: 12px; */
   font-size: 2rem;
 }
 @media (max-width: 768px) {
@@ -27,9 +25,9 @@ h1 {
 }
 
 header {
-  /* margin-top: 1rem; */
   padding: 1rem;
 }
+
 main {
   flex: 1;
   padding: 1rem;
