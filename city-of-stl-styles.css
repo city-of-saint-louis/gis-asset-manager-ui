@@ -109,15 +109,6 @@ li {
   vertical-align: middle;
 }
 
-/* .link-button:hover {
-  background-color: #174054;
-  border-color: #174054;
-  color: #fff;
-  text-shadow: none;
-  text-decoration: none;
-  top: -1px;
-} */
-
 .link-button.inverse-button {
   background-color: #fff;
   border-color: #1e526b;
