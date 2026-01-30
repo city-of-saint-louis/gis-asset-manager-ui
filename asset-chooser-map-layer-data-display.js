@@ -236,9 +236,9 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
           title="${displayName} Layer"
         >
           <div>
-            <span class="glyphicons-svg ${
-              isSketchable ? "glyphicons-svg-pencil" : "glyphicons-svg-cursor"
-            }"></span>
+            <span> ${
+              isSketchable ? `<calcite-icon icon="pencil" />` : `<calcite-icon icon="cursor" />`
+            }</span>
             <span>${displayName}</span>
           </div>
           <button
@@ -333,11 +333,11 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
               <button
                 type="button"
                 id="enable-sketch-btn-${sanitizedLayerName}"
-                class="enable-sketch-button "
-                aria-label=""
+                class="enable-sketch-button"
+                aria-label="enable sketch for ${displayName} layer"
                 title="Enable sketch for ${displayName} layer"
               >
-                <span class="glyphicons-svg glyphicons-svg-pencil"></span>Sketch</button>
+                <span id="enable-sketch-icon-${sanitizedLayerName}"><calcite-icon icon="pencil" scale="s" /></span>Sketch</button>
             `
                 : ""
             }

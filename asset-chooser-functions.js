@@ -843,8 +843,8 @@ export const handleSketchEnabled = () => {
   modeStatusBanner.classList.add("mode-status-banner-sketch");
 
   const modeStatusIconSpan = document.getElementById("mode-status-icon-span");
-  modeStatusIconSpan.classList.remove("glyphicons-svg-cursor");
-  modeStatusIconSpan.classList.add("glyphicons-svg-pencil");
+  // modeStatusIconSpan.classList.remove("glyphicons-svg-cursor");
+  // modeStatusIconSpan.classList.add("glyphicons-svg-pencil");
 
   const modeStatusTextSpan = document.getElementById("mode-status-text-span");
   modeStatusTextSpan.innerText = "Sketch Mode enabled. Select layer below.";

@@ -29,5 +29,8 @@
     "dist",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "dependencies": {
+    "@esri/calcite-ui-icons": "^4.3.0"
+  }
 }

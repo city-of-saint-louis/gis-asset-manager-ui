@@ -8,13 +8,6 @@ class AssetChooserModeToggle extends HTMLElement {
   }
   connectedCallback() {
     try {
-      // this.innerHTML = `
-      //   <div id="asset-chooser-mode-toggle-container">
-      //     <label class="switch">
-      //       <input type="checkbox">
-      //         <span class="slider round"></span>
-      //     </label>
-      //   </div>`;
       this.innerHTML = `
         <div id="asset-chooser-mode-toggle-container" style="">
           <span id="mode-toggle-label">Asset Mode:</span>
@@ -23,14 +16,14 @@ class AssetChooserModeToggle extends HTMLElement {
           id="select-mode-button" 
           class="mode-button"
         >
-          <span class="glyphicons-svg glyphicons-svg-cursor"></span>
-          <span class="mode-button-text">Select</span>
+          <span class="mode-button-icon"><calcite-icon icon="cursor" /></span>
+          Select</span>
         </button>
         <button
           id="sketch-mode-button" 
           class="mode-button"
         >
-          <span class="glyphicons-svg glyphicons-svg-pencil"></span>
+          <span class="mode-button-icon"><calcite-icon icon="pencil" /></span>
           <span class="mode-button-text">Sketch</span>
         </button>
           </div>

@@ -61,8 +61,15 @@
   font-size: 0.8rem;
   pointer-events: none;
   white-space: nowrap;
-  padding-bottom: 2px;
-  padding-right: 0.25rem;
+  /* padding-bottom: 2px; */
+  /* padding-right: 0.25rem; */
+  padding-top: 0.15rem;
+  padding-bottom: 0.15rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .mode-status-banner-select {
@@ -76,7 +83,12 @@
 }
 
 .mode-status-icon {
-  margin-right: 0.5rem;
+  /* margin-right: 0.5rem; */
+}
+
+#mode-status-text-span {
+  /* margin-left: 0.5rem; */
+  /* margin-right: 0.25rem; */
 }
 
 #layer-data-container {
@@ -165,14 +177,16 @@
 .enable-sketch-button {
   font-size: 12px;
   background-color: #eeeeee;
-  transition: transform 0.1s;
+  /* transition: transform 0.1s; */
   padding-left: 6px;
   padding-right: 6px;
   min-width: 60px;
   color: #174054;
   visibility: hidden;
   border: 2px solid #174054;
-  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .enable-sketch-button:hover {
@@ -182,6 +196,7 @@
   box-shadow:
     0 2px 2px 0 rgba(0, 0, 0, 0.1),
     0 6px 10px 0 rgba(0, 0, 0, 0.1);
+    border: #333 2px solid;
 }
 
 .sketch-button-shadow {
@@ -292,8 +307,8 @@
 #accomodation-button {
   margin: 0 !important;
   /* margin-top: 1rem !important; */
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 0.25rem 1.42rem !important;
+  /* transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); */
+  /* padding: 0.25rem 1.42rem !important; */
   font-size: 1rem;
 }
 #accomodation-button:hover {
@@ -323,7 +338,7 @@
 }
 
 #accessibility-icon {
-  margin-right: 5px;
+  /* margin-right: 5px; */
 }
 
 .accessible-accommodation-num-assets-required {
@@ -386,11 +401,15 @@ asset-chooser-map-layer-data-display li {
 
 .mode-button {
   margin-top: 0.25rem;
-  margin-bottom: 1rem;
-  padding: 0.25rem 1.42rem;
+  margin-bottom: .75rem;
+  /* padding: 0.25rem 1.42rem; */
   font-size: 1rem;
   border: black 1px solid;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  /* transition: transform 0.6s; */
+  display: flex;
+  align-items: center;
+  padding-top: .25rem;
+  padding-bottom: .25rem;
 }
 
 .mode-button:hover {
@@ -402,6 +421,10 @@ asset-chooser-map-layer-data-display li {
 
 .mode-button:active {
   transform: scale(0.95);
+}
+
+.mode-button-icon {
+  margin-right: 0.5rem;
 }
 
 #select-mode-button {

@@ -391,7 +391,7 @@ export const initializeMap = async () => {
     mapContainer.appendChild(modeStatusBanner);
     const modeStatusIconSpan = document.createElement("span");
     modeStatusIconSpan.id = "mode-status-icon-span";
-    modeStatusIconSpan.classList.add("mode-status-icon", "glyphicons-svg");
+    modeStatusIconSpan.classList.add("mode-status-icon");
     modeStatusBanner.appendChild(modeStatusIconSpan);
     const modeStatusTextSpan = document.createElement("span");
     modeStatusTextSpan.id = "mode-status-text-span";

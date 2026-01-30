@@ -38,7 +38,6 @@ class AssetChooserContainerComponent extends HTMLElement {
              <span id="mode-status-banner"></span>
             </div>
           </div>
-         
           <div class="row" id="layer-data-container">
           </div>
         </section>
@@ -86,8 +85,10 @@ class AssetChooserContainerComponent extends HTMLElement {
       accomodationButton.setAttribute("title", accomodationButtonMessage);
       buttonContainer.appendChild(accomodationButton);
       accomodationButton.innerHTML = `
-        <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched">
+        <span id="accessibility-icon">
+        <calcite-icon icon="person-2" />
         </span>
+        
         Accessible Accommodation
       `;
       const accomodationButtonHint = document.createElement("p");
