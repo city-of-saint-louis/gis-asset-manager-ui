@@ -72,13 +72,25 @@ const enableSketchForLayer = (layer) => {
 
   const modeStatusTextSpan = document.getElementById("mode-status-text-span");
   modeStatusTextSpan.innerText = `Sketch Mode Enabled for ${layer.graphicsLayer.formattedLayerName}.`;
-  modeStatusBanner.prepend(geometryIcon);
+  const modeStatusIconSpan = document.getElementById("mode-status-icon-span");
+  // modeStatusBanner.prepend(geometryIcon);
+  modeStatusIconSpan.innerHTML = ""; // Clear existing icons
+  modeStatusIconSpan.appendChild(geometryIcon);
   const enableSketchButtons = document.querySelectorAll(
     ".enable-sketch-button",
   );
   enableSketchButtons.forEach((element) => {
     element.classList.remove("sketch-button-shadow", "pointer-events-none");
     element.disabled = false;
+  });
+  const otherEnableSketchButtons = document.querySelectorAll(
+    `.enable-sketch-button:not(#enable-sketch-btn-${layer.graphicsLayer.formattedLayerName.replace(/[-, _]/g, "-")})`,
+  );
+  otherEnableSketchButtons.forEach((element) => {
+    const buttonIcon = element.querySelector("calcite-icon");
+    buttonIcon.setAttribute("icon", "pencil");
+   
+    
   });
   // Sanitize the layer title the same way as in asset-chooser-map-layer-data-display.js
   const sanitizedLayerName = layer.name

@@ -678,6 +678,7 @@ export const handleSelectEnabled = () => {
     // Add the cursor icon
     const cursorIcon = document.createElement("calcite-icon");
     cursorIcon.setAttribute("icon", "cursor");
+    cursorIcon.setAttribute("scale", "s");
     modeStatusIconSpan.appendChild(cursorIcon);
   }
 
@@ -853,8 +854,18 @@ export const handleSketchEnabled = () => {
   modeStatusBanner.classList.add("mode-status-banner-sketch");
 
   const modeStatusIconSpan = document.getElementById("mode-status-icon-span");
-  // modeStatusIconSpan.classList.remove("glyphicons-svg-cursor");
-  // modeStatusIconSpan.classList.add("glyphicons-svg-pencil");
+  if (modeStatusIconSpan) {
+    // Remove any existing calcite-icon
+    const existingIcon = modeStatusIconSpan.querySelector("calcite-icon");
+    if (existingIcon) {
+      modeStatusIconSpan.removeChild(existingIcon);
+    }
+    // Add the pencil icon
+    const pencilIcon = document.createElement("calcite-icon");
+    pencilIcon.setAttribute("icon", "pencil");
+    pencilIcon.setAttribute("scale", "s");
+    modeStatusIconSpan.appendChild(pencilIcon);
+  }
 
   const modeStatusTextSpan = document.getElementById("mode-status-text-span");
   modeStatusTextSpan.innerText = "Sketch Mode enabled. Select layer below.";

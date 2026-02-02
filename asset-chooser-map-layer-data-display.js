@@ -337,7 +337,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
                 aria-label="enable sketch for ${displayName} layer"
                 title="Enable sketch for ${displayName} layer"
               >
-                <span id="enable-sketch-icon-${sanitizedLayerName}"><calcite-icon icon="pencil" scale="s" /></span>Sketch</button>
+                <span class="enable-sketch-icon" id="enable-sketch-icon-${sanitizedLayerName}"><calcite-icon icon="pencil" scale="s" /></span>Sketch</button>
             `
                 : ""
             }
