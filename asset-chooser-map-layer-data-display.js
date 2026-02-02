@@ -235,7 +235,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
           aria-label="${displayName} Layer"
           title="${displayName} Layer"
         >
-          <div>
+          <div class="layer-data-display-title-div">
             <span class="layer-data-display-asset-type-icon-span-${isSketchable ? "sketch" : "select"}" id="${sanitizedLayerName}-layer-asset-type-icon"> ${
               isSketchable ? `<calcite-icon icon="pencil" />` : `<calcite-icon icon="cursor" />`
             }</span>
