@@ -667,9 +667,19 @@ export const handleSelectEnabled = () => {
   modeStatusBanner.classList.remove("mode-status-banner-sketch");
   modeStatusBanner.classList.add("mode-status-banner-select");
 
+ // Replace the icon in the mode status banner
   const modeStatusIconSpan = document.getElementById("mode-status-icon-span");
-  modeStatusIconSpan.classList.remove("glyphicons-svg-pencil");
-  modeStatusIconSpan.classList.add("glyphicons-svg-cursor");
+  if (modeStatusIconSpan) {
+    // Remove any existing calcite-icon
+    const existingIcon = modeStatusIconSpan.querySelector("calcite-icon");
+    if (existingIcon) {
+      modeStatusIconSpan.removeChild(existingIcon);
+    }
+    // Add the cursor icon
+    const cursorIcon = document.createElement("calcite-icon");
+    cursorIcon.setAttribute("icon", "cursor");
+    modeStatusIconSpan.appendChild(cursorIcon);
+  }
 
   const modeStatusTextSpan = document.getElementById("mode-status-text-span");
   modeStatusTextSpan.innerText = `Select Mode enabled for ${formattedSelectableLayerNames}.`;
