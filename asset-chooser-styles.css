@@ -65,8 +65,8 @@
   /* padding-right: 0.25rem; */
   padding-top: 0.15rem;
   padding-bottom: 0.15rem;
-  padding-left: 0.35rem;
-  padding-right: 0.35rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -83,12 +83,14 @@
 }
 
 .mode-status-icon {
-  /* margin-right: 0.5rem; */
+  /* margin-top: 0.1rem; */
 }
 
 #mode-status-text-span {
   /* margin-left: 0.5rem; */
   /* margin-right: 0.25rem; */
+  display: flex;
+  align-items: center;
 }
 
 #layer-data-container {
@@ -343,10 +345,6 @@
   margin: 0;
 }
 
-#accessibility-icon {
-  /* margin-right: 5px; */
-}
-
 .accessible-accommodation-num-assets-required {
   margin-top: 0;
   margin-bottom: 0;
@@ -478,12 +476,16 @@ arcgis-search#asset-chooser-arcgis-search {
   }
   #mode-status-banner {
     left: -0.12rem;
-    top: -1.2rem;
+    top: -1.65rem;
   }
   arcgis-sketch#asset-chooser-sketch {
     top: -1.12em;
     left: -1.12rem;
   }
+  .mode-status-icon {
+  /* margin-right: 0.5rem; */
+  margin-top: 0.15rem;
+}
 }
 
 @media screen and (max-width: 768px) {
