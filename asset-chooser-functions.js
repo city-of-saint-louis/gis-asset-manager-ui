@@ -693,6 +693,12 @@ export const handleSelectEnabled = () => {
     button.classList.remove("sketch-button-shadow", "pointer-events-none");
     button.disabled = false;
   });
+  const enableSketchIcons = document.querySelectorAll(
+    ".enable-sketch-icon"
+  );
+  enableSketchIcons.forEach((icon) => {
+    icon.innerHTML = `<calcite-icon icon="pencil" scale="s"></calcite-icon>`;
+  });
   const mapContainer = document.getElementById("viewDiv");
   mapContainer.classList.remove("sketch-shadow", "sketch-border");
   mapContainer.classList.add("select-shadow", "select-border");

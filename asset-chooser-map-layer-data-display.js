@@ -236,7 +236,7 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
           title="${displayName} Layer"
         >
           <div>
-            <span> ${
+            <span class="layer-data-display-asset-type-icon-span-${isSketchable ? "sketch" : "select"}" id="${sanitizedLayerName}-layer-asset-type-icon"> ${
               isSketchable ? `<calcite-icon icon="pencil" />` : `<calcite-icon icon="cursor" />`
             }</span>
             <span>${displayName}</span>

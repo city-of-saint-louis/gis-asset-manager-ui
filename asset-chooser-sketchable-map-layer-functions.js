@@ -52,11 +52,13 @@ const enableSketchForLayer = (layer) => {
   console.log("layerGeometryType:", layerGeometryType);
   const modeStatusBanner = document.getElementById("mode-status-banner");
   // Clear existing geometry icon if present
-  const existingGeometryIcon = modeStatusBanner.querySelector(".current-sketch-geometry-icon");
+  const existingGeometryIcon = modeStatusBanner.querySelector(
+    ".current-sketch-geometry-icon",
+  );
   if (existingGeometryIcon) {
     existingGeometryIcon.remove();
   }
-  
+
   const geometryIcon = document.createElement("calcite-icon");
   geometryIcon.setAttribute("scale", "s");
   geometryIcon.classList.add("current-sketch-geometry-icon");
@@ -89,8 +91,6 @@ const enableSketchForLayer = (layer) => {
   otherEnableSketchButtons.forEach((element) => {
     const buttonIcon = element.querySelector("calcite-icon");
     buttonIcon.setAttribute("icon", "pencil");
-   
-    
   });
   // Sanitize the layer title the same way as in asset-chooser-map-layer-data-display.js
   const sanitizedLayerName = layer.name
@@ -110,17 +110,38 @@ const enableSketchForLayer = (layer) => {
   );
   layerEnableSketchButton.disabled = true;
   // Find the <calcite-icon> inside the button
-const buttonIcon = layerEnableSketchButton.querySelector(`#enable-sketch-icon-${sanitizedLayerName} calcite-icon`);
-if (buttonIcon) {
-  buttonIcon.setAttribute(
-    "icon",
-    layerGeometryType === "polygon"
-      ? "polygon"
-      : layerGeometryType === "polyline"
-        ? "line"
-        : "pin"
+  const buttonIcon = layerEnableSketchButton.querySelector(
+    `#enable-sketch-icon-${sanitizedLayerName} calcite-icon`,
   );
-}
+  if (buttonIcon) {
+    buttonIcon.setAttribute(
+      "icon",
+      layerGeometryType === "polygon"
+        ? "polygon"
+        : layerGeometryType === "polyline"
+          ? "line"
+          : "pin",
+    );
+  }
+
+  const layerAssetTypeIcon = document.getElementById(`${sanitizedLayerName}-layer-asset-type-icon`);
+  if (layerAssetTypeIcon) {
+    layerAssetTypeIcon.innerHTML = `<calcite-icon icon="${
+      layerGeometryType === "polygon"
+        ? "polygon"
+        : layerGeometryType === "polyline"
+          ? "line"
+          : "pin"
+    }" />`;
+  }
+
+  const otherLayerAssetTypeIcons = document.querySelectorAll(".layer-data-display-asset-type-icon-span-sketch");
+  otherLayerAssetTypeIcons.forEach((element) => {
+    if (element.id !== `${sanitizedLayerName}-layer-asset-type-icon`) {
+      element.innerHTML = `<calcite-icon icon="pencil" />`;
+    }
+  });
+
   const sketch = document.getElementById("asset-chooser-sketch");
   if (sketch && sketch.shadowRoot) {
     const style = document.createElement("style");
