@@ -6,7 +6,7 @@
 
 The GIS Asset Chooser Module utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) to create an interactive map that can be configured with various different graphic layers.
 
-Users can select assets contained within the graphic layers by mouse click. Developers can configure the module to fit a specific use case by passing property values to the module's two custom elements.
+Developers can configure the module to fit a specific use case by passing property values to the module's custom elements. Users can select assets contained within the graphic layers by mouse click and/or add assets using the Sketch feature depending on the configuration.
 
 The GIS Asset Chooser Module is not a standalone application. It is intended for use within a parent application and was built with flexibility in mind.
 
