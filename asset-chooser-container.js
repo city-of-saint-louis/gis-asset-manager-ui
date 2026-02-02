@@ -42,35 +42,8 @@ class AssetChooserContainerComponent extends HTMLElement {
           </div>
         </section>
       `;
-      // this.innerHTML = `
-      //   <section id="asset-chooser-interface">
-      //     <h2 id="asset-chooser-title">${this.title}</h2>
-      //     <p id="asset-chooser-hint" data-original-hint="${this.hint}">${this.hint}</p>
-      //     <div id="asset-chooser-map-and-layer-data-wrapper">
-      //       <div id="viewDiv" aria-label="Interactive map for selecting and adding assets">
-      //       </div>
-      //       <div class="row" id="layer-data-container">
-      //       </div>
-      //     </div>
-      //      <div id="accomodation-button-container">
-      //       <button
-      //         type="button"
-      //         id="accomodation-button"
-      //         class="link-button inverse-button"
-      //         aria-label="${accomodationButtonMessage}"
-      //         title="${accomodationButtonMessage}"
-      //       >
-      //         <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched">
-      //         </span>
-      //         Accessible Accommodation
-      //       </button>
-      //     </div>
-      //   </section>
-      // `;
-      // Add event listener for the accomodation button click
-      // const accomodationButton = this.querySelector("#accomodation-button");
+      
       const buttonContainer = this.querySelector("#asset-chooser-button-container");
-      // buttonContainer.style.display = "flex";
       
       if (this.isSelectEnabled && this.isSketchEnabled) {
         const modeToggleSwitch = document.createElement("asset-chooser-mode-toggle");
@@ -112,34 +85,3 @@ class AssetChooserContainerComponent extends HTMLElement {
 }
 
 export { AssetChooserContainerComponent };
-
-
-//  <p id="validity-message" title="Selection requirements"></p>
-
-//  <div class="row" id="asset-chooser-map-and-layer-data-wrapper">
-//             <div class="col-md-7">
-//               <div id="viewDiv" style="width: 100%; height: 500px;" aria-label="Interactive map for selecting and adding assets">
-//             </div>
-//             </div>
-//             <div class="col-md-5" id="layer-data-container">
-//               <div id="layer-data-div" class="stat-group"></div>
-//               <div id="sketchable-layer-data-div" class="stat-group"></div>
-//             </div>
-//           </div>
-
-
-
-
-
-
-{/* <button
-              type="button"
-              id="accomodation-button"
-              class="link-button inverse-button"
-              aria-label="${accomodationButtonMessage}"
-              title="${accomodationButtonMessage}"
-            >
-              <span id="accessibility-icon" class="glyphicons-svg glyphicons-svg-white glyphicons-svg-outstretched">
-              </span>
-              Accessible Accommodation
-            </button> */}
