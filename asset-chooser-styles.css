@@ -82,13 +82,11 @@
   color: #fff;
 }
 
-.mode-status-icon {
-  /* margin-top: 0.1rem; */
-}
+/* .mode-status-icon {
+  margin-top: 0.1rem;
+} */
 
 #mode-status-text-span {
-  /* margin-left: 0.5rem; */
-  /* margin-right: 0.25rem; */
   display: flex;
   align-items: center;
 }
@@ -217,6 +215,14 @@
 
 .invisible-button {
   display: none;
+}
+
+.remove-asset-btn {
+  gap: .25rem;
+  padding: .25rem !important;
+  padding-right: .35rem !important;
+  font-size: 0.75rem;
+ 
 }
 
 .remove-asset-btn:hover {
