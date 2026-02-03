@@ -240,3 +240,8 @@ button {
   margin-left: -15px;
   margin-right: -15px;
 }
+
+.disabled-button {
+  pointer-events: none;
+  color: inherit;
+}

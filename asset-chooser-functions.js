@@ -644,6 +644,14 @@ const injectMapSurfaceFocusStyle = () => {
 };
 
 export const handleSelectEnabled = () => {
+  const enableSelectModeButton = document.getElementById("select-mode-button");
+  enableSelectModeButton.setAttribute("disabled", "true");
+  enableSelectModeButton.classList.add("disabled-button");
+  
+  const sketchModeButton = document.getElementById("sketch-mode-button");
+  sketchModeButton.removeAttribute("disabled");
+  sketchModeButton.classList.remove("disabled-button");
+
   // console.log("featureLayers:", featureLayers);
   const selectableLayerNames = featureLayers.map(
     (layer) => layer.layerProperties.layerName
@@ -758,6 +766,12 @@ export const handleSelectEnabled = () => {
 };
 
 export const handleSketchEnabled = () => {
+  const enableSketchModeButton = document.getElementById("sketch-mode-button");
+  enableSketchModeButton.setAttribute("disabled", "true");
+  enableSketchModeButton.classList.add("disabled-button");
+  const selectModeButton = document.getElementById("select-mode-button");
+  selectModeButton.removeAttribute("disabled");
+  selectModeButton.classList.remove("disabled-button");
   // Show the mode status banner and update its style
   const modeStatusBanner = document.getElementById("mode-status-banner");
   modeStatusBanner.hidden = false;

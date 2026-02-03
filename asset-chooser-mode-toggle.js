@@ -15,13 +15,15 @@ class AssetChooserModeToggle extends HTMLElement {
         <button
           id="select-mode-button" 
           class="mode-button"
+          title="Enable Select Mode"
         >
           <span class="mode-button-icon"><calcite-icon icon="cursor" /></span>
-          Select</span>
+          <span class="mode-button-text">Select</span>
         </button>
         <button
           id="sketch-mode-button" 
           class="mode-button"
+          title="Enable Sketch Mode"
         >
           <span class="mode-button-icon"><calcite-icon icon="pencil" /></span>
           <span class="mode-button-text">Sketch</span>
