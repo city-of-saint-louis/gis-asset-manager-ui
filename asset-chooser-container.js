@@ -13,7 +13,7 @@ class AssetChooserContainerComponent extends HTMLElement {
     this.hint = this.getAttribute("hint") || "";
     this.isSelectEnabled = this.getAttribute("is-select-enabled") === "true";
     this.isSketchEnabled = this.getAttribute("is-sketch-enabled") === "true";
-    this.isSelectBySearchEnabled = this.getAttribute("is-select-by-search-enabled") === "true";
+    this.isSelectBySearchEnabled = this.getAttribute("is-select-by-search-enabled") === "false";
     this.titleHeadingLevel = this.getAttribute("title-heading-level") || "2";
   }
   connectedCallback() {

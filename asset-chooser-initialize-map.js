@@ -85,6 +85,7 @@ export const initializeMap = async () => {
       assetChooserContainer.getAttribute("center-y") || defaultCenterY;
     const showSearch =
       assetChooserContainer.getAttribute("show-search") || defaultShowSearch;
+      console.log("Show search:", showSearch);
     // const stLouisExtent = new Extent({
     //   xmin: -10054448.855908303,
     //   ymin: 4654966.477336443,
@@ -136,10 +137,10 @@ export const initializeMap = async () => {
       maxSuggestions: 4,
       suggestionsEnabled: true,
     };
-
+console.log("showSearch:", showSearch);
     if (showSearch === "true" || showSearch === true) {
+      console.log("Show search is enabled");
       const searchComponent = document.createElement("arcgis-search");
-      // searchComponent.setAttribute("position", "bottom-right");
       searchComponent.setAttribute("position", "top-right");
       searchComponent.setAttribute("popup-disabled", "true");
       searchComponent.setAttribute("include-default-sources-disabled", "true");
