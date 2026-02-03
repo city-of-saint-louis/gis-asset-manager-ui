@@ -314,9 +314,8 @@
 
 #accomodation-button {
   margin: 0 !important;
-  /* margin-top: 1rem !important; */
-  /* transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); */
-  /* padding: 0.25rem 1.42rem !important; */
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
   font-size: 1rem;
 }
 #accomodation-button:hover {
