@@ -486,7 +486,16 @@ export const renderSelectedAssetLabels = () => {
         removeAssetBtn.className =
           "pull-right link-button small-button red-button transparent-button remove-asset-btn";
         removeAssetBtn.title = `Remove ${assetLabel}`;
-        removeAssetBtn.innerHTML = `<span class="glyphicons glyphicons-remove"></span> Remove`;
+        // removeAssetBtn.innerHTML = `<span class="remove-button-text">Remove</span> `;
+        const removeIcon = document.createElement("calcite-icon");
+        removeIcon.setAttribute("icon", "x-circle");
+        removeIcon.setAttribute("scale", "s");
+        removeAssetBtn.appendChild(removeIcon);
+
+        const removeButtonTextSpan = document.createElement("span");
+        removeButtonTextSpan.className = "remove-button-text";
+        removeButtonTextSpan.textContent = "Remove";
+        removeAssetBtn.appendChild(removeButtonTextSpan);
 
         assetLabelListItem.appendChild(removeAssetBtn);
         selectedLayerAssetList.appendChild(assetLabelListItem);
