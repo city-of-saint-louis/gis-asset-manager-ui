@@ -2,7 +2,7 @@
 
 ## **Developed By The City of St. Louis Web Team**
 
-*Please note: The documentation below does not yet include the new Sketch feature currently in development. The Sketch feature can be seen in the demo deployment but is not yet documented.*
+_Please note: The documentation below does not yet include the new Sketch feature currently in development. The Sketch feature can be seen in the demo deployment but is not yet documented._
 
 ## **Description**
 
@@ -40,44 +40,65 @@ This file contains the functions that are only used in the asset chooser contain
 
 ### **asset-chooser-container.js**
 
- A reusable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Chooser, including the map, is rendered. It is a parent to **asset-chooser-map-layer.js**.
+A reusable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Chooser, including the map, is rendered. It is a parent to **asset-chooser-map-layer.js**.
 
 The Asset Chooser can be configured as needed by passing values for the following properties to the container element.
 
 1. **title**
-   - type: string
-   - description: An appropriate title based on the specific implementation of the GIS Asset Chooser
-   - default value: **none**
+   - **Type:** `string`
+   - **Description:** An appropriate title based on the specific implementation of the GIS Asset Chooser.
+   - **Default value:** _none_
+
 2. **hint**
-   - type: string
-   - description: A simple statement to let the user know what to do with the GIS Asset Chooser for the specific implementation
-   - default value: **none**
+   - **Type:** `string`
+   - **Description:** A simple statement to let the user know what to do with the GIS Asset Chooser for the specific implementation.
+   - **Default value:** _none_
+
 3. **zoom**
-   - type: number
-   - description: Sets the zoom level for the map when it first loads. The lower the number, the farther out the zoom level.
-   - default value: **12**
+   - **Type:** `number`
+   - **Description:** Sets the zoom level for the map when it first loads. The lower the number, the farther out the zoom level.
+   - **Default value:** `12`
+
 4. **base-map**
-   - type: string
-   - description: Sets the base map to be used for the ArcGIS Asset Chooser.
-   - default value: **"topo-vector"**
+   - **Type:** `string`
+   - **Description:** Sets the base map to be used for the ArcGIS Asset Chooser.
+   - **Default value:** `"topo-vector"`
+
 5. **center-x**
-   - type: number
-   - description: Sets the X coordinate for where the map will be entered
-   - default value: **-90.25** (By default the map centers on the center of the City of St. Louis.)
+   - **Type:** `number`
+   - **Description:** Sets the X coordinate for where the map will be centered.
+   - **Default value:** `-90.25` (By default the map centers on the center of the City of St. Louis.)
+
 6. **center-y**
-   - type: number
-   - description: Sets the Y coordinate for where the map will be entered
-   - default value: **38.64** (By default the map centers on the center of the City of St. Louis.)
+   - **Type:** `number`
+   - **Description:** Sets the Y coordinate for where the map will be centered.
+   - **Default value:** `38.64` (By default the map centers on the center of the City of St. Louis.)
+
 7. **show-search**
-   - type: boolean
-   - description: Determines if the search box is shown on the map or not.
-   - default value: **true**
+   - **Type:** `boolean`
+   - **Description:** Determines if the search box is shown on the map or not.
+   - **Default value:** `true`
 
-**Please note:**
+8. **is-select-enabled**
+   - **Type:** `boolean`
+   - **Description:** Determines if select mode is enabled, allowing users to select existing assets on the map.
+   - **Default value:** `true`
 
-***If a string is passed in instead of a number or a boolean, such as "12" instead of 12, or "false", instead of false, it will be converted to the proper data type.***
+9. **is-sketch-enabled**
+   - **Type:** `boolean`
+   - **Description:** Determines if sketch mode is enabled, allowing users to add new assets to the map.
+   - **Default value:** `false`
 
-***If a property is not included the default value will take effect.***
+10. **is-select-by-search-enabled**
+    - **Type:** `boolean`
+    - **Description:** Determines if select by search mode is enabled, allowing users to select assets by searching for them.
+    - **Default value:** `false`
+
+- type: boolean
+- description: Determines if select by search mode is enabled allowing users to select assets by searching for them.
+- default value: **false**
+
+  **_If a property is not included the default value will take effect._**
 
 ```html
 <asset-chooser-container
@@ -146,19 +167,19 @@ A map layer can be configured as needed by passing values for the following prop
 
 **Please note:**
 
-***If a string is passed in instead of a number, such as "4" instead of 4, it will be converted to the proper data type.***
+**_If a string is passed in instead of a number, such as "4" instead of 4, it will be converted to the proper data type._**
 
-***If a property is not included the default value will take effect.***
+**_If a property is not included the default value will take effect._**
 
 ```html
 <asset-chooser-map-layer
   name="Streets"
   layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
   layer-asset-id-field-name="OBJECTID"
-  minimum=1
-  maximum=3
+  minimum="1"
+  maximum="3"
   label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
-  min-scale=10000
+  min-scale="10000"
 >
 </asset-chooser-map-layer>
 ```
@@ -173,7 +194,7 @@ This file captures the x,y coordinates from address validation and the map layer
 
 ### **asset-chooser-styles.css**
 
-CSS stylesheet for the asset chooser module  
+CSS stylesheet for the asset chooser module
 
 ## **How To Use the GIS Asset Chooser Module**
 
@@ -192,7 +213,10 @@ In order for the GIS Asset Chooser you must bring the ArcGIS Maps SDK for JavaSc
 To utilize the CDN there are two tags, one for CSS and one for JavaScript. ArcGIS documentation recommends putting both in the HEAD of your HTML.
 
 ```html
-<link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css" />
+<link
+  rel="stylesheet"
+  href="https://js.arcgis.com/4.30/esri/themes/light/main.css"
+/>
 <script src="https://js.arcgis.com/4.30/"></script>
 ```
 
@@ -219,7 +243,10 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GIS Asset Chooser Demo</title>
     <!-- Bring in ArcGIS CSS -->
-    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.30/esri/themes/light/main.css"
+    />
     <!-- Bring in ArcGIS JavaScript -->
     <script src="https://js.arcgis.com/4.30/"></script>
   </head>
@@ -239,10 +266,10 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
           name="Streets"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
           layer-asset-id-field-name="OBJECTID"
-          minimum=1
-          maximum=3
+          minimum="1"
+          maximum="3"
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
-          min-scale=10000
+          min-scale="10000"
         >
         </asset-chooser-map-layer>
         <!-- Instance of the map layer custom element used to add "Parcels" layer. -->
@@ -250,10 +277,10 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
           name="Parcels"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/4"
           layer-asset-id-field-name="FID"
-          minimum=1
-          maximum=0
+          minimum="1"
+          maximum="0"
           label-mask="{SITEADDR}"
-          max-scale=10000
+          max-scale="10000"
         >
         </asset-chooser-map-layer>
       </asset-chooser-container>
@@ -295,18 +322,17 @@ Use the custom event listener below to handle when asset selection is not valid 
 // Custom event listener for when isValid is false (isValid = false)
 // Further customize as needed to fit your use case
 document.addEventListener("isValidFalse", function (event) {
-  // your logic here to handle when isValid is false 
+  // your logic here to handle when isValid is false
 });
-
 ```
 
 ### **Further customize event listeners to fit your use case**
 
-Customize the event listeners to fit your needs. Once received 'chosenAssets' can be consumed as needed within the parent application.  The event listeners can also be used to handle any necessary changes to the user interface, or run any other necessary logic.
+Customize the event listeners to fit your needs. Once received 'chosenAssets' can be consumed as needed within the parent application. The event listeners can also be used to handle any necessary changes to the user interface, or run any other necessary logic.
 
 #### Some possible integration strategies include
 
-1. save chosen asset data to a new variable scoped for the parent application  
+1. save chosen asset data to a new variable scoped for the parent application
 2. use local storage to save 'chosenAssets'
 3. use a submit button to send or store 'chosenAssets' to desired location
 4. store to database
@@ -324,9 +350,13 @@ document.addEventListener("isValidTrue", function (event) {
   console.log("chosenAssets received:", chosenAssets);
   // example of a possible integration strategy using local storage and a submit button
   localStorage.setItem("chosenAssets", JSON.stringify(chosenAssets));
-  document.getElementById("submit-chosen-assets-button").removeAttribute("disabled");
-  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 10px 5px #538400";
-}); 2
+  document
+    .getElementById("submit-chosen-assets-button")
+    .removeAttribute("disabled");
+  document.getElementById("submit-chosen-assets-button").style.boxShadow =
+    "0px 0px 10px 5px #538400";
+});
+2;
 ```
 
 #### Example of using 'isValidFalse' event listener
@@ -335,8 +365,11 @@ document.addEventListener("isValidTrue", function (event) {
 // Custom event listener for when isValid is false
 // example of possible integration strategy with a submit button and local storage
 document.addEventListener("isValidFalse", function (event) {
-  document.getElementById("submit-chosen-assets-button").setAttribute("disabled", true);
-  document.getElementById("submit-chosen-assets-button").style.boxShadow = "0px 0px 0px 0px ";
+  document
+    .getElementById("submit-chosen-assets-button")
+    .setAttribute("disabled", true);
+  document.getElementById("submit-chosen-assets-button").style.boxShadow =
+    "0px 0px 0px 0px ";
   localStorage.removeItem("chosenAssets");
 });
 ```
