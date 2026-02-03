@@ -1,18 +1,20 @@
 # **GIS Asset Chooser Module**
 
+## **Developed By The City of St. Louis Web Team**
+
 *Please note: The documentation below does not yet include the new Sketch feature currently in development. The Sketch feature can be seen in the demo deployment but is not yet documented.*
 
 ## **Description**
 
-The GIS Asset Chooser Module utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) to create an interactive map that can be configured with various different graphic layers for selecting assets or blank layers for adding new assets.
+The GIS Asset Chooser Module utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) to create an interactive map that can be configured with various different graphic layers for selecting existing assets or for adding new assets.
 
 Developers can configure the module to fit a specific use case by passing property values to the module's custom elements. Users can select assets contained within the graphic layers by mouse click and/or add assets using the Sketch feature depending on the configuration.
 
 The GIS Asset Chooser Module is not a standalone application. It is intended for use within a parent application and was built with flexibility in mind.
 
-When the asset selection requirements have been met by the user, the array of chosen assets ('chosenAssets') becomes available to the parent application through a custom event.
+When the asset requirements have been met by the user, the array of chosen assets ('chosenAssets') and the array of newly sketched assets ('createdAssets') become available to the parent application through a custom events that are triggered automatically when the asset requirements are met.
 
-The parent application can then receive the 'chosenAssets' array through the use of a custom event listener and consume the data as needed.
+The parent application can then receive the 'chosenAssets' and 'createdAssets' arrays through the use of custom event listeners. The parent application can then consume the data as needed.
 
 ## **[Link to Demo](https://miniature-chainsaw-9qqvvzp.pages.github.io/)**
 
