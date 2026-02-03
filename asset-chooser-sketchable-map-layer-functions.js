@@ -507,10 +507,21 @@ const renderCreatedAssetLabel = (graphic) => {
       "transparent-button",
       "remove-asset-btn",
     );
-    const removeIconSpan = document.createElement("span");
-    removeIconSpan.classList.add("glyphicons", "glyphicons-remove");
-    listItemRemoveButton.appendChild(removeIconSpan);
-    listItemRemoveButton.appendChild(document.createTextNode(" Remove"));
+    // const removeIconSpan = document.createElement("span");
+    // removeIconSpan.classList.add("glyphicons", "glyphicons-remove");
+    // listItemRemoveButton.appendChild(removeIconSpan);
+    // listItemRemoveButton.appendChild(document.createTextNode(" Remove"));
+    const removeIcon = document.createElement("calcite-icon");
+    removeIcon.setAttribute("icon", "x-circle");
+    removeIcon.setAttribute("scale", "s");
+    listItemRemoveButton.appendChild(removeIcon);
+
+    const removeButtonTextSpan = document.createElement("span");
+        removeButtonTextSpan.className = "remove-button-text";
+        removeButtonTextSpan.textContent = "Remove";
+        listItemRemoveButton.appendChild(removeButtonTextSpan);
+
+    // --- Remove asset event listener ---
     listItemRemoveButton.addEventListener("click", () => {
       handleRemoveSketchedAsset(graphic.attributes.id);
       renderValidityMessage();

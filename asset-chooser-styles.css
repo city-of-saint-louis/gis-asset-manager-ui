@@ -4,11 +4,6 @@
   margin: 0 auto;
 }
 
-/* #asset-chooser-title {
-  margin: 0;
-  padding: 0;
-} */
-
 #asset-chooser-hint {
   font-size: 0.9rem;
   margin-bottom: 0rem;
@@ -222,7 +217,7 @@
   padding: .25rem !important;
   padding-right: .35rem !important;
   font-size: 0.75rem;
- 
+flex-shrink: 0; 
 }
 
 .remove-asset-btn:hover {
@@ -398,6 +393,24 @@ asset-chooser-map-layer-data-display li {
   background: transparent;
   border: none;
   border-radius: 0;
+}
+
+.chosen-asset-data-list li,
+.created-asset-data-list li {
+  background: #f0f0f0;
+  margin-bottom: 0.25rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #cccccc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.asset-list-item-content-span {
+  flex: 1 1 auto;      /* <-- add this to make label take all available space */
+  min-width: 0;        /* <-- add this for text-overflow to work if needed */
+  /* ...existing styles... */
 }
 
 #asset-chooser-mode-toggle-container {
