@@ -20,8 +20,60 @@ The parent application can then receive the 'chosenAssets' and 'createdAssets' a
 
 ## **Contents**
 
+- [Getting Started](#getting-started)
 - [Parts of the GIS Asset Chooser Module](#parts-of-the-gis-asset-chooser-module)
 - [How To Use the GIS Asset Chooser Module](#how-to-use-the-gis-asset-chooser-module)
+
+## Getting Started
+
+### Installation
+
+There are two ways to use the GIS Asset Chooser Module in your project:
+
+**_Please note: The commands below are placeholders to be updated once the module is published to npm._**
+
+1. You can install the module via npm:
+
+   ```bash
+   npm install gis-asset-chooser
+   ```
+
+2. You can use the GIS Asset Chooser Module via a CDN:
+
+   ```html
+   <script src="https://cdn.jsdelivr.net/npm/gis-asset-chooser/dist/gis-asset-chooser.js"></script>
+   ```
+
+### ArcGIS Maps SDK for JavaScript
+
+The GIS Asset Chooser Module relies on the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest). You will need to include this SDK in your project for the module to function correctly. To utilize the SDK in your project include the necessary script tags in the order shown below in the `<head>` section of your HTML file:
+
+```html
+<!-- Load Calcite Design System -->
+<script type="module" src="https://js.arcgis.com/calcite-components/3.3.3/calcite.esm.js"></script>
+
+<!-- Load the JavaScript Maps SDK core API -->
+<script src="https://js.arcgis.com/4.34/"></script>
+
+<!-- Load the JavaScript Maps SDK Map components or other component packages -->
+<script type="module" src="https://js.arcgis.com/4.34/map-components/"></script>
+```
+
+According to the ArcGIS Maps SDK for JavaScript documentation, you can also install the SDK via npm although the documentation is a bit vague on which packages are required.
+
+The documentation references the following command to install ArcGIS Map Components:
+
+```bash
+npm install @arcgis/map-components
+```
+
+There is also the option to install the ArcGIS Maps SDK for JavaScript via npm:
+
+```bash
+npm install @arcgis/core
+```
+
+Refer to the [ArcGIS Maps SDK for JavaScript documentation](https://developers.arcgis.com/javascript/latest/get-started/) for more information.
 
 ## Parts of the GIS Asset Chooser Module
 
@@ -94,11 +146,14 @@ The Asset Chooser can be configured as needed by passing values for the followin
     - **Description:** Determines if select by search mode is enabled, allowing users to select assets by searching for them.
     - **Default value:** `false`
 
-- type: boolean
-- description: Determines if select by search mode is enabled allowing users to select assets by searching for them.
-- default value: **false**
+11. **title-heading-level**
+    - **Type:** `number`
+    - **Description:** Sets the heading level for the title of the asset chooser (h1 - h6). Pass in a number from 1 to 6.
+    - **Default value:** `2`
 
-  **_If a property is not included the default value will take effect._**
+  **_If a value is not provided for a property, the default value will take effect._**
+
+### HTML example
 
 ```html
 <asset-chooser-container
@@ -106,6 +161,15 @@ The Asset Chooser can be configured as needed by passing values for the followin
   hint="Select the street segments for your proposed parade route."
 >
 </asset-chooser-container>
+```
+
+### JavaScript example
+
+```javascript
+const assetChooserContainer = document.createElement('asset-chooser-container');
+assetChooserContainer.setAttribute('title', 'Parade Permit Application');
+assetChooserContainer.setAttribute('hint', 'Select the street segments for your proposed parade route.');
+assetChooserContainer.setAttribute('title-heading-level', '1');
 ```
 
 The asset chooser container also houses the **accessibility accommodation**. Users navigating by keyboard are unable to tab into the map and select assets with the keyboard. Even if they could, a map layer may contain thousands of assets. It is not reasonable to ask someone to tab through thousands of assets to find the one they need. In order to account for this we have provided an accommodation for folks navigating by keyboard and using assistive technology such as a screen reader. We have placed a button above the map for users who need to access this accommodation. When the button is clicked a modal opens with a text input allowing users to enter information on their required assets.
@@ -215,9 +279,9 @@ To utilize the CDN there are two tags, one for CSS and one for JavaScript. ArcGI
 ```html
 <link
   rel="stylesheet"
-  href="https://js.arcgis.com/4.30/esri/themes/light/main.css"
+  href="https://js.arcgis.com/4.34/esri/themes/light/main.css"
 />
-<script src="https://js.arcgis.com/4.30/"></script>
+<script src="https://js.arcgis.com/4.34/"></script>
 ```
 
 ### **Bring in GIS Asset Chooser Module JavaScript**
