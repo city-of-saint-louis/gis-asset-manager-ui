@@ -59,7 +59,7 @@ The GIS Asset Chooser Module relies on the [ArcGIS Maps SDK for JavaScript](http
 <script type="module" src="https://js.arcgis.com/4.34/map-components/"></script>
 ```
 
-According to the ArcGIS Maps SDK for JavaScript documentation, you can also install the SDK via npm although the documentation is a bit vague on which packages are required.
+According to the [ArcGIS Maps SDK for JavaScript documentation](https://developers.arcgis.com/javascript/latest/get-started/), you can also install the SDK via npm although the documentation is a bit vague on which packages are required.
 
 The documentation references the following command to install ArcGIS Map Components:
 
@@ -76,6 +76,14 @@ npm install @arcgis/core
 Refer to the [ArcGIS Maps SDK for JavaScript documentation](https://developers.arcgis.com/javascript/latest/get-started/) for more information.
 
 ## Parts of the GIS Asset Chooser Module
+
+### Custom Elements
+
+1. AssetChooserContainer
+2. 
+3. 
+
+### Other Files
 
 1. [assest-chooser-container-functions.js](#asset-chooser-container-functionsjs)
 2. [asset-chooser-container.js](#asset-chooser-containerjs)
@@ -229,11 +237,7 @@ A map layer can be configured as needed by passing values for the following prop
    - description: Use "min-scale" and "max-scale" if you want a map layer to only appear at certain zoom levels.
    - default value: none
 
-**Please note:**
-
-**_If a string is passed in instead of a number, such as "4" instead of 4, it will be converted to the proper data type._**
-
-**_If a property is not included the default value will take effect._**
+ **_If a value is not provided for a property, the default value will take effect._**
 
 ```html
 <asset-chooser-map-layer

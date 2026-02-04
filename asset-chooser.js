@@ -1,9 +1,9 @@
-// import AssetChooserContainerComponent from asset-chooser-container.js
-import { AssetChooserContainerComponent } from "./asset-chooser-container.js";
-// import MapLayer from asset-chooser-map-layer.js
-import { MapLayer } from "./asset-chooser-map-layer.js";
-// import SketchableMapLayer from asset-chooser-sketchable-map-layer.js
-import { SketchableMapLayer } from "./asset-chooser-sketchable-map-layer.js";
+// import AssetChooserContainer from asset-chooser-container.js
+import { AssetChooserContainer } from "./asset-chooser-container.js";
+// import AssetChooserMapLayer from asset-chooser-map-layer.js
+import { AssetChooserMapLayer } from "./asset-chooser-map-layer.js";
+// import AssetChooserSketchableMapLayer from asset-chooser-sketchable-map-layer.js
+import { AssetChooserSketchableMapLayer } from "./asset-chooser-sketchable-map-layer.js";
 // import AssetChooserMapLayerDataDisplay from asset-chooser-map-layer-data-display.js
 import { AssetChooserMapLayerDataDisplay } from "./asset-chooser-map-layer-data-display.js";
 // import AssetChooserModeToggle from asset-chooser-mode-toggle.js
@@ -33,14 +33,14 @@ document.addEventListener("coordinatesAvailable", (event) => {
 captureMapLayers();
 // capture the sketchable map layers added to the asset-chooser-container component
 captureSketachableMapLayers();
-// initialize the map after the DOM content has loaded and the MapLayer and AssetChooserContainerComponent components are defined
+// initialize the map after the DOM content has loaded and the MapLayer and AssetChooserContainer components are defined
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("asset-chooser-mode-toggle", AssetChooserModeToggle);
-  customElements.define("asset-chooser-map-layer", MapLayer);
-  customElements.define("asset-chooser-sketchable-map-layer", SketchableMapLayer);
+  customElements.define("asset-chooser-map-layer", AssetChooserMapLayer);
+  customElements.define("asset-chooser-sketchable-map-layer", AssetChooserSketchableMapLayer);
   customElements.define("asset-chooser-map-layer-data-display", AssetChooserMapLayerDataDisplay);
-  customElements.define("asset-chooser-container", AssetChooserContainerComponent);
-  // Wait for the AssetChooserContainerComponent to be defined and rendered before initializing the map
+  customElements.define("asset-chooser-container", AssetChooserContainer);
+  // Wait for the AssetChooserContainer to be defined and rendered before initializing the map
   customElements.whenDefined('asset-chooser-container').then(() => {
     // Wait a tick for rendering
     setTimeout(() => {

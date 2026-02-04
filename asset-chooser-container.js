@@ -6,7 +6,7 @@ import {
   setIsSelectBySearchEnabled,
 } from "./asset-chooser-state.js";
 
-class AssetChooserContainerComponent extends HTMLElement {
+class AssetChooserContainer extends HTMLElement {
   constructor() {
     super(); // always call super() first in the constructor for a custom web component
     this.title = this.getAttribute("title") || "";
@@ -21,7 +21,7 @@ class AssetChooserContainerComponent extends HTMLElement {
     enableSelectMode(this.isSelectEnabled);
     if (this.isSelectBySearchEnabled) {
       setIsSelectBySearchEnabled(true);
-      // console.log("Select by search is enabled in AssetChooserContainerComponent");
+      // console.log("Select by search is enabled in AssetChooserContainer");
     }
     const accomodationButtonMessage =
       "Click this button to enter assets if you are using assistive technology and are unable to select assets on the map.";
@@ -84,4 +84,4 @@ class AssetChooserContainerComponent extends HTMLElement {
   }
 }
 
-export { AssetChooserContainerComponent };
+export { AssetChooserContainer };
