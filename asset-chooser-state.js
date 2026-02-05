@@ -9,8 +9,8 @@ export const defaultCenterY = 38.64; // latitude, centered on St. Louis, MO
 // default extent in Web Mercator (102100) keeps St. Louis city limits in view
 export const defaultExtent = {
   xmin: -10054448.855908303,
-  ymin: 4654966.477336443,
   xmax: -10038240.32627997,
+  ymin: 4654966.477336443,
   ymax: 4689440.938430255,
   spatialReference: { wkid: 102100 },
 };

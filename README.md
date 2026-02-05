@@ -2,19 +2,21 @@
 
 ## **Developed By The City of St. Louis Web Team**
 
-_Please note: The documentation below does not yet include the new Sketch feature currently in development. The Sketch feature can be seen in the demo deployment but is not yet documented._
+_Please note: The documentation below is in process and is not yet fully comprehensive._
 
 ## **Description**
 
 The GIS Asset Chooser Module utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) to create an interactive map that can be configured with various different graphic layers for selecting existing assets or for adding new assets.
 
-Developers can configure the module to fit a specific use case by passing property values to the module's custom elements. Users can select assets contained within the graphic layers by mouse click and/or add assets using the Sketch feature depending on the configuration.
+Developers can configure the module to fit a specific use case by passing property values to the module's custom elements. Users can select assets contained within the graphic layers by mouse click and/or add assets using the Sketch feature depending on the configuration. The GIS Asset Chooser Module can be configured to run in **Select Mode** allowing users to select existing assets, **Sketch Mode** allowing users to add new assets, or **both modes simultaneously**.
 
-The GIS Asset Chooser Module is not a standalone application. It is intended for use within a parent application and was built with flexibility in mind.
+Selected assets are added to an array called 'chosenAssets', and newly sketched assets are added to an array called 'createdAssets'.
 
-When the asset requirements have been met by the user, the array of chosen assets ('chosenAssets') and the array of newly sketched assets ('createdAssets') become available to the parent application through a custom events that are triggered automatically when the asset requirements are met.
+The GIS Asset Chooser Module is not a standalone application. It is intended for use within a parent application.
 
-The parent application can then receive the 'chosenAssets' and 'createdAssets' arrays through the use of custom event listeners. The parent application can then consume the data as needed.
+When the asset requirements have been met by the user, the array of chosen assets ('chosenAssets') and/or the array of newly sketched assets ('createdAssets') become available to the parent application through custom events that are triggered automatically when the asset requirements are met.
+
+The parent application can then receive the 'chosenAssets' array and/or the 'createdAssets' array through the use of custom event listeners. The parent application can then consume the data as needed.
 
 ## **[Link to Demo](https://miniature-chainsaw-9qqvvzp.pages.github.io/)**
 
@@ -23,6 +25,7 @@ The parent application can then receive the 'chosenAssets' and 'createdAssets' a
 - [Getting Started](#getting-started)
 - [Parts of the GIS Asset Chooser Module](#parts-of-the-gis-asset-chooser-module)
 - [How To Use the GIS Asset Chooser Module](#how-to-use-the-gis-asset-chooser-module)
+- [Accessible Accommodation](#accessible-accommodation)
 
 ## Getting Started
 
@@ -173,6 +176,31 @@ The Asset Chooser can be configured as needed by passing values for the followin
     - **Type:** `number`
     - **Description:** Sets the heading level for the title of the asset chooser (h1 - h6). Pass in a number from 1 to 6.
     - **Default value:** `2`
+
+12. **extent-xmin**
+    - **Type:** `number`
+    - **Description:** Sets the minimum X coordinate for the map extent.
+    - **Default value:** `-10054448.855908303`
+
+13. **extent-xmax**
+    - **Type:** `number`
+    - **Description:** Sets the maximum X coordinate for the map extent.
+    - **Default value:** `-10038240.32627997`
+
+14. **extent-ymin**
+    - **Type:** `number`
+    - **Description:** Sets the minimum Y coordinate for the map extent.
+    - **Default value:** `4654966.477336443`
+
+15. **extent-ymax**
+    - **Type:** `number`
+    - **Description:** Sets the maximum Y coordinate for the map extent.
+    - **Default value:** `4689440.938430255`
+
+16. **extent-spatial-reference-wkid**
+    - **Type:** `number`
+    - **Description:** Sets the spatial reference WKID for the map extent.
+    - **Default value:** `102100`
 
   **_If a value is not provided for a property, the default value will take effect._**
 
@@ -452,3 +480,5 @@ document.addEventListener("isValidFalse", function (event) {
   localStorage.removeItem("chosenAssets");
 });
 ```
+
+## Accessible Accommodation
