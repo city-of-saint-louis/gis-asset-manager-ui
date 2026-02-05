@@ -80,10 +80,12 @@ Refer to the [ArcGIS Maps SDK for JavaScript documentation](https://developers.a
 ### Custom Elements
 
 1. AssetChooserContainer
-2. 
-3. 
+2. AssetChooserMapLayer
+3. AssetChooserSketchableMapLayer
+4. AssetChooserMapLayerDataDisplay
+5. AssetChooserModeToggle
 
-### Other Files
+### Other JavaScript Files
 
 1. [assest-chooser-container-functions.js](#asset-chooser-container-functionsjs)
 2. [asset-chooser-container.js](#asset-chooser-containerjs)
@@ -93,6 +95,19 @@ Refer to the [ArcGIS Maps SDK for JavaScript documentation](https://developers.a
 6. [asset-chooser-state.js](#asset-chooser-statejs)
 7. [asset-chooser.js](#asset-chooserjs)
 8. [asset-chooser-styles.css](#asset-chooser-stylescss)
+
+### CSS Files
+
+1. [asset-chooser-styles.css](#asset-chooser-stylescss)
+2. [city-of-stl-styles.css](#city-of-stl-stylescss)
+
+#### **asset-chooser-styles.css**
+
+CSS stylesheet for the asset chooser module
+
+#### **city-of-stl-styles.css**
+
+CSS stylesheet for the City of St. Louis asset chooser implementation
 
 ### **asset-chooser-container-functions.js**
 
@@ -259,10 +274,6 @@ This file holds all of the state variables that are required for the asset choos
 ### **asset-chooser.js**
 
 This file captures the x,y coordinates from address validation and the map layer data from the map-layer components and uses the data to initialize the map.
-
-### **asset-chooser-styles.css**
-
-CSS stylesheet for the asset chooser module
 
 ## **How To Use the GIS Asset Chooser Module**
 
