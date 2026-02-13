@@ -3,7 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
 
 export default {
-  input: 'asset-chooser.js', // Your main entry file
+  input: 'asset-chooser.js', // the main entry file
   output: [
     {
       file: 'dist/asset-chooser.esm.js',
@@ -28,6 +28,6 @@ export default {
     })
   ],
   external: [
-    // List external dependencies here
+    // List any external dependencies here
   ]
 };
