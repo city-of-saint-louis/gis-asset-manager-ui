@@ -153,6 +153,11 @@ const enableSketchForLayer = (layer) => {
   `;
     sketch.shadowRoot.appendChild(style);
   }
+
+  if (sketch) {
+    sketch.cancel();
+  }
+
   const sketchType = layer.sketchType;
   sketch.availableCreateTools = layer.sketchType;
   sketch.removeAttribute("hidden");
