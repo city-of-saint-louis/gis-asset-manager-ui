@@ -1,4 +1,4 @@
-# **GIS Asset Chooser Module**
+# **GIS Asset Manager UI**
 
 ## **Developed By The City of St. Louis Web Team**
 
@@ -6,13 +6,13 @@ _Please note: The documentation below is in process and is not yet fully compreh
 
 ## **Description**
 
-The GIS Asset Chooser Module utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) to create an interactive map that can be configured with various different graphic layers for selecting existing assets and/or adding new assets.
+GIS Asset Manager UI utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) to create an interactive map that can be configured with various different graphic layers for selecting existing assets and/or adding new assets.
 
-Developers can configure the module to fit a specific use case by passing property values to the module's custom elements. Users can select assets contained within the graphic layers by mouse click and/or add new assets using the Sketch feature depending on the module is configured. The GIS Asset Chooser Module can be configured to run in **Select Mode** allowing users to select existing assets, **Sketch Mode** allowing users to add new assets, or **both modes simultaneously**.
+Developers can configure the module to fit a specific use case by passing property values to the module's custom elements. Users can select assets contained within the graphic layers by mouse click and/or add new assets using the Sketch feature depending on the module is configured. GIS Asset Manager UI can be configured to run in **Select Mode** allowing users to select existing assets, **Sketch Mode** allowing users to add new assets, or **both modes simultaneously**.
 
 Selected assets are added to an array called 'chosenAssets', and newly sketched assets are added to an array called 'createdAssets'.
 
-The GIS Asset Chooser Module is not a standalone application. It is intended for use within a parent application.
+GIS Asset Manager UI is not a standalone application. It is intended for use within a parent application.
 
 When the asset requirements have been met by the user, the array of chosen assets ('chosenAssets') and/or the array of newly sketched assets ('createdAssets') become available to the parent application through custom events that are triggered automatically when the asset requirements are met.
 
@@ -23,15 +23,15 @@ The parent application can then receive the 'chosenAssets' array and/or the 'cre
 ## **Contents**
 
 - [Getting Started](#getting-started)
-- [How To Use the GIS Asset Chooser Module](#how-to-use-the-gis-asset-chooser-module)
-- [Parts of the GIS Asset Chooser Module](#parts-of-the-gis-asset-chooser-module)
+- [How To Use GIS Asset Manager UI](#how-to-use-gis-asset-manager-ui)
+- [Parts of GIS Asset Manager UI](#parts-of-gis-asset-manager-ui)
 - [Accessible Accommodation](#accessible-accommodation)
 
 ## Getting Started
 
 ### Installation
 
-There are three ways to use the GIS Asset Chooser Module in your project:
+There are three ways to use GIS Asset Manager UI in your project:
 
 **_Please note: The commands below are placeholders to be updated once the module is published to npm._**
 
@@ -41,13 +41,13 @@ There are three ways to use the GIS Asset Chooser Module in your project:
    npm install gis-asset-chooser
    ```
 
-2. You can use the GIS Asset Chooser Module via a CDN:
+2. You can use GIS Asset Manager UI via a CDN:
 
    ```html
    <script src="https://cdn.jsdelivr.net/npm/gis-asset-chooser/dist/gis-asset-chooser.js"></script>
    ```
 
-3. You can also include the GIS Asset Chooser Module directly in your project by downloading the source files and referencing them locally. This method is not recommended as you do not need all of the files in the asset chooser repository to run the module and it will make updating the module within your project more difficult. If you choose this method you only need to include the JavaScript files (not including `parent-application.js`) in your project. You must keep all of the JavaScript files in the same directory. You can choose to use the two CSS stylesheets or not. See the section on [CSS Files](#css-files) for more information. You only need to include a script tag for the main JavaScript file `gis-asset-chooser.js` in your HTML file.
+3. You can also include GIS Asset Manager UI directly in your project by downloading the source files and referencing them locally. This method is not recommended as you do not need all of the files in the asset chooser repository to run the module and it will make updating the module within your project more difficult. If you choose this method you only need to include the JavaScript files (not including `parent-application.js`) in your project. You must keep all of the JavaScript files in the same directory. You can choose to use the two CSS stylesheets or not. See the section on [CSS Files](#css-files) for more information. You only need to include a script tag for the main JavaScript file `gis-asset-chooser.js` in your HTML file.
 
    ```html
    <script src="path/to/gis-asset-chooser.js"></script>
@@ -55,10 +55,10 @@ There are three ways to use the GIS Asset Chooser Module in your project:
 
 ### ArcGIS Maps SDK for JavaScript
 
-The GIS Asset Chooser Module relies on the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest). You will need to include this SDK in your project for the module to function correctly. To utilize the SDK in your project include the necessary script tags in the order shown below in the `<head>` section of your HTML file:
+GIS Asset Manager UI relies on the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest). You will need to include this SDK in your project for the module to function correctly. To utilize the SDK in your project include the necessary script tags in the order shown below in the `<head>` section of your HTML file:
 
 ```html
-<!-- Load Calcite Design System -->
+<!-- Load Calcite Design System from ArcGIS-->
 <script type="module" src="https://js.arcgis.com/calcite-components/3.3.3/calcite.esm.js"></script>
 
 <!-- Load the JavaScript Maps SDK core API -->
@@ -84,7 +84,7 @@ npm install @arcgis/core
 
 Refer to the [ArcGIS Maps SDK for JavaScript documentation](https://developers.arcgis.com/javascript/latest/get-started/) for more information.
 
-## **How To Use the GIS Asset Chooser Module**
+## **How To Use GIS Asset Manager UI**
 
 1. [Use Custom Elements in HTML](#use-custom-elements-in-html)
 2. [Place custom event listeners in parent application](#place-custom-event-listeners-in-parent-application)
@@ -96,7 +96,7 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
 
 **_Note: Remember to quote all attribute values in HTML, even for numbers and booleans. For example: `zoom="12"`, `show-search="true"`._**
 
-### **Example Implementation of the GIS Asset Chooser module's two custom elements**
+#### **Example Implementation of GIS Asset Manager UI's two custom elements in HTML**
 
 ```html
 <!DOCTYPE html>
@@ -237,7 +237,7 @@ document.addEventListener("isValidFalse", function (event) {
 });
 ```
 
-## Parts of the GIS Asset Chooser Module
+## Parts of GIS Asset Manager UI
 
 1. [Custom Elements](#custom-elements)
 2. [Other JavaScript Files](#other-javascript-files)
@@ -245,7 +245,7 @@ document.addEventListener("isValidFalse", function (event) {
 
 ### Custom Elements
 
-There are 5 custom elements in the GIS Asset Chooser Module. The module is configured by passing property values to AssetChooserContainer, AssetChooserMapLayer, and AssetChooserSketchableMapLayer. The other two custom elements, AssetChooserMapLayerDataDisplay and AssetChooserModeToggle, are used internally by the module.
+There are 5 custom elements in GIS Asset Manager UI. The module is configured by passing property values to AssetChooserContainer, AssetChooserMapLayer, and AssetChooserSketchableMapLayer. The other two custom elements, AssetChooserMapLayerDataDisplay and AssetChooserModeToggle, are used internally by the module.
 
 1. [AssetChooserContainer](#assetchoosercontainer)
 2. [AssetChooserMapLayer](#assetchoosermaplayer)
