@@ -1,5 +1,5 @@
-// import AssetChooserContainer from asset-chooser-container.js
-import { AssetChooserContainer } from "./asset-chooser-container.js";
+// import AssetManagerContainer from asset-manager-container.js
+import { AssetManagerContainer } from "./asset-manager-container.js";
 // import AssetChooserMapLayer from asset-chooser-map-layer.js
 import { AssetChooserMapLayer } from "./asset-chooser-map-layer.js";
 // import AssetChooserSketchableMapLayer from asset-chooser-sketchable-map-layer.js
@@ -20,28 +20,28 @@ import { initializeMap } from "./asset-chooser-initialize-map.js";
 document.addEventListener("coordinatesAvailable", (event) => {
   setAddressMarkerX(event.detail.centerX);
   setAddressMarkerY(event.detail.centerY);
-  const assetChooserContainer = document.querySelector("asset-chooser-container");
+  const assetManagerContainer = document.querySelector("asset-manager-container");
   // reset zoom level, reset x,y based on address entered, and reinitialize the map
-  assetChooserContainer.setAttribute("zoom", 18);
-  assetChooserContainer.setAttribute("center-x", addressMarkerX);
-  assetChooserContainer.setAttribute("center-y", addressMarkerY);
+  assetManagerContainer.setAttribute("zoom", 18);
+  assetManagerContainer.setAttribute("center-x", addressMarkerX);
+  assetManagerContainer.setAttribute("center-y", addressMarkerY);
   const layerDataDiv = document.getElementById("layer-data-div");
   layerDataDiv.innerHTML = "";
   initializeMap();
 });
-// capture the map layers added to the asset-chooser-container component
+// capture the map layers added to the asset-manager-container component
 captureMapLayers();
-// capture the sketchable map layers added to the asset-chooser-container component
+// capture the sketchable map layers added to the asset-manager-container component
 captureSketachableMapLayers();
-// initialize the map after the DOM content has loaded and the MapLayer and AssetChooserContainer components are defined
+// initialize the map after the DOM content has loaded and the MapLayer and AssetManagerContainer components are defined
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("asset-chooser-mode-toggle", AssetChooserModeToggle);
   customElements.define("asset-chooser-map-layer", AssetChooserMapLayer);
   customElements.define("asset-chooser-sketchable-map-layer", AssetChooserSketchableMapLayer);
   customElements.define("asset-chooser-map-layer-data-display", AssetChooserMapLayerDataDisplay);
-  customElements.define("asset-chooser-container", AssetChooserContainer);
-  // Wait for the AssetChooserContainer to be defined and rendered before initializing the map
-  customElements.whenDefined('asset-chooser-container').then(() => {
+  customElements.define("asset-manager-container", AssetManagerContainer);
+  // Wait for the AssetManagerContainer to be defined and rendered before initializing the map
+  customElements.whenDefined('asset-manager-container').then(() => {
     // Wait a tick for rendering
     setTimeout(() => {
       initializeMap();

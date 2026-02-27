@@ -280,7 +280,7 @@ const handleCancelSelectionsClick = () => {
   if (existingModal) {
     existingModal.close();
   }
-  const container = document.querySelector("asset-chooser-container");
+  const container = document.querySelector("asset-manager-container");
   if (container && typeof container.connectedCallback === "function") {
     container.connectedCallback(); // Re-render the component
   }
@@ -350,7 +350,7 @@ const handleModalAssetFormSubmit = (event) => {
   }
   // Clear the form
   event.target.reset();
-  const container = document.querySelector("asset-chooser-container");
+  const container = document.querySelector("asset-manager-container");
   const title = container?.getAttribute("title") || "";
   const titleHeadingLevel =
     container?.getAttribute("title-heading-level") || "2";
@@ -417,7 +417,7 @@ const handleModalAssetFormSubmit = (event) => {
     editSelectionsButton.addEventListener("click", handleAssetEditButtonClick);
   }
 };
-// export for use in asset-chooser-container.js
+// export for use in asset-manager-container.js
 export const handleAccomodationButtonClick = () => {
   if (chosenAssetFormData.length > 0) {
     // remove assets from chosenAssetFormData array

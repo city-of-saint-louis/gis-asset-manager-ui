@@ -73,36 +73,27 @@ export const initializeMap = async () => {
     //   "@arcgis/core/widgets/Search/LayerSearchSource.js"
     // );
     // console.log("LayerSearchSource:", LayerSearchSource);
-    const assetChooserContainer = document.querySelector(
-      "asset-chooser-container",
+    const assetManagerContainer = document.querySelector(
+      "asset-manager-container",
     );
-    const zoom = assetChooserContainer.getAttribute("zoom") || defaultZoom;
+    const zoom = assetManagerContainer.getAttribute("zoom") || defaultZoom;
     const baseMap =
-      assetChooserContainer.getAttribute("base-map") || defaultBaseMap;
+      assetManagerContainer.getAttribute("base-map") || defaultBaseMap;
     const centerX =
-      assetChooserContainer.getAttribute("center-x") || defaultCenterX;
+      assetManagerContainer.getAttribute("center-x") || defaultCenterX;
     const centerY =
-      assetChooserContainer.getAttribute("center-y") || defaultCenterY;
+      assetManagerContainer.getAttribute("center-y") || defaultCenterY;
     const showSearch =
-      assetChooserContainer.getAttribute("show-search") || defaultShowSearch;
-      console.log("Show search:", showSearch);
-    // const stLouisExtent = new Extent({
-    //   xmin: -10054448.855908303,
-    //   ymin: 4654966.477336443,
-    //   xmax: -10038240.32627997,
-    //   ymax: 4689440.938430255,
-    //   spatialReference: { wkid: 102100 }, // or 3857
-    // });
+      assetManagerContainer.getAttribute("show-search") || defaultShowSearch;
     const extent = new Extent({
-      xmin: assetChooserContainer.getAttribute("extent-xmin") || defaultExtent.xmin,
-      ymin: assetChooserContainer.getAttribute("extent-ymin") || defaultExtent.ymin,
-      xmax: assetChooserContainer.getAttribute("extent-xmax") || defaultExtent.xmax,
-      ymax: assetChooserContainer.getAttribute("extent-ymax") || defaultExtent.ymax,
-      spatialReference: assetChooserContainer.getAttribute("extent-spatial-reference-wkid")
-        ? { wkid: parseInt(assetChooserContainer.getAttribute("extent-spatial-reference-wkid"), 10) }
+      xmin: assetManagerContainer.getAttribute("extent-xmin") || defaultExtent.xmin,
+      ymin: assetManagerContainer.getAttribute("extent-ymin") || defaultExtent.ymin,
+      xmax: assetManagerContainer.getAttribute("extent-xmax") || defaultExtent.xmax,
+      ymax: assetManagerContainer.getAttribute("extent-ymax") || defaultExtent.ymax,
+      spatialReference: assetManagerContainer.getAttribute("extent-spatial-reference-wkid")
+        ? { wkid: parseInt(assetManagerContainer.getAttribute("extent-spatial-reference-wkid"), 10) }
         : defaultExtent.spatialReference,
     });
-    console.log("Map extent:", extent.toJSON());
     // Dynamically create the <arcgis-map> component
     const mapContainer = document.querySelector("#viewDiv");
     const arcGisMap = document.createElement("arcgis-map");
@@ -114,19 +105,7 @@ export const initializeMap = async () => {
     const zoomControl = document.createElement("arcgis-zoom");
     zoomControl.setAttribute("position", "bottom-left");
     arcGisMap.appendChild(zoomControl);
-    // Add a LocatorSearchSource for local search suggestions
-    // const locatorSearchSource = new LocatorSearchSource({
-    //   url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
-    //   filter: {
-    //     geometry: stLouisExtent,
-    //   },
-    //   outFields: ["*"],
-    //   singleLineFieldName: "SingleLine",
-    //   name: "ArcGIS World Geocoding Service",
-    //   placeholder: "Search for places or addresses",
-    //   maxSuggestions: 4,
-    //   suggestionsEnabled: true,
-    // });
+
     const locatorSourceObj = {
       url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
       filter: { geometry: extent },
@@ -137,7 +116,7 @@ export const initializeMap = async () => {
       maxSuggestions: 4,
       suggestionsEnabled: true,
     };
-console.log("showSearch:", showSearch);
+
     if (showSearch === "true" || showSearch === true) {
       console.log("Show search is enabled");
       const searchComponent = document.createElement("arcgis-search");

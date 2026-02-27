@@ -1,12 +1,12 @@
-// import from asset-chooser-container-functions.js
-import { handleAccomodationButtonClick } from "./asset-chooser-container-functions.js";
-import { enableSketchMode, enableSelectMode } from "./asset-chooser-container-functions.js";
+// import from asset-manager-container-functions.js
+import { handleAccomodationButtonClick } from "./asset-manager-container-functions.js";
+import { enableSketchMode, enableSelectMode } from "./asset-manager-container-functions.js";
 import {
   // isSelectBySearchEnabled,
   setIsSelectBySearchEnabled,
 } from "./asset-chooser-state.js";
 
-class AssetChooserContainer extends HTMLElement {
+class AssetManagerContainer extends HTMLElement {
   constructor() {
     super(); // always call super() first in the constructor for a custom web component
     this.title = this.getAttribute("title") || "";
@@ -21,7 +21,7 @@ class AssetChooserContainer extends HTMLElement {
     enableSelectMode(this.isSelectEnabled);
     if (this.isSelectBySearchEnabled) {
       setIsSelectBySearchEnabled(true);
-      // console.log("Select by search is enabled in AssetChooserContainer");
+      // console.log("Select by search is enabled in AssetManagerContainer");
     }
     const accomodationButtonMessage =
       "Click this button to enter assets if you are using assistive technology and are unable to select assets on the map.";
@@ -84,4 +84,4 @@ class AssetChooserContainer extends HTMLElement {
   }
 }
 
-export { AssetChooserContainer };
+export { AssetManagerContainer };
