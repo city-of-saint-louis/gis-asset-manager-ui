@@ -4,18 +4,18 @@ import { AssetManagerContainer } from "./asset-manager-container.js";
 import { AssetChooserMapLayer } from "./asset-chooser-map-layer.js";
 // import AssetChooserSketchableMapLayer from asset-chooser-sketchable-map-layer.js
 import { AssetChooserSketchableMapLayer } from "./asset-chooser-sketchable-map-layer.js";
-// import AssetChooserMapLayerDataDisplay from asset-chooser-map-layer-data-display.js
-import { AssetChooserMapLayerDataDisplay } from "./asset-chooser-map-layer-data-display.js";
-// import AssetChooserModeToggle from asset-chooser-mode-toggle.js
-import { AssetChooserModeToggle } from "./asset-chooser-mode-toggle.js";
-// import state variables from asset-chooser-state.js
-import { addressMarkerX, setAddressMarkerX, addressMarkerY, setAddressMarkerY } from "./asset-chooser-state.js"
-// import from asset-chooser-functions.js
-import { captureMapLayers } from "./asset-chooser-functions.js"
-// import from asset-chooser-sketchable-map-layer-functions.js
-import { captureSketachableMapLayers } from "./asset-chooser-sketchable-map-layer-functions.js"
+// import AssetManagerMapLayerDataDisplay from asset-manager-map-layer-data-display.js
+import { AssetManagerMapLayerDataDisplay } from "./asset-manager-map-layer-data-display.js";
+// import AssetManagerModeToggle from asset-manager-mode-toggle.js
+import { AssetManagerModeToggle } from "./asset-manager-mode-toggle.js";
+// import state variables from asset-manager-state.js
+import { addressMarkerX, setAddressMarkerX, addressMarkerY, setAddressMarkerY } from "./asset-manager-state.js"
+// import from asset-manager-functions.js
+import { captureMapLayers } from "./asset-manager-functions.js"
+// import from asset-manager-sketchable-map-layer-functions.js
+import { captureSketachableMapLayers } from "./asset-manager-sketchable-map-layer-functions.js"
 // import initializeMap function from map-initialization.js
-import { initializeMap } from "./asset-chooser-initialize-map.js";
+import { initializeMap } from "./asset-manager-initialize-map.js";
 // event listener to caputre x,y coordinates from address validation
 document.addEventListener("coordinatesAvailable", (event) => {
   setAddressMarkerX(event.detail.centerX);
@@ -35,10 +35,10 @@ captureMapLayers();
 captureSketachableMapLayers();
 // initialize the map after the DOM content has loaded and the MapLayer and AssetManagerContainer components are defined
 document.addEventListener("DOMContentLoaded", () => {
-  customElements.define("asset-chooser-mode-toggle", AssetChooserModeToggle);
+  customElements.define("asset-manager-mode-toggle", AssetManagerModeToggle);
   customElements.define("asset-chooser-map-layer", AssetChooserMapLayer);
   customElements.define("asset-chooser-sketchable-map-layer", AssetChooserSketchableMapLayer);
-  customElements.define("asset-chooser-map-layer-data-display", AssetChooserMapLayerDataDisplay);
+  customElements.define("asset-manager-map-layer-data-display", AssetManagerMapLayerDataDisplay);
   customElements.define("asset-manager-container", AssetManagerContainer);
   // Wait for the AssetManagerContainer to be defined and rendered before initializing the map
   customElements.whenDefined('asset-manager-container').then(() => {

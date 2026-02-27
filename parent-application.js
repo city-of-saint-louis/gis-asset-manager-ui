@@ -1,5 +1,5 @@
 // This file is simulating the parent application that will receive the chosenAssets from the child application
-// import { chosenAssets } from "./asset-chooser-state.js"; 
+// import { chosenAssets } from "./asset-manager-state.js"; 
 let chosenAssets;
 let createdAssets;
 let isChosenAssetsValid = false;

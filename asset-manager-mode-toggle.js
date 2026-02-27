@@ -1,15 +1,15 @@
-import { setAssetMode } from "./asset-chooser-state.js";
+import { setAssetMode } from "./asset-manager-state.js";
 
-import { handleSelectEnabled, handleSketchEnabled } from "./asset-chooser-functions.js";
+import { handleSelectEnabled, handleSketchEnabled } from "./asset-manager-functions.js";
 
-class AssetChooserModeToggle extends HTMLElement {
+class AssetManagerModeToggle extends HTMLElement {
   constructor() {
     super();
   }
   connectedCallback() {
     try {
       this.innerHTML = `
-        <div id="asset-chooser-mode-toggle-container" style="">
+        <div id="asset-manager-mode-toggle-container" style="">
           <span id="mode-toggle-label">Asset Mode:</span>
           <div class="mode-toggle-buttons" style="display: flex; gap: 8px;">
         <button
@@ -40,11 +40,11 @@ class AssetChooserModeToggle extends HTMLElement {
       });
     } catch (error) {
       console.error(
-        "Error in AssetChooserModeToggle connectedCallback:",
+        "Error in AssetManagerModeToggle connectedCallback:",
         error
       );
     }
   }
 }
 
-export { AssetChooserModeToggle };
+export { AssetManagerModeToggle };

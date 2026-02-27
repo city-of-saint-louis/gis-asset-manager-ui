@@ -1,4 +1,4 @@
-// import state variables from asset-chooser-state.js
+// import state variables from asset-manager-state.js
 import {
   sketchableMapLayersToAdd,
   allSketchableLayerIds,
@@ -9,16 +9,16 @@ import {
   setCreatedAssetsAreValid,
   // createdAssetsAreValid,
   // isSketchEnabled,
-} from "./asset-chooser-state.js";
-// import from asset-chooser-functions.js
+} from "./asset-manager-state.js";
+// import from asset-manager-functions.js
 import {
   monitorLayerVisibility,
   renderValidityMessage,
-} from "./asset-chooser-functions.js";
-// import asset-chooser-map-layer-data-display component
-import "./asset-chooser-map-layer-data-display.js";
+} from "./asset-manager-functions.js";
+// import asset-manager-map-layer-data-display component
+import "./asset-manager-map-layer-data-display.js";
 
-import { getCreatedAssetsAreValid } from "./asset-chooser-state.js";
+import { getCreatedAssetsAreValid } from "./asset-manager-state.js";
 
 export const dispatchCreatedAssets = (createdAssets) => {
   const event = new CustomEvent("createdAssetsAreValidIsTrue", {
@@ -92,7 +92,7 @@ const enableSketchForLayer = (layer) => {
     const buttonIcon = element.querySelector("calcite-icon");
     buttonIcon.setAttribute("icon", "pencil");
   });
-  // Sanitize the layer title the same way as in asset-chooser-map-layer-data-display.js
+  // Sanitize the layer title the same way as in asset-manager-map-layer-data-display.js
   const sanitizedLayerName = layer.name
     .replace(/[-, _]/g, " ")
     .replace(
@@ -326,7 +326,7 @@ export const addSketchableMapLayer = async ({
   });
 
   const mapLayerDataDisplay = document.createElement(
-    "asset-chooser-map-layer-data-display",
+    "asset-manager-map-layer-data-display",
   );
   mapLayerDataDisplay.setAttribute("data-layer-id", sketchableGraphicLayerId);
   // mapLayerDataDisplay.classList.add("col-sm-6", "col-lg-4");
@@ -410,7 +410,7 @@ export const updateLayerRequirementDisplay = (asset) => {
     validateCreatedAssets();
   }
   const assetCountDisplay = document.querySelector(
-    `asset-chooser-map-layer-data-display[data-layer-id="${layerId}"]`,
+    `asset-manager-map-layer-data-display[data-layer-id="${layerId}"]`,
   );
   if (assetCountDisplay) {
     assetCountDisplay.assetCount = totalLayerAssetsCreated;

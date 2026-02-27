@@ -1,4 +1,4 @@
-// import state variables from asset-chooser-state.js
+// import state variables from asset-manager-state.js
 import {
   defaultZoom,
   defaultCenterX,
@@ -25,11 +25,11 @@ import {
   // setIsSelectEnabled,
   // createdAssetsAreValid,
   setCreatedAssetsAreValid,
-} from "./asset-chooser-state.js";
+} from "./asset-manager-state.js";
 
-import { getCreatedAssetsAreValid } from "./asset-chooser-state.js";
+import { getCreatedAssetsAreValid } from "./asset-manager-state.js";
 
-// import from asset-chooser-functions.js
+// import from asset-manager-functions.js
 import {
   destroyPreviousMapView,
   clearMapData,
@@ -43,14 +43,14 @@ import {
   handleSketchEnabled,
   // renderSelectedAssetLabels,
   // validateLayerSelections,
-} from "./asset-chooser-functions.js";
+} from "./asset-manager-functions.js";
 
 import {
   addSketchableMapLayer,
   sketchAsset,
   dispatchCreatedAssets,
   secureCreatedAssets,
-} from "./asset-chooser-sketchable-map-layer-functions.js";
+} from "./asset-manager-sketchable-map-layer-functions.js";
 
 export const initializeMap = async () => {
   destroyPreviousMapView();

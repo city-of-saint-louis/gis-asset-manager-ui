@@ -1,4 +1,4 @@
-// import required state variables from asset-chooser-state.js
+// import required state variables from asset-manager-state.js
 import {
   featureLayers,
   graphicLayers,
@@ -14,11 +14,11 @@ import {
   setIsSketchEnabled,
   // isSelectEnabled,
   setIsSelectEnabled,
-} from "./asset-chooser-state.js";
-// import required functions from asset-chooser-functions.js
-import { secureChosenAssets } from "./asset-chooser-functions.js";
+} from "./asset-manager-state.js";
+// import required functions from asset-manager-functions.js
+import { secureChosenAssets } from "./asset-manager-functions.js";
 // import initializeMap function from map-initialization.js
-import { initializeMap } from "./asset-chooser-initialize-map.js";
+import { initializeMap } from "./asset-manager-initialize-map.js";
 
 const handleAddAssetInputButtonClick = (event) => {
   // console.log("Add asset input button clicked:", event.target);

@@ -1,4 +1,4 @@
-// import state variables from asset-chooser-state.js
+// import state variables from asset-manager-state.js
 import {
   chosenAssets,
   createdAssets,
@@ -20,9 +20,9 @@ import {
   // setIsSketchEnabled,
   // assetMode,
   // setAssetMode,
-} from "./asset-chooser-state.js";
+} from "./asset-manager-state.js";
 
-import { getCreatedAssetsAreValid } from "./asset-chooser-state.js";
+import { getCreatedAssetsAreValid } from "./asset-manager-state.js";
 
 // *** begin map related functions *** //
 // destroy the previous map view
@@ -184,7 +184,7 @@ export const addMapLayer = ({
   });
 
   const mapLayerDataDisplay = document.createElement(
-    "asset-chooser-map-layer-data-display"
+    "asset-manager-map-layer-data-display"
   );
   mapLayerDataDisplay.setAttribute("data-layer-id", mapDataLayerId);
   // mapLayerDataDisplay.classList.add("col-sm-6", "col-lg-4");
@@ -234,7 +234,7 @@ export const monitorLayerVisibility = (
 
   function updateLayerDisplay() {
     const allDisplays = document.querySelectorAll(
-      "asset-chooser-map-layer-data-display"
+      "asset-manager-map-layer-data-display"
     );
     let mapLayerDataDisplay = null;
     allDisplays.forEach((display) => {

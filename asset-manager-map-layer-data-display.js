@@ -1,4 +1,4 @@
-class AssetChooserMapLayerDataDisplay extends HTMLElement {
+class AssetManagerMapLayerDataDisplay extends HTMLElement {
   constructor() {
     super();
     this._data = null;
@@ -450,9 +450,9 @@ class AssetChooserMapLayerDataDisplay extends HTMLElement {
   }
 }
 
-export { AssetChooserMapLayerDataDisplay };
+export { AssetManagerMapLayerDataDisplay };
 
-// class AssetChooserMapLayerDataDisplay extends HTMLElement {
+// class AssetManagerMapLayerDataDisplay extends HTMLElement {
 //   constructor() {
 //     super();
 //     this._data = null;
@@ -734,4 +734,4 @@ export { AssetChooserMapLayerDataDisplay };
 //   // --- END DOM manipulation version of render ---
 // }
 
-// export { AssetChooserMapLayerDataDisplay };
+// export { AssetManagerMapLayerDataDisplay };

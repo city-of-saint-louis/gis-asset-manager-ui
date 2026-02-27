@@ -22,7 +22,7 @@ export default {
     commonjs(),
     copy({
       targets: [
-        { src: 'asset-chooser-styles.css', dest: 'dist' },
+        { src: 'asset-manager-styles.css', dest: 'dist' },
         { src: 'city-of-stl-styles.css', dest: 'dist' }
       ]
     })

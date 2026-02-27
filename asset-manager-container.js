@@ -4,7 +4,7 @@ import { enableSketchMode, enableSelectMode } from "./asset-manager-container-fu
 import {
   // isSelectBySearchEnabled,
   setIsSelectBySearchEnabled,
-} from "./asset-chooser-state.js";
+} from "./asset-manager-state.js";
 
 class AssetManagerContainer extends HTMLElement {
   constructor() {
@@ -46,7 +46,7 @@ class AssetManagerContainer extends HTMLElement {
       const buttonContainer = this.querySelector("#asset-chooser-button-container");
       
       if (this.isSelectEnabled && this.isSketchEnabled) {
-        const modeToggleSwitch = document.createElement("asset-chooser-mode-toggle");
+        const modeToggleSwitch = document.createElement("asset-manager-mode-toggle");
         buttonContainer.appendChild(modeToggleSwitch);
       }
 

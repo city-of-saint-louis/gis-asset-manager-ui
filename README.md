@@ -245,13 +245,13 @@ document.addEventListener("isValidFalse", function (event) {
 
 ### Custom Elements
 
-There are 5 custom elements in GIS Asset Manager UI. The module is configured by passing property values to AssetManagerContainer, AssetChooserMapLayer, and AssetChooserSketchableMapLayer. The other two custom elements, AssetChooserMapLayerDataDisplay and AssetChooserModeToggle, are used internally by the module.
+There are 5 custom elements in GIS Asset Manager UI. The module is configured by passing property values to AssetManagerContainer, AssetChooserMapLayer, and AssetChooserSketchableMapLayer. The other two custom elements, AssetManagerMapLayerDataDisplay and AssetManagerModeToggle, are used internally by the module.
 
 1. [AssetManagerContainer](#assetchoosercontainer)
 2. [AssetChooserMapLayer](#assetchoosermaplayer)
 3. [AssetChooserSketchableMapLayer](#assetchoosersketchablemaplayer)
-4. [AssetChooserMapLayerDataDisplay](#assetchoosermaplayerdatadisplay)
-5. [AssetChooserModeToggle](#assetchoosermodetoggle)
+4. [AssetManagerMapLayerDataDisplay](#assetchoosermaplayerdatadisplay)
+5. [AssetManagerModeToggle](#assetchoosermodetoggle)
 
 #### **AssetManagerContainer**
 
@@ -434,32 +434,32 @@ A map layer can be configured as needed by passing values for the following prop
 
 #### **AssetChooserSketchableMapLayer**
 
-#### **AssetChooserMapLayerDataDisplay**
+#### **AssetManagerMapLayerDataDisplay**
 
-#### **AssetChooserModeToggle**
+#### **AssetManagerModeToggle**
 
 ### Other JavaScript Files
 
 1. [assest-chooser-container-functions.js](#asset-manager-container-functionsjs)
-2. [asset-chooser-functions.js](#asset-chooser-functionsjs)
-3. [asset-chooser-initialize-map.js](#asset-chooser-initialize-mapjs)
-4. [asset-chooser-state.js](#asset-chooser-statejs)
-5. [asset-manager.js](#asset-chooserjs)
-6. [asset-chooser-styles.css](#asset-chooser-stylescss)
+2. [asset-manager-functions.js](#asset-manager-functionsjs)
+3. [asset-manager-initialize-map.js](#asset-manager-initialize-mapjs)
+4. [asset-manager-state.js](#asset-manager-statejs)
+5. [asset-manager.js](#asset-managerjs)
+6. [asset-manager-styles.css](#asset-manager-stylescss)
 
 ### **asset-manager-container-functions.js**
 
 This file contains the functions that are only used in the asset chooser container. Functions are exported from this file and imported into asset-manager-container.js
 
-### **asset-chooser-functions.js**
+### **asset-manager-functions.js**
 
 This file contains most of the functions used by the asset chooser. Functions are exported from this file and imported where they are needed.
 
-### **asset-chooser-initialize-map.js**
+### **asset-manager-initialize-map.js**
 
 This file holds the initializeMap function. This function uses the map layers and other data to generate the map. It is exported from here and imported into asset-manager.js and asset-manager-container-functions.js
 
-### **asset-chooser-state.js**
+### **asset-manager-state.js**
 
 This file holds all of the state variables that are required for the asset chooser to function. Variables are declared and exported from this file and imported into the other files as needed.
 
@@ -469,10 +469,10 @@ This file captures the x,y coordinates from address validation and the map layer
 
 ### CSS Files
 
-1. [asset-chooser-styles.css](#asset-chooser-stylescss)
+1. [asset-manager-styles.css](#asset-manager-stylescss)
 2. [city-of-stl-styles.css](#city-of-stl-stylescss)
 
-#### **asset-chooser-styles.css**
+#### **asset-manager-styles.css**
 
 CSS stylesheet for the asset chooser module
 

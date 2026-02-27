@@ -370,7 +370,7 @@ flex-shrink: 0;
   margin: 0;
 }
 
-asset-chooser-map-layer-data-display li {
+asset-manager-map-layer-data-display li {
   font-size: 0.8rem;
   padding: 0.35rem !important;
 }
@@ -413,7 +413,7 @@ asset-chooser-map-layer-data-display li {
   /* ...existing styles... */
 }
 
-#asset-chooser-mode-toggle-container {
+#asset-manager-mode-toggle-container {
   display: flex;
   flex-direction: column;
   align-items: center;
