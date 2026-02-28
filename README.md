@@ -247,11 +247,11 @@ document.addEventListener("isValidFalse", function (event) {
 
 There are 5 custom elements in GIS Asset Manager UI. The module is configured by passing property values to AssetManagerContainer, AssetChooserMapLayer, and AssetChooserSketchableMapLayer. The other two custom elements, AssetManagerMapLayerDataDisplay and AssetManagerModeToggle, are used internally by the module.
 
-1. [AssetManagerContainer](#assetchoosercontainer)
+1. [AssetManagerContainer](#assetmanagercontainer)
 2. [AssetChooserMapLayer](#assetchoosermaplayer)
 3. [AssetChooserSketchableMapLayer](#assetchoosersketchablemaplayer)
-4. [AssetManagerMapLayerDataDisplay](#assetchoosermaplayerdatadisplay)
-5. [AssetManagerModeToggle](#assetchoosermodetoggle)
+4. [AssetManagerMapLayerDataDisplay](#assetmanagermaplayerdatadisplay)
+5. [AssetManagerModeToggle](#assetmanagermodetoggle)
 
 #### **AssetManagerContainer**
 
