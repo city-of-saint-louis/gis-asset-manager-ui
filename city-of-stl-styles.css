@@ -33,6 +33,13 @@ h2 {
   margin-bottom: 0.83em;
 }
 
+.page-sub-title {
+  border:none;
+  /* font-size: 1.85rem; */
+  text-align: center;
+  margin-top: 0;
+}
+
 h3 {
   font-size: 1.5em;
   border: none;

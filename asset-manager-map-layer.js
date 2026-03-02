@@ -1,4 +1,4 @@
-class AssetChooserMapLayer extends HTMLElement {
+class AssetManagerMapLayer extends HTMLElement {
   constructor() {
     super();
   }
@@ -40,4 +40,4 @@ class AssetChooserMapLayer extends HTMLElement {
   }
 }
 
-export { AssetChooserMapLayer };
+export { AssetManagerMapLayer };

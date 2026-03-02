@@ -125,7 +125,7 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
         <!-- Use the map layer element inside the container element. -->
         <!-- Use a new instance of the map layer element for each layer you want to put on the map. -->
         <!-- Instance of the map layer custom element used to add "Streets" layer. -->
-        <asset-chooser-map-layer
+        <asset-manager-map-layer
           name="Streets"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
           layer-asset-id-field-name="OBJECTID"
@@ -134,9 +134,9 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
           label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
           min-scale="10000"
         >
-        </asset-chooser-map-layer>
+        </asset-manager-map-layer>
         <!-- Instance of the map layer custom element used to add "Parcels" layer. -->
-        <asset-chooser-map-layer
+        <asset-manager-map-layer
           name="Parcels"
           layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/4"
           layer-asset-id-field-name="FID"
@@ -145,7 +145,7 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
           label-mask="{SITEADDR}"
           max-scale="10000"
         >
-        </asset-chooser-map-layer>
+        </asset-manager-map-layer>
       </asset-manager-container>
     </main>
     <footer></footer>
@@ -257,7 +257,7 @@ There are 5 custom elements in GIS Asset Manager UI. The module is configured by
 
 ##### **asset-manager-container.js**
 
-A reusable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Chooser, including the map, is rendered. It is a parent to **asset-chooser-map-layer.js**.
+A reusable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Chooser, including the map, is rendered. It is a parent to **asset-manager-map-layer.js**.
 
 The Asset Chooser can be configured as needed by passing values for the following properties to the container element.
 
@@ -372,9 +372,9 @@ This feature can be further built out to accomodate a specific use case, allowin
 
 #### **AssetChooserMapLayer**
 
-#### **asset-chooser-map-layer.js**
+#### **asset-manager-map-layer.js**
 
-A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. A child to **assest-chooser-container.js**. An instance of the map layer element is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of **asset-chooser-map-layer.js** (one for each layer) and pass each instance the necessary properties.
+A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. A child to **assest-chooser-container.js**. An instance of the map layer element is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of **asset-manager-map-layer.js** (one for each layer) and pass each instance the necessary properties.
 
 A map layer can be configured as needed by passing values for the following properties to the map layer element.
 
@@ -420,7 +420,7 @@ A map layer can be configured as needed by passing values for the following prop
  **_Note: All attribute values must be quoted in HTML, regardless of type. For example, use `zoom="12"` and `show-search="true"`, not `zoom=12` or `show-search=true`._**
 
 ```html
-<asset-chooser-map-layer
+<asset-manager-map-layer
   name="Streets"
   layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
   layer-asset-id-field-name="OBJECTID"
@@ -429,7 +429,7 @@ A map layer can be configured as needed by passing values for the following prop
   label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
   min-scale="10000"
 >
-</asset-chooser-map-layer>
+</asset-manager-map-layer>
 ```
 
 #### **AssetChooserSketchableMapLayer**

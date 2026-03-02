@@ -22,11 +22,12 @@
   </head>
   <body>
       <header>
-        <h1>GIS Asset Chooser Module - Select Mode Only</h1>
+        <h1>GIS Asset Manager UI</h1>
+        <h2 class="page-sub-title">Select Mode</h2>
         <nav class="navigation">
           <a href="index.html">Home</a> |
-          <a href="select-mode.html">Select Mode Only</a> |
-          <a href="sketch-mode.html">Sketch Mode Only</a> |
+          <a href="select-mode.html">Select Mode</a> |
+          <a href="sketch-mode.html">Sketch Mode</a> |
           <a href="select-and-sketch-modes.html">Select Mode and Sketch Mode</a>
         </nav>
       </header>
@@ -44,7 +45,7 @@
         extent-spatial-reference-wkid="102100"
         title-heading-level="3"
       >
-        <asset-chooser-map-layer
+        <asset-manager-map-layer
           name="street"
           layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/0/"
           layer-asset-id-field-name="OBJECTID"
@@ -54,8 +55,8 @@
           asset-label="StreetName"
           is-select-by-search-enabled="true"
         >
-        </asset-chooser-map-layer>
-        <asset-chooser-map-layer
+        </asset-manager-map-layer>
+        <asset-manager-map-layer
           name="PARCEL"
           layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/4/"
           layer-asset-id-field-name="OBJECTID"
@@ -66,7 +67,7 @@
           asset-label="SITEADDR"
           is-select-by-search-enabled="true"
         >
-        </asset-chooser-map-layer>
+        </asset-manager-map-layer>
       </asset-manager-container>
       <div>
         <button
