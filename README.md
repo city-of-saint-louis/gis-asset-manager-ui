@@ -6,6 +6,8 @@ _Please note: The documentation below is in process and is not yet fully compreh
 
 ## **Description**
 
+test
+
 GIS Asset Manager UI utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) to create an interactive map that can be configured with various different graphic layers for selecting existing assets and/or adding new assets.
 
 Developers can configure the module to fit a specific use case by passing property values to the module's custom elements. Users can select assets contained within the graphic layers by mouse click and/or add new assets using the Sketch feature depending on the module is configured. GIS Asset Manager UI can be configured to run in **Select Mode** allowing users to select existing assets, **Sketch Mode** allowing users to add new assets, or **both modes simultaneously**.
