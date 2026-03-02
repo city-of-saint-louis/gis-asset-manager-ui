@@ -34,10 +34,10 @@ h2 {
 }
 
 .page-sub-title {
-  border:none;
-  /* font-size: 1.85rem; */
+  border: none;
+  font-size: 1.5rem;
   text-align: center;
-  margin-top: 0;
+  margin-top: -.75rem;
 }
 
 h3 {

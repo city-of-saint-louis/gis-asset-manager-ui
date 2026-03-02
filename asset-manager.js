@@ -2,8 +2,8 @@
 import { AssetManagerContainer } from "./asset-manager-container.js";
 // import AssetChooserMapLayer from asset-manager-map-layer.js
 import { AssetManagerMapLayer } from "./asset-manager-map-layer.js";
-// import AssetChooserSketchableMapLayer from asset-chooser-sketchable-map-layer.js
-import { AssetChooserSketchableMapLayer } from "./asset-chooser-sketchable-map-layer.js";
+// import AssetChooserSketchableMapLayer from asset-manager-sketchable-map-layer.js
+import { AssetManagerSketchableMapLayer } from "./asset-manager-sketchable-map-layer.js";
 // import AssetManagerMapLayerDataDisplay from asset-manager-map-layer-data-display.js
 import { AssetManagerMapLayerDataDisplay } from "./asset-manager-map-layer-data-display.js";
 // import AssetManagerModeToggle from asset-manager-mode-toggle.js
@@ -37,7 +37,7 @@ captureSketachableMapLayers();
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("asset-manager-mode-toggle", AssetManagerModeToggle);
   customElements.define("asset-manager-map-layer", AssetManagerMapLayer);
-  customElements.define("asset-chooser-sketchable-map-layer", AssetChooserSketchableMapLayer);
+  customElements.define("asset-manager-sketchable-map-layer", AssetManagerSketchableMapLayer);
   customElements.define("asset-manager-map-layer-data-display", AssetManagerMapLayerDataDisplay);
   customElements.define("asset-manager-container", AssetManagerContainer);
   // Wait for the AssetManagerContainer to be defined and rendered before initializing the map

@@ -1,4 +1,4 @@
-class AssetChooserSketchableMapLayer extends HTMLElement {
+class AssetManagerSketchableMapLayer extends HTMLElement {
   constructor() {
     super();
   }
@@ -29,4 +29,4 @@ class AssetChooserSketchableMapLayer extends HTMLElement {
     }
   }
 }
-export { AssetChooserSketchableMapLayer };
+export { AssetManagerSketchableMapLayer };

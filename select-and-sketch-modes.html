@@ -25,7 +25,7 @@
   <body>
     <header>
       <h1>GIS Asset Manager UI</h1>
-       <h2 class="page-sub-title">Select Mode and Sketch Mode</h2>
+      <h2 class="page-sub-title">Select Mode and Sketch Mode</h2>
       <nav class="navigation">
         <a href="index.html">Home</a> |
         <a href="select-mode.html">Select Mode</a> |
@@ -40,37 +40,37 @@
         is-sketch-enabled="true"
         is-select-enabled="true"
       >
-        <asset-chooser-sketchable-map-layer
+        <asset-manager-sketchable-map-layer
           name="Access Point"
           minimum="2"
           maximum="10"
           sketch-type="point"
           min-scale="8000"
         >
-        </asset-chooser-sketchable-map-layer>
-        <asset-chooser-sketchable-map-layer
+        </asset-manager-sketchable-map-layer>
+        <asset-manager-sketchable-map-layer
           name="Barricade"
           sketch-type="polyline"
           min-scale="8000"
           maximum="20"
         >
-        </asset-chooser-sketchable-map-layer>
-        <asset-chooser-sketchable-map-layer
+        </asset-manager-sketchable-map-layer>
+        <asset-manager-sketchable-map-layer
           name="First Aid"
           minimum="1"
           maximum="2"
           sketch-type="polygon"
           min-scale="8000"
         >
-        </asset-chooser-sketchable-map-layer>
-        <asset-chooser-sketchable-map-layer
+        </asset-manager-sketchable-map-layer>
+        <asset-manager-sketchable-map-layer
           name="Stage"
           minimum="1"
           sketch-type="polygon"
           min-scale="8000"
           maximum="1"
         >
-        </asset-chooser-sketchable-map-layer>
+        </asset-manager-sketchable-map-layer>
         <asset-manager-map-layer
           name="street"
           layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/0/"
