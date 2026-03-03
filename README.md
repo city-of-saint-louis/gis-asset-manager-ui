@@ -366,13 +366,13 @@ assetManagerContainer.setAttribute("title-heading-level", "1");
 
 The asset manager container also houses the **accessibility accommodation**. Users navigating by keyboard are unable to tab into the map and select assets with the keyboard. Even if they could, a map layer may contain thousands of assets. It is not reasonable to ask someone to tab through thousands of assets to find the one they need. In order to account for this we have provided an accommodation for folks navigating by keyboard and using assistive technology such as a screen reader. We have placed a button above the map for users who need to access this accommodation. When the button is clicked a modal opens with a text input allowing users to enter information on their required assets.
 
-No additional configuration is required to implement this solution. A text input is generated for each map layer that has been applied. If asset selection is required for any particular layer, then a user will be required to provide asset information for that layer through the alternate text input.
+No additional configuration is required to implement this solution. A text input is generated for each map layer that has been applied. Users can add additional inputs as needed.
 
-This feature can be further built out to accomodate a specific use case, allowing users to provide more detailed information if needed.
+The select by search feature can be used on layers where it is apropriate to elminate the need for the optional text input.
 
 #### **AssetManagerMapLayer**
 
-#### **asset-manager-map-layer.js**
+##### **asset-manager-map-layer.js**
 
 A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. A child to **assest-manager-container.js**. An instance of the map layer element is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of **asset-manager-map-layer.js** (one for each layer) and pass each instance the necessary properties.
 
@@ -414,6 +414,10 @@ A map layer can be configured as needed by passing values for the following prop
    - type: number
    - description: Use "min-scale" and "max-scale" if you want a map layer to only appear at certain zoom levels.
    - default value: none
+9. **is-select-by-search-enabled**
+   - type: boolean
+   - description: Enables the select by search feature for this layer.
+   - default value: false
 
  **_If a value is not provided for a property, the default value will take effect._**
 
@@ -434,9 +438,59 @@ A map layer can be configured as needed by passing values for the following prop
 
 #### **AssetManagerSketchableMapLayer**
 
+##### **asset-manager-sketchable-map-layer.js**
+
+A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. A child to **assest-manager-container.js**. An instance of the sketchable map layer element is used for each sketachable layer needed on the map. For example to put 3 different sketable layers on the map, you would use 3 seperate instances of **asset-manager-sketachable-map-layer.js** (one for each layer) and pass each instance the necessary properties.
+
+A sketchable map layer can be configured as needed by passing values for the following properties to the map layer element.
+
+1. **name**
+   - type: string
+   - description: The name of the layer
+   - default value: none
+2. **minimum**
+   - type: number
+   - description: The minimum number of assets that must be selected from this layer by a user.
+   - default value: 0
+3. **maximum**
+   - type: number
+   - description: The maximum number of assets that can be selected from this layer by a user.
+   - default value: 0
+4. **min-scale**
+   - type: number
+   - description: The minimum scale at which the layer is visible.
+   - default value: none
+5. **max-scale**
+   - type: number
+   - description: The maximum scale at which the layer is visible.
+   - default value: none
+6. **sketch-type**
+   - type: string
+   - description: The type of sketch that can be drawn on this layer. Possible values are "point", "polyline", and "polygon".
+   - default value: "point"
+
+ **_If a value is not provided for a property, the default value will take effect._**
+
+ **_Note: All attribute values must be quoted in HTML, regardless of type. For example, use `zoom="12"` and `show-search="true"`, not `zoom=12` or `show-search=true`._**
+
+```html
+<asset-manager-sketchable-map-layer
+  name="Access Point"
+  minimum="2"
+  maximum="10"
+  sketch-type="point"
+  min-scale="8000"
+>
+</asset-manager-sketchable-map-layer>
+```
+
 #### **AssetManagerMapLayerDataDisplay**
 
+##### **asset-manager-map-layer-data-display.js**
+
 #### **AssetManagerModeToggle**
+
+##### **asset-manager-mode-toggle.js**
 
 ### Other JavaScript Files
 
