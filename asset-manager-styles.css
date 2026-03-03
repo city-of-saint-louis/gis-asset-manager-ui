@@ -1,18 +1,18 @@
-/* asset-chooser */
+/* asset-manager */
 
-#asset-chooser-interface {
+#asset-manager-interface {
   max-width: 1440px;
   margin: 0 auto;
 }
 
-#asset-chooser-hint {
+#asset-manager-hint {
   font-size: 0.9rem;
   margin-bottom: 0rem;
   margin-top: 0rem;
   min-height: 6.2rem;
 }
 
-#asset-chooser-button-and-map-wrapper {
+#asset-manager-button-and-map-wrapper {
   margin-top: -0.75rem;
   position: relative;
   display: grid;
@@ -21,17 +21,17 @@
 }
 
 @media (max-width: 1200px) {
-  #asset-chooser-button-and-map-wrapper {
+  #asset-manager-button-and-map-wrapper {
     grid-template-columns: 1fr 2fr;
   }
 }
 @media (max-width: 768px) {
-  #asset-chooser-button-and-map-wrapper {
+  #asset-manager-button-and-map-wrapper {
     grid-template-columns: 1fr;
   }
 }
 
-#asset-chooser-button-container {
+#asset-manager-button-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -477,27 +477,27 @@ asset-manager-map-layer-data-display li {
   }
 }
 
-arcgis-sketch#asset-chooser-sketch {
+arcgis-sketch#asset-manager-sketch {
   position: absolute;
   /* top: -1.12rem; */
   left: -1.12rem;
 }
 
-arcgis-search#asset-chooser-arcgis-search {
+arcgis-search#asset-manager-arcgis-search {
   position: absolute;
   top: -1rem;
   right: -1rem;
 }
 
 @media screen and (max-width: 992px) {
-  #asset-chooser-button-and-map-wrapper {
+  #asset-manager-button-and-map-wrapper {
     margin-top: 1.5rem;
   }
   #mode-status-banner {
     left: -0.12rem;
     top: -1.65rem;
   }
-  arcgis-sketch#asset-chooser-sketch {
+  arcgis-sketch#asset-manager-sketch {
     top: -1.12em;
     left: -1.12rem;
   }
@@ -508,16 +508,16 @@ arcgis-search#asset-chooser-arcgis-search {
 }
 
 @media screen and (max-width: 768px) {
-  #asset-chooser-button-and-map-wrapper {
+  #asset-manager-button-and-map-wrapper {
     margin-top: 0.5rem;
   }
 }
 
 @media screen and (max-width: 500px) {
-  arcgis-search#asset-chooser-arcgis-search {
+  arcgis-search#asset-manager-arcgis-search {
     left: -1rem;
   }
-  arcgis-sketch#asset-chooser-sketch {
+  arcgis-sketch#asset-manager-sketch {
     top: 1rem;
   }
 }

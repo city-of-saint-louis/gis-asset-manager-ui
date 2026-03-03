@@ -38,16 +38,16 @@ There are three ways to use GIS Asset Manager UI in your project:
 1. You can install the module via npm:
 
    ```bash
-   npm install gis-asset-chooser
+   npm install gis-asset-manager
    ```
 
 2. You can use GIS Asset Manager UI via a CDN:
 
    ```html
-   <script src="https://cdn.jsdelivr.net/npm/gis-asset-chooser/dist/gis-asset-manager.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/gis-asset-manager/dist/gis-asset-manager.js"></script>
    ```
 
-3. You can also include GIS Asset Manager UI directly in your project by downloading the source files and referencing them locally. This method is not recommended as you do not need all of the files in the asset chooser repository to run the module and it will make updating the module within your project more difficult. If you choose this method you only need to include the JavaScript files (not including `parent-application.js`) in your project. You must keep all of the JavaScript files in the same directory. You can choose to use the two CSS stylesheets or not. See the section on [CSS Files](#css-files) for more information. You only need to include a script tag for the main JavaScript file `gis-asset-manager.js` in your HTML file.
+3. You can also include GIS Asset Manager UI directly in your project by downloading the source files and referencing them locally. This method is not recommended as you do not need all of the files in the asset manager repository to run the module and it will make updating the module within your project more difficult. If you choose this method you only need to include the JavaScript files (not including `parent-application.js`) in your project. You must keep all of the JavaScript files in the same directory. You can choose to use the two CSS stylesheets or not. See the section on [CSS Files](#css-files) for more information. You only need to include a script tag for the main JavaScript file `gis-asset-manager.js` in your HTML file.
 
    ```html
    <script src="path/to/gis-asset-manager.js"></script>
@@ -92,7 +92,7 @@ Refer to the [ArcGIS Maps SDK for JavaScript documentation](https://developers.a
 
 ### **Use Custom Elements in HTML**
 
-Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, simply use the custom elements in your HTML and pass the necessary property values to both elements as needed.
+Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Manager are in place, simply use the custom elements in your HTML and pass the necessary property values to both elements as needed.
 
 **_Note: Remember to quote all attribute values in HTML, even for numbers and booleans. For example: `zoom="12"`, `show-search="true"`._**
 
@@ -104,7 +104,7 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Chooser are in place, 
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GIS Asset Chooser Demo</title>
+    <title>GIS Asset Manager Demo</title>
     <!-- Bring in ArcGIS CSS -->
     <link
       rel="stylesheet"
@@ -165,10 +165,10 @@ If after the 'isValidTrue' event has been triggered, assets are unselected, and 
 
 #### **isValidTrue event listener**
 
-Use the custom event listener below in the parent application to receive 'chosenAssets' from the GIS Asset Chooser when asset selection is valid (isValid = true)
+Use the custom event listener below in the parent application to receive 'chosenAssets' from the GIS Asset Manager when asset selection is valid (isValid = true)
 
 ```javascript
-// Custom event listener to receive chosenAssets from the asset chooser when asset selection is valid (isValid = true)
+// Custom event listener to receive chosenAssets from the asset manager when asset selection is valid (isValid = true)
 document.addEventListener("isValidTrue", function (event) {
   const chosenAssets = event.detail.chosenAssets;
   // log chosenAssets to the console to verify that 'chosenAssets' is available to parent app
@@ -207,7 +207,7 @@ Customize the event listeners to fit your needs. Once received 'chosenAssets' ca
 #### Example of using 'isValidTrue' event listener
 
 ```javascript
-// Custom event listener to receive chosenAssets from the asset chooser when isValid is true
+// Custom event listener to receive chosenAssets from the asset manager when isValid is true
 document.addEventListener("isValidTrue", function (event) {
   const chosenAssets = event.detail.chosenAssets;
   console.log("chosenAssets received:", chosenAssets);
@@ -245,11 +245,11 @@ document.addEventListener("isValidFalse", function (event) {
 
 ### Custom Elements
 
-There are 5 custom elements in GIS Asset Manager UI. The module is configured by passing property values to AssetManagerContainer, AssetChooserMapLayer, and AssetChooserSketchableMapLayer. The other two custom elements, AssetManagerMapLayerDataDisplay and AssetManagerModeToggle, are used internally by the module.
+There are 5 custom elements in GIS Asset Manager UI. The module is configured by passing property values to AssetManagerContainer, AssetManagerMapLayer, and AssetManagerSketchableMapLayer. The other two custom elements, AssetManagerMapLayerDataDisplay and AssetManagerModeToggle, are used internally by the module.
 
 1. [AssetManagerContainer](#assetmanagercontainer)
-2. [AssetChooserMapLayer](#assetchoosermaplayer)
-3. [AssetChooserSketchableMapLayer](#assetchoosersketchablemaplayer)
+2. [AssetManagerMapLayer](#assetmanagermaplayer)
+3. [AssetManagerSketchableMapLayer](#assetmanagersketchablemaplayer)
 4. [AssetManagerMapLayerDataDisplay](#assetmanagermaplayerdatadisplay)
 5. [AssetManagerModeToggle](#assetmanagermodetoggle)
 
@@ -257,18 +257,18 @@ There are 5 custom elements in GIS Asset Manager UI. The module is configured by
 
 ##### **asset-manager-container.js**
 
-A reusable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Chooser, including the map, is rendered. It is a parent to **asset-manager-map-layer.js**.
+A reusable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Manager, including the map, is rendered. It is a parent to **asset-manager-map-layer.js**.
 
-The Asset Chooser can be configured as needed by passing values for the following properties to the container element.
+The Asset Manager can be configured as needed by passing values for the following properties to the container element.
 
 1. **title**
    - **Type:** `string`
-   - **Description:** An appropriate title based on the specific implementation of the GIS Asset Chooser.
+   - **Description:** An appropriate title based on the specific implementation of the GIS Asset Manager.
    - **Default value:** _none_
 
 2. **hint**
    - **Type:** `string`
-   - **Description:** A simple statement to let the user know what to do with the GIS Asset Chooser for the specific implementation.
+   - **Description:** A simple statement to let the user know what to do with the GIS Asset Manager for the specific implementation.
    - **Default value:** _none_
 
 3. **zoom**
@@ -278,7 +278,7 @@ The Asset Chooser can be configured as needed by passing values for the followin
 
 4. **base-map**
    - **Type:** `string`
-   - **Description:** Sets the base map to be used for the ArcGIS Asset Chooser.
+   - **Description:** Sets the base map to be used for the ArcGIS Asset Manager.
    - **Default value:** `"topo-vector"`
 
 5. **center-x**
@@ -313,7 +313,7 @@ The Asset Chooser can be configured as needed by passing values for the followin
 
 11. **title-heading-level**
     - **Type:** `number`
-    - **Description:** Sets the heading level for the title of the asset chooser (h1 - h6). Pass in a number from 1 to 6.
+    - **Description:** Sets the heading level for the title of the asset manager (h1 - h6). Pass in a number from 1 to 6.
     - **Default value:** `2`
 
 12. **extent-xmin**
@@ -364,17 +364,17 @@ assetManagerContainer.setAttribute("hint", "Select the street segments for your 
 assetManagerContainer.setAttribute("title-heading-level", "1");
 ```
 
-The asset chooser container also houses the **accessibility accommodation**. Users navigating by keyboard are unable to tab into the map and select assets with the keyboard. Even if they could, a map layer may contain thousands of assets. It is not reasonable to ask someone to tab through thousands of assets to find the one they need. In order to account for this we have provided an accommodation for folks navigating by keyboard and using assistive technology such as a screen reader. We have placed a button above the map for users who need to access this accommodation. When the button is clicked a modal opens with a text input allowing users to enter information on their required assets.
+The asset manager container also houses the **accessibility accommodation**. Users navigating by keyboard are unable to tab into the map and select assets with the keyboard. Even if they could, a map layer may contain thousands of assets. It is not reasonable to ask someone to tab through thousands of assets to find the one they need. In order to account for this we have provided an accommodation for folks navigating by keyboard and using assistive technology such as a screen reader. We have placed a button above the map for users who need to access this accommodation. When the button is clicked a modal opens with a text input allowing users to enter information on their required assets.
 
 No additional configuration is required to implement this solution. A text input is generated for each map layer that has been applied. If asset selection is required for any particular layer, then a user will be required to provide asset information for that layer through the alternate text input.
 
 This feature can be further built out to accomodate a specific use case, allowing users to provide more detailed information if needed.
 
-#### **AssetChooserMapLayer**
+#### **AssetManagerMapLayer**
 
 #### **asset-manager-map-layer.js**
 
-A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. A child to **assest-chooser-container.js**. An instance of the map layer element is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of **asset-manager-map-layer.js** (one for each layer) and pass each instance the necessary properties.
+A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. A child to **assest-manager-container.js**. An instance of the map layer element is used for each layer placed on the map. For example to put 3 different graphic layers on the map, you would use 3 seperate instances of **asset-manager-map-layer.js** (one for each layer) and pass each instance the necessary properties.
 
 A map layer can be configured as needed by passing values for the following properties to the map layer element.
 
@@ -432,7 +432,7 @@ A map layer can be configured as needed by passing values for the following prop
 </asset-manager-map-layer>
 ```
 
-#### **AssetChooserSketchableMapLayer**
+#### **AssetManagerSketchableMapLayer**
 
 #### **AssetManagerMapLayerDataDisplay**
 
@@ -440,7 +440,7 @@ A map layer can be configured as needed by passing values for the following prop
 
 ### Other JavaScript Files
 
-1. [assest-chooser-container-functions.js](#asset-manager-container-functionsjs)
+1. [assest-manager-container-functions.js](#asset-manager-container-functionsjs)
 2. [asset-manager-functions.js](#asset-manager-functionsjs)
 3. [asset-manager-initialize-map.js](#asset-manager-initialize-mapjs)
 4. [asset-manager-state.js](#asset-manager-statejs)
@@ -449,11 +449,11 @@ A map layer can be configured as needed by passing values for the following prop
 
 ### **asset-manager-container-functions.js**
 
-This file contains the functions that are only used in the asset chooser container. Functions are exported from this file and imported into asset-manager-container.js
+This file contains the functions that are only used in the asset manager container. Functions are exported from this file and imported into asset-manager-container.js
 
 ### **asset-manager-functions.js**
 
-This file contains most of the functions used by the asset chooser. Functions are exported from this file and imported where they are needed.
+This file contains most of the functions used by the asset manager. Functions are exported from this file and imported where they are needed.
 
 ### **asset-manager-initialize-map.js**
 
@@ -461,7 +461,7 @@ This file holds the initializeMap function. This function uses the map layers an
 
 ### **asset-manager-state.js**
 
-This file holds all of the state variables that are required for the asset chooser to function. Variables are declared and exported from this file and imported into the other files as needed.
+This file holds all of the state variables that are required for the asset manager to function. Variables are declared and exported from this file and imported into the other files as needed.
 
 ### **asset-manager.js**
 
@@ -474,10 +474,10 @@ This file captures the x,y coordinates from address validation and the map layer
 
 #### **asset-manager-styles.css**
 
-CSS stylesheet for the asset chooser module
+CSS stylesheet for the asset manager module
 
 #### **city-of-stl-styles.css**
 
-CSS stylesheet for the City of St. Louis asset chooser implementation
+CSS stylesheet for the City of St. Louis asset manager implementation
 
 ## Accessible Accommodation

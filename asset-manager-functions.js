@@ -276,7 +276,7 @@ export const renderValidityMessage = () => {
   //   createdAssetsAreValid
   // );
   // const validityMessage = document.getElementById("validity-message");
-  const validityMessage = document.getElementById("asset-chooser-hint");
+  const validityMessage = document.getElementById("asset-manager-hint");
   const originalHintText = validityMessage.getAttribute("data-original-hint");
   const mapContainer = document.getElementById("viewDiv");
   const mapLayerDataContainers = document.querySelectorAll(
@@ -725,7 +725,7 @@ export const handleSelectEnabled = () => {
   mapContainer.classList.add("select-shadow", "select-border");
   mapContainer.style.pointerEvents = "auto";
 
-  const sketch = document.getElementById("asset-chooser-sketch");
+  const sketch = document.getElementById("asset-manager-sketch");
   sketch.setAttribute("hidden", "");
 
   const selectableAssetDisplayElements =
@@ -858,6 +858,6 @@ export const handleSketchEnabled = () => {
 export const mapActionsDisabled = () => {
   const mapContainer = document.getElementById("viewDiv");
   mapContainer.style.pointerEvents = "none";
-  const sketch = document.getElementById("asset-chooser-sketch");
+  const sketch = document.getElementById("asset-manager-sketch");
   sketch.setAttribute("hidden", "true");
 };

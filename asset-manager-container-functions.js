@@ -360,11 +360,11 @@ const handleModalAssetFormSubmit = (event) => {
     if (level >= 6) return "6";
     return (level + 1).toString();
   })();
-  const assetChooserInterface = document.getElementById(
-    "asset-chooser-interface",
+  const assetManagerInterface = document.getElementById(
+    "asset-manager-interface",
   );
-  assetChooserInterface.innerHTML = `
-    <h${titleHeadingLevel} id="asset-chooser-title">${title}</h${titleHeadingLevel}>
+  assetManagerInterface.innerHTML = `
+    <h${titleHeadingLevel} id="asset-manager-title">${title}</h${titleHeadingLevel}>
     <h${subHeadingLevel}>The asset information has been added to your case.</h${subHeadingLevel}>
     <p>You entered:</p>
     <ul>
@@ -398,7 +398,7 @@ const handleModalAssetFormSubmit = (event) => {
   `;
   closeModal();
   document
-    .getElementById("asset-chooser-interface")
+    .getElementById("asset-manager-interface")
     .scrollIntoView({ behavior: "smooth", block: "start" });
   // Add event listener for the dynamically created cancel button
   const cancelSelectionsButton = document.querySelector(

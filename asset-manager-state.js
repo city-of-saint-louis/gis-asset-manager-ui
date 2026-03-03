@@ -1,4 +1,4 @@
-// declare variables for the GIS Asset Chooser
+// declare variables for the GIS Asset Manager
 // set default values for map view
 // set empty arrays for dynamic data storage
 // provide setter functions for mutable variables

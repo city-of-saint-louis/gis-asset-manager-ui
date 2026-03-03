@@ -6,14 +6,14 @@ export default {
   input: 'asset-manager.js', // the main entry file aka 'one file to rule them all'
   output: [
     {
-      file: 'dist/asset-chooser.esm.js',
+      file: 'dist/asset-manager.esm.js',
       format: 'esm',
       sourcemap: true,
     },
     {
-      file: 'dist/asset-chooser.umd.js',
+      file: 'dist/asset-manager.umd.js',
       format: 'umd',
-      name: 'AssetChooser',
+      name: 'AssetManager',
       sourcemap: true,
     }
   ],

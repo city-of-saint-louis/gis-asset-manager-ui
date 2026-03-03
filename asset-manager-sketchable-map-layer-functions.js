@@ -142,7 +142,7 @@ const enableSketchForLayer = (layer) => {
     }
   });
 
-  const sketch = document.getElementById("asset-chooser-sketch");
+  const sketch = document.getElementById("asset-manager-sketch");
   if (sketch && sketch.shadowRoot) {
     const style = document.createElement("style");
     style.textContent = `
@@ -535,7 +535,7 @@ const renderCreatedAssetLabel = (graphic) => {
     listItemContentSpan.style.cursor = "pointer";
     listItemContentSpan.addEventListener("click", () => {
       // Try to get the view from the graphicsLayer or pass it in as needed
-      // const view = graphic.layer.graphicsLayer?.view || window.assetChooserMapView;
+      // const view = graphic.layer.graphicsLayer?.view || window.assetManagerMapView;
       const arcGisMap = document.querySelector("arcgis-map");
       const view = arcGisMap.view;
       if (view && graphic.geometry) {

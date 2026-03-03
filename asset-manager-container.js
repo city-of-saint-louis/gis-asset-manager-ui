@@ -27,11 +27,11 @@ class AssetManagerContainer extends HTMLElement {
       "Click this button to enter assets if you are using assistive technology and are unable to select assets on the map.";
     try {
       this.innerHTML = `
-        <section id="asset-chooser-interface">
-          <h${this.titleHeadingLevel} id="asset-chooser-title">${this.title}</h${this.titleHeadingLevel}>
-          <div id="asset-chooser-button-and-map-wrapper">
-            <div id="asset-chooser-button-container">
-              <p id="asset-chooser-hint" data-original-hint="${this.hint}">${this.hint}</p>
+        <section id="asset-manager-interface">
+          <h${this.titleHeadingLevel} id="asset-manager-title">${this.title}</h${this.titleHeadingLevel}>
+          <div id="asset-manager-button-and-map-wrapper">
+            <div id="asset-manager-button-container">
+              <p id="asset-manager-hint" data-original-hint="${this.hint}">${this.hint}</p>
             </div>
             <div id="viewDiv" aria-label="Interactive map for selecting and adding 
             assets">
@@ -43,7 +43,7 @@ class AssetManagerContainer extends HTMLElement {
         </section>
       `;
       
-      const buttonContainer = this.querySelector("#asset-chooser-button-container");
+      const buttonContainer = this.querySelector("#asset-manager-button-container");
       
       if (this.isSelectEnabled && this.isSketchEnabled) {
         const modeToggleSwitch = document.createElement("asset-manager-mode-toggle");

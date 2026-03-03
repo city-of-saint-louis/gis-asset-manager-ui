@@ -13,8 +13,8 @@
   "license": "MIT",
   "author": "The City of St. Louis Web Team",
   "type": "module",
-  "main": "dist/asset-chooser.umd.js",
-  "module": "dist/asset-chooser.esm.js",
+  "main": "dist/asset-manager.umd.js",
+  "module": "dist/asset-manager.esm.js",
   "scripts": {
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -31,8 +31,8 @@ const caseAssets = [];
 const submitAssetsButton = document.getElementById("submit-assets-button");
 const assetsDisplayContainer = document.getElementById("asset-display-div");
 const submittedAssetList = document.getElementById("submitted-asset-list");
-// Custom event listener to receive chosenAssets from the asset chooser when isValid is true
-// recommended for integration with gis aset chooser - customize as needed
+// Custom event listener to receive chosenAssets from the asset manager when isValid is true
+// recommended for integration with gis aset manager - customize as needed
 document.addEventListener("isValidTrue", (event) => {
   isChosenAssetsValid = true;
   chosenAssets = event.detail.chosenAssets;
@@ -58,7 +58,7 @@ document.addEventListener("createdAssetsAreValidIsTrue", (event) => {
 });
 
 // Custom event listener for when isValid is false
-// recommended for integration with gis aset chooser - customize as needed
+// recommended for integration with gis aset manager - customize as needed
 // example of possible integration strategy with a submit button
 document.addEventListener("isValidFalse", () => {
   isChosenAssetsValid = false;

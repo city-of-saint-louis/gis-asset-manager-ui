@@ -1,8 +1,8 @@
 // import AssetManagerContainer from asset-manager-container.js
 import { AssetManagerContainer } from "./asset-manager-container.js";
-// import AssetChooserMapLayer from asset-manager-map-layer.js
+// import AssetManagerMapLayer from asset-manager-map-layer.js
 import { AssetManagerMapLayer } from "./asset-manager-map-layer.js";
-// import AssetChooserSketchableMapLayer from asset-manager-sketchable-map-layer.js
+// import AssetManagerSketchableMapLayer from asset-manager-sketchable-map-layer.js
 import { AssetManagerSketchableMapLayer } from "./asset-manager-sketchable-map-layer.js";
 // import AssetManagerMapLayerDataDisplay from asset-manager-map-layer-data-display.js
 import { AssetManagerMapLayerDataDisplay } from "./asset-manager-map-layer-data-display.js";

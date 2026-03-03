@@ -123,7 +123,7 @@ export const initializeMap = async () => {
       searchComponent.setAttribute("position", "top-right");
       searchComponent.setAttribute("popup-disabled", "true");
       searchComponent.setAttribute("include-default-sources-disabled", "true");
-      searchComponent.setAttribute("id", "asset-chooser-arcgis-search");
+      searchComponent.setAttribute("id", "asset-manager-arcgis-search");
       // searchComponent.setAttribute("auto-select-disabled", "true");
       searchComponent.sources = [locatorSourceObj];
       arcGisMap.appendChild(searchComponent);
@@ -163,7 +163,7 @@ export const initializeMap = async () => {
 
       function updateSearchPosition() {
         const searchComponent = document.getElementById(
-          "asset-chooser-arcgis-search",
+          "asset-manager-arcgis-search",
         );
         if (!searchComponent) return;
         if (window.innerWidth <= 500) {
@@ -229,7 +229,7 @@ export const initializeMap = async () => {
         });
         // console.log("layerSearchSources:", layerSearchSources);
         const searchComponent = document.getElementById(
-          "asset-chooser-arcgis-search",
+          "asset-manager-arcgis-search",
         );
         if (
           isSelectBySearchEnabled === "true" ||
@@ -247,7 +247,7 @@ export const initializeMap = async () => {
 
         const sketch = document.createElement("arcgis-sketch");
         sketch.view = view;
-        sketch.setAttribute("id", "asset-chooser-sketch");
+        sketch.setAttribute("id", "asset-manager-sketch");
         sketch.setAttribute("slot", "top-left");
         sketch.setAttribute("hide-selection-tools-lasso-selection", "true");
         sketch.setAttribute("hide-selection-tools-rectangle-selection", "true");
