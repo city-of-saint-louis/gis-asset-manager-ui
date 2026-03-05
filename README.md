@@ -199,12 +199,16 @@ Allows users to select and add assets.
 
 - [isValidTrue event listener](#isvalidtrue-event-listener)
 - [isValidFalse event listener](isvalidfalse-event-listener)
+- [createdAssetsAreValidIsTrue event listener](#createdassetsarevalidistrue-event-listener)
+- [createdAssetsAreValidIsFalse event listener](#createdassetsarevalidisfalse-event-listener)
+
+#### **Selected Assets**
 
 When assets are selected by a user they are added to an array 'chosenAssets'. When the selections in 'chosenAssets' meet the selection criteria, a custom event 'isValidTrue' is triggered. This event makes the 'chosenAssets' array available to the parent application. Use the 'isValidTrue' event listener to bring 'chosenAssets' into the parent application and handle any changes to the user interface or any other logic that needs to run at that time. For example you may what to enable a submit button when 'isValidTrue' is triggered.
 
 If after the 'isValidTrue' event has been triggered, assets are unselected, and the items within 'chosenAssets' no longer meet the selection criteria, a second custom event 'isValidFalse' is triggered. The 'isValidFalse' event listener can be used to handle any necssary logic that needs to run at that time. For example if when 'isValidTrue' fires, a button is enabled to submit 'chosenAssets', you would probably want to disable the button when 'isValidFalse' is triggered. You also might want to secure 'chosenAssets' so it is no longer available in the parent application.
 
-#### **isValidTrue event listener**
+##### **isValidTrue event listener**
 
 Use the custom event listener below in the parent application to receive 'chosenAssets' from the GIS Asset Manager when asset selection is valid (isValid = true)
 
@@ -218,7 +222,7 @@ document.addEventListener("isValidTrue", function (event) {
 });
 ```
 
-#### **isValidFalse event listener**
+##### **isValidFalse event listener**
 
 Use the custom event listener below to handle when asset selection is not valid (isValid = false)
 
@@ -227,6 +231,38 @@ Use the custom event listener below to handle when asset selection is not valid 
 // Further customize as needed to fit your use case
 document.addEventListener("isValidFalse", function (event) {
   // your logic here to handle when isValid is false
+});
+```
+
+##### **Sketched Assets**
+
+When assets are sketched by a user they are added to an array 'createdAssets'. When the sketched assets in 'createdAssets' meet the sketching criteria, a custom event 'createdAssetsAreValidIsTrue' is triggered. This event makes the 'createdAssets' array available to the parent application. Use the 'createdAssetsAreValidIsTrue' event listener to bring 'createdAssets' into the parent application and handle any changes to the user interface or any other logic that needs to run at that time. For example you may what to enable a submit button when 'createdAssetsAreValidIsTrue' is triggered.
+
+If after the 'createdAssetsAreValidIsTrue' event has been triggered, assets are removed or modified, and the items within 'createdAssets' no longer meet the sketching criteria, a second custom event 'createdAssetsAreValidIsFalse' is triggered. The 'createdAssetsAreValidIsFalse' event listener can be used to handle any necessary logic that needs to run at that time. For example if when 'createdAssetsAreValidIsTrue' fires, a button is enabled to submit 'createdAssets', you would probably want to disable the button when 'createdAssetsAreValidIsFalse' is triggered. You also might want to secure 'createdAssets' so it is no longer available in the parent application.
+
+##### **createdAssetsAreValidIsTrue event listener**
+
+Use the custom event listener below in the parent application to receive 'createdAssets' from the GIS Asset Manager when sketched assets are valid (createdAssetsAreValid = true)
+
+```javascript
+// Custom event listener to receive createdAssets from the asset manager when sketched assets are valid (createdAssetsAreValid = true)
+document.addEventListener("createdAssetsAreValidIsTrue", function (event) {
+  const createdAssets = event.detail.createdAssets;
+  // log createdAssets to the console to verify that 'createdAssets' is available to parent app
+  console.log("createdAssets available to parent:", createdAssets);
+  // your logic here to handle createdAssets within the parent application when createdAssetsAreValid is true
+});
+```
+
+##### **createdAssetsAreValidIsFalse event listener**
+
+Use the custom event listener below to handle when sketched assets are not valid (createdAssetsAreValid = false)
+
+```javascript
+// Custom event listener for when createdAssetsAreValid is false (createdAssetsAreValid = false)
+// Further customize as needed to fit your use case
+document.addEventListener("createdAssetsAreValidIsFalse", function (event) {
+  // your logic here to handle when createdAssetsAreValid is false
 });
 ```
 
