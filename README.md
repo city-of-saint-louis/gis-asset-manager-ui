@@ -8,15 +8,17 @@ _Please note: The documentation below is in process and is not yet fully compreh
 
 GIS Asset Manager UI utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) to create an interactive map that can be configured with various different graphic layers for selecting existing assets and/or adding new assets.
 
-Developers can configure the module to fit a specific use case by passing property values to the module's custom elements. Users can select assets contained within the graphic layers by mouse click and/or add new assets using the Sketch feature depending on the module is configured. GIS Asset Manager UI can be configured to run in **Select Mode** allowing users to select existing assets, **Sketch Mode** allowing users to add new assets, or **both modes simultaneously**.
+Developers can configure the module to fit a specific use case by passing property values to the module's custom elements. GIS Asset Manager UI can be configured to run in **Select Mode** allowing users to select existing assets, **Sketch Mode** allowing users to add new assets, or **both modes simultaneously**. Users can select assets contained within the graphic layers by mouse click and/or add new assets using the sketch feature depending on the module configuration.
 
-Selected assets are added to an array called 'chosenAssets', and newly sketched assets are added to an array called 'createdAssets'.
+Selected assets are added to an array called 'chosenAssets'.
+
+Newly sketched assets are added to an array called 'createdAssets'.
 
 GIS Asset Manager UI is not a standalone application. It is intended for use within a parent application.
 
-When the asset requirements have been met by the user, the array of chosen assets ('chosenAssets') and/or the array of newly sketched assets ('createdAssets') become available to the parent application through custom events that are triggered automatically when the asset requirements are met.
+When the user meets the asset requirements, the arrays of chosen assets ('chosenAssets') and/or newly sketched assets ('createdAssets') are made available to the parent application through custom events.
 
-The parent application can then receive the 'chosenAssets' array and/or the 'createdAssets' array through the use of custom event listeners. The parent application can then consume the data as needed.
+The parent application can then receive 'chosenAssets' and/or 'createdAssets' through the use of custom event listeners. The parent application can then consume the data as needed.
 
 ## **[Link to Demo](https://miniature-chainsaw-9qqvvzp.pages.github.io/)**
 
@@ -25,7 +27,8 @@ The parent application can then receive the 'chosenAssets' array and/or the 'cre
 - [Getting Started](#getting-started)
 - [How To Use GIS Asset Manager UI](#how-to-use-gis-asset-manager-ui)
 - [Parts of GIS Asset Manager UI](#parts-of-gis-asset-manager-ui)
-- [Accessible Accommodation](#accessible-accommodation)
+- [Accessibility Accommodation](#accessibility-accommodation)
+- [Modes](#modes)
 
 ## Getting Started
 
@@ -38,7 +41,7 @@ There are three ways to use GIS Asset Manager UI in your project:
 1. You can install the module via npm:
 
    ```bash
-   npm install gis-asset-manager
+   npm install @city-of-stl/gis-asset-manager
    ```
 
 2. You can use GIS Asset Manager UI via a CDN:
@@ -59,13 +62,19 @@ GIS Asset Manager UI relies on the [ArcGIS Maps SDK for JavaScript](https://deve
 
 ```html
 <!-- Load Calcite Design System from ArcGIS-->
-<script type="module" src="https://js.arcgis.com/calcite-components/3.3.3/calcite.esm.js"></script>
+<script
+  type="module"
+  src="https://js.arcgis.com/calcite-components/3.3.3/calcite.esm.js"
+></script>
 
 <!-- Load the JavaScript Maps SDK core API -->
 <script src="https://js.arcgis.com/4.34/"></script>
 
-<!-- Load the JavaScript Maps SDK Map components or other component packages -->
-<script type="module" src="https://js.arcgis.com/4.34/map-components/"></script>
+<!-- Load the JavaScript Maps SDK Map components package -->
+<script
+  type="module"
+  src="https://js.arcgis.com/4.34/map-components/"
+></script>
 ```
 
 According to the [ArcGIS Maps SDK for JavaScript documentation](https://developers.arcgis.com/javascript/latest/get-started/), you can also install the SDK via npm although the documentation is a bit vague on which packages are required.
@@ -87,16 +96,17 @@ Refer to the [ArcGIS Maps SDK for JavaScript documentation](https://developers.a
 ## **How To Use GIS Asset Manager UI**
 
 1. [Use Custom Elements in HTML](#use-custom-elements-in-html)
-2. [Place custom event listeners in parent application](#place-custom-event-listeners-in-parent-application)
-3. [Further customize event listeners to fit your use case](#further-customize-event-listeners-to-fit-your-use-case)
+2. [Modes](#modes)
+3. [Place custom event listeners in parent application](#place-custom-event-listeners-in-parent-application)
+4. [Further customize event listeners to fit your use case](#further-customize-event-listeners-to-fit-your-use-case)
 
 ### **Use Custom Elements in HTML**
 
-Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Manager are in place, simply use the custom elements in your HTML and pass the necessary property values to both elements as needed.
+Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Manager are in place, simply use the custom elements in your HTML and pass the necessary property values to the configurable custom elements as needed.
 
 **_Note: Remember to quote all attribute values in HTML, even for numbers and booleans. For example: `zoom="12"`, `show-search="true"`._**
 
-#### **Example Implementation of GIS Asset Manager UI's two custom elements in HTML**
+#### **Example Implementation in HTML**
 
 ```html
 <!DOCTYPE html>
@@ -105,13 +115,22 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Manager are in place, 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GIS Asset Manager Demo</title>
-    <!-- Bring in ArcGIS CSS -->
-    <link
-      rel="stylesheet"
-      href="https://js.arcgis.com/4.30/esri/themes/light/main.css"
-    />
-    <!-- Bring in ArcGIS JavaScript -->
-    <script src="https://js.arcgis.com/4.30/"></script>
+    <!-- Optionally include Asset Manager styles -->
+    <link rel="stylesheet" href="asset-manager-styles.css" />
+    <!-- Optionally include City of St Louis styles -->
+    <link rel="stylesheet" href="city-of-stl-styles.css" />
+    <!-- Load Calcite Design System -->
+    <script
+      type="module"
+      src="https://js.arcgis.com/calcite-components/3.3.3/calcite.esm.js"
+    ></script>
+    <!-- Load the JavaScript Maps SDK core API -->
+    <script src="https://js.arcgis.com/4.34/"></script>
+    <!-- Load the JavaScript Maps SDK Map components package -->
+    <script
+      type="module"
+      src="https://js.arcgis.com/4.34/map-components/"
+    ></script>
   </head>
   <body>
     <header></header>
@@ -153,6 +172,28 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Manager are in place, 
   </body>
 </html>
 ```
+
+### Modes
+
+GIS Asset Manager UI has 3 modes:
+
+#### 1. Select Mode
+
+Allows users to select assets from graphic layers by mouse click.
+
+![Select Mode](/assets/screenshots/select-mode.png)
+
+#### 2. Sketch Mode
+
+Allows users to add assets to the map.
+
+![Sketch Mode](/assets/screenshots/sketch-mode.png)
+
+#### 3. Select Mode & Sketch Mode
+
+Allows users to select and add assets.
+
+![Select Mode & Sketch Mode](/assets/screenshots/select-and-sketch-mode.png)
 
 ### **Place custom event listeners in parent application**
 
@@ -257,7 +298,7 @@ There are 5 custom elements in GIS Asset Manager UI. The module is configured by
 
 ##### **asset-manager-container.js**
 
-A reusable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Manager, including the map, is rendered. It is a parent to **asset-manager-map-layer.js**.
+A reusable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This is where the ArcGIS Asset Manager, including the map, is rendered. It is a parent to **asset-manager-map-layer.js** and **asset-manager-sketchable-map-layer.js**.
 
 The Asset Manager can be configured as needed by passing values for the following properties to the container element.
 
@@ -349,8 +390,17 @@ The Asset Manager can be configured as needed by passing values for the followin
 
 ```html
 <asset-manager-container
-  title="Parade Permit Application"
-  hint="Select the street segments for your proposed parade route."
+  title="Select Street Segments and Parcels as Needed"
+  hint="Select assets by mouse click to fulfill the requirements. Submit selected assets when finished."
+  is-sketch-enabled="false"
+  is-select-enabled="true"
+  is-select-by-search-enabled="true"
+  extent-xmin="-16800000"
+  extent-ymin="2000000"
+  extent-xmax="-5000000"
+  extent-ymax="9000000"
+  extent-spatial-reference-wkid="102100"
+  title-heading-level="3"
 >
 </asset-manager-container>
 ```
@@ -364,11 +414,7 @@ assetManagerContainer.setAttribute("hint", "Select the street segments for your 
 assetManagerContainer.setAttribute("title-heading-level", "1");
 ```
 
-The asset manager container also houses the **accessibility accommodation**. Users navigating by keyboard are unable to tab into the map and select assets with the keyboard. Even if they could, a map layer may contain thousands of assets. It is not reasonable to ask someone to tab through thousands of assets to find the one they need. In order to account for this we have provided an accommodation for folks navigating by keyboard and using assistive technology such as a screen reader. We have placed a button above the map for users who need to access this accommodation. When the button is clicked a modal opens with a text input allowing users to enter information on their required assets.
-
-No additional configuration is required to implement this solution. A text input is generated for each map layer that has been applied. Users can add additional inputs as needed.
-
-The select by search feature can be used on layers where it is apropriate to elminate the need for the optional text input.
+The asset manager container also houses the [**accessibility accommodation**](#accessibility-accommodation).
 
 #### **AssetManagerMapLayer**
 
@@ -490,12 +536,16 @@ A sketchable map layer can be configured as needed by passing values for the fol
 
 A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This custom element has no configurable properties. An instance of this element is used for each map layer placed on the map. The element displays the asset requirements and selected or sketched asset data for its corresponding map layer.
 
-![AssetManagerMapLayerDataDisplay - 2 assets required](map-layer-data-display-2-req.png)
-![AssetManagerMapLayerDataDisplay - 2 assets added](map-layer-data-display-2-added.png)
+![AssetManagerMapLayerDataDisplay - 2 assets required](/assets/screenshots/map-layer-data-display-2-req.png)
+![AssetManagerMapLayerDataDisplay - 2 assets added](/assets/screenshots/map-layer-data-display-2-added.png)
 
 #### **AssetManagerModeToggle**
 
 ##### **asset-manager-mode-toggle.js**
+
+A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This custom element has no configurable properties. This element is put in place when both select mode and sketch mode are enabled. It allows the user to toggle between the two modes.
+
+![AssetManagerModeToggle](/assets/screenshots/mode-toggle.png)
 
 ### Other JavaScript Files
 
@@ -544,6 +594,8 @@ To use the CSS in your project, include the desired stylesheet(s) in the `<head>
 <link rel="stylesheet" href="path/to/city-of-stl-styles.css">
 ```
 
+_**Please note:** If you do not use **asset-manager-styles.css**, you must provide a height for the div with id 'viewDiv' in your CSS or the map will not render on the screen._
+
 #### **asset-manager-styles.css**
 
 CSS stylesheet for the asset manager module. This provides basic styling for functionality.
@@ -552,4 +604,12 @@ CSS stylesheet for the asset manager module. This provides basic styling for fun
 
 CSS stylesheet for the City of St. Louis asset manager implementation. This provides styling to match the [City of St. Louis website](https://www.stlouis-mo.gov/).
 
-## Accessible Accommodation
+## Accessibility Accommodation
+
+Users navigating by keyboard are unable to tab into the map and select assets with the keyboard. Even if they could, a map layer may contain thousands of assets. It is not reasonable to ask someone to tab through thousands of assets to find the one they need. In order to account for this we have provided an accommodation for folks navigating by keyboard and using assistive technology such as a screen reader. We have placed a button above the map for users who need to access this accommodation. When the button is clicked a modal opens with a text input allowing users to enter information on their required assets.
+
+No additional configuration is required to implement this solution. A text input is generated for each map layer that has been applied. Users can add additional inputs as needed.
+
+The select by search feature can be used on layers where it is appropriate to eliminate the need for the optional text input. This feature allows assets to be selected through the search bar and is keyboard accessible. This feature must be enabled on both the map layer and the container. This feature is still in development and only appropriate for assets that will be easily recognizable from a drop down menu.
+
+![alt text](/assets/screenshots/select-by-search.png)
