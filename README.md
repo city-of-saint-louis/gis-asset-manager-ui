@@ -488,50 +488,68 @@ A sketchable map layer can be configured as needed by passing values for the fol
 
 ##### **asset-manager-map-layer-data-display.js**
 
+A reusuable [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) made with [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) technologies. This custom element has no configurable properties. An instance of this element is used for each map layer placed on the map. The element displays the asset requirements and selected or sketched asset data for its corresponding map layer.
+
+![AssetManagerMapLayerDataDisplay - 2 assets required](map-layer-data-display-2-req.png)
+![AssetManagerMapLayerDataDisplay - 2 assets added](map-layer-data-display-2-added.png)
+
 #### **AssetManagerModeToggle**
 
 ##### **asset-manager-mode-toggle.js**
 
 ### Other JavaScript Files
 
-1. [assest-manager-container-functions.js](#asset-manager-container-functionsjs)
-2. [asset-manager-functions.js](#asset-manager-functionsjs)
+1. [asset-manager.js](#asset-managerjs)
+2. [asset-manager-state.js](#asset-manager-statejs)
 3. [asset-manager-initialize-map.js](#asset-manager-initialize-mapjs)
-4. [asset-manager-state.js](#asset-manager-statejs)
-5. [asset-manager.js](#asset-managerjs)
-6. [asset-manager-styles.css](#asset-manager-stylescss)
+4. [asset-manager-functions.js](#asset-manager-functionsjs)
+5. [assest-manager-container-functions.js](#asset-manager-container-functionsjs)
+6. [asset-manager-sketchable-map-layer-functions.js](#asset-manager-sketchable-map-layer-functionsjs)
 
-### **asset-manager-container-functions.js**
+### **asset-manager.js**
 
-This file contains the functions that are only used in the asset manager container. Functions are exported from this file and imported into asset-manager-container.js
-
-### **asset-manager-functions.js**
-
-This file contains most of the functions used by the asset manager. Functions are exported from this file and imported where they are needed.
-
-### **asset-manager-initialize-map.js**
-
-This file holds the initializeMap function. This function uses the map layers and other data to generate the map. It is exported from here and imported into asset-manager.js and asset-manager-container-functions.js
+This is the entry point for the asset manager module. It imports the necessary functions and state variables from the other files and initializes the asset manager.
 
 ### **asset-manager-state.js**
 
 This file holds all of the state variables that are required for the asset manager to function. Variables are declared and exported from this file and imported into the other files as needed.
 
-### **asset-manager.js**
+### **asset-manager-initialize-map.js**
 
-This file captures the x,y coordinates from address validation and the map layer data from the map-layer components and uses the data to initialize the map.
+This file holds the initializeMap function. This function uses the map layers and other data to generate the map. It is exported from here and imported into asset-manager.js and asset-manager-container-functions.js
+
+### **asset-manager-functions.js**
+
+This file contains most of the functions used by the asset manager. Functions are exported from this file and imported where they are needed.
+
+### **asset-manager-container-functions.js**
+
+This file contains the functions that are only used in the asset manager container. Functions are exported from this file and imported into asset-manager-container.js
+
+### **asset-manager-sketchable-map-layer-functions.js**
+
+This file contains the functions that are only used in the asset manager sketchable map layer. Functions are exported from this file and imported into asset-manager-sketchable-map-layer.js
 
 ### CSS Files
+
+GIS Asset Manager UI has two CSS stylesheets. You can choose to use them or not depending on the needs of your project.
 
 1. [asset-manager-styles.css](#asset-manager-stylescss)
 2. [city-of-stl-styles.css](#city-of-stl-stylescss)
 
+To use the CSS in your project, include the desired stylesheet(s) in the `<head>` of your HTML file:
+
+```html
+<link rel="stylesheet" href="path/to/asset-manager-styles.css">
+<link rel="stylesheet" href="path/to/city-of-stl-styles.css">
+```
+
 #### **asset-manager-styles.css**
 
-CSS stylesheet for the asset manager module
+CSS stylesheet for the asset manager module. This provides basic styling for functionality.
 
 #### **city-of-stl-styles.css**
 
-CSS stylesheet for the City of St. Louis asset manager implementation
+CSS stylesheet for the City of St. Louis asset manager implementation. This provides styling to match the [City of St. Louis website](https://www.stlouis-mo.gov/).
 
 ## Accessible Accommodation

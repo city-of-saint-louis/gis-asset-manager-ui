@@ -155,6 +155,10 @@
   gap: 0.5rem; /* space between buttons */
 }
 
+.max-asset-allowed-message {
+  margin-top: .25rem;  
+}
+
 .toggleLayerVisibilityButton {
   font-size: 12px;
   background-color: #eeeeee;

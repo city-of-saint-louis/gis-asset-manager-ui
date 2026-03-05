@@ -115,7 +115,6 @@ class AssetManagerMapLayerDataDisplay extends HTMLElement {
           layerMaxScale > 0 ? `Zoom Out` : ""
         }`;
         toggleLayerVisibilityButton.setAttribute("disabled", true);
-        // toggleLayerVisibilityButton.setAttribute("hidden", true);
         toggleLayerVisibilityButton.classList.add("invisible-button");
       }
     }
@@ -319,7 +318,7 @@ class AssetManagerMapLayerDataDisplay extends HTMLElement {
                     ? `Add a maximum of ${maxAssetsAllowed} to ${displayName} layer`
                     : `Select a maximum of ${maxAssetsAllowed} from ${displayName} layer`
                 }"
-                class="label label-default"
+                class="label label-default max-asset-allowed-message"
               >
                 ${maxAssetsAllowed} maximum
               </span>`

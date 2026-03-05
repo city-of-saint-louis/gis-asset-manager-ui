@@ -15,7 +15,7 @@ import {
   isValid,
   // createdAssetsAreValid,
   setIsValid,
-  isSelectBySearchEnabled,
+  // isSelectBySearchEnabled,
   // setIsSelectEnabled,
   // setIsSketchEnabled,
   // assetMode,
