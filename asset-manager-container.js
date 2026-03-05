@@ -21,7 +21,6 @@ class AssetManagerContainer extends HTMLElement {
     enableSelectMode(this.isSelectEnabled);
     if (this.isSelectBySearchEnabled) {
       setIsSelectBySearchEnabled(true);
-      // console.log("Select by search is enabled in AssetManagerContainer");
     }
     const accomodationButtonMessage =
       "Click this button to enter assets if you are using assistive technology and are unable to select assets on the map.";

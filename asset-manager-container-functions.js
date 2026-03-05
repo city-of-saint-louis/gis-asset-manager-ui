@@ -3,7 +3,7 @@ import {
   featureLayers,
   graphicLayers,
   chosenAssets,
-  createdAssets,
+  // createdAssets,
   chosenAssetFormData,
   createdAssetFormData,
   isValid,
@@ -21,16 +21,24 @@ import { secureChosenAssets } from "./asset-manager-functions.js";
 import { initializeMap } from "./asset-manager-initialize-map.js";
 
 const handleAddAssetInputButtonClick = (event) => {
-  // console.log("Add asset input button clicked:", event.target);
   if (event.target.classList.contains("add-asset-input-button")) {
     const layerName = event.target.dataset.layer;
-    // console.log("Adding input for layer:", layerName);
     const assetType = event.target.dataset.type;
-    // console.log('assetType', assetType)
-
-    // const layer = featureLayers.find(
-    //   (layer) => layer.layerProperties.layerName === layerName
-    // );
+    console.log('dataset', event.target);
+    const allMapLayers = [...featureLayers, ...graphicLayers];
+    console.log('allMapLayers', allMapLayers);
+    const currentLayer = allMapLayers.find(
+      (layer) => layer.layerProperties.layerName === layerName
+    );
+    console.log('currentLayer', currentLayer);
+    const maxInputs = currentLayer ? currentLayer.maxAssetsAllowed : 0;
+    console.log('maxInputs', maxInputs);
+    const minInputsRequired = currentLayer ? currentLayer.minAssetsRequired : 0;
+    console.log('minInputsRequired', minInputsRequired);
+    // let currentNumOfInputs = minInputsRequired;
+    // currentNumOfInputs ++;
+    // console.log('currentNumOfInputs', currentNumOfInputs);
+   
     let layer;
     if (assetType === "selected") {
       layer = featureLayers.find(
@@ -46,13 +54,21 @@ const handleAddAssetInputButtonClick = (event) => {
       const inputContainer = document.getElementById(
         `${layerName}-input-container`,
       );
+      let numOfAddedInputs = document.querySelectorAll(`.${layerName}-added-input`).length;
+      let currentNumOfInputs = numOfAddedInputs + minInputsRequired;
+      console.log('currentNumOfInputs', currentNumOfInputs);
+      if (currentNumOfInputs < maxInputs) {
       const newInput = document.createElement("input");
       newInput.type = "text";
       newInput.name = layer.layerProperties.formattedLayerName;
       newInput.id = `${layerName}-${inputContainer.querySelectorAll("input").length}`;
       newInput.size = 60;
-      newInput.classList.add("accessible-accommodation-input");
+      newInput.classList.add(`accessible-accommodation-input`, `${layerName}-added-input`);
       inputContainer.appendChild(newInput);
+      }
+      else {
+        alert(`Maximum number of inputs (${maxInputs}) reached for ${layerName}`);
+      }
     }
   }
 };
