@@ -36,6 +36,7 @@
   "keywords": [
     "GIS",
     "ArcGIS",
+    "ArcGIS Maps SDK for JavaScript",
     "JavaScript",
     "web components",
     "map",
@@ -43,6 +44,8 @@
     "asset manager",
     "city",
     "St. Louis",
-    "Missouri"
+    "Missouri",
+    "City of St. Louis",
+    "City of St. Louis Web Team"
   ]
 }
