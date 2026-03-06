@@ -32,5 +32,17 @@
     "dist",
     "README.md",
     "LICENSE"
+  ],
+  "keywords": [
+    "GIS",
+    "ArcGIS",
+    "JavaScript",
+    "web components",
+    "map",
+    "assets",
+    "asset manager",
+    "city",
+    "St. Louis",
+    "Missouri"
   ]
 }
