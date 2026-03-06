@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/city-of-saint-louis/gis-asset-manager-ui.git"
   },
+   "publishConfig": {
+    "access": "public"
+  },
   "license": "MIT",
   "author": "The City of St. Louis Web Team",
   "type": "module",
