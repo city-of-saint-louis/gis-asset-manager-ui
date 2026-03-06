@@ -1,6 +1,6 @@
 {
   "name": "@cityofstlouis/gis-asset-manager-ui",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "GIS Asset Manager UI utilizes the ArcGIS Maps SDK for JavaScript to create an interactive map for asset selection and/or asset creation, along with a user interface for managing assets. It is intended for use within a parent application.",
   "homepage": "https://github.com/city-of-saint-louis/gis-asset-manager-ui#readme",
   "bugs": {
@@ -32,5 +32,20 @@
     "dist",
     "README.md",
     "LICENSE"
+  ],
+  "keywords": [
+    "GIS",
+    "ArcGIS",
+    "ArcGIS Maps SDK for JavaScript",
+    "JavaScript",
+    "web components",
+    "map",
+    "assets",
+    "asset manager",
+    "city",
+    "St. Louis",
+    "Missouri",
+    "City of St. Louis",
+    "City of St. Louis Web Team"
   ]
 }

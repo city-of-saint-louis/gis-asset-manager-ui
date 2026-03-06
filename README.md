@@ -36,12 +36,10 @@ The parent application can then receive 'chosenAssets' and/or 'createdAssets' th
 
 There are three ways to use GIS Asset Manager UI in your project:
 
-**_Please note: The commands below are placeholders to be updated once the module is published to npm._**
-
 1. You can install the module via npm:
 
    ```bash
-   npm install @city-of-stl/gis-asset-manager
+   npm install @cityofstlouis/gis-asset-manager-ui
    ```
 
 2. You can use GIS Asset Manager UI via a CDN:
@@ -116,24 +114,25 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Manager are in place, 
 #### **Example Implementation in HTML**
 
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GIS Asset Manager Demo</title>
-    <!-- Optionally include Asset Manager styles -->
-    <link rel="stylesheet" href="asset-manager-styles.css" />
-    <!-- Optionally include City of St Louis styles -->
-    <link rel="stylesheet" href="city-of-stl-styles.css" />
-    <!-- Load Calcite Design System -->
+    <title>GIS Asset Manager</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui/dist/asset-manager-styles.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui/dist/city-of-stl-styles.css"
+    />
     <script
       type="module"
-      src="https://js.arcgis.com/calcite-components/3.3.3/calcite.esm.js"
+      src="https://js.arcgis.com/calcite-components/3.2.1/calcite.esm.js"
     ></script>
-    <!-- Load the JavaScript Maps SDK core API -->
     <script src="https://js.arcgis.com/4.34/"></script>
-    <!-- Load the JavaScript Maps SDK Map components package -->
     <script
       type="module"
       src="https://js.arcgis.com/4.34/map-components/"
@@ -142,40 +141,37 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Manager are in place, 
   <body>
     <header></header>
     <main>
-      <!-- Insert the container element into html. Pass in property values as needed. -->
-      <!-- Title and hint are the only properties with no default value.  -->
       <asset-manager-container
-        title="Select Assets Required For Your Use Case"
-        hint="Click on the map to select required assets. Click again to unselect."
+        title="Select Street Segments and Parcels as Needed"
+        hint="Zoom in to see the asset layers. Select assets by mouse click to fulfill the requirements. Submit selected assets when finished."
+        is-sketch-enabled="false"
+        is-select-enabled="true"
       >
-        <!-- Use the map layer element inside the container element. -->
-        <!-- Use a new instance of the map layer element for each layer you want to put on the map. -->
-        <!-- Instance of the map layer custom element used to add "Streets" layer. -->
         <asset-manager-map-layer
-          name="Streets"
-          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/0"
+          name="street"
+          layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/0/"
+          layer-asset-id-field-name="OBJECTID"
+          minimum="0"
+          label-mask="{LeftFromAddress} to {RightToAddress} {StreetName}"
+          min-scale="20000"
+          asset-label="StreetName"
+        ></asset-manager-map-layer>
+        <asset-manager-map-layer
+          name="PARCEL"
+          layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/4/"
           layer-asset-id-field-name="OBJECTID"
           minimum="1"
-          maximum="3"
-          label-mask="{FULLNAME} from {From_Stree} to {To_Street}"
-          min-scale="10000"
-        >
-        </asset-manager-map-layer>
-        <!-- Instance of the map layer custom element used to add "Parcels" layer. -->
-        <asset-manager-map-layer
-          name="Parcels"
-          layer-class-url="https://maps6.stlouis-mo.gov/arcgis/rest/services/CITYWORKS/CW_BASE/MapServer/4"
-          layer-asset-id-field-name="FID"
-          minimum="1"
-          maximum="0"
+          maximum="6"
           label-mask="{SITEADDR}"
-          max-scale="10000"
-        >
-        </asset-manager-map-layer>
+          min-scale="30000"
+          asset-label="SITEADDR"
+        ></asset-manager-map-layer>
       </asset-manager-container>
     </main>
-    <footer></footer>
-    <script type="module" src="asset-manager.js"></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui/dist/asset-manager.esm.js"
+    ></script>
   </body>
 </html>
 ```

@@ -41,10 +41,24 @@ document.addEventListener("DOMContentLoaded", () => {
   customElements.define("asset-manager-map-layer-data-display", AssetManagerMapLayerDataDisplay);
   customElements.define("asset-manager-container", AssetManagerContainer);
   // Wait for the AssetManagerContainer to be defined and rendered before initializing the map
+  // customElements.whenDefined('asset-manager-container').then(() => {
+  //   // Wait a tick for rendering
+  //   setTimeout(() => {
+  //     initializeMap();
+  //   }, 0);
+  // });
   customElements.whenDefined('asset-manager-container').then(() => {
-    // Wait a tick for rendering
-    setTimeout(() => {
-      initializeMap();
-    }, 0);
+  function waitForElement(selector, callback) {
+    const el = document.querySelector(selector);
+    if (el) {
+      callback(el);
+    } else {
+      setTimeout(() => waitForElement(selector, callback), 100);
+    }
+  }
+
+  waitForElement("#viewDiv", () => {
+    initializeMap();
   });
+});
 });
