@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/city-of-saint-louis/gis-asset-manager-ui.git"
   },
-   "publishConfig": {
+  "publishConfig": {
     "access": "public"
   },
   "license": "MIT",
@@ -25,14 +25,12 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
-    "rollup": "^4.55.1",
+    "rollup": "^4.59.0",
     "rollup-plugin-copy": "^3.5.0"
   },
   "files": [
     "dist",
     "README.md",
     "LICENSE"
-  ],
-  "dependencies": {
-  }
+  ]
 }
