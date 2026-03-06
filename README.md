@@ -41,13 +41,16 @@ There are three ways to use GIS Asset Manager UI in your project:
 1. You can install the module via npm:
 
    ```bash
-   npm install @city-of-stl/gis-asset-manager
+   npm install @cityofstlouis/gis-asset-manager-ui
    ```
 
 2. You can use GIS Asset Manager UI via a CDN:
 
    ```html
-   <script src="https://cdn.jsdelivr.net/npm/gis-asset-manager/dist/gis-asset-manager.js"></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui/dist/asset-manager.esm.js"
+    ></script>
    ```
 
 3. You can also include GIS Asset Manager UI directly in your project by downloading the source files and referencing them locally. This method is not recommended as you do not need all of the files in the asset manager repository to run the module and it will make updating the module within your project more difficult. If you choose this method you only need to include the JavaScript files (not including `parent-application.js`) in your project. You must keep all of the JavaScript files in the same directory. You can choose to use the two CSS stylesheets or not. See the section on [CSS Files](#css-files) for more information. You only need to include a script tag for the main JavaScript file `gis-asset-manager.js` in your HTML file.
