@@ -47,7 +47,17 @@ There are three ways to use GIS Asset Manager UI in your project:
 2. You can use GIS Asset Manager UI via a CDN:
 
    ```html
-   <script src="https://cdn.jsdelivr.net/npm/gis-asset-manager/dist/gis-asset-manager.js"></script>
+   <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui/dist/asset-manager-styles.css"
+   />
+   <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui/dist/city-of-stl-styles.css"
+   />
+   <script 
+     src="https://cdn.jsdelivr.net/npm/gis-asset-manager/dist/gis-asset-manager.js">
+   </script>
    ```
 
 3. You can also include GIS Asset Manager UI directly in your project by downloading the source files and referencing them locally. This method is not recommended as you do not need all of the files in the asset manager repository to run the module and it will make updating the module within your project more difficult. If you choose this method you only need to include the JavaScript files (not including `parent-application.js`) in your project. You must keep all of the JavaScript files in the same directory. You can choose to use the two CSS stylesheets or not. See the section on [CSS Files](#css-files) for more information. You only need to include a script tag for the main JavaScript file `gis-asset-manager.js` in your HTML file.
@@ -71,10 +81,7 @@ GIS Asset Manager UI relies on the [ArcGIS Maps SDK for JavaScript](https://deve
 <script src="https://js.arcgis.com/4.34/"></script>
 
 <!-- Load the JavaScript Maps SDK Map components package -->
-<script
-  type="module"
-  src="https://js.arcgis.com/4.34/map-components/"
-></script>
+<script type="module" src="https://js.arcgis.com/4.34/map-components/"></script>
 ```
 
 According to the [ArcGIS Maps SDK for JavaScript documentation](https://developers.arcgis.com/javascript/latest/get-started/), you can also install the SDK via npm although the documentation is a bit vague on which packages are required.
@@ -418,9 +425,9 @@ The Asset Manager can be configured as needed by passing values for the followin
     - **Description:** Sets the spatial reference WKID for the map extent.
     - **Default value:** `102100`
 
-  **_If a value is not provided for a property, the default value will take effect._**
+**_If a value is not provided for a property, the default value will take effect._**
 
-  **_Note: All attribute values must be quoted in HTML, regardless of type. For example, use `zoom="12"` and `show-search="true"`, not `zoom=12` or `show-search=true`._**
+**_Note: All attribute values must be quoted in HTML, regardless of type. For example, use `zoom="12"` and `show-search="true"`, not `zoom=12` or `show-search=true`._**
 
 ##### HTML example
 
@@ -446,7 +453,10 @@ The Asset Manager can be configured as needed by passing values for the followin
 ```javascript
 const assetManagerContainer = document.createElement("asset-manager-container");
 assetManagerContainer.setAttribute("title", "Parade Permit Application");
-assetManagerContainer.setAttribute("hint", "Select the street segments for your proposed parade route.");
+assetManagerContainer.setAttribute(
+  "hint",
+  "Select the street segments for your proposed parade route.",
+);
 assetManagerContainer.setAttribute("title-heading-level", "1");
 ```
 
@@ -501,9 +511,9 @@ A map layer can be configured as needed by passing values for the following prop
    - description: Enables the select by search feature for this layer.
    - default value: false
 
- **_If a value is not provided for a property, the default value will take effect._**
+**_If a value is not provided for a property, the default value will take effect._**
 
- **_Note: All attribute values must be quoted in HTML, regardless of type. For example, use `zoom="12"` and `show-search="true"`, not `zoom=12` or `show-search=true`._**
+**_Note: All attribute values must be quoted in HTML, regardless of type. For example, use `zoom="12"` and `show-search="true"`, not `zoom=12` or `show-search=true`._**
 
 ```html
 <asset-manager-map-layer
@@ -551,9 +561,9 @@ A sketchable map layer can be configured as needed by passing values for the fol
    - description: The type of sketch that can be drawn on this layer. Possible values are "point", "polyline", and "polygon".
    - default value: "point"
 
- **_If a value is not provided for a property, the default value will take effect._**
+**_If a value is not provided for a property, the default value will take effect._**
 
- **_Note: All attribute values must be quoted in HTML, regardless of type. For example, use `zoom="12"` and `show-search="true"`, not `zoom=12` or `show-search=true`._**
+**_Note: All attribute values must be quoted in HTML, regardless of type. For example, use `zoom="12"` and `show-search="true"`, not `zoom=12` or `show-search=true`._**
 
 ```html
 <asset-manager-sketchable-map-layer
@@ -626,8 +636,8 @@ GIS Asset Manager UI has two CSS stylesheets. You can choose to use them or not 
 To use the CSS in your project, include the desired stylesheet(s) in the `<head>` of your HTML file:
 
 ```html
-<link rel="stylesheet" href="path/to/asset-manager-styles.css">
-<link rel="stylesheet" href="path/to/city-of-stl-styles.css">
+<link rel="stylesheet" href="path/to/asset-manager-styles.css" />
+<link rel="stylesheet" href="path/to/city-of-stl-styles.css" />
 ```
 
 _**Please note:** If you do not use **asset-manager-styles.css**, you must provide a height for the div with id 'viewDiv' in your CSS or the map will not render on the screen._
