@@ -36,8 +36,6 @@ The parent application can then receive 'chosenAssets' and/or 'createdAssets' th
 
 There are three ways to use GIS Asset Manager UI in your project:
 
-**_Please note: The commands below are placeholders to be updated once the module is published to npm._**
-
 1. You can install the module via npm:
 
    ```bash
