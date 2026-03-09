@@ -25,9 +25,12 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-node-resolve": "^16.0.3",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^13.1.5",
     "rollup": "^4.59.0",
     "rollup-plugin-copy": "^3.5.0",
-    "tar": "^7.5.10"
+    "semantic-release": "^25.0.3"
   },
   "files": [
     "dist",
@@ -48,9 +51,5 @@
     "Missouri",
     "City of St. Louis",
     "City of St. Louis Web Team"
-  ],
-  "dependencies": {
-    "@semantic-release/npm": "^13.1.5",
-    "semantic-release": "^25.0.3"
-  }
+  ]
 }
