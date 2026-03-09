@@ -1,17 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data: https://cdn.arcgis.com; style-src 'self' 'unsafe-inline'; script-src 'self' https://js.arcgis.com; font-src 'self' https://js.arcgis.com; connect-src 'self' https://js.arcgis.com/ https://www.arcgis.com https://services.arcgisonline.com https://cdn.arcgis.com https://basemaps.arcgis.com https://maps8.stlouis-mo.gov https://static.arcgis.com https://server.arcgisonline.com; worker-src 'self' blob:;"
+    />
     <title>GIS Asset Manager UI - Select Mode</title>
-    <link rel="icon" type="image/x-icon" href="./assets/icons/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="./assets/icons/favicon.ico" />
     <link rel="stylesheet" href="city-of-stl-styles.css" />
     <link rel="stylesheet" href="asset-manager-styles.css" />
     <link rel="stylesheet" href="dev-styles.css" />
-   <!-- Load Calcite Design System -->
+    <!-- Load Calcite Design System -->
     <script
       type="module"
       src="https://js.arcgis.com/calcite-components/3.3.3/calcite.esm.js"
@@ -25,18 +28,22 @@
     ></script>
   </head>
   <body>
-      <header>
-        <h1>GIS Asset Manager UI</h1>
-        <h2 class="page-sub-title">Select Mode</h2>
-        <nav class="navigation">
-          <a href="index.html">Home</a> |
-          <a href="select-mode.html">Select Mode</a> |
-          <a href="sketch-mode.html">Sketch Mode</a> |
-          <a href="select-and-sketch-modes.html">Select Mode and Sketch Mode</a>
-          <a href="https://github.com/city-of-saint-louis/gis-asset-manager-ui/blob/main/README.md" target="_blank">Documentation</a>
-        </nav>
-      </header>
-      <main>
+    <header>
+      <h1>GIS Asset Manager UI</h1>
+      <h2 class="page-sub-title">Select Mode</h2>
+      <nav class="navigation">
+        <a href="index.html">Home</a> |
+        <a href="select-mode.html">Select Mode</a> |
+        <a href="sketch-mode.html">Sketch Mode</a> |
+        <a href="select-and-sketch-modes.html">Select Mode and Sketch Mode</a>
+        <a
+          href="https://github.com/city-of-saint-louis/gis-asset-manager-ui/blob/main/README.md"
+          target="_blank"
+          >Documentation</a
+        >
+      </nav>
+    </header>
+    <main>
       <asset-manager-container
         title="Select Street Segments and Parcels as Needed"
         hint="Zoom in to see the asset layers. Select assets by mouse click to fulfill the requirements. Submit selected assets when finished."
@@ -85,9 +92,12 @@
         </button>
       </div>
     </main>
-     <footer>
+    <footer>
       <p>Developed by The City of St. Louis Web Team</p>
-      <img src="./assets/images/city-flag-32x32.png" alt="City of St. Louis Flag" />
+      <img
+        src="./assets/images/city-flag-32x32.png"
+        alt="City of St. Louis Flag"
+      />
     </footer>
     <script type="module" src="asset-manager.js"></script>
     <script src="parent-application.js"></script>
