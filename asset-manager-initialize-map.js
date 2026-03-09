@@ -118,7 +118,6 @@ export const initializeMap = async () => {
     };
 
     if (showSearch === "true" || showSearch === true) {
-      console.log("Show search is enabled");
       const searchComponent = document.createElement("arcgis-search");
       searchComponent.setAttribute("position", "top-right");
       searchComponent.setAttribute("popup-disabled", "true");
