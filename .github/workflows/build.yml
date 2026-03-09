@@ -2,8 +2,8 @@ name: Publish to npm on Push to Main
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
 
 permissions:
   id-token: write
