@@ -47,9 +47,7 @@ export const captureSketachableMapLayers = () => {
 };
 
 const enableSketchForLayer = (layer) => {
-  console.log("Enabling sketch for layer:", layer);
   const layerGeometryType = layer.sketchType[0];
-  console.log("layerGeometryType:", layerGeometryType);
   const modeStatusBanner = document.getElementById("mode-status-banner");
   // Clear existing geometry icon if present
   const existingGeometryIcon = modeStatusBanner.querySelector(
@@ -70,7 +68,6 @@ const enableSketchForLayer = (layer) => {
         ? "line"
         : "pin",
   );
-  console.log("geometryIcon:", geometryIcon);
 
   const modeStatusTextSpan = document.getElementById("mode-status-text-span");
   modeStatusTextSpan.innerText = `Sketch Mode Enabled for ${layer.graphicsLayer.formattedLayerName}.`;
