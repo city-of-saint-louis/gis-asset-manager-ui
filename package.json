@@ -34,6 +34,10 @@
     "semantic-release": "^25.0.3",
     "tar": "^7.5.10"
   },
+  "overrides": {
+    "minimatch": "10.2.3",
+    "tar": "7.5.10"
+  },
   "files": [
     "dist",
     "README.md",
