@@ -1,4 +1,4 @@
-name: Publish to npm on Push to Main
+name: Build and Publish on Tag
 
 on:
   push:
