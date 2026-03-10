@@ -8,9 +8,9 @@ If you find a bug or have a feature request, please open an issue on our GitHub 
 
 ## Pull Requests
 
-We welcome contributions to GIS Asset Manager UI! To help us maintain quality and security, please follow these steps:
-
 [GIS Asset Manager UI Pull Requests](https://github.com/city-of-saint-louis/gis-asset-manager-ui/pulls)
+
+We welcome contributions to GIS Asset Manager UI! To help us maintain quality and security, please follow these steps:
 
 1. **Fork the repository** and create a new branch for your feature or bug fix.
 2. **Make your changes** and ensure your code follows our coding standards.
