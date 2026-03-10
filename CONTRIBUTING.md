@@ -2,13 +2,15 @@
 
 ## Issues
 
-If you find a bug or have a feature request, please open an issue on our GitHub repository. When opening an issue, please provide as much detail as possible, including steps to reproduce the issue, expected behavior, and any relevant screenshots or logs.
-
 [GIS Asset Manager UI Issues](https://github.com/city-of-saint-louis/gis-asset-manager-ui/issues)
+
+If you find a bug or have a feature request, please open an issue on our GitHub repository. When opening an issue, please provide as much detail as possible, including steps to reproduce the issue, expected behavior, and any relevant screenshots or logs.
 
 ## Pull Requests
 
 We welcome contributions to GIS Asset Manager UI! To help us maintain quality and security, please follow these steps:
+
+[GIS Asset Manager UI Pull Requests](https://github.com/city-of-saint-louis/gis-asset-manager-ui/pulls)
 
 1. **Fork the repository** and create a new branch for your feature or bug fix.
 2. **Make your changes** and ensure your code follows our coding standards.
@@ -21,5 +23,3 @@ We welcome contributions to GIS Asset Manager UI! To help us maintain quality an
 
 **Security Vulnerabilities:**  
 If you discover a security vulnerability, please report it privately via [GitHub Security Advisories](https://github.com/city-of-saint-louis/gis-asset-manager-ui/security/advisories) or email, rather than submitting a public issue or pull request.
-
-[GIS Asset Manager UI Pull Requests](https://github.com/city-of-saint-louis/gis-asset-manager-ui/pulls)
