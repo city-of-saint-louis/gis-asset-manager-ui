@@ -1,6 +1,6 @@
 # **GIS Asset Manager UI**
 
-## **Developed By The City of St. Louis Web Team**
+## **Developed By The [City of St. Louis Web Team](https://www.stlouis-mo.gov/government/departments/information-technology/web-development/index.cfm)**
 
 _Please note: The documentation below is in process and is not yet fully comprehensive._
 
