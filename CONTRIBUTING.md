@@ -22,4 +22,4 @@ We welcome contributions to GIS Asset Manager UI! To help us maintain quality an
 8. All pull requests will be **reviewed by maintainers** and must **pass all checks** (linting, tests, build, etc.) before merging.
 
 **Security Vulnerabilities:**  
-If you discover a security vulnerability, please report it privately via [GitHub Security Advisories](https://github.com/city-of-saint-louis/gis-asset-manager-ui/security/advisories) or email, rather than submitting a public issue or pull request.
+If you discover a security vulnerability, please report it privately via [GitHub Security Advisories](https://github.com/city-of-saint-louis/gis-asset-manager-ui/security/advisories) or email <cinweb@stlouis-mo.gov>, rather than submitting a public issue or pull request.
