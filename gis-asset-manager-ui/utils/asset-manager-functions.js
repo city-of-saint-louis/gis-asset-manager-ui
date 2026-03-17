@@ -20,9 +20,9 @@ import {
   // setIsSketchEnabled,
   // assetMode,
   // setAssetMode,
-} from "./asset-manager-state.js";
+} from "../asset-manager-state.js";
 
-import { getCreatedAssetsAreValid } from "./asset-manager-state.js";
+import { getCreatedAssetsAreValid } from "../asset-manager-state.js";
 
 // *** begin map related functions *** //
 // destroy the previous map view

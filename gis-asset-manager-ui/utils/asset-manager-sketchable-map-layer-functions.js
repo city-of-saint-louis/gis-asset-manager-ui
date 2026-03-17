@@ -7,18 +7,15 @@ import {
   createdAssets,
   validSketchableLayers,
   setCreatedAssetsAreValid,
-  // createdAssetsAreValid,
-  // isSketchEnabled,
-} from "./asset-manager-state.js";
+  getCreatedAssetsAreValid,
+} from "../asset-manager-state.js";
 // import from asset-manager-functions.js
 import {
   monitorLayerVisibility,
   renderValidityMessage,
 } from "./asset-manager-functions.js";
 // import asset-manager-map-layer-data-display component
-import "./asset-manager-map-layer-data-display.js";
-
-import { getCreatedAssetsAreValid } from "./asset-manager-state.js";
+import "../custom-elements/asset-manager-map-layer-data-display.js";
 
 export const dispatchCreatedAssets = (createdAssets) => {
   const event = new CustomEvent("createdAssetsAreValidIsTrue", {
@@ -121,7 +118,9 @@ const enableSketchForLayer = (layer) => {
     );
   }
 
-  const layerAssetTypeIcon = document.getElementById(`${sanitizedLayerName}-layer-asset-type-icon`);
+  const layerAssetTypeIcon = document.getElementById(
+    `${sanitizedLayerName}-layer-asset-type-icon`,
+  );
   if (layerAssetTypeIcon) {
     layerAssetTypeIcon.innerHTML = `<calcite-icon icon="${
       layerGeometryType === "polygon"
@@ -132,7 +131,9 @@ const enableSketchForLayer = (layer) => {
     }" />`;
   }
 
-  const otherLayerAssetTypeIcons = document.querySelectorAll(".layer-data-display-asset-type-icon-span-sketch");
+  const otherLayerAssetTypeIcons = document.querySelectorAll(
+    ".layer-data-display-asset-type-icon-span-sketch",
+  );
   otherLayerAssetTypeIcons.forEach((element) => {
     if (element.id !== `${sanitizedLayerName}-layer-asset-type-icon`) {
       element.innerHTML = `<calcite-icon icon="pencil" />`;
@@ -519,9 +520,9 @@ const renderCreatedAssetLabel = (graphic) => {
     listItemRemoveButton.appendChild(removeIcon);
 
     const removeButtonTextSpan = document.createElement("span");
-        removeButtonTextSpan.className = "remove-button-text";
-        removeButtonTextSpan.textContent = "Remove";
-        listItemRemoveButton.appendChild(removeButtonTextSpan);
+    removeButtonTextSpan.className = "remove-button-text";
+    removeButtonTextSpan.textContent = "Remove";
+    listItemRemoveButton.appendChild(removeButtonTextSpan);
 
     // --- Remove asset event listener ---
     listItemRemoveButton.addEventListener("click", () => {

@@ -25,9 +25,8 @@ import {
   // setIsSelectEnabled,
   // createdAssetsAreValid,
   setCreatedAssetsAreValid,
-} from "./asset-manager-state.js";
-
-import { getCreatedAssetsAreValid } from "./asset-manager-state.js";
+  getCreatedAssetsAreValid 
+} from "../asset-manager-state.js";
 
 // import from asset-manager-functions.js
 import {

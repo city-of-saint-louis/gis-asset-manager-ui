@@ -1,21 +1,21 @@
 // import AssetManagerContainer from asset-manager-container.js
-import { AssetManagerContainer } from "./asset-manager-container.js";
+import { AssetManagerContainer } from "./custom-elements/asset-manager-container.js";
 // import AssetManagerMapLayer from asset-manager-map-layer.js
-import { AssetManagerMapLayer } from "./asset-manager-map-layer.js";
+import { AssetManagerMapLayer } from "./custom-elements/asset-manager-map-layer.js";
 // import AssetManagerSketchableMapLayer from asset-manager-sketchable-map-layer.js
-import { AssetManagerSketchableMapLayer } from "./asset-manager-sketchable-map-layer.js";
+import { AssetManagerSketchableMapLayer } from "./custom-elements/asset-manager-sketchable-map-layer.js";
 // import AssetManagerMapLayerDataDisplay from asset-manager-map-layer-data-display.js
-import { AssetManagerMapLayerDataDisplay } from "./asset-manager-map-layer-data-display.js";
+import { AssetManagerMapLayerDataDisplay } from "./custom-elements/asset-manager-map-layer-data-display.js";
 // import AssetManagerModeToggle from asset-manager-mode-toggle.js
-import { AssetManagerModeToggle } from "./asset-manager-mode-toggle.js";
+import { AssetManagerModeToggle } from "./custom-elements/asset-manager-mode-toggle.js";
 // import state variables from asset-manager-state.js
 import { addressMarkerX, setAddressMarkerX, addressMarkerY, setAddressMarkerY } from "./asset-manager-state.js"
 // import from asset-manager-functions.js
-import { captureMapLayers } from "./asset-manager-functions.js"
+import { captureMapLayers } from "./utils/asset-manager-functions.js"
 // import from asset-manager-sketchable-map-layer-functions.js
-import { captureSketachableMapLayers } from "./asset-manager-sketchable-map-layer-functions.js"
+import { captureSketachableMapLayers } from "./utils/asset-manager-sketchable-map-layer-functions.js"
 // import initializeMap function from map-initialization.js
-import { initializeMap } from "./asset-manager-initialize-map.js";
+import { initializeMap } from "./utils/asset-manager-initialize-map.js";
 // event listener to caputre x,y coordinates from address validation
 document.addEventListener("coordinatesAvailable", (event) => {
   setAddressMarkerX(event.detail.centerX);

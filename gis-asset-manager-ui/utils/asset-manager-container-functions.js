@@ -14,7 +14,7 @@ import {
   setIsSketchEnabled,
   // isSelectEnabled,
   setIsSelectEnabled,
-} from "./asset-manager-state.js";
+} from "../asset-manager-state.js";
 // import required functions from asset-manager-functions.js
 import { secureChosenAssets } from "./asset-manager-functions.js";
 // import initializeMap function from map-initialization.js

@@ -1,10 +1,12 @@
 // import from asset-manager-container-functions.js
-import { handleAccomodationButtonClick } from "./asset-manager-container-functions.js";
-import { enableSketchMode, enableSelectMode } from "./asset-manager-container-functions.js";
+import { 
+  enableSketchMode, 
+  enableSelectMode, 
+  handleAccomodationButtonClick 
+} from "../utils/asset-manager-container-functions.js";
 import {
-  // isSelectBySearchEnabled,
   setIsSelectBySearchEnabled,
-} from "./asset-manager-state.js";
+} from "../asset-manager-state.js";
 
 class AssetManagerContainer extends HTMLElement {
   constructor() {

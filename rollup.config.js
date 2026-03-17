@@ -3,7 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
 
 export default {
-  input: 'asset-manager.js', // the main entry file aka 'one file to rule them all'
+  input: './gis-asset-manager-ui/asset-manager.js', // the main entry file aka 'one file to rule them all'
   output: [
     {
       file: 'dist/asset-manager.esm.js',
@@ -22,8 +22,8 @@ export default {
     commonjs(),
     copy({
       targets: [
-        { src: 'styles/package/asset-manager-styles.css', dest: 'dist' },
-        { src: 'styles/package/city-of-stl-styles.css', dest: 'dist' }
+        { src: './gis-asset-manager-ui/styles/asset-manager-styles.css', dest: 'dist' },
+        { src: './gis-asset-manager-ui/styles/city-of-stl-styles.css', dest: 'dist' }
       ]
     })
   ],
