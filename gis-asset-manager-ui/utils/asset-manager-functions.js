@@ -15,6 +15,7 @@ import {
   isValid,
   // createdAssetsAreValid,
   setIsValid,
+  getCreatedAssetsAreValid
   // isSelectBySearchEnabled,
   // setIsSelectEnabled,
   // setIsSketchEnabled,
@@ -22,7 +23,6 @@ import {
   // setAssetMode,
 } from "../asset-manager-state.js";
 
-import { getCreatedAssetsAreValid } from "../asset-manager-state.js";
 
 // *** begin map related functions *** //
 // destroy the previous map view
