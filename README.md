@@ -20,7 +20,7 @@ When the user meets the asset requirements, the arrays of chosen assets ('chosen
 
 The parent application can then receive 'chosenAssets' and/or 'createdAssets' through the use of custom event listeners. The parent application can then consume the data as needed.
 
-## **[Link to Demo](https://city-of-saint-louis.github.io/gis-asset-manager-ui/select-mode.html)**
+## **[Link to Demo](https://city-of-saint-louis.github.io/gis-asset-manager-ui/)**
 
 ## **Contents**
 
