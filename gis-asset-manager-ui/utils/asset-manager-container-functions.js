@@ -3,16 +3,13 @@ import {
   featureLayers,
   graphicLayers,
   chosenAssets,
-  // createdAssets,
   chosenAssetFormData,
   createdAssetFormData,
   isValid,
   setIsValid,
   setCreatedAssetsAreValid,
   getCreatedAssetsAreValid,
-  // isSketchEnabled,
   setIsSketchEnabled,
-  // isSelectEnabled,
   setIsSelectEnabled,
 } from "../asset-manager-state.js";
 // import required functions from asset-manager-functions.js
@@ -390,19 +387,15 @@ export const handleAccomodationButtonClick = () => {
 export const enableSketchMode = (isSketchEnabled) => {
   if (isSketchEnabled) {
     setIsSketchEnabled(true);
-    // console.log("Sketch mode enabled");
   } else {
     setIsSketchEnabled(false);
-    // console.log("Sketch mode disabled");
   }
 };
 
 export const enableSelectMode = (isSelectEnabled) => {
   if (isSelectEnabled) {
     setIsSelectEnabled(true);
-    // console.log("Select mode enabled");
   } else {
     setIsSelectEnabled(false);
-    // console.log("Select mode disabled");
   }
 };

@@ -42,10 +42,6 @@ export let isValid = false;
 export function setIsValid(value) {
   isValid = value;
 }
-// export let createdAssetsAreValid = false;
-// export function setCreatedAssetsAreValid(value) {
-//   createdAssetsAreValid = value;
-// }
 
 let _createdAssetsAreValid = false;
 export function setCreatedAssetsAreValid(value) {
@@ -66,13 +62,11 @@ export function setCurrentView(view) {
 // state vars for sketch capability
 export let isSketchEnabled = false;
 export function setIsSketchEnabled(value) {
-  // console.log("Setting isSketchEnabled to:", value);
   isSketchEnabled = value;
 }
 // state vars for select capability
 export let isSelectEnabled = false;
 export function setIsSelectEnabled(value) {
-  // console.log("Setting isSelectEnabled to:", value);
   isSelectEnabled = value;
 }
 
@@ -84,5 +78,4 @@ export function setIsSelectBySearchEnabled(value) {
 export let assetMode = ""; // possible values: "select", "sketch"
 export function setAssetMode(value) {
   assetMode = value;
-  // console.log("Asset mode set to:", assetMode);
 }

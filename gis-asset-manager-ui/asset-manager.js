@@ -9,18 +9,25 @@ import { AssetManagerMapLayerDataDisplay } from "./custom-elements/asset-manager
 // import AssetManagerModeToggle from asset-manager-mode-toggle.js
 import { AssetManagerModeToggle } from "./custom-elements/asset-manager-mode-toggle.js";
 // import state variables from asset-manager-state.js
-import { addressMarkerX, setAddressMarkerX, addressMarkerY, setAddressMarkerY } from "./asset-manager-state.js"
+import {
+  addressMarkerX,
+  setAddressMarkerX,
+  addressMarkerY,
+  setAddressMarkerY,
+} from "./asset-manager-state.js";
 // import from asset-manager-functions.js
-import { captureMapLayers } from "./utils/asset-manager-functions.js"
+import { captureMapLayers } from "./utils/asset-manager-functions.js";
 // import from asset-manager-sketchable-map-layer-functions.js
-import { captureSketachableMapLayers } from "./utils/asset-manager-sketchable-map-layer-functions.js"
+import { captureSketachableMapLayers } from "./utils/asset-manager-sketchable-map-layer-functions.js";
 // import initializeMap function from map-initialization.js
 import { initializeMap } from "./utils/asset-manager-initialize-map.js";
 // event listener to caputre x,y coordinates from address validation
 document.addEventListener("coordinatesAvailable", (event) => {
   setAddressMarkerX(event.detail.centerX);
   setAddressMarkerY(event.detail.centerY);
-  const assetManagerContainer = document.querySelector("asset-manager-container");
+  const assetManagerContainer = document.querySelector(
+    "asset-manager-container",
+  );
   // reset zoom level, reset x,y based on address entered, and reinitialize the map
   assetManagerContainer.setAttribute("zoom", 18);
   assetManagerContainer.setAttribute("center-x", addressMarkerX);
@@ -37,28 +44,28 @@ captureSketachableMapLayers();
 document.addEventListener("DOMContentLoaded", () => {
   customElements.define("asset-manager-mode-toggle", AssetManagerModeToggle);
   customElements.define("asset-manager-map-layer", AssetManagerMapLayer);
-  customElements.define("asset-manager-sketchable-map-layer", AssetManagerSketchableMapLayer);
-  customElements.define("asset-manager-map-layer-data-display", AssetManagerMapLayerDataDisplay);
+  customElements.define(
+    "asset-manager-sketchable-map-layer",
+    AssetManagerSketchableMapLayer,
+  );
+  customElements.define(
+    "asset-manager-map-layer-data-display",
+    AssetManagerMapLayerDataDisplay,
+  );
   customElements.define("asset-manager-container", AssetManagerContainer);
   // Wait for the AssetManagerContainer to be defined and rendered before initializing the map
-  // customElements.whenDefined('asset-manager-container').then(() => {
-  //   // Wait a tick for rendering
-  //   setTimeout(() => {
-  //     initializeMap();
-  //   }, 0);
-  // });
-  customElements.whenDefined('asset-manager-container').then(() => {
-  function waitForElement(selector, callback) {
-    const el = document.querySelector(selector);
-    if (el) {
-      callback(el);
-    } else {
-      setTimeout(() => waitForElement(selector, callback), 100);
+  customElements.whenDefined("asset-manager-container").then(() => {
+    function waitForElement(selector, callback) {
+      const el = document.querySelector(selector);
+      if (el) {
+        callback(el);
+      } else {
+        setTimeout(() => waitForElement(selector, callback), 100);
+      }
     }
-  }
 
-  waitForElement("#viewDiv", () => {
-    initializeMap();
+    waitForElement("#viewDiv", () => {
+      initializeMap();
+    });
   });
-});
 });

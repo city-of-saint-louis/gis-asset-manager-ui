@@ -13,14 +13,8 @@ import {
   currentView,
   setCurrentView,
   isValid,
-  // createdAssetsAreValid,
   setIsValid,
   getCreatedAssetsAreValid
-  // isSelectBySearchEnabled,
-  // setIsSelectEnabled,
-  // setIsSketchEnabled,
-  // assetMode,
-  // setAssetMode,
 } from "../asset-manager-state.js";
 
 
@@ -72,7 +66,7 @@ export const captureMapLayers = () => {
   });
 };
 
-// --- UPDATED: hideOrShowLayer only toggles visibility ---
+// --- hideOrShowLayer method only toggles visibility ---
 export const hideOrShowLayer = (layerName) => {
   // Find the correct layer by name
   const layer = featureLayers.find(
@@ -113,9 +107,8 @@ export const addMapLayer = ({
       minScale: layerMinScale,
       maxScale: layerMaxScale,
       isSelectBySearchEnabled
-      // searchFields: [mapLayer.labelMask],
-      // displayField: mapLayer.labelMask,
     },
+    // the commented out logic below can be used to render asset labels
     // labelingInfo: [
     //   {
     //     labelExpressionInfo: {
@@ -160,12 +153,9 @@ export const addMapLayer = ({
   const maxAssetsAllowed = parseInt(
     mapDataLayer.layerProperties.maxAssetsAllowed
   );
-  // const layerMinScale = mapDataLayer.minScale;
   if (minAssetsRequired === 0) {
     layersWithNoSelectionRequired.push(mapDataLayerId);
   }
-  // const layerMaxScale = mapDataLayer.maxScale;
-  // const layerDataDiv = document.getElementById("layer-data-div");
   const layerDataContainer = document.getElementById("layer-data-container");
   layerDataContainer.classList.add("stat-group");
 
@@ -187,7 +177,6 @@ export const addMapLayer = ({
     "asset-manager-map-layer-data-display"
   );
   mapLayerDataDisplay.setAttribute("data-layer-id", mapDataLayerId);
-  // mapLayerDataDisplay.classList.add("col-sm-6", "col-lg-4");
   mapLayerDataDisplay.data = {
     layerName,
     formattedLayerName,
@@ -201,8 +190,6 @@ export const addMapLayer = ({
     view,
     layer: mapDataLayer,
   };
-  // console.log("mapLayerDataDisplay.data", mapLayerDataDisplay.data);
-  // layerDataDiv.appendChild(mapLayerDataDisplay);
   layerDataContainer.appendChild(mapLayerDataDisplay);
 };
 
@@ -218,7 +205,6 @@ export const monitorLayerVisibility = (
   // Watch visibleAtCurrentScale (zoom/scale)
   reactiveUtils.watch(
     () => layerView.visibleAtCurrentScale,
-    // (visibleAtCurrentScale) => {
     () => {
       updateLayerDisplay();
     }
@@ -226,7 +212,6 @@ export const monitorLayerVisibility = (
   // Watch visible property (show/hide)
   reactiveUtils.watch(
     () => mapDataLayer.visible,
-    // (visible) => {
     () => {
       updateLayerDisplay();
     }
@@ -268,14 +253,6 @@ export const monitorLayerVisibility = (
 // render the validity message for asset selection based on assets selected
 export const renderValidityMessage = () => {
   const createdAssetsAreValid = getCreatedAssetsAreValid();
-  // console.log(
-  //   "Rendering validity message...",
-  //   "isValid",
-  //   isValid,
-  //   "createdAssetsAreValid",
-  //   createdAssetsAreValid
-  // );
-  // const validityMessage = document.getElementById("validity-message");
   const validityMessage = document.getElementById("asset-manager-hint");
   const originalHintText = validityMessage.getAttribute("data-original-hint");
   const mapContainer = document.getElementById("viewDiv");
@@ -293,15 +270,9 @@ export const renderValidityMessage = () => {
       "sketch-border"
     );
     mapContainer.classList.add("assets-valid-shadow", "assets-valid-border");
-    // mapLayerDataContainers.forEach((container) => {
-    //   container.classList.remove("select-shadow", "sketch-shadow");
-    // });
     mapLayerDataContainers.forEach((container) => {
       container.classList.add("assets-valid-shadow", "assets-valid-border");
     });
-    // setIsSelectEnabled(false);
-    // setIsSketchEnabled(false);
-    // setAssetMode('');
   } else {
     validityMessage.removeAttribute("aria-live");
     validityMessage.textContent = originalHintText;
@@ -333,7 +304,6 @@ export const highlightSelectedAsset = (
   highlightedSelection
 ) => {
   const graphic = response.results[0].graphic;
-  // console.log("Graphic selected:", graphic);
   const layerProperties = response.results[0].layer.layerProperties;
   const layerAssetIDFieldName = layerProperties.layerAssetIDFieldName;
   const layerName = graphic.layer.layerProperties.layerName;
@@ -377,7 +347,6 @@ export const highlightSelectedAsset = (
         return;
       }
       highlightedSelection = layerView.highlight(graphic);
-      // console.log("Asset highlighted by click:", highlightedSelection);
       const chosenAsset = {
         assetAttributes: graphic.attributes,
         internalAssetId: `${layerName}-${graphic.attributes[layerAssetIDFieldName]}`,
@@ -395,9 +364,7 @@ export const highlightSelectedAsset = (
         highlightSelect: highlightedSelection,
         graphic: graphic,
       };
-      // console.log("Chosen asset added:", chosenAsset);
       chosenAssets.push(chosenAsset);
-      // console.log("chosenAssets array:", chosenAssets);
       renderSelectedAssetLabels();
       validateLayerSelections();
     });
@@ -422,9 +389,7 @@ export const highlightSelectedAsset = (
 };
 
 // render information about the assets that have been selected
-// used in highlightSelectedAsset function, no need to export
 export const renderSelectedAssetLabels = () => {
-  // console.log('chosenAssets:', chosenAssets);
   const selectedLayerAssetListArray = document.querySelectorAll(
     ".chosen-asset-data-list"
   );
@@ -433,23 +398,9 @@ export const renderSelectedAssetLabels = () => {
     list.innerHTML = "";
   });
   chosenAssets.forEach((asset) => {
-    // console.log("Rendering asset label for:", asset);
     selectedLayerAssetListArray.forEach((selectedLayerAssetList) => {
       if (asset.layerId === selectedLayerAssetList.id) {
         let assetLabel = asset.assetLabel;
-        // if (
-        //   asset.assetAttributes.RoadType &&
-        //   asset.assetAttributes.RoadType === "Alley"
-        // ) {
-        //   assetLabel = `Alley`;
-        // };
-        // if (assetLabel.includes("0 to 0") && asset.assetAttributes.RoadType !== "Interstate") {
-        //   assetLabel = "Alley";
-        // };
-        // if (assetLabel.includes("0 to 0") && asset.assetAttributes.RoadType === "Interstate") {
-        //   // filter and remove "0 to 0" from interstate labels
-        //   assetLabel = assetLabel.replace("0 to 0", "").trim();
-        // };
         if (assetLabel.includes("null")) {
           assetLabel = "Asset data unavailable";
         }
@@ -486,7 +437,6 @@ export const renderSelectedAssetLabels = () => {
         removeAssetBtn.className =
           "pull-right link-button small-button red-button transparent-button remove-asset-btn";
         removeAssetBtn.title = `Remove ${assetLabel}`;
-        // removeAssetBtn.innerHTML = `<span class="remove-button-text">Remove</span> `;
         const removeIcon = document.createElement("calcite-icon");
         removeIcon.setAttribute("icon", "x-circle");
         removeIcon.setAttribute("scale", "s");
@@ -541,8 +491,6 @@ export const renderSelectedAssetLabels = () => {
 // validate asset selection for each individual layer, used in highlightSelectedAsset function
 export const validateLayerSelections = () => {
   featureLayers.forEach((mapLayer) => {
-    // console.log("Validating layer selections for:", mapLayer);
-    // const layerId = `${mapLayer.layerProperties.layerName}-${mapLayer.id}`;
     const layerId = mapLayer.id;
     const layerAssetMin = parseInt(mapLayer.layerProperties.minAssetsRequired);
     const layerAssetMax = parseInt(mapLayer.layerProperties.maxAssetsAllowed);
@@ -665,11 +613,9 @@ export const handleSelectEnabled = () => {
     sketchModeButton.classList.remove("disabled-button");
   }
 
-  // console.log("featureLayers:", featureLayers);
   const selectableLayerNames = featureLayers.map(
     (layer) => layer.layerProperties.layerName
   );
-  // console.log("selectableLayerNames:", selectableLayerNames);
 
   let formattedSelectableLayerNames = selectableLayerNames.map(
     (name) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
@@ -745,7 +691,6 @@ export const handleSelectEnabled = () => {
     if (!node) return;
     if (node.querySelectorAll) {
       const btns = node.querySelectorAll("button");
-      // console.log("Found buttons in shadow DOM:", btns);
       if (btns.length) {
         shadowButtons.push(...btns);
       }
@@ -759,7 +704,6 @@ export const handleSelectEnabled = () => {
   };
 
   collectShadowButtons(sketch);
-  // console.log("All shadow DOM buttons:", shadowButtons);
   const targetButton = shadowButtons.find(
     (b) =>
       b.getAttribute("aria-label") &&
@@ -767,7 +711,6 @@ export const handleSelectEnabled = () => {
   );
   if (targetButton) {
     targetButton.click();
-    // console.log(`Clicked select tool button`);
   } else {
     console.warn(`Could not find the select tool button`);
   }
@@ -852,12 +795,4 @@ export const handleSketchEnabled = () => {
     // Optionally disconnect after a short delay if you only need a one-time update
     setTimeout(() => observer.disconnect(), 1000);
   }
-};
-
-
-export const mapActionsDisabled = () => {
-  const mapContainer = document.getElementById("viewDiv");
-  mapContainer.style.pointerEvents = "none";
-  const sketch = document.getElementById("asset-manager-sketch");
-  sketch.setAttribute("hidden", "true");
 };
