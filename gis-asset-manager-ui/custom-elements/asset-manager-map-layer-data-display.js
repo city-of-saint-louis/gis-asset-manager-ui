@@ -54,7 +54,7 @@ class AssetManagerMapLayerDataDisplay extends HTMLElement {
     }
   }
 
-  // --- new updateVisibility method ---
+  // --- updateVisibility method ---
   updateVisibility({
     visibleAtCurrentScale,
     visible,
@@ -62,7 +62,7 @@ class AssetManagerMapLayerDataDisplay extends HTMLElement {
     layerMinScale,
     layerMaxScale,
   }) {
-    // Use the same logic as before, but scoped to this component's DOM
+    
     const displayNameRaw =
       this._data.formattedLayerName || this._data.layerName;
     const displayName = displayNameRaw
@@ -94,7 +94,6 @@ class AssetManagerMapLayerDataDisplay extends HTMLElement {
         zoomAlertButton.textContent = ``;
         zoomAlertButton.classList.add("invisible-button");
         toggleLayerVisibilityButton.removeAttribute("disabled");
-        // toggleLayerVisibilityButton.removeAttribute("hidden");
         toggleLayerVisibilityButton.classList.remove("invisible-button");
         if (visible) {
           toggleVisibilityBtnTextSpan.textContent = `Hide`;
@@ -119,7 +118,7 @@ class AssetManagerMapLayerDataDisplay extends HTMLElement {
       }
     }
   }
-  // --- END new updateVisibility method ---
+  // --- END updateVisibility method ---
 
   render(layerData) {
     this.innerHTML = ""; // Clear previous content
@@ -130,13 +129,10 @@ class AssetManagerMapLayerDataDisplay extends HTMLElement {
       maxAssetsAllowed,
       enableSketchHandler,
       isSketchable = false, // <-- flag to distinguish layer type
-      // formattedLayerName, // for regular layers
       showHideHandler,
       layerMinScale = 0, // for zoom alert
       layerMaxScale = 0, // for zoom alert
-      // availableCreateTools, // for sketchable layers
     } = layerData;
-    // console.log("layerData", layerData.layer);
     const sketchType = layerData.layer?.sketchType?.[0] || "unknown";
     // Map sketchType to display name
     let sketchTypeDisplay;
@@ -146,18 +142,14 @@ class AssetManagerMapLayerDataDisplay extends HTMLElement {
       sketchTypeDisplay =
         sketchType.charAt(0).toUpperCase() + sketchType.slice(1);
     }
-    // console.log("sketchType", sketchType);
     const displayNameRaw = layerName.replace(/[-, _]/g, " ");
-    // console.log("displayNameRaw", displayNameRaw);
     const displayName = displayNameRaw.replace(
       /\w\S*/g,
       (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
     );
-    // console.log("displayName", displayName);
     const sanitizedLayerName = displayName
       .replace(/\s+/g, "-")
       .replace(/[^a-zA-Z0-9-_]/g, "");
-    // console.log("sanitizedLayerName", sanitizedLayerName);
     const assetListClass = isSketchable
       ? "created-asset-data-list"
       : "chosen-asset-data-list";
@@ -168,61 +160,6 @@ class AssetManagerMapLayerDataDisplay extends HTMLElement {
       "stat-container",
       "stat-medium"
     );
-
-    // const layerTitleDiv = document.createElement("div");
-    // layerTitleDiv.classList.add("stat-title");
-    // layerTitleDiv.setAttribute(
-    //   "id",
-    //   `${sanitizedLayerName}-layer-selected-asset-container`
-    // );
-    // layerTitleDiv.setAttribute("aria-label", `${displayName} Layer`);
-    // layerTitleDiv.setAttribute("title", `${displayName} Layer`);
-
-    // const layerTitleSpan = document.createElement("span");
-    // layerTitleSpan.textContent = `${displayName} Layer `;
-
-    // const assetCountSpan = document.createElement("span");
-    // assetCountSpan.classList.add("asset-count-span");
-    // assetCountSpan.textContent = `(${this._assetCount})`;
-
-    // // Zoom alert
-    // const zoomAlertButton = document.createElement("span");
-    // zoomAlertButton.className = "zoom-alert-button";
-    // zoomAlertButton.id = `${sanitizedLayerName}-zoom-alert-button`;
-    // zoomAlertButton.style.height = "14px";
-    // zoomAlertButton.style.display = "inline-block";
-    // zoomAlertButton.textContent =
-    //   layerMinScale > 0 ? `Zoom in to see this layer.` : "";
-
-    // const enableSketchButton = isSketchable
-    //   ? document.createElement("button")
-    //   : null;
-    // if (enableSketchButton) {
-    //   enableSketchButton.type = "button";
-    //   enableSketchButton.id = `enable-sketch-btn-${sanitizedLayerName}`;
-    //   enableSketchButton.classList.add("toggleLayerVisibilityButton");
-    //   enableSketchButton.setAttribute("aria-label", "");
-    //   enableSketchButton.setAttribute(
-    //     "title",
-    //     `Enable sketch for ${displayName} layer`
-    //   );
-    //   const buttonSpan = document.createElement("span");
-    //   buttonSpan.textContent = "Add Assets";
-    //   enableSketchButton.appendChild(buttonSpan);
-    //   layerTitleDiv.appendChild(enableSketchButton);
-    // }
-
-    // layerTitleSpan.appendChild(assetCountSpan); // <span>Layer Name <span>(0)</span></span>
-    // layerTitleDiv.appendChild(layerTitleSpan); // Add the title+count
-    // layerTitleDiv.appendChild(document.createElement("br")); // Add line break
-    // layerTitleDiv.appendChild(zoomAlertButton); // Add zoom alert
-    // if (enableSketchButton) {
-    //   layerTitleDiv.appendChild(enableSketchButton); // Add button last
-    // }
-    // componentContainer.appendChild(layerTitleDiv); // Add title section to container
-    // this.appendChild(componentContainer); // Add container to custom element
-
-    // <span class="asset-count-span">(${this._assetCount})</span>
 
     this.innerHTML = `
       <div class="map-layer-data-container stat-container stat-medium ${
@@ -340,7 +277,6 @@ class AssetManagerMapLayerDataDisplay extends HTMLElement {
             `
                 : ""
             }
-              
           </div>
         </div> 
         <div class="asset-list-wrapper">
@@ -362,13 +298,11 @@ class AssetManagerMapLayerDataDisplay extends HTMLElement {
       </div>
    `;
     const view = layerData.view;
-    // console.log("view in map layer data display", view);
-    // ...inside render(), after creating zoomAlertBtn...
 
     function getLodAtOrBelow(view, targetScale) {
       const tileInfo = view.map.basemap.baseLayers.items[0].tileInfo;
       if (!tileInfo || !tileInfo.lods) return targetScale;
-      // Find the LOD with the largest scale <= targetScale (i.e., most detailed that is still valid)
+      // Find the Level of Detail (LOD) with the largest scale <= targetScale (i.e., most detailed that is still valid)
       const lods = tileInfo.lods
         .filter((lod) => lod.scale <= targetScale)
         .sort((a, b) => b.scale - a.scale);
@@ -400,32 +334,16 @@ class AssetManagerMapLayerDataDisplay extends HTMLElement {
         const layer = this._data.layer;
         const minScale = layer.minScale || layer.layerMinScale || 0;
         const maxScale = layer.maxScale || layer.layerMaxScale || 0;
-        // console.log(
-        //   `[Zoom Alert] Layer: ${
-        //     layer.title || layer.id
-        //   }, minScale: ${minScale}, maxScale: ${maxScale}, current view.scale: ${
-        //     view.scale
-        //   }`
-        // );
         // Snap to nearest LOD
         if (minScale > 0 && view.scale > minScale) {
           const snapScale = getLodAtOrBelow(view, minScale);
-          // console.log(
-          //   `[Zoom Alert] Zooming in to snapped minScale: ${snapScale}`
-          // );
           view.goTo({ scale: snapScale });
         } else if (maxScale > 0 && view.scale < maxScale) {
           const snapScale = getLodAtOrAbove(view, maxScale);
-          // console.log(
-          //   `[Zoom Alert] Zooming out to snapped maxScale: ${snapScale}`
-          // );
           view.goTo({ scale: snapScale });
-        } else {
-          // console.log("[Zoom Alert] No zoom action taken.");
-        }
+        } 
       };
     }
-
     // Attach event listeners
     if (
       isSketchable &&
@@ -451,11 +369,79 @@ class AssetManagerMapLayerDataDisplay extends HTMLElement {
 
 export { AssetManagerMapLayerDataDisplay };
 
+
+
+
+
+
+
+
+
+
+
+
 // class AssetManagerMapLayerDataDisplay extends HTMLElement {
+//   // Static template created once
+//   static #templateElement = null;
+
+//   static getTemplate() {
+//     if (!this.#templateElement) {
+//       const template = document.createElement('template');
+//       template.innerHTML = `
+//         <div class="map-layer-data-container stat-container stat-medium">
+//           <div class="stat-title" aria-label="Layer">
+//             <div class="layer-data-display-title-div">
+//               <span class="layer-data-display-asset-type-icon-span">
+//                 <calcite-icon></calcite-icon>
+//               </span>
+//               <span class="layer-display-name"></span>
+//             </div>
+//             <button
+//               class="zoom-alert-button"
+//               title="Zoom In"
+//             ></button>
+//             <button
+//               type="button"
+//               class="toggleLayerVisibilityButton"
+//               title="Hide layer"
+//             >
+//               <span class="toggle-visibility-text">Hide</span>
+//             </button>
+//           </div>
+
+//           <div class="layer-data-display-row">
+//             <div class="asset-selection-requirements" aria-live="polite" aria-atomic="true">
+//               <span class="sr-only">Asset requirements and status</span>
+//               <span class="min-asset-required-message"></span>
+//               <span class="max-asset-allowed-message"></span>
+//             </div>
+//             <div class="layer-data-display-button-row">
+//               <button 
+//                 type="button"
+//                 class="enable-sketch-button"
+//                 style="display: none;"
+//               >
+//                 <span class="enable-sketch-icon"><calcite-icon icon="pencil" scale="s"></calcite-icon></span>
+//                 Sketch
+//               </button>
+//             </div>
+//           </div>
+
+//           <div class="asset-list-wrapper">
+//             <ul class="list-group asset-list">
+//               <li>None selected</li>
+//             </ul>
+//           </div>
+//         </div>
+//       `;
+//       this.#templateElement = template;
+//     }
+//     return this.#templateElement;
+//   }
+
 //   constructor() {
 //     super();
 //     this._data = null;
-//     this._rendered = false;
 //     this._assetCount = 0;
 //   }
 
@@ -469,9 +455,17 @@ export { AssetManagerMapLayerDataDisplay };
 //   }
 
 //   updateAssetCountDisplay() {
-//     const countSpan = this.querySelector('.asset-count-span');
+//     const countSpan = this.querySelector(".asset-count-span");
 //     if (countSpan) {
-//       countSpan.textContent = `(${this._assetCount})`;
+//       countSpan.textContent = this._assetCount;
+//     }
+//     const minAssetMsg = this.querySelector('[id$="-min-asset-required-message"]');
+//     if (minAssetMsg && this._data && typeof this._data.minAssetsRequired === "number") {
+//       if (this._assetCount === 0) {
+//         minAssetMsg.textContent = `${this._data.minAssetsRequired} required.`;
+//       } else {
+//         minAssetMsg.textContent = `${this._assetCount} added. ${this._data.minAssetsRequired} required.`;
+//       }
 //     }
 //   }
 
@@ -497,17 +491,9 @@ export { AssetManagerMapLayerDataDisplay };
 //     layerMinScale,
 //     layerMaxScale,
 //   }) {
-//     const displayNameRaw =
-//       this._data.formattedLayerName || this._data.layerName;
-//     const displayName = displayNameRaw
-//       .replace(/[-, _]/g, " ")
-//       .replace(
-//         /\w\S*/g,
-//         (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-//       );
-//     const sanitizedLayerName = displayName
-//       .replace(/\s+/g, "-")
-//       .replace(/[^a-zA-Z0-9-_]/g, "");
+//     const displayNameRaw = this._data.formattedLayerName || this._data.layerName;
+//     const displayName = this._formatDisplayName(displayNameRaw);
+//     const sanitizedLayerName = this._sanitizeLayerName(displayName);
 
 //     const toggleLayerVisibilityButton = this.querySelector(
 //       `#${sanitizedLayerName}-show-hide-layer-btn`
@@ -519,218 +505,223 @@ export { AssetManagerMapLayerDataDisplay };
 //       `#${sanitizedLayerName}-zoom-alert-button`
 //     );
 
-//     if (
-//       zoomAlertButton &&
-//       toggleLayerVisibilityButton &&
-//       toggleVisibilityBtnTextSpan
-//     ) {
+//     if (zoomAlertButton && toggleLayerVisibilityButton && toggleVisibilityBtnTextSpan) {
 //       if (visibleAtCurrentScale) {
 //         zoomAlertButton.textContent = ``;
+//         zoomAlertButton.classList.add("invisible-button");
 //         toggleLayerVisibilityButton.removeAttribute("disabled");
-//         toggleLayerVisibilityButton.removeAttribute("hidden");
+//         toggleLayerVisibilityButton.classList.remove("invisible-button");
 //         if (visible) {
 //           toggleVisibilityBtnTextSpan.textContent = `Hide`;
-//           toggleLayerVisibilityButton.setAttribute(
-//             "title",
-//             `Hide ${formattedLayerName} layer`
-//           );
+//           toggleLayerVisibilityButton.setAttribute("title", `Hide ${formattedLayerName} layer`);
 //         } else {
 //           toggleVisibilityBtnTextSpan.textContent = `Show`;
-//           toggleLayerVisibilityButton.setAttribute(
-//             "title",
-//             `Show ${formattedLayerName} layer`
-//           );
+//           toggleLayerVisibilityButton.setAttribute("title", `Show ${formattedLayerName} layer`);
 //         }
 //       } else {
-//         zoomAlertButton.textContent = `${
-//           layerMinScale > 0 ? `Zoom in to see this layer.` : ""
-//         } ${layerMaxScale > 0 ? `Zoom out to see this layer.` : ""}`;
+//         zoomAlertButton.classList.remove("invisible-button");
+//         zoomAlertButton.textContent = `${layerMinScale > 0 ? `Zoom In` : ""} ${
+//           layerMaxScale > 0 ? `Zoom Out` : ""
+//         }`;
 //         toggleLayerVisibilityButton.setAttribute("disabled", true);
-//         toggleLayerVisibilityButton.setAttribute("hidden", true);
+//         toggleLayerVisibilityButton.classList.add("invisible-button");
 //       }
 //     }
 //   }
 
-//   // --- DOM manipulation version of render ---
 //   render(layerData) {
-//     // Clear previous content
-//     this.innerHTML = "";
+//   const {
+//     layerName,
+//     mapDataLayerId,
+//     minAssetsRequired,
+//     maxAssetsAllowed,
+//     enableSketchHandler,
+//     isSketchable = false,
+//     showHideHandler,
+//     layerMinScale = 0,
+//     layerMaxScale = 0,
+//     view,
+//     layer,
+//   } = layerData;
 
-//     const {
-//       layerName,
-//       mapDataLayerId,
-//       minAssetsRequired,
-//       maxAssetsAllowed,
-//       enableSketchHandler,
-//       isSketchable = false,
-//       showHideHandler,
-//       layerMinScale = 0,
-//     } = layerData;
+//   const displayNameRaw = layerName.replace(/[-, _]/g, " ");
+//   const displayName = this._formatDisplayName(displayNameRaw);
+//   const sanitizedLayerName = this._sanitizeLayerName(displayName);
+//   const assetListClass = isSketchable ? "created-asset-data-list" : "chosen-asset-data-list";
 
-//     const displayNameRaw = layerName.replace(/[-, _]/g, " ");
-//     const displayName = displayNameRaw.replace(
-//       /\w\S*/g,
-//       (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-//     );
-//     const sanitizedLayerName = displayName
+//   // Clone template
+//   const template = AssetManagerMapLayerDataDisplay.getTemplate();
+//   const fragment = template.content.cloneNode(true);
+
+//   // Update container
+//   const container = fragment.querySelector(".map-layer-data-container");
+//   container.classList.add(isSketchable ? "sketch-border" : "select-border");
+
+//   // Update title section
+//   const statTitle = fragment.querySelector(".stat-title");
+//   statTitle.id = `${sanitizedLayerName}-layer-selected-asset-container`;
+//   statTitle.setAttribute("aria-label", `${displayName} Layer`);
+//   statTitle.setAttribute("title", `${displayName} Layer`);
+
+//   // Update display name
+//   fragment.querySelector(".layer-display-name").textContent = displayName;
+
+//   // Update icon
+//   const icon = fragment.querySelector(".layer-data-display-asset-type-icon-span calcite-icon");
+//   icon.setAttribute("icon", isSketchable ? "pencil" : "cursor");
+
+//   // Update zoom button
+//   const zoomBtn = fragment.querySelector(".zoom-alert-button");
+//   zoomBtn.id = `${sanitizedLayerName}-zoom-alert-button`;
+//   zoomBtn.textContent = layerMinScale > 0 ? "Zoom In" : "";
+//   if (layerMinScale === 0) {
+//     zoomBtn.style.display = "none";
+//   }
+
+//   // Update hide/show button
+//   const toggleBtn = fragment.querySelector(".toggleLayerVisibilityButton");
+//   toggleBtn.id = `${sanitizedLayerName}-show-hide-layer-btn`;
+//   toggleBtn.setAttribute("att-layer-id", mapDataLayerId);
+//   toggleBtn.setAttribute("aria-label", "");
+//   toggleBtn.setAttribute("title", `Hide ${displayName} layer`);
+//   if (layerMinScale > 0) {
+//     toggleBtn.setAttribute("disabled", "");
+//     toggleBtn.classList.add("invisible-button");
+//   }
+
+//   const toggleVisibilityTextSpan = fragment.querySelector(".toggle-visibility-text");
+//   toggleVisibilityTextSpan.id = `${layerName}-toggle-visibility-btn-text-span`;
+//   toggleVisibilityTextSpan.textContent = layerMinScale > 0 ? "Show" : "Hide";
+
+//   // Update min assets required
+//   const minAssetMsg = fragment.querySelector(".min-asset-required-message");
+//   minAssetMsg.id = `${mapDataLayerId}-min-asset-required-message`;
+//   this._updateMinAssetsDisplay(minAssetMsg, minAssetsRequired, displayName, isSketchable);
+
+//   // Update max assets allowed
+//   const maxAssetMsg = fragment.querySelector(".max-asset-allowed-message");
+//   if (maxAssetsAllowed > 0) {
+//     maxAssetMsg.id = `${mapDataLayerId}-max-asset-allowed-message`;
+//     maxAssetMsg.className = "label label-default max-asset-allowed-message";
+//     maxAssetMsg.textContent = `${maxAssetsAllowed} maximum`;
+//     maxAssetMsg.title = `${isSketchable ? "Add" : "Select"} a maximum of ${maxAssetsAllowed} to ${displayName} layer`;
+//   } else {
+//     maxAssetMsg.style.display = "none";
+//   }
+
+//   // Update sketch button container
+// const buttonRow = fragment.querySelector(".layer-data-display-button-row");
+// buttonRow.innerHTML = isSketchable ? `
+//   <button
+//     type="button"
+//     id="enable-sketch-btn-${sanitizedLayerName}"
+//     class="enable-sketch-button"
+//     aria-label="enable sketch for ${displayName} layer"
+//     title="Enable sketch for ${displayName} layer"
+//   >
+//     <span class="enable-sketch-icon" id="enable-sketch-icon-${sanitizedLayerName}"><calcite-icon icon="pencil" scale="s"></calcite-icon></span>Sketch
+//   </button>
+// ` : '';
+
+// // Get the fresh button reference if it exists
+// const sketchBtn = fragment.querySelector(".enable-sketch-button");
+
+//   // Update asset list
+//   const assetList = fragment.querySelector(".asset-list");
+//   assetList.id = mapDataLayerId;
+//   assetList.setAttribute("data-layer-name", sanitizedLayerName);
+//   assetList.className = `list-group ${assetListClass}`;
+//   assetList.setAttribute("title", `Asset display for ${displayName} layer`);
+//   const listItem = assetList.querySelector("li");
+//   listItem.textContent = `None ${isSketchable ? "added" : "selected"}`;
+//   listItem.title = `No assets ${isSketchable ? "added" : "selected"} for ${displayName} layer`;
+
+//   // Update sr-only span
+//   const srOnly = fragment.querySelector(".sr-only");
+//   srOnly.textContent = `Asset requirements and status for ${displayName} layer`;
+
+//   // Clear and append
+//   this.innerHTML = "";
+//   this.appendChild(fragment);
+
+//   // Zoom alert functionality
+//   if (zoomBtn && view && layer) {
+//     zoomBtn.onclick = (e) => {
+//       e.preventDefault();
+//       const minScale = layer.minScale || layer.layerMinScale || 0;
+//       const maxScale = layer.maxScale || layer.layerMaxScale || 0;
+//       if (minScale > 0 && view.scale > minScale) {
+//         const snapScale = this._getLodAtOrBelow(view, minScale);
+//         view.goTo({ scale: snapScale });
+//       } else if (maxScale > 0 && view.scale < maxScale) {
+//         const snapScale = this._getLodAtOrAbove(view, maxScale);
+//         view.goTo({ scale: snapScale });
+//       }
+//     };
+//   }
+
+//   // Hide/show button event listener
+//   if (toggleBtn) {
+//     toggleBtn.onclick = () => {
+//       showHideHandler && showHideHandler(layerName);
+//     };
+//   }
+
+//   // Sketch button event listener
+//   if (isSketchable && sketchBtn) {
+//     sketchBtn.addEventListener("click", () => {
+//       enableSketchHandler && enableSketchHandler(layer);
+//     });
+//   }
+// }
+
+//   _formatDisplayName(layerName) {
+//     return layerName
+//       .replace(/[-, _]/g, " ")
+//       .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+//   }
+
+//   _sanitizeLayerName(displayName) {
+//     return displayName
 //       .replace(/\s+/g, "-")
 //       .replace(/[^a-zA-Z0-9-_]/g, "");
-//     const assetListClass = isSketchable
-//       ? "created-asset-data-list"
-//       : "chosen-asset-data-list";
+//   }
 
-//     // Main container
-//     const container = document.createElement("div");
-//     container.className = "map-layer-data-container stat-container stat-medium";
-
-//     // Stat title section
-//     const statTitle = document.createElement("div");
-//     statTitle.className = "stat-title";
-//     statTitle.id = `${sanitizedLayerName}-layer-selected-asset-container`;
-//     statTitle.setAttribute("aria-label", `${displayName} Layer`);
-//     statTitle.setAttribute("title", `${displayName} Layer`);
-
-//     // Layer name and count
-//     const layerNameDiv = document.createElement("div");
-//     const layerNameSpan = document.createElement("span");
-//     layerNameSpan.textContent = `${displayName} Layer `;
-
-//     const countSpan = document.createElement("span");
-//     countSpan.className = "asset-count-span";
-//     countSpan.textContent = `(${this._assetCount})`;
-//     layerNameSpan.appendChild(countSpan);
-
-//     layerNameDiv.appendChild(layerNameSpan);
-//     layerNameDiv.appendChild(document.createElement("br"));
-
-//     // Zoom alert
-//     const zoomAlertButton = document.createElement("span");
-//     zoomAlertButton.className = "zoom-alert-button";
-//     zoomAlertButton.id = `${sanitizedLayerName}-zoom-alert-button`;
-//     zoomAlertButton.style.height = "14px";
-//     zoomAlertButton.style.display = "inline-block";
-//     zoomAlertButton.textContent = layerMinScale > 0 ? `Zoom in to see this layer.` : "";
-//     layerNameDiv.appendChild(zoomAlertButton);
-
-//     statTitle.appendChild(layerNameDiv);
-
-//     // Buttons row
-//     const buttonsDiv = document.createElement("div");
-//     if (isSketchable) {
-//       const enableSketchBtn = document.createElement("button");
-//       enableSketchBtn.type = "button";
-//       enableSketchBtn.id = `enable-sketch-btn-${sanitizedLayerName}`;
-//       enableSketchBtn.className = "toggleLayerVisibilityButton";
-//       enableSketchBtn.setAttribute("aria-label", "");
-//       enableSketchBtn.setAttribute("title", `Enable sketch for ${displayName} layer`);
-//       const enableSketchBtnSpan = document.createElement("span");
-//       enableSketchBtnSpan.textContent = "Add Assets";
-//       enableSketchBtn.appendChild(enableSketchBtnSpan);
-//       buttonsDiv.appendChild(enableSketchBtn);
-//     }
-
-//     const showHideBtn = document.createElement("button");
-//     showHideBtn.type = "button";
-//     showHideBtn.id = `${sanitizedLayerName}-show-hide-layer-btn`;
-//     showHideBtn.className = "toggleLayerVisibilityButton";
-//     showHideBtn.setAttribute("att-layer-id", mapDataLayerId);
-//     showHideBtn.setAttribute("aria-label", "");
-//     showHideBtn.setAttribute("title", `Hide ${displayName} layer`);
-//     if (layerMinScale > 0) {
-//       showHideBtn.setAttribute("disabled", true);
-//       showHideBtn.setAttribute("hidden", true);
-//     }
-//     const showHideBtnSpan = document.createElement("span");
-//     showHideBtnSpan.id = `${layerName}-toggle-visibility-btn-text-span`;
-//     showHideBtnSpan.textContent = layerMinScale > 0 ? "Show" : "Hide";
-//     showHideBtn.appendChild(showHideBtnSpan);
-
-//     buttonsDiv.appendChild(showHideBtn);
-//     statTitle.appendChild(buttonsDiv);
-
-//     container.appendChild(statTitle);
-
-//     // Asset selection requirements
-//     const requirementsDiv = document.createElement("div");
-//     requirementsDiv.setAttribute("aria-live", "polite");
-//     requirementsDiv.setAttribute("aria-atomic", "true");
-//     requirementsDiv.className = "asset-selection-requirements";
-
-//     const srOnlySpan = document.createElement("span");
-//     srOnlySpan.className = "sr-only";
-//     srOnlySpan.textContent = `Asset requirements and status for ${displayName} layer`;
-//     requirementsDiv.appendChild(srOnlySpan);
-
-//     // Min assets required
-//     let minAssetsSpan = document.createElement("span");
-//     minAssetsSpan.id = `${mapDataLayerId}-min-asset-required-message`;
-//     if (minAssetsRequired === 0) {
-//       minAssetsSpan.title = "No selection required";
-//       minAssetsSpan.className = "label label-success";
-//       minAssetsSpan.textContent = `No ${isSketchable ? "additions" : "selection"} required`;
-//     } else if (minAssetsRequired === 1) {
-//       minAssetsSpan.title = `${minAssetsRequired} selection required from ${displayName} layer`;
-//       minAssetsSpan.className = "label label-error";
-//       minAssetsSpan.textContent = `${minAssetsRequired} required`;
+//   _updateMinAssetsDisplay(element, minRequired, displayName, isSketchable) {
+//     if (minRequired === 0) {
+//       element.className = "label label-success";
+//       element.textContent = "0 required";
+//       element.title = "No selection required";
+//     } else if (minRequired === 1) {
+//       element.className = "label label-error";
+//       element.textContent = `${minRequired} required`;
+//       element.title = `${minRequired} selection required from ${displayName} layer`;
 //     } else {
-//       minAssetsSpan.title = `At least ${minAssetsRequired} selections required from ${displayName} layer`;
-//       minAssetsSpan.className = "label label-error";
-//       minAssetsSpan.textContent = `At least ${minAssetsRequired} required`;
-//     }
-//     requirementsDiv.appendChild(minAssetsSpan);
-
-//     // Max assets allowed
-//     if (maxAssetsAllowed > 0) {
-//       const maxAssetsSpan = document.createElement("span");
-//       maxAssetsSpan.id = `${mapDataLayerId}-max-asset-allowed-message`;
-//       maxAssetsSpan.title = `Select a maximum of ${maxAssetsAllowed} from ${displayName} layer`;
-//       maxAssetsSpan.className = "label label-default";
-//       maxAssetsSpan.textContent = `${isSketchable ? "Add" : "Select"} a maximum of ${maxAssetsAllowed}`;
-//       requirementsDiv.appendChild(maxAssetsSpan);
-//     }
-
-//     container.appendChild(requirementsDiv);
-
-//     // Asset list
-//     const assetList = document.createElement("ul");
-//     assetList.setAttribute("data-layer-name", sanitizedLayerName);
-//     assetList.className = `list-group ${assetListClass}`;
-//     assetList.id = mapDataLayerId;
-//     assetList.setAttribute("aria-live", "polite");
-//     assetList.setAttribute("aria-atomic", "true");
-
-//     const noneLi = document.createElement("li");
-//     noneLi.title = `No assets ${isSketchable ? "added" : "selected"} for ${displayName} layer`;
-//     noneLi.textContent = `None ${isSketchable ? "added" : "selected"}`;
-//     assetList.appendChild(noneLi);
-
-//     container.appendChild(assetList);
-
-//     // Replace content
-//     this.appendChild(container);
-
-//     // Attach event listeners
-//     if (
-//       isSketchable &&
-//       this.querySelector(`#enable-sketch-btn-${sanitizedLayerName}`)
-//     ) {
-//       this.querySelector(
-//         `#enable-sketch-btn-${sanitizedLayerName}`
-//       ).addEventListener(
-//         "click",
-//         () => enableSketchHandler && enableSketchHandler(layerData.layer)
-//       );
-//     }
-//     const hideBtn = this.querySelector(
-//       `#${sanitizedLayerName}-show-hide-layer-btn`
-//     );
-//     if (hideBtn) {
-//       hideBtn.onclick = () => {
-//         showHideHandler(layerName);
-//       };
+//       element.className = "label label-error";
+//       element.textContent = `${minRequired} required`;
+//       element.title = `At least ${minRequired} selections required from ${displayName} layer`;
 //     }
 //   }
-//   // --- END DOM manipulation version of render ---
+
+//   _getLodAtOrBelow(view, targetScale) {
+//     const tileInfo = view.map.basemap.baseLayers.items[0].tileInfo;
+//     if (!tileInfo || !tileInfo.lods) return targetScale;
+//     const lods = tileInfo.lods
+//       .filter((lod) => lod.scale <= targetScale)
+//       .sort((a, b) => b.scale - a.scale);
+//     if (lods.length > 0) return lods[0].scale;
+//     return tileInfo.lods[tileInfo.lods.length - 1].scale;
+//   }
+
+//   _getLodAtOrAbove(view, targetScale) {
+//     const tileInfo = view.map.basemap.baseLayers.items[0].tileInfo;
+//     if (!tileInfo || !tileInfo.lods) return targetScale;
+//     const lods = tileInfo.lods
+//       .filter((lod) => lod.scale >= targetScale)
+//       .sort((a, b) => a.scale - b.scale);
+//     if (lods.length > 0) return lods[0].scale;
+//     return tileInfo.lods[0].scale;
+//   }
 // }
 
 // export { AssetManagerMapLayerDataDisplay };
