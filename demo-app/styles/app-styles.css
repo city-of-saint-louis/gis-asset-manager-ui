@@ -38,7 +38,11 @@ main {
 footer {
   text-align: center;
   font-size: .75rem;
-  margin-bottom: .4rem;
+  margin-bottom: .5rem;
+}
+
+.footer-flag {
+  margin-bottom: .25rem;
 }
 
 .navigation {
