@@ -3,7 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
 
 export default {
-  input: './gis-asset-manager-ui/asset-manager.js', // the main entry file aka 'one file to rule them all'
+  input: './gis-asset-manager-ui/asset-manager.js', // the entry point for the module
   output: [
     {
       file: 'dist/asset-manager.esm.js',
