@@ -154,7 +154,8 @@ const enableSketchForLayer = (layer) => {
   }
 
   const sketchType = layer.sketchType;
-  sketch.availableCreateTools = layer.sketchType;
+  sketch.availableCreateTools = sketchType;
+  console.log("Setting sketch availableCreateTools to:", sketchType);
   sketch.removeAttribute("hidden");
   const mapContainer = document.getElementById("viewDiv");
   mapContainer.style.pointerEvents = "auto";
@@ -208,7 +209,7 @@ const enableSketchForLayer = (layer) => {
     } else {
       console.warn(`Could not find the select tool button`);
     }
-  }, 0);
+  }, 40);
 };
 
 const hideOrShowSketchableLayer = (layerName) => {

@@ -57,8 +57,6 @@
   font-size: 0.8rem;
   pointer-events: none;
   white-space: nowrap;
-  /* padding-bottom: 2px; */
-  /* padding-right: 0.25rem; */
   padding-top: 0.15rem;
   padding-bottom: 0.15rem;
   padding-left: 0.5rem;
@@ -77,10 +75,6 @@
   background: #174054;
   color: #fff;
 }
-
-/* .mode-status-icon {
-  margin-top: 0.1rem;
-} */
 
 #mode-status-text-span {
   display: flex;
@@ -109,7 +103,6 @@
 @media (max-width: 768px) {
   #layer-data-container {
     grid-template-columns: 1fr;
-    /* gap: 0; */
   }
 }
 
@@ -156,7 +149,7 @@
 }
 
 .max-asset-allowed-message {
-  margin-top: .25rem;  
+  margin-top: 0.25rem;
 }
 
 .toggleLayerVisibilityButton {
@@ -202,7 +195,7 @@
   box-shadow:
     0 2px 2px 0 rgba(0, 0, 0, 0.1),
     0 6px 10px 0 rgba(0, 0, 0, 0.1);
-    border: #333 2px solid;
+  border: #333 2px solid;
 }
 
 .sketch-button-shadow {
@@ -218,11 +211,11 @@
 }
 
 .remove-asset-btn {
-  gap: .25rem;
-  padding: .25rem !important;
-  padding-right: .35rem !important;
+  gap: 0.25rem;
+  padding: 0.25rem !important;
+  padding-right: 0.35rem !important;
   font-size: 0.75rem;
-flex-shrink: 0; 
+  flex-shrink: 0;
 }
 
 .remove-asset-btn:hover {
@@ -413,30 +406,25 @@ asset-manager-map-layer-data-display li {
 }
 
 .asset-list-item-content-span {
-  flex: 1 1 auto;      /* <-- add this to make label take all available space */
-  min-width: 0;        /* <-- add this for text-overflow to work if needed */
-  /* ...existing styles... */
+  flex: 1 1 auto; /* <-- make label take all available space */
+  min-width: 0; /* <-- add this for text-overflow to work if needed */
 }
 
 #asset-manager-mode-toggle-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* margin-top: 1rem; */
-  /* margin-bottom: 1rem; */
 }
 
 .mode-button {
   margin-top: 0.25rem;
-  margin-bottom: .75rem;
-  /* padding: 0.25rem 1.42rem; */
+  margin-bottom: 0.75rem;
   font-size: 1rem;
   border: black 1px solid;
-  /* transition: transform 0.6s; */
   display: flex;
   align-items: center;
-  padding-top: .25rem;
-  padding-bottom: .25rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
 .mode-button:hover {
@@ -483,14 +471,13 @@ asset-manager-map-layer-data-display li {
 
 arcgis-sketch#asset-manager-sketch {
   position: absolute;
-  /* top: -1.12rem; */
   left: -1.12rem;
 }
 
 arcgis-search#asset-manager-arcgis-search {
   position: absolute;
-  top: -1rem;
-  right: -1rem;
+  top: -1.04rem;
+  right: -1.04rem;
 }
 
 @media screen and (max-width: 992px) {
@@ -499,16 +486,21 @@ arcgis-search#asset-manager-arcgis-search {
   }
   #mode-status-banner {
     left: -0.12rem;
-    top: -1.65rem;
+    top: -1.68rem;
   }
   arcgis-sketch#asset-manager-sketch {
     top: -1.12em;
     left: -1.12rem;
   }
   .mode-status-icon {
-  /* margin-right: 0.5rem; */
-  margin-top: 0.15rem;
+    margin-top: 0.15rem;
+  }
 }
+
+@media screen and (max-width: 884px) {
+  arcgis-search#asset-manager-arcgis-search {
+    top: 2.14rem;
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -517,12 +509,15 @@ arcgis-search#asset-manager-arcgis-search {
   }
 }
 
+/* @media screen and (max-width: 600px) {
+  arcgis-search#asset-manager-arcgis-search {
+    top: 2.14rem;
+  }
+} */
+
 @media screen and (max-width: 500px) {
   arcgis-search#asset-manager-arcgis-search {
-    left: -1rem;
-  }
-  arcgis-sketch#asset-manager-sketch {
-    top: 1rem;
+    left: -1.04rem;
   }
 }
 

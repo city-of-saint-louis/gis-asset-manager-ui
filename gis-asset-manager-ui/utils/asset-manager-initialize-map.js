@@ -84,7 +84,7 @@ export const initializeMap = async () => {
     arcGisMap.setAttribute("extent", JSON.stringify(extent.toJSON()));
     mapContainer.appendChild(arcGisMap);
     const zoomControl = document.createElement("arcgis-zoom");
-    zoomControl.setAttribute("position", "bottom-left");
+    zoomControl.setAttribute("slot", "bottom-left");
     arcGisMap.appendChild(zoomControl);
 
     const locatorSourceObj = {
@@ -145,9 +145,9 @@ export const initializeMap = async () => {
         );
         if (!searchComponent) return;
         if (window.innerWidth <= 500) {
-          searchComponent.setAttribute("position", "top-left");
+          searchComponent.setAttribute("slot", "top-left");
         } else {
-          searchComponent.setAttribute("position", "top-right");
+          searchComponent.setAttribute("slot", "top-right");
         }
       }
       // Run on load

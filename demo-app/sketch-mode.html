@@ -7,25 +7,15 @@
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' data: https://cdn.arcgis.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval' https://js.arcgis.com; font-src 'self' https://js.arcgis.com; connect-src 'self' https://js.arcgis.com/ https://www.arcgis.com https://services.arcgisonline.com https://cdn.arcgis.com https://basemaps.arcgis.com https://maps8.stlouis-mo.gov https://static.arcgis.com https://server.arcgisonline.com; worker-src 'self' blob:;"
+      content="default-src 'self'; img-src 'self' data: https://cdn.arcgis.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval' https://js.arcgis.com; font-src 'self' https://js.arcgis.com; connect-src 'self' https://js.arcgis.com/ https://www.arcgis.com https://services.arcgisonline.com https://cdn.arcgis.com https://basemaps.arcgis.com https://maps8.stlouis-mo.gov https://static.arcgis.com https://server.arcgisonline.com; worker-src 'self' blob:;"
     />
     <title>GIS Asset Manager UI - Sketch Mode</title>
     <link rel="icon" type="image/x-icon" href="./assets/icons/favicon.ico" />
     <link rel="stylesheet" href="../gis-asset-manager-ui/styles/city-of-stl-styles.css" />
     <link rel="stylesheet" href="../gis-asset-manager-ui/styles/asset-manager-styles.css" />
     <link rel="stylesheet" href="./styles/app-styles.css" />
-    <!-- Load Calcite Design System -->
-    <script
-      type="module"
-      src="https://js.arcgis.com/calcite-components/3.3.3/calcite.esm.js"
-    ></script>
-    <!-- Load the JavaScript Maps SDK core API -->
-    <script src="https://js.arcgis.com/4.34/"></script>
-    <!-- Load the JavaScript Maps SDK Map components package -->
-    <script
-      type="module"
-      src="https://js.arcgis.com/4.34/map-components/"
-    ></script>
+    <!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
+    <script type="module" src="https://js.arcgis.com/5.0/"></script>
   </head>
   <body>
     <header>
