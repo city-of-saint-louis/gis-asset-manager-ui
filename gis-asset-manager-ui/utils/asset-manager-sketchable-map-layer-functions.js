@@ -521,6 +521,10 @@ const renderCreatedAssetLabel = (graphic) => {
 };
 
 export const sketchAsset = (sketchComponent) => {
+  console.log(
+    "Sketch component received in sketchAsset function:",
+    sketchComponent.layer,
+  );
   sketchComponent.addEventListener("arcgisCreate", async (event) => {
     if (event.detail.state !== "complete") return; // Only handle completed graphics
     const graphic = event.detail.graphic;
@@ -540,6 +544,9 @@ export const sketchAsset = (sketchComponent) => {
       console.warn(
         `Cannot add more assets to ${sketchComponent.layer.layerProperties.formattedLayerName} layer. Maximum of ${layerAssetMax} reached.`,
       );
+      if (sketchComponent.layer && sketchComponent.layer.graphics) {
+        sketchComponent.layer.graphics.remove(graphic);
+      }
       return;
     }
     graphic.attributes = {
@@ -559,11 +566,9 @@ export const sketchAsset = (sketchComponent) => {
     };
 
     // Add the graphic to the ArcGIS GraphicsLayer so it appears on the map
-    if (
-      sketchComponent.layer.graphicsLayer &&
-      sketchComponent.layer.graphicsLayer.graphics
-    ) {
-      sketchComponent.layer.graphicsLayer.graphics.add(graphic);
+    if (sketchComponent.layer && sketchComponent.layer.graphics) {
+      sketchComponent.layer.graphics.add(graphic);
+      console.log("Graphic added to layer:", sketchComponent.layer, graphic);
     }
 
     const Graphic = await $arcgis.import("@arcgis/core/Graphic.js");
