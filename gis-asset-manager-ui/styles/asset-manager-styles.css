@@ -471,6 +471,7 @@ asset-manager-map-layer-data-display li {
 
 arcgis-sketch#asset-manager-sketch {
   position: absolute;
+  top: 0.4rem;
   left: -1.12rem;
 }
 

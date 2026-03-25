@@ -145,6 +145,9 @@ const enableSketchForLayer = (layer) => {
       border: 2px solid #174054 !important;
       box-sizing: border-box;
     }
+    calcite-action-group:has(calcite-action[data-action-key="pointer-select"]) {
+      border-style: none !important;
+    }  
   `;
     sketch.shadowRoot.appendChild(style);
   }
@@ -205,7 +208,7 @@ const enableSketchForLayer = (layer) => {
         b.getAttribute("aria-label").toLowerCase().includes("select"),
     );
     if (selectButton) {
-      selectButton.setAttribute("hidden", "true");
+      selectButton.style.display = "none";
     } else {
       console.warn(`Could not find the select tool button`);
     }
@@ -353,7 +356,7 @@ export const updateLayerRequirementDisplay = (asset) => {
   const minAssetMessageElement = document.getElementById(
     `${layerId}-min-asset-required-message`,
   );
-  
+
   if (totalLayerAssetsCreated >= layerAssetMin) {
     minAssetMessageElement.classList.remove("label-error");
     minAssetMessageElement.classList.add("label-success");
@@ -598,11 +601,11 @@ export const sketchAsset = (sketchComponent) => {
       geometry: labelGeometry,
       symbol: labelSymbol,
       attributes: {
-        relatedAssetId: graphic.attributes.id, 
+        relatedAssetId: graphic.attributes.id,
       },
     });
     sketchComponent.layer.graphics.add(labelGraphic);
-    graphic.attributes.labelGraphicId = labelGraphic.uid; 
+    graphic.attributes.labelGraphicId = labelGraphic.uid;
     if (!sketchComponent.availableCreateTools.includes(graphic.geometry.type)) {
       console.warn(
         `Created graphic type ${graphic.geometry.type} is not allowed in this layer!`,
