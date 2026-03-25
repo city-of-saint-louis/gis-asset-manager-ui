@@ -44,19 +44,28 @@ There are three ways to use GIS Asset Manager UI in your project:
 
 2. You can use GIS Asset Manager UI via a CDN:
 
+   - Place the links to the CSS files in the `<head>` section of your HTML file.
+
    ```html
-   <link
+    <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui/dist/asset-manager-styles.css"
-   />
-   <link
+      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/asset-manager-styles.css"
+    />
+    <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui/dist/city-of-stl-styles.css"
-   />
-   <script 
-     src="https://cdn.jsdelivr.net/npm/gis-asset-manager/dist/gis-asset-manager.js">
-   </script>
-   ```
+      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/city-of-stl-styles.css"
+    />
+    ```
+
+   - Place a script tag for the GIS Asset Manager entry point just before the closing `</body>` tag in your HTML file.
+
+    ```html
+      <script 
+        type="module" 
+        src="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/gis-asset-manager.js">
+      </script>
+     </body>
+    ```
 
 3. You can also include GIS Asset Manager UI directly in your project by downloading the source files and referencing them locally. This method is not recommended as you do not need all of the files in the asset manager repository to run the module and it will make updating the module within your project more difficult. If you choose this method you only need to include the JavaScript files in the 'gis-asset-manager-ui' directory in your project. You must keep all of the files in the same directory. You can choose to use the two CSS stylesheets or not. See the section on [CSS Files](#css-files) for more information. You only need to include a script tag for the main JavaScript file `gis-asset-manager.js` in your HTML file.
 
@@ -113,11 +122,11 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Manager are in place, 
     <title>GIS Asset Manager</title>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui/dist/asset-manager-styles.css"
+      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/asset-manager-styles.css"
     />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui/dist/city-of-stl-styles.css"
+      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/city-of-stl-styles.css"
     />
     <!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
     <script type="module" src="https://js.arcgis.com/5.0/"></script>
@@ -152,9 +161,9 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Manager are in place, 
         ></asset-manager-map-layer>
       </asset-manager-container>
     </main>
-    <script
+     <script
       type="module"
-      src="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui/dist/asset-manager.esm.js"
+      src="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/asset-manager.esm.js"
     ></script>
   </body>
 </html>
