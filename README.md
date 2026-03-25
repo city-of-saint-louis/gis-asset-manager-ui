@@ -42,30 +42,37 @@ There are three ways to use GIS Asset Manager UI in your project:
    npm install @cityofstlouis/gis-asset-manager-ui
    ```
 
-2. You can use GIS Asset Manager UI via a CDN:
+   - After installing via npm, you can import the module into your JavaScript file as follows:
 
+   ```javascript
+   import "@cityofstlouis/gis-asset-manager-ui/dist/asset-manager-styles.css";
+   import "@cityofstlouis/gis-asset-manager-ui/dist/city-of-stl-styles.css";
+   import "@cityofstlouis/gis-asset-manager-ui";
+   ```
+
+2. You can use GIS Asset Manager UI via a CDN:
    - Place the links to the CSS files in the `<head>` section of your HTML file.
 
    ```html
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/asset-manager-styles.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/city-of-stl-styles.css"
-    />
-    ```
+   <link
+     rel="stylesheet"
+     href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/asset-manager-styles.css"
+   />
+   <link
+     rel="stylesheet"
+     href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/city-of-stl-styles.css"
+   />
+   ```
 
    - Place a script tag for the GIS Asset Manager entry point just before the closing `</body>` tag in your HTML file.
 
-    ```html
-      <script 
-        type="module" 
-        src="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/gis-asset-manager.js">
-      </script>
-     </body>
-    ```
+   ```html
+     <script
+       type="module"
+       src="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/gis-asset-manager.js">
+     </script>
+    </body>
+   ```
 
 3. You can also include GIS Asset Manager UI directly in your project by downloading the source files and referencing them locally. This method is not recommended as you do not need all of the files in the asset manager repository to run the module and it will make updating the module within your project more difficult. If you choose this method you only need to include the JavaScript files in the 'gis-asset-manager-ui' directory in your project. You must keep all of the files in the same directory. You can choose to use the two CSS stylesheets or not. See the section on [CSS Files](#css-files) for more information. You only need to include a script tag for the main JavaScript file `gis-asset-manager.js` in your HTML file.
 
@@ -114,59 +121,69 @@ Once the ArcGIS Maps SDK for JavaScript and the GIS Asset Manager are in place, 
 #### **Example Implementation in HTML**
 
 ```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GIS Asset Manager</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/asset-manager-styles.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/city-of-stl-styles.css"
-    />
-    <!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
-    <script type="module" src="https://js.arcgis.com/5.0/"></script>
-  </head>
-  <body>
-    <header></header>
-    <main>
-      <asset-manager-container
-        title="Select Street Segments and Parcels as Needed"
-        hint="Zoom in to see the asset layers. Select assets by mouse click to fulfill the requirements. Submit selected assets when finished."
-        is-sketch-enabled="false"
-        is-select-enabled="true"
-      >
-        <asset-manager-map-layer
-          name="street"
-          layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/0/"
-          layer-asset-id-field-name="OBJECTID"
-          minimum="0"
-          label-mask="{LeftFromAddress} to {RightToAddress} {StreetName}"
-          min-scale="20000"
-          asset-label="StreetName"
-        ></asset-manager-map-layer>
-        <asset-manager-map-layer
-          name="PARCEL"
-          layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/4/"
-          layer-asset-id-field-name="OBJECTID"
-          minimum="1"
-          maximum="6"
-          label-mask="{SITEADDR}"
-          min-scale="30000"
-          asset-label="SITEADDR"
-        ></asset-manager-map-layer>
-      </asset-manager-container>
-    </main>
-     <script
-      type="module"
-      src="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/asset-manager.esm.js"
-    ></script>
-  </body>
-</html>
+<main>
+  <asset-manager-container
+    title="Select Street Segments and Parcels as Needed"
+    hint="Zoom in to see the asset layers. Select assets by mouse click to fulfill the requirements. Submit selected assets when finished."
+    is-sketch-enabled="false"
+    is-select-enabled="true"
+  >
+    <asset-manager-map-layer
+      name="street"
+      layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/0/"
+      layer-asset-id-field-name="OBJECTID"
+      minimum="0"
+      label-mask="{LeftFromAddress} to {RightToAddress} {StreetName}"
+      min-scale="20000"
+      asset-label="StreetName"
+    ></asset-manager-map-layer>
+    <asset-manager-map-layer
+      name="PARCEL"
+      layer-class-url="https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/4/"
+      layer-asset-id-field-name="OBJECTID"
+      minimum="1"
+      maximum="6"
+      label-mask="{SITEADDR}"
+      min-scale="30000"
+      asset-label="SITEADDR"
+    ></asset-manager-map-layer>
+  </asset-manager-container>
+</main>
+```
+
+### **Use Custom Elements in JavaScript**
+
+Or you can create the elements dynamically with JavaScript:
+
+```javascript
+const assetManagerContainer = document.createElement("asset-manager-container");
+assetManagerContainer.setAttribute("title", "Select Street Segments and Parcels as Needed");
+assetManagerContainer.setAttribute("hint", "Zoom in to see the asset layers. Select assets by mouse click to fulfill the requirements. Submit selected assets when finished.");
+assetManagerContainer.setAttribute("is-sketch-enabled", "false");
+assetManagerContainer.setAttribute("is-select-enabled", "true");
+
+const streetLayer = document.createElement("asset-manager-map-layer");
+streetLayer.setAttribute("name", "street");
+streetLayer.setAttribute("layer-class-url", "https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/0/");
+streetLayer.setAttribute("layer-asset-id-field-name", "OBJECTID");
+streetLayer.setAttribute("minimum", "0");
+streetLayer.setAttribute("label-mask", "{LeftFromAddress} to {RightToAddress} {StreetName}");
+streetLayer.setAttribute("min-scale", "20000");
+streetLayer.setAttribute("asset-label", "StreetName");
+
+const parcelLayer = document.createElement("asset-manager-map-layer");
+parcelLayer.setAttribute("name", "PARCEL");
+parcelLayer.setAttribute("layer-class-url", "https://maps8.stlouis-mo.gov/arcgis/rest/services/STREETS/Streets_Permitting/MapServer/4/");
+parcelLayer.setAttribute("layer-asset-id-field-name", "OBJECTID");
+parcelLayer.setAttribute("minimum", "1");
+parcelLayer.setAttribute("maximum", "6");
+parcelLayer.setAttribute("label-mask", "{SITEADDR}");
+parcelLayer.setAttribute("min-scale", "30000");
+parcelLayer.setAttribute("asset-label", "SITEADDR");
+
+assetManagerContainer.appendChild(streetLayer);
+assetManagerContainer.appendChild(parcelLayer);
+document.querySelector("main").appendChild(assetManagerContainer);
 ```
 
 ### Modes
