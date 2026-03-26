@@ -89,22 +89,6 @@ GIS Asset Manager UI relies on the [ArcGIS Maps SDK for JavaScript](https://deve
 <script type="module" src="https://js.arcgis.com/5.0/"></script>
 ```
 
-According to the [ArcGIS Maps SDK for JavaScript documentation](https://developers.arcgis.com/javascript/latest/get-started/), you can also install the SDK via npm although the documentation is a bit vague on which packages are required.
-
-The documentation references the following command to install ArcGIS Map Components:
-
-```bash
-npm install @arcgis/map-components
-```
-
-There is also the option to install the ArcGIS Maps SDK for JavaScript via npm:
-
-```bash
-npm install @arcgis/core
-```
-
-Refer to the [ArcGIS Maps SDK for JavaScript documentation](https://developers.arcgis.com/javascript/latest/get-started/) for more information.
-
 ## **How To Use GIS Asset Manager UI**
 
 1. [Use Custom Elements in HTML](#use-custom-elements-in-html)
