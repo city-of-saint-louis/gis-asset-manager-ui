@@ -74,10 +74,10 @@ There are three ways to use GIS Asset Manager UI in your project:
     </body>
    ```
 
-3. You can also include GIS Asset Manager UI directly in your project by downloading the source files and referencing them locally. This method is not recommended as you do not need all of the files in the asset manager repository to run the module and it will make updating the module within your project more difficult. If you choose this method you only need to include the JavaScript files in the 'gis-asset-manager-ui' directory in your project. You must keep all of the files in the same directory. You can choose to use the two CSS stylesheets or not. See the section on [CSS Files](#css-files) for more information. You only need to include a script tag for the main JavaScript file `gis-asset-manager.js` in your HTML file.
+3. You can also include GIS Asset Manager UI directly in your project by downloading the source files and referencing them locally. This method is not recommended as you do not need all of the files in the asset manager repository to run the module and it will make updating the module within your project more difficult. If you choose this method you only need to include the 'gis-asset-manager-ui' directory in your project. You can choose to use the two CSS stylesheets or not. See the section on [CSS Files](#css-files) for more information. You only need to include a script tag for the main JavaScript file `gis-asset-manager.js` in your HTML file. Place the script tag just before the closing `</body>` tag. Be sure to specify `type="module"` in the script tag as shown below.
 
    ```html
-   <script type="module" src="path/to/gis-asset-manager.js"></script>
+    <script type="module" src="./gis-asset-manager-ui/asset-manager.js"></script>
    ```
 
 ### ArcGIS Maps SDK for JavaScript
