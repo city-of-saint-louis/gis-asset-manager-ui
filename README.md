@@ -69,7 +69,7 @@ There are three ways to use GIS Asset Manager UI in your project:
    ```html
      <script
        type="module"
-       src="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/gis-asset-manager.js">
+       src="https://cdn.jsdelivr.net/npm/@cityofstlouis/gis-asset-manager-ui@2.0.1/dist/asset-manager.esm.js">
      </script>
     </body>
    ```
@@ -373,7 +373,7 @@ The Asset Manager can be configured as needed by passing values for the followin
 8. **is-select-enabled**
    - **Type:** `boolean`
    - **Description:** Determines if select mode is enabled, allowing users to select existing assets on the map.
-   - **Default value:** `true`
+   - **Default value:** `false`
 
 9. **is-sketch-enabled**
    - **Type:** `boolean`
