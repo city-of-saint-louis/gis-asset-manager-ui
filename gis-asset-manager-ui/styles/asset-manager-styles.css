@@ -9,7 +9,7 @@
   font-size: 0.9rem;
   margin-bottom: 0rem;
   margin-top: 0rem;
-  min-height: 6.2rem;
+  /* min-height: 6.2rem; */
 }
 
 #asset-manager-button-and-map-wrapper {
@@ -83,28 +83,29 @@
 
 #layer-data-container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  /* grid-template-columns: 1fr 1fr 1fr 1fr;  */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem;
   padding: 1rem 1rem;
   align-items: start;
   z-index: 0;
 }
 
-@media (max-width: 1200px) {
+ /* @media (max-width: 1440px) {
   #layer-data-container {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr ;
   }
-}
-@media (max-width: 992px) {
+} */
+/*@media (max-width: 992px) {
   #layer-data-container {
     grid-template-columns: 1fr 1fr;
   }
-}
-@media (max-width: 768px) {
+} */
+/* @media (max-width: 768px) {
   #layer-data-container {
     grid-template-columns: 1fr;
   }
-}
+} */
 
 #layer-data-container::before {
   display: none !important;
@@ -130,7 +131,8 @@
   box-shadow:
     0 2px 2px 0 rgba(0, 0, 0, 0.1),
     0 6px 10px 0 rgba(0, 0, 0, 0.1);
-  scale: 105%;
+  scale: 102%;
+  /* will-change: transform; */
 }
 .zoom-alert-button:active {
   transform: scale(0.95);
@@ -162,7 +164,7 @@
 }
 
 .toggleLayerVisibilityButton:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
   background-color: #f9f9f9;
   box-shadow:
     0 2px 2px 0 rgba(0, 0, 0, 0.1),
@@ -189,7 +191,7 @@
 }
 
 .enable-sketch-button:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
   background-color: #174054;
   color: white;
   box-shadow:
@@ -318,10 +320,12 @@
   font-size: 1rem;
 }
 #accomodation-button:hover {
-  transform: scale(1.05);
+  transform: scale(1.02); /* subtle */
   box-shadow:
     0 2px 2px 0 rgba(0, 0, 0, 0.1),
     0 6px 10px 0 rgba(0, 0, 0, 0.1);
+  
+  /* will-change: transform; */
 }
 
 #accomodation-button-hint {
@@ -428,7 +432,7 @@ asset-manager-map-layer-data-display li {
 }
 
 .mode-button:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
   box-shadow:
     0 2px 2px 0 rgba(0, 0, 0, 0.1),
     0 6px 10px 0 rgba(0, 0, 0, 0.1);
