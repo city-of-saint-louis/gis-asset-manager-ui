@@ -91,6 +91,10 @@
   z-index: 0;
 }
 
+#layer-data-container > :only-child {
+  grid-column: 1 / -1;
+}
+
  /* @media (max-width: 1440px) {
   #layer-data-container {
     grid-template-columns: 1fr 1fr ;
