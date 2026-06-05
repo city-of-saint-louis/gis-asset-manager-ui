@@ -32,7 +32,7 @@ document.addEventListener("coordinatesAvailable", (event) => {
   assetManagerContainer.setAttribute("zoom", 18);
   assetManagerContainer.setAttribute("center-x", addressMarkerX);
   assetManagerContainer.setAttribute("center-y", addressMarkerY);
-  const layerDataDiv = document.getElementById("layer-data-div");
+  const layerDataDiv = document.getElementById("layer-data-container");
   layerDataDiv.innerHTML = "";
   initializeMap();
 });

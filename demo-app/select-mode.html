@@ -11,8 +11,14 @@
     />
     <title>GIS Asset Manager UI - Select Mode</title>
     <link rel="icon" type="image/x-icon" href="../assets/icons/favicon.ico" />
-    <link rel="stylesheet" href="../gis-asset-manager-ui/styles/city-of-stl-styles.css" />
-    <link rel="stylesheet" href="../gis-asset-manager-ui/styles/asset-manager-styles.css" />
+    <link
+      rel="stylesheet"
+      href="../gis-asset-manager-ui/styles/city-of-stl-styles.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../gis-asset-manager-ui/styles/asset-manager-styles.css"
+    />
     <link rel="stylesheet" href="./styles/app-styles.css" />
     <!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
     <script type="module" src="https://js.arcgis.com/5.0/"></script>
@@ -22,8 +28,7 @@
       <h1>GIS Asset Manager UI</h1>
       <h2 class="page-sub-title">Select Mode</h2>
       <nav class="navigation">
-        <a href="../index.html">Home</a> |
-        <span>Select Mode</span> |
+        <a href="../index.html">Home</a> | <span>Select Mode</span> |
         <a href="sketch-mode.html">Sketch Mode</a> |
         <a href="select-and-sketch-modes.html">Select Mode & Sketch Mode</a> |
         <a
@@ -53,7 +58,7 @@
           layer-asset-id-field-name="OBJECTID"
           minimum="0"
           label-mask="{LeftFromAddress} to {RightToAddress} {StreetName}"
-        min-scale="30000"
+          min-scale="30000"
           asset-label="StreetName"
           is-select-by-search-enabled="true"
         >
@@ -90,7 +95,10 @@
         class="footer-flag"
       />
     </footer>
-    <script type="module" src="../gis-asset-manager-ui/asset-manager.js"></script>
+    <script
+      type="module"
+      src="../gis-asset-manager-ui/asset-manager.js"
+    ></script>
     <script src="./parent-application.js"></script>
   </body>
 </html>
