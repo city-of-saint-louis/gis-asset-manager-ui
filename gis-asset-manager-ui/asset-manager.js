@@ -23,17 +23,22 @@ import { captureSketachableMapLayers } from "./utils/asset-manager-sketchable-ma
 import { initializeMap } from "./utils/asset-manager-initialize-map.js";
 // event listener to caputre x,y coordinates from address validation
 document.addEventListener("coordinatesAvailable", (event) => {
-  setAddressMarkerX(event.detail.centerX);
-  setAddressMarkerY(event.detail.centerY);
+  // setAddressMarkerX(event.detail.centerX);
+  // setAddressMarkerY(event.detail.centerY);
+  const { centerX, centerY } = event.detail || {};
   const assetManagerContainer = document.querySelector(
     "asset-manager-container",
   );
+  if (!assetManagerContainer || centerX == null || centerY == null) return;
+  setAddressMarkerX(centerX);
+  setAddressMarkerY(centerY);
   // reset zoom level, reset x,y based on address entered, and reinitialize the map
   assetManagerContainer.setAttribute("zoom", 18);
-  assetManagerContainer.setAttribute("center-x", addressMarkerX);
-  assetManagerContainer.setAttribute("center-y", addressMarkerY);
+  assetManagerContainer.setAttribute("center-x", String(centerX));
+  assetManagerContainer.setAttribute("center-y", String(centerY));
   const layerDataContainer = document.getElementById("layer-data-container");
   if (layerDataContainer) layerDataContainer.innerHTML = "";
+  console.log(assetManagerContainer.getAttribute("center-x"), assetManagerContainer.getAttribute("center-y"));
   initializeMap();
 });
 // capture the map layers added to the asset-manager-container component
