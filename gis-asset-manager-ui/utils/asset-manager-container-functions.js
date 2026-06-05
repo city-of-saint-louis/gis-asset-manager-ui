@@ -23,11 +23,11 @@ const handleAddAssetInputButtonClick = (event) => {
     const assetType = event.target.dataset.type;
     const allMapLayers = [...featureLayers, ...graphicLayers];
     const currentLayer = allMapLayers.find(
-      (layer) => layer.layerProperties.layerName === layerName
+      (layer) => layer.layerProperties.layerName === layerName,
     );
     const maxInputs = currentLayer ? currentLayer.maxAssetsAllowed : 0;
     const minInputsRequired = currentLayer ? currentLayer.minAssetsRequired : 0;
-   
+
     let layer;
     if (assetType === "selected") {
       layer = featureLayers.find(
@@ -42,19 +42,25 @@ const handleAddAssetInputButtonClick = (event) => {
       const inputContainer = document.getElementById(
         `${layerName}-input-container`,
       );
-      let numOfAddedInputs = document.querySelectorAll(`.${layerName}-added-input`).length;
+      let numOfAddedInputs = document.querySelectorAll(
+        `.${layerName}-added-input`,
+      ).length;
       let currentNumOfInputs = numOfAddedInputs + minInputsRequired;
       if (currentNumOfInputs < maxInputs) {
-      const newInput = document.createElement("input");
-      newInput.type = "text";
-      newInput.name = layer.layerProperties.formattedLayerName;
-      newInput.id = `${layerName}-${inputContainer.querySelectorAll("input").length}`;
-      newInput.size = 60;
-      newInput.classList.add(`accessible-accommodation-input`, `${layerName}-added-input`);
-      inputContainer.appendChild(newInput);
-      }
-      else {
-        alert(`Maximum number of inputs (${maxInputs}) reached for ${layerName}`);
+        const newInput = document.createElement("input");
+        newInput.type = "text";
+        newInput.name = layer.layerProperties.formattedLayerName;
+        newInput.id = `${layerName}-${inputContainer.querySelectorAll("input").length}`;
+        newInput.size = 60;
+        newInput.classList.add(
+          `accessible-accommodation-input`,
+          `${layerName}-added-input`,
+        );
+        inputContainer.appendChild(newInput);
+      } else {
+        alert(
+          `Maximum number of inputs (${maxInputs}) reached for ${layerName}`,
+        );
       }
     }
   }
@@ -161,7 +167,7 @@ const generateModalHTML = (inputsContent, sketchInputsContent) => {
     <dialog id="asset-modal" class="modal">
       <div class="modal-content">
         <div class="modal-header">
-          <button class="close" type="button" aria-label="Close">&times;</button>
+          <button id="accomodation-modal-close-btn" class="close" type="button" aria-label="Close">&times;</button>
           <h1 id="accomodation-title">
             Enter the assets required for your request.
           </h1>
@@ -206,17 +212,24 @@ const openModal = (prefillData = {}) => {
   modal.showModal();
   document.body.classList.add("no-scroll");
   // Add event listener for the modal form submission
-  const modalForm = document.getElementById("modal-asset-form");
+  const modalForm = modal?.querySelector("#modal-asset-form");
   if (modalForm) {
     modalForm.addEventListener("submit", handleModalAssetFormSubmit);
   }
   // Add event listener for closing the modal
-  const modalCloseButton = document.querySelector(".modal .close");
+  const modalCloseButton = modal?.querySelector(
+    "#accomodation-modal-close-btn",
+  );
   if (modalCloseButton) {
     modalCloseButton.addEventListener("click", closeModal);
   }
   modal.addEventListener("close", () => {
     document.body.classList.remove("no-scroll");
+  });
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      closeModal();
+    }
   });
 };
 

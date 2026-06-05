@@ -32,8 +32,8 @@ document.addEventListener("coordinatesAvailable", (event) => {
   assetManagerContainer.setAttribute("zoom", 18);
   assetManagerContainer.setAttribute("center-x", addressMarkerX);
   assetManagerContainer.setAttribute("center-y", addressMarkerY);
-  const layerDataDiv = document.getElementById("layer-data-container");
-  layerDataDiv.innerHTML = "";
+  const layerDataContainer = document.getElementById("layer-data-container");
+  if (layerDataContainer) layerDataContainer.innerHTML = "";
   initializeMap();
 });
 // capture the map layers added to the asset-manager-container component
