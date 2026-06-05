@@ -9,12 +9,12 @@ import { AssetManagerMapLayerDataDisplay } from "./custom-elements/asset-manager
 // import AssetManagerModeToggle from asset-manager-mode-toggle.js
 import { AssetManagerModeToggle } from "./custom-elements/asset-manager-mode-toggle.js";
 // import state variables from asset-manager-state.js
-import {
-  addressMarkerX,
-  setAddressMarkerX,
-  addressMarkerY,
-  setAddressMarkerY,
-} from "./asset-manager-state.js";
+// import {
+//   addressMarkerX,
+//   setAddressMarkerX,
+//   addressMarkerY,
+//   setAddressMarkerY,
+// } from "./asset-manager-state.js";
 // import from asset-manager-functions.js
 import { captureMapLayers } from "./utils/asset-manager-functions.js";
 // import from asset-manager-sketchable-map-layer-functions.js
@@ -30,15 +30,15 @@ document.addEventListener("coordinatesAvailable", (event) => {
     "asset-manager-container",
   );
   if (!assetManagerContainer || centerX == null || centerY == null) return;
-  setAddressMarkerX(centerX);
-  setAddressMarkerY(centerY);
+  // setAddressMarkerX(centerX);
+  // setAddressMarkerY(centerY);
+
   // reset zoom level, reset x,y based on address entered, and reinitialize the map
-  assetManagerContainer.setAttribute("zoom", 18);
-  assetManagerContainer.setAttribute("center-x", String(centerX));
-  assetManagerContainer.setAttribute("center-y", String(centerY));
+  // assetManagerContainer.setAttribute("zoom", 18);
+  // assetManagerContainer.setAttribute("center-x", String(centerX));
+  // assetManagerContainer.setAttribute("center-y", String(centerY));
   const layerDataContainer = document.getElementById("layer-data-container");
   if (layerDataContainer) layerDataContainer.innerHTML = "";
-  console.log(assetManagerContainer.getAttribute("center-x"), assetManagerContainer.getAttribute("center-y"));
   initializeMap();
 });
 // capture the map layers added to the asset-manager-container component
