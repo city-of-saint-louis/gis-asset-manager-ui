@@ -22,14 +22,14 @@ import { captureSketachableMapLayers } from "./utils/asset-manager-sketchable-ma
 // import initializeMap function from map-initialization.js
 import { initializeMap } from "./utils/asset-manager-initialize-map.js";
 // event listener to caputre x,y coordinates from address validation
-document.addEventListener("coordinatesAvailable", (event) => {
+document.addEventListener("coordinatesAvailable", () => {
   // setAddressMarkerX(event.detail.centerX);
   // setAddressMarkerY(event.detail.centerY);
-  const { centerX, centerY } = event.detail || {};
+  // const { centerX, centerY } = event.detail || {};
   const assetManagerContainer = document.querySelector(
     "asset-manager-container",
   );
-  if (!assetManagerContainer || centerX == null || centerY == null) return;
+  if (!assetManagerContainer) return;
   // setAddressMarkerX(centerX);
   // setAddressMarkerY(centerY);
 
