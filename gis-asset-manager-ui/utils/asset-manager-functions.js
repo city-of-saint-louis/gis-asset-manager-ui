@@ -718,8 +718,8 @@ export const handleSelectEnabled = () => {
     // NEW CODE: Cancel any active sketch session and detach layer
   if (sketch) {
     if (typeof sketch.cancel === "function") sketch.cancel();
-    if ("activeTool" in sketch) sketch.activeTool = null;
-    sketch.layer = null;
+    // if ("activeTool" in sketch) sketch.activeTool = null;
+    // sketch.layer = null;
   }
 
   setTimeout(() => {
