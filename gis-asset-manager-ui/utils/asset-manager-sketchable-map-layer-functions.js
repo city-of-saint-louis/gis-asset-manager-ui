@@ -561,12 +561,6 @@ export const sketchAsset = (sketchComponent) => {
       geometryString: JSON.stringify(graphic.geometry),
     };
 
-    // Add the graphic to the ArcGIS GraphicsLayer so it appears on the map
-    if (sketchComponent.layer && sketchComponent.layer.graphics) {
-      sketchComponent.layer.graphics.add(graphic);
-      console.log("Graphic added to layer:", sketchComponent.layer, graphic);
-    }
-
     const Graphic = await $arcgis.import("@arcgis/core/Graphic.js");
 
     // Create the label text
@@ -616,6 +610,7 @@ export const sketchAsset = (sketchComponent) => {
       }
       return;
     }
+    console.log("layer", sketchComponent.layer);
     createdAssets.push(graphic);
     renderCreatedAssetLabel(graphic);
     updateLayerRequirementDisplay(graphic);
