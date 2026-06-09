@@ -5,6 +5,7 @@ import {
   handleAccomodationButtonClick,
 } from "../utils/asset-manager-container-functions.js";
 import { setIsSelectBySearchEnabled, setListenForNewCoordinates } from "../asset-manager-state.js";
+import { initializeMap } from "../utils/asset-manager-initialize-map.js";
 
 class AssetManagerContainer extends HTMLElement {
   constructor() {
@@ -13,11 +14,9 @@ class AssetManagerContainer extends HTMLElement {
     this.hint = this.getAttribute("hint") || "";
     this.isSelectEnabled = this.getAttribute("is-select-enabled") === "true";
     this.isSketchEnabled = this.getAttribute("is-sketch-enabled") === "true";
-    this.isSelectBySearchEnabled =
-      this.getAttribute("is-select-by-search-enabled") === "true";
+    this.isSelectBySearchEnabled = this.getAttribute("is-select-by-search-enabled") === "true";
     this.titleHeadingLevel = this.getAttribute("title-heading-level") || "2";
-    this.listenForNewCoordinates =
-      this.getAttribute("listen-for-new-coordinates") === "true";
+    this.listenForNewCoordinates = this.getAttribute("listen-for-new-coordinates") === "true";
   }
   connectedCallback() {
     enableSketchMode(this.isSketchEnabled);
