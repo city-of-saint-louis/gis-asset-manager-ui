@@ -202,16 +202,16 @@ const enableSketchForLayer = (layer) => {
         `Could not find the sketch tool button for type: ${sketchType}`,
       );
     }
-    const selectButton = shadowButtons.find(
-      (b) =>
-        b.getAttribute("aria-label") &&
-        b.getAttribute("aria-label").toLowerCase().includes("select"),
-    );
-    if (selectButton) {
-      selectButton.style.display = "none";
-    } else {
-      console.warn(`Could not find the select tool button`);
-    }
+    // const selectButton = shadowButtons.find(
+    //   (b) =>
+    //     b.getAttribute("aria-label") &&
+    //     b.getAttribute("aria-label").toLowerCase().includes("select"),
+    // );
+    // if (selectButton) {
+    //   selectButton.style.display = "none";
+    // } else {
+    //   console.warn(`Could not find the select tool button`);
+    // }
   }, 40);
 };
 
@@ -521,10 +521,6 @@ const renderCreatedAssetLabel = (graphic) => {
 };
 
 export const sketchAsset = (sketchComponent) => {
-  console.log(
-    "Sketch component received in sketchAsset function:",
-    sketchComponent.layer,
-  );
   sketchComponent.addEventListener("arcgisCreate", async (event) => {
     if (event.detail.state !== "complete") return; // Only handle completed graphics
     const graphic = event.detail.graphic;

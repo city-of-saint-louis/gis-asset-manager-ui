@@ -686,33 +686,40 @@ export const handleSelectEnabled = () => {
     element.classList.remove("sketch-shadow");
   });
 
-  const shadowButtons = [];
-  const collectShadowButtons = (node) => {
-    if (!node) return;
-    if (node.querySelectorAll) {
-      const btns = node.querySelectorAll("button");
-      if (btns.length) {
-        shadowButtons.push(...btns);
-      }
-    }
-    if (node.shadowRoot) {
-      collectShadowButtons(node.shadowRoot);
-    }
-    if (node.children) {
-      Array.from(node.children).forEach((child) => collectShadowButtons(child));
-    }
-  };
+  // const shadowButtons = [];
+  // const collectShadowButtons = (node) => {
+  //   if (!node) return;
+  //   if (node.querySelectorAll) {
+  //     const btns = node.querySelectorAll("button");
+  //     if (btns.length) {
+  //       shadowButtons.push(...btns);
+  //     }
+  //   }
+  //   if (node.shadowRoot) {
+  //     collectShadowButtons(node.shadowRoot);
+  //   }
+  //   if (node.children) {
+  //     Array.from(node.children).forEach((child) => collectShadowButtons(child));
+  //   }
+  // };
 
-  collectShadowButtons(sketch);
-  const targetButton = shadowButtons.find(
-    (b) =>
-      b.getAttribute("aria-label") &&
-      b.getAttribute("aria-label").toLowerCase().includes("select")
-  );
-  if (targetButton) {
-    targetButton.click();
-  } else {
-    console.warn(`Could not find the select tool button`);
+  // collectShadowButtons(sketch);
+  // const targetButton = shadowButtons.find(
+  //   (b) =>
+  //     b.getAttribute("aria-label") &&
+  //     b.getAttribute("aria-label").toLowerCase().includes("select")
+  // );
+  // if (targetButton) {
+  //   targetButton.click();
+  // } else {
+  //   console.warn(`Could not find the select tool button`);
+  // }
+
+    // NEW CODE: Cancel any active sketch session and detach layer
+  if (sketch) {
+    if (typeof sketch.cancel === "function") sketch.cancel();
+    if ("activeTool" in sketch) sketch.activeTool = null;
+    sketch.layer = null;
   }
 
   setTimeout(() => {
