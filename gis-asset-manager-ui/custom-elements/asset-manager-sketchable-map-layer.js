@@ -5,11 +5,8 @@ class AssetManagerSketchableMapLayer extends HTMLElement {
   connectedCallback() {
     try {
       const name = (this.getAttribute("name") || "").replace(/\s/g, "-");
-      // const minimum = this.getAttribute("minimum") || 0;
-      // const maximum = this.getAttribute("maximum") || 10;
       const parseNonNegativeIntAttr = (attrValue, fallback) => {
         if (attrValue === null) return fallback;
-
         const normalized = String(attrValue).trim().toLowerCase();
         if (
           normalized === "" ||
@@ -18,13 +15,10 @@ class AssetManagerSketchableMapLayer extends HTMLElement {
         ) {
           return fallback;
         }
-
         const parsed = Number.parseInt(normalized, 10);
         return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
       };
-
       const minimum = parseNonNegativeIntAttr(this.getAttribute("minimum"), 0);
-
       const maximum = Math.max(
         parseNonNegativeIntAttr(this.getAttribute("maximum"), 10),
         minimum,

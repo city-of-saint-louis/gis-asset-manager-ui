@@ -1,5 +1,6 @@
+// import from asset-manager-state.js
 import { setAssetMode } from "../asset-manager-state.js";
-
+// import from asset-manager-functions.js
 import { handleSelectEnabled, handleSketchEnabled } from "../utils/asset-manager-functions.js";
 
 class AssetManagerModeToggle extends HTMLElement {

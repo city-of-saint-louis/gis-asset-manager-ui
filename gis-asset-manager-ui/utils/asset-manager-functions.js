@@ -686,40 +686,9 @@ export const handleSelectEnabled = () => {
     element.classList.remove("sketch-shadow");
   });
 
-  // const shadowButtons = [];
-  // const collectShadowButtons = (node) => {
-  //   if (!node) return;
-  //   if (node.querySelectorAll) {
-  //     const btns = node.querySelectorAll("button");
-  //     if (btns.length) {
-  //       shadowButtons.push(...btns);
-  //     }
-  //   }
-  //   if (node.shadowRoot) {
-  //     collectShadowButtons(node.shadowRoot);
-  //   }
-  //   if (node.children) {
-  //     Array.from(node.children).forEach((child) => collectShadowButtons(child));
-  //   }
-  // };
-
-  // collectShadowButtons(sketch);
-  // const targetButton = shadowButtons.find(
-  //   (b) =>
-  //     b.getAttribute("aria-label") &&
-  //     b.getAttribute("aria-label").toLowerCase().includes("select")
-  // );
-  // if (targetButton) {
-  //   targetButton.click();
-  // } else {
-  //   console.warn(`Could not find the select tool button`);
-  // }
-
-    // NEW CODE: Cancel any active sketch session and detach layer
+  // Cancel any active sketch session and detach layer
   if (sketch) {
     if (typeof sketch.cancel === "function") sketch.cancel();
-    // if ("activeTool" in sketch) sketch.activeTool = null;
-    // sketch.layer = null;
   }
 
   setTimeout(() => {
@@ -788,10 +757,10 @@ export const handleSketchEnabled = () => {
     });
   }
 
-  // Try to apply immediately
+  // apply immediately
   applySketchModeUI();
 
-  // Set up MutationObserver on the correct parent
+  // Set up MutationObserver on the parent
   const layerDataContainer = document.getElementById("layer-data-container");
   if (layerDataContainer) {
     const observer = new MutationObserver(() => {
@@ -799,7 +768,7 @@ export const handleSketchEnabled = () => {
     });
     observer.observe(layerDataContainer, { childList: true, subtree: true });
 
-    // Optionally disconnect after a short delay if you only need a one-time update
+    // disconnect after a short delay 
     setTimeout(() => observer.disconnect(), 1000);
   }
 };

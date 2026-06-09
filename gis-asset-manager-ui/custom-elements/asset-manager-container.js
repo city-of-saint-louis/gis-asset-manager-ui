@@ -27,7 +27,6 @@ class AssetManagerContainer extends HTMLElement {
     }
     if (this.listenForNewCoordinates) {
       setListenForNewCoordinates(true);
-      console.log("AssetManagerContainer is listening for new coordinates.");
       document.addEventListener("coordinatesAvailable", () => {
         console.log("Listener for new coordinates has been triggered.");
         const layerDataContainer = document.getElementById(
@@ -36,11 +35,7 @@ class AssetManagerContainer extends HTMLElement {
         if (layerDataContainer) layerDataContainer.innerHTML = "";
         initializeMap();
       });
-    } else {
-      console.log(
-        "AssetManagerContainer is not listening for new coordinates. To enable this, set the 'listen-for-new-coordinates' attribute to 'true'.",
-      );
-    }
+    } 
     const accomodationButtonMessage =
       "Click this button to enter assets if you are using assistive technology and are unable to select assets on the map.";
     try {

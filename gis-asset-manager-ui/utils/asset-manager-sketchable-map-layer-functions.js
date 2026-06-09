@@ -202,16 +202,6 @@ const enableSketchForLayer = (layer) => {
         `Could not find the sketch tool button for type: ${sketchType}`,
       );
     }
-    // const selectButton = shadowButtons.find(
-    //   (b) =>
-    //     b.getAttribute("aria-label") &&
-    //     b.getAttribute("aria-label").toLowerCase().includes("select"),
-    // );
-    // if (selectButton) {
-    //   selectButton.style.display = "none";
-    // } else {
-    //   console.warn(`Could not find the select tool button`);
-    // }
   }, 40);
 };
 
@@ -610,7 +600,6 @@ export const sketchAsset = (sketchComponent) => {
       }
       return;
     }
-    console.log("layer", sketchComponent.layer);
     createdAssets.push(graphic);
     renderCreatedAssetLabel(graphic);
     updateLayerRequirementDisplay(graphic);

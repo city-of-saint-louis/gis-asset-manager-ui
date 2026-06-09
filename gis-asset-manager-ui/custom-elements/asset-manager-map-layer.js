@@ -7,9 +7,6 @@ class AssetManagerMapLayer extends HTMLElement {
       const name = (this.getAttribute("name") || "").replace(/\s/g, "-");
       const displayName = this.getAttribute("display-name") || "";
       const layerClassUrl = this.getAttribute("layer-class-url") || "";
-      // const minimumSelectionsRequired = this.getAttribute("minimum") || 0;
-      // const maximumSelectionsAllowed = this.getAttribute("maximum") || 10;
-
       const parseNonNegativeIntAttr = (attrValue, fallback) => {
         if (attrValue === null) return fallback;
         const normalized = String(attrValue).trim().toLowerCase();
@@ -27,12 +24,10 @@ class AssetManagerMapLayer extends HTMLElement {
         this.getAttribute("minimum"),
         0,
       );
-
       const maximumSelectionsAllowed = Math.max(
         parseNonNegativeIntAttr(this.getAttribute("maximum"), 10),
         minimumSelectionsRequired,
       );
-
       const labelMask = this.getAttribute("label-mask") || "";
       const layerAssetIDFieldName =
         this.getAttribute("layer-asset-id-field-name") || "GUID";
