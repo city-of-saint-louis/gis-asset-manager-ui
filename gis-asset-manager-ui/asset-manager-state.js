@@ -79,3 +79,8 @@ export let assetMode = ""; // possible values: "select", "sketch"
 export function setAssetMode(value) {
   assetMode = value;
 }
+
+let listenForNewCoordinates = false;
+export function setListenForNewCoordinates(value) {
+  listenForNewCoordinates = value;
+}

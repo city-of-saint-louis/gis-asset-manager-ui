@@ -1,12 +1,10 @@
 // import from asset-manager-container-functions.js
-import { 
-  enableSketchMode, 
-  enableSelectMode, 
-  handleAccomodationButtonClick 
-} from "../utils/asset-manager-container-functions.js";
 import {
-  setIsSelectBySearchEnabled,
-} from "../asset-manager-state.js";
+  enableSketchMode,
+  enableSelectMode,
+  handleAccomodationButtonClick,
+} from "../utils/asset-manager-container-functions.js";
+import { setIsSelectBySearchEnabled, setListenForNewCoordinates } from "../asset-manager-state.js";
 
 class AssetManagerContainer extends HTMLElement {
   constructor() {
@@ -15,14 +13,33 @@ class AssetManagerContainer extends HTMLElement {
     this.hint = this.getAttribute("hint") || "";
     this.isSelectEnabled = this.getAttribute("is-select-enabled") === "true";
     this.isSketchEnabled = this.getAttribute("is-sketch-enabled") === "true";
-    this.isSelectBySearchEnabled = this.getAttribute("is-select-by-search-enabled") === "true";
+    this.isSelectBySearchEnabled =
+      this.getAttribute("is-select-by-search-enabled") === "true";
     this.titleHeadingLevel = this.getAttribute("title-heading-level") || "2";
+    this.listenForNewCoordinates =
+      this.getAttribute("listen-for-new-coordinates") === "true";
   }
   connectedCallback() {
     enableSketchMode(this.isSketchEnabled);
     enableSelectMode(this.isSelectEnabled);
     if (this.isSelectBySearchEnabled) {
       setIsSelectBySearchEnabled(true);
+    }
+    if (this.listenForNewCoordinates) {
+      setListenForNewCoordinates(true);
+      console.log("AssetManagerContainer is listening for new coordinates.");
+      document.addEventListener("coordinatesAvailable", () => {
+        console.log("Listener for new coordinates has been triggered.");
+        const layerDataContainer = document.getElementById(
+          "layer-data-container",
+        );
+        if (layerDataContainer) layerDataContainer.innerHTML = "";
+        initializeMap();
+      });
+    } else {
+      console.log(
+        "AssetManagerContainer is not listening for new coordinates. To enable this, set the 'listen-for-new-coordinates' attribute to 'true'.",
+      );
     }
     const accomodationButtonMessage =
       "Click this button to enter assets if you are using assistive technology and are unable to select assets on the map.";
@@ -43,11 +60,15 @@ class AssetManagerContainer extends HTMLElement {
           </div>
         </section>
       `;
-      
-      const buttonContainer = this.querySelector("#asset-manager-button-container");
-      
+
+      const buttonContainer = this.querySelector(
+        "#asset-manager-button-container",
+      );
+
       if (this.isSelectEnabled && this.isSketchEnabled) {
-        const modeToggleSwitch = document.createElement("asset-manager-mode-toggle");
+        const modeToggleSwitch = document.createElement(
+          "asset-manager-mode-toggle",
+        );
         buttonContainer.appendChild(modeToggleSwitch);
       }
 
@@ -67,20 +88,19 @@ class AssetManagerContainer extends HTMLElement {
       `;
       const accomodationButtonHint = document.createElement("p");
       accomodationButtonHint.id = "accomodation-button-hint";
-      accomodationButtonHint.textContent = "Please note that the accessible accommodation should only be used if you are unable to enter assets on the map.";
+      accomodationButtonHint.textContent =
+        "Please note that the accessible accommodation should only be used if you are unable to enter assets on the map.";
       buttonContainer.appendChild(accomodationButtonHint);
       if (accomodationButton) {
         accomodationButton.addEventListener(
           "click",
-          handleAccomodationButtonClick
+          handleAccomodationButtonClick,
         );
       }
-      
     } catch (e) {
       console.error(e);
-      document.getElementById(
-        "viewDiv"
-      ).innerHTML = `<p>There was a problem loading the map. Please try again later.</p>`;
+      document.getElementById("viewDiv").innerHTML =
+        `<p>There was a problem loading the map. Please try again later.</p>`;
     }
   }
 }
