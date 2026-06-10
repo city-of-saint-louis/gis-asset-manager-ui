@@ -415,6 +415,11 @@ The Asset Manager can be configured as needed by passing values for the followin
     - **Description:** Sets the spatial reference WKID for the map extent.
     - **Default value:** `102100`
 
+17. **listen-for-new-coordinates**
+    - **Type:** `boolean`
+    - **Description:** Determines if the map should listen for new coordinates being added. This is helpful if you need to refocus the map on a new location after the map has already loaded. When this property is set to true, the map listens for a custom event 'coordinatesAvailable' to be dispatched from the parent application. The logic for recentering the map is handled in the parent application, so you can customize it to fit your needs.The asset manager will then reload the map with the new coordinates when the 'coordinatesAvailable' event is received.
+    - **Default value:** `false`
+
 **_If a value is not provided for a property, the default value will take effect._**
 
 **_Note: All attribute values must be quoted in HTML, regardless of type. For example, use `zoom="12"` and `show-search="true"`, not `zoom=12` or `show-search=true`._**
@@ -434,6 +439,7 @@ The Asset Manager can be configured as needed by passing values for the followin
   extent-ymax="9000000"
   extent-spatial-reference-wkid="102100"
   title-heading-level="3"
+  listen-for-new-coordinates="true"
 >
 </asset-manager-container>
 ```
