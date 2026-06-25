@@ -2,8 +2,6 @@
 
 ## **Developed By The [City of St. Louis Web Team](https://www.stlouis-mo.gov/government/departments/information-technology/web-development/index.cfm)**
 
-_Please note: The documentation below is in process and is not yet fully comprehensive._
-
 ## **Description**
 
 GIS Asset Manager UI utilizes the [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest) to create an interactive map that can be configured with various different graphic layers for selecting existing assets and/or adding new assets.
